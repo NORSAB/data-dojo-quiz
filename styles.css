@@ -56,9 +56,9 @@
   --radius-xl: 20px;
   --radius-full: 9999px;
 
-  /* Layout Tokens (Audit: centralize repeated widths) */
-  --layout-max-md: 900px;
-  --layout-max-xl: 1400px;
+  /* Layout Tokens — Full Width Fluid Layout */
+  --layout-max-md: 100%;
+  --layout-max-xl: 100%;
 }
 
 [data-theme="dark"] {
@@ -3882,3 +3882,91 @@ body.zen-mode .zen-exit-btn {
 [data-theme="dark"] .admin-toggle-list::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.15);
 }
+
+/* =============================================================================
+   UNIVERSAL 100% FULL-WIDTH FLUID LAYOUT (ALL SCREENS & VIEWS)
+   ============================================================================= */
+html, body {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Force every container and view to use 100% width */
+.main-container,
+.vertical-layout,
+.menu-container,
+.course-selection-area,
+.course-list,
+.menu-profile-card,
+#menu-profile-card,
+.study-coach-panel,
+.study-coach-grid,
+.btn-quick-quiz,
+#quick-quiz-btn,
+#mapping-quiz-btn,
+.streak-risk-banner,
+#streak-risk-banner,
+.domain-grid,
+#domain-grid,
+.domain-cards-wrapper,
+.quiz-container,
+.question-container,
+.study-container,
+.results-container,
+.flashcard-container,
+.flashcards-container,
+.conceptos-container,
+.comandos-container,
+.weakness-panel,
+.dashboard-container,
+.wisdom-container,
+.dojo-wisdom-section,
+.hero-profile,
+.hero-card,
+.stats-page,
+.stats-container,
+.stats-overlay,
+.study-plan,
+.btn-exam-simulate,
+#start-marathon-btn,
+.course-item {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  box-sizing: border-box !important;
+}
+
+/* Fluid responsive grid for courses and domains on wide screens */
+.course-list {
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+  gap: 1rem !important;
+}
+
+.domain-cards-wrapper {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
+  gap: 16px !important;
+  width: 100% !important;
+}
+
+.study-coach-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 1rem !important;
+  width: 100% !important;
+}
+
+/* Ensure padding remains clean and balanced across all viewports */
+.main-container {
+  padding: 1.25rem 2.5rem !important;
+}
+
+.course-selection-area {
+  padding: 0 !important;
+}
+
