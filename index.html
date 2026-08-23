@@ -17,32 +17,104 @@
     <title>Quiz Simulator</title>
     <link rel="manifest" href="manifest.json" />
     <meta name="theme-color" content="#4f6ef7" />
-    <link rel="stylesheet" href="styles.css?v=12" />
+    <link rel="stylesheet" href="styles.css?v=15" />
     <style>
-      /* Universal Full-Width Layout (100% viewport expansion) */
+      /* =======================================================================
+         TRUE 100% FULL-WIDTH FLUID RESPONSIVE SYSTEM
+         ======================================================================= */
       html, body {
+        width: 100% !important;
+        max-width: 100vw !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow-x: hidden !important;
+      }
+
+      .main-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 1.5rem 2rem !important;
+        box-sizing: border-box !important;
+      }
+
+      .vertical-layout,
+      .menu-container,
+      .course-selection-area,
+      #start-screen {
         width: 100% !important;
         max-width: 100% !important;
         margin: 0 !important;
         padding: 0 !important;
+        box-sizing: border-box !important;
       }
-      .main-container,
-      .vertical-layout,
-      .menu-container,
-      .course-selection-area,
-      .course-list,
-      .menu-profile-card,
+
+      /* Full width for top widgets */
       #menu-profile-card,
-      .study-coach-panel,
-      .study-coach-grid,
-      .btn-quick-quiz,
+      .menu-profile-card,
+      #streak-risk-banner,
+      .streak-risk,
       #quick-quiz-btn,
       #mapping-quiz-btn,
-      .streak-risk-banner,
-      #streak-risk-banner,
+      .btn-quick-quiz,
+      .study-coach-panel,
+      .dojo-wisdom-section,
+      .wisdom-quote-card,
+      .weakness-panel,
+      .dashboard-container,
+      .study-plan,
+      .btn-exam-simulate,
+      #start-marathon-btn {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        box-sizing: border-box !important;
+      }
+
+      /* Responsive 2-column Grid for Study Coach */
+      .study-coach-grid {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 1.25rem !important;
+        width: 100% !important;
+      }
+
+      /* Modern Wide Grid for Course Cards on desktop */
+      .course-list {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)) !important;
+        gap: 1.25rem !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+      }
+
+      .course-item {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        box-sizing: border-box !important;
+      }
+
+      /* Wide Grid for Practice by Area / Domains */
       .domain-grid,
-      #domain-grid,
-      .domain-cards-wrapper,
+      #domain-grid {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+      }
+
+      .domain-cards-wrapper {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
+        gap: 1.25rem !important;
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+
+      /* Quiz, Study, Results & Flashcards full width */
       .quiz-container,
       .question-container,
       .study-container,
@@ -51,42 +123,24 @@
       .flashcards-container,
       .conceptos-container,
       .comandos-container,
-      .weakness-panel,
-      .dashboard-container,
-      .wisdom-container,
-      .dojo-wisdom-section,
-      .hero-profile,
-      .hero-card,
-      .stats-page,
-      .stats-container,
-      .stats-overlay,
-      .study-plan,
-      .btn-exam-simulate,
-      #start-marathon-btn,
-      .course-item {
+      .card {
         width: 100% !important;
         max-width: 100% !important;
         margin-left: 0 !important;
         margin-right: 0 !important;
         box-sizing: border-box !important;
       }
-      .main-container {
-        padding: 1.25rem 2.5rem !important;
-      }
-      .course-selection-area {
-        padding: 0 !important;
-      }
-      .domain-cards-wrapper {
-        display: grid !important;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
-        gap: 16px !important;
-        width: 100% !important;
-      }
-      .study-coach-grid {
-        display: grid !important;
-        grid-template-columns: 1fr 1fr !important;
-        gap: 1rem !important;
-        width: 100% !important;
+
+      @media (max-width: 768px) {
+        .main-container {
+          padding: 1rem !important;
+        }
+        .study-coach-grid {
+          grid-template-columns: 1fr !important;
+        }
+        .course-list {
+          grid-template-columns: 1fr !important;
+        }
       }
     </style>
     <!-- MathJax for Latex rendering -->
