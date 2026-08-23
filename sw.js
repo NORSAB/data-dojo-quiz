@@ -1,6 +1,6 @@
 // M5: Version hash with build timestamp
-const BUILD_TIMESTAMP = '20260405h';
-const CACHE_NAME = `simulador-v16-${BUILD_TIMESTAMP}`;
+const BUILD_TIMESTAMP = '20260823a';
+const CACHE_NAME = `simulador-v17-${BUILD_TIMESTAMP}`;
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -17,6 +17,8 @@ const ASSETS_TO_CACHE = [
   './questions_databricks_aibi.js',
   './questions_databricks_sql_analytics.js',
   './questions_databricks_genai.js',
+  './questions_databricks_genai_es.js',
+  './study_databricks_genai.js',
   './questions_unir_viz.js',
   './questions_unir_herr.js',
   './questions_unah_tesis.js',
