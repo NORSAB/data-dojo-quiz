@@ -1,0 +1,1916 @@
+<!--
+  THE DATA DOJO - QUIZ SIMULATOR
+  =============================================================================
+  Main entry point for the application.
+  Features:
+  - Dynamic Quiz generation from JS data
+  - Hero Gamification System
+  - Theme Support (Light/Dark)
+  - Responsive Layout
+  =============================================================================
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz Simulator</title>
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#4f6ef7" />
+    <link rel="stylesheet" href="styles.css?v=10" />
+    <!-- MathJax for Latex rendering -->
+    <script src="marked.min.js"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+  </head>
+  <body>
+    <!-- Floating Exit Button for Zen Mode (Moved outside Header) -->
+    <button
+      class="zen-exit-btn"
+      onclick="toggleZenMode()"
+      title="Salir de Zen Mode"
+    >
+      Salir de Zen Mode
+    </button>
+
+    <header>
+      <div class="header-title">
+        <h1 id="app-title">The Data Dojo</h1>
+      </div>
+      <div class="header-controls">
+        <div
+          id="timer-display"
+          class="hidden"
+          style="
+            font-family: monospace;
+            font-size: 1.2rem;
+            font-weight: bold;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+          "
+        >
+          00:00
+        </div>
+
+        <!-- Zen Mode -->
+        <button
+          id="zen-mode-toggle"
+          class="btn-icon-modern"
+          onclick="toggleZenMode()"
+          title="Modo Zen"
+        >
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M12 2A10 10 0 0 0 2 12a10 10 0 0 0 10 10a10 10 0 0 0 10-10A10 10 0 0 0 12 2m0 2a8 8 0 0 1 8 8a8 8 0 0 1-8 8a8 8 0 0 1-8-8a8 8 0 0 1 8-8m0 4a4 4 0 0 0-4 4a4 4 0 0 0 4 4a4 4 0 0 0 4-4a4 4 0 0 0-4-4"
+            />
+          </svg>
+          <span class="icon-label">Zen</span>
+        </button>
+
+        <!-- Home -->
+        <button
+          id="global-home-btn"
+          class="btn-icon-modern"
+          onclick="returnToMenu()"
+          title="Ir al Inicio"
+        >
+          <svg viewBox="0 0 24 24">
+            <path d="M10 20v-6h4v6h5v-8h3L12 3L2 12h3v8z" />
+          </svg>
+          <span class="icon-label">Inicio</span>
+        </button>
+
+        <!-- Profile -->
+        <button
+          id="header-profile-btn"
+          class="btn-icon-modern"
+          onclick="openProfile()"
+          title="Mi Perfil"
+        >
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4s-4 1.79-4 4s1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+            />
+          </svg>
+          <span class="icon-label">Perfil</span>
+        </button>
+
+        <!-- Achievements -->
+        <button
+          id="badges-btn"
+          class="btn-icon-modern"
+          onclick="renderBadges()"
+          title="Mis Logros"
+        >
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+            />
+          </svg>
+          <span class="icon-label">Logros</span>
+        </button>
+
+        <!-- F20: Stats Page -->
+        <button
+          id="stats-page-btn"
+          class="btn-icon-modern"
+          onclick="if(typeof openStatsPage==='function')openStatsPage()"
+          title="Estadísticas"
+        >
+          <svg viewBox="0 0 24 24">
+            <path d="M3 13h2v8H3v-8zm4-6h2v14H7V7zm4-4h2v18h-2V3zm4 8h2v10h-2V11zm4-3h2v13h-2V8z" />
+          </svg>
+          <span class="icon-label">Stats</span>
+        </button>
+
+        <!-- Admin -->
+        <button id="admin-btn" class="btn-icon-modern" title="Administración">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M19.14 12.94c.04-.3.06-.61.06-.94c0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.04.17 0 .4.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.04-.22 0-.45-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6s3.6 1.62 3.6 3.6s-1.62 3.6-3.6 3.6z"
+            />
+          </svg>
+          <span class="icon-label">Admin</span>
+        </button>
+
+        <!-- Theme Toggle -->
+        <button
+          id="theme-toggle"
+          class="btn-icon-modern"
+          onclick="toggleTheme()"
+          title="Cambiar Tema"
+        >
+          <svg viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3A7 7 0 0 0 21 12.79z" />
+          </svg>
+          <span class="icon-label">Tema</span>
+        </button>
+      </div>
+    </header>
+
+    <div class="main-container">
+      <!-- ONBOARDING SCREEN -->
+      <div id="onboarding-screen" class="onboarding-container hidden">
+        <div class="dojo-container">
+          <!-- Animated Background Particles (CSS-driven) -->
+          <div class="dojo-particles" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span
+            ><span></span>
+          </div>
+
+          <!-- Top Emblem -->
+          <div class="dojo-emblem">
+            <svg viewBox="0 0 120 120" class="emblem-svg" aria-hidden="true">
+              <!-- Outer ring -->
+              <circle
+                cx="60"
+                cy="60"
+                r="56"
+                fill="none"
+                stroke="url(#emblemGrad)"
+                stroke-width="2.5"
+                opacity="0.5"
+              />
+              <circle
+                cx="60"
+                cy="60"
+                r="48"
+                fill="none"
+                stroke="url(#emblemGrad)"
+                stroke-width="1.5"
+                opacity="0.2"
+              />
+              <!-- Torii Gate -->
+              <g
+                transform="translate(60,56) scale(1.0)"
+                stroke="url(#emblemGrad)"
+                stroke-width="3.5"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <line x1="-22" y1="24" x2="-22" y2="-12" />
+                <line x1="22" y1="24" x2="22" y2="-12" />
+                <line x1="-28" y1="-6" x2="28" y2="-6" />
+                <line x1="-25" y1="-14" x2="25" y2="-14" />
+                <path d="M-26,-14 Q0,-24 26,-14" stroke-width="3" />
+              </g>
+              <!-- Decorative bottom marks -->
+              <line
+                x1="46"
+                y1="92"
+                x2="74"
+                y2="92"
+                stroke="url(#emblemGrad)"
+                stroke-width="2"
+                opacity="0.3"
+                stroke-linecap="round"
+              />
+              <line
+                x1="50"
+                y1="97"
+                x2="70"
+                y2="97"
+                stroke="url(#emblemGrad)"
+                stroke-width="1.5"
+                opacity="0.2"
+                stroke-linecap="round"
+              />
+              <defs>
+                <linearGradient
+                  id="emblemGrad"
+                  x1="0%"
+                  y1="0%"
+                  x2="100%"
+                  y2="100%"
+                >
+                  <stop offset="0%" stop-color="#4f6ef7" />
+                  <stop offset="100%" stop-color="#7c3aed" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+
+          <!-- Headline -->
+          <h1 class="dojo-headline">
+            <span class="dojo-headline-kanji" aria-hidden="true">道場</span>
+            <span class="dojo-headline-main">The Data Dojo</span>
+            <span class="dojo-headline-sub"
+              >Forja tu dominio sobre los datos</span
+            >
+          </h1>
+
+          <!-- Brushstroke Divider -->
+          <div class="brush-divider" aria-hidden="true">
+            <svg viewBox="0 0 200 8" preserveAspectRatio="none">
+              <path
+                d="M0 4 Q30 0, 60 4 T120 4 T180 4 L200 4"
+                stroke="url(#brushGrad)"
+                stroke-width="2"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <defs>
+                <linearGradient
+                  id="brushGrad"
+                  x1="0%"
+                  y1="0%"
+                  x2="100%"
+                  y2="0%"
+                >
+                  <stop offset="0%" stop-color="transparent" />
+                  <stop offset="20%" stop-color="#4f6ef7" />
+                  <stop offset="50%" stop-color="#7c3aed" />
+                  <stop offset="80%" stop-color="#4f6ef7" />
+                  <stop offset="100%" stop-color="transparent" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+
+          <!-- Sensei Quote -->
+          <div class="sensei-quote-block">
+            <svg
+              class="sensei-quote-icon"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z" />
+            </svg>
+            <blockquote class="sensei-quote-text">
+              El ruido de la información es vasto como el océano, pero tu mente
+              será el faro que lo atraviese. Elige tu arma, aspirante.
+            </blockquote>
+            <cite class="sensei-quote-author">— Sensei de Datos</cite>
+          </div>
+
+          <!-- Values Strip -->
+          <div class="dojo-values">
+            <div class="dojo-value-item">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12c5.16-1.26 9-6.45 9-12V5l-9-4z"
+                />
+              </svg>
+              <span>Disciplina</span>
+            </div>
+            <div class="dojo-value-divider"></div>
+            <div class="dojo-value-item">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M3 3h18v2H3V3zm0 16h18v2H3v-2zm0-8h18v2H3v-2zm4-4h10v2H7V7zm0 8h10v2H7v-2z"
+                />
+              </svg>
+              <span>Estructura</span>
+            </div>
+            <div class="dojo-value-divider"></div>
+            <div class="dojo-value-item">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+                />
+              </svg>
+              <span>Maestría</span>
+            </div>
+          </div>
+
+          <!-- Footer Action -->
+          <div class="onboarding-footer">
+            <button id="skip-onboarding-btn" class="btn-dojo-enter">
+              <svg viewBox="0 0 24 24" class="btn-dojo-icon">
+                <path
+                  d="M13 3h-2v10h2V3zm4.83 2.17l-1.42 1.42A6.92 6.92 0 0 1 19 12c0 3.87-3.13 7-7 7s-7-3.13-7-7c0-2.27 1.08-4.28 2.76-5.56L6.34 5.02A9.006 9.006 0 0 0 3 12c0 4.97 4.03 9 9 9s9-4.03 9-9c0-2.69-1.19-5.1-3.07-6.73l-.1-.1z"
+                />
+              </svg>
+              <span>Iniciar Entrenamiento</span>
+              <svg viewBox="0 0 24 24" class="btn-dojo-arrow">
+                <path
+                  d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"
+                />
+              </svg>
+            </button>
+          </div>
+
+          <!-- Copyright Footer (separated) -->
+          <footer class="dojo-copyright">
+            <p>© 2026 The Data Dojo — Disciplina · Estructura · Maestría</p>
+          </footer>
+        </div>
+      </div>
+
+      <!-- NEW START SCREEN WRAPPER (Vertical Stack) -->
+      <div id="start-screen" class="vertical-layout" style="position: relative">
+        <!-- MENU CONTAINER -->
+        <div class="menu-container">
+          <!-- PROFILE CARD — belt & XP info -->
+          <div id="menu-profile-card" class="menu-profile-card">
+            <!-- JS will inject: avatar, name, belt, XP bar -->
+          </div>
+
+          <!-- F6: STREAK WIDGET (below hero card) -->
+          <div id="streak-display" class="streak-widget" style="display:none;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+              </svg>
+              <span id="streak-count">0</span>
+              <span class="streak-label">días</span>
+          </div>
+
+          <!-- F11: STREAK AT RISK BANNER -->
+          <div id="streak-risk-banner" class="streak-risk" style="display:none;">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+                  <line x1="12" y1="9" x2="12" y2="13"/>
+                  <line x1="12" y1="17" x2="12.01" y2="17"/>
+              </svg>
+              <div>
+                  <strong id="streak-risk-text">Tu racha está en riesgo</strong>
+                  <small>Completa al menos 1 pregunta para mantenerla</small>
+              </div>
+              <button id="streak-risk-dismiss" class="streak-risk-close">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M18 6L6 18M6 6l12 12"/>
+                  </svg>
+              </button>
+          </div>
+
+          <!-- F9: QUICK QUIZ BUTTON -->
+          <button id="quick-quiz-btn" class="btn-quick-quiz">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+              </svg>
+              <div>
+                  <strong>Quick Quiz</strong>
+                  <small>10 preguntas aleatorias de todos los cursos</small>
+              </div>
+          </button>
+
+          <!-- QUICK QUIZ MAPPING (48 Questions) -->
+          <button id="mapping-quiz-btn" class="btn-quick-quiz" style="margin-top: 10px; background: var(--bg-tertiary);">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2L2 7l10 5 10-5-10-5zm0 18l-10-5 10-5 10 5-10 5z"/>
+              </svg>
+              <div>
+                  <strong>Simulador Mapping</strong>
+                  <small>Practicar las 48 preguntas del mapping</small>
+              </div>
+          </button>
+
+          <!-- F21: STUDY RECOMMENDATION + COURSE READINESS -->
+          <div id="study-coach-panel" class="study-coach-panel" style="display:none;">
+              <div class="study-coach-grid">
+                  <!-- What to Study Today -->
+                  <div id="study-today-card" class="coach-card coach-card--recommend">
+                      <div class="coach-card-icon">
+                          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2">
+                              <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                              <path d="M2 17l10 5 10-5"/>
+                              <path d="M2 12l10 5 10-5"/>
+                          </svg>
+                      </div>
+                      <div class="coach-card-body">
+                          <h4>Qué Estudiar Hoy</h4>
+                          <p id="study-today-text" class="coach-card-desc">Cargando recomendación...</p>
+                          <button id="study-today-cta" class="btn btn-sm btn-primary" style="display:none;">
+                              Practicar Ahora
+                          </button>
+                      </div>
+                  </div>
+                  <!-- Course Readiness -->
+                  <div id="course-readiness-card" class="coach-card coach-card--readiness">
+                      <div class="coach-card-icon">
+                          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2">
+                              <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                              <polyline points="22 4 12 14.01 9 11.01"/>
+                          </svg>
+                      </div>
+                      <div class="coach-card-body">
+                          <h4>Preparación</h4>
+                          <div class="readiness-meter">
+                              <div class="readiness-score" id="readiness-score">—</div>
+                              <div class="readiness-bar-track">
+                                  <div class="readiness-bar-fill" id="readiness-bar-fill" style="width:0%"></div>
+                              </div>
+                          </div>
+                          <p id="readiness-detail" class="coach-card-desc">Selecciona un curso para ver tu nivel</p>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <div class="menu-header">
+            <h2>Seleccionar Categoría</h2>
+          </div>
+
+          <div class="menu-grid">
+            <!-- Categories as horizontal pills -->
+            <div class="category-sidebar">
+              <h3 class="section-title">CATEGORÍAS</h3>
+              <div id="category-list" class="category-list">
+                <!-- Injected via JS -->
+              </div>
+            </div>
+
+            <!-- Courses -->
+            <div class="course-selection-area">
+              <h3 class="section-title" id="course-section-title">
+                CURSOS DE MICROSOFT
+              </h3>
+              <div id="course-list" class="course-list">
+                <!-- Injected via JS -->
+              </div>
+
+              <!-- F2: DOMAIN PRACTICE CARDS (per-course) -->
+              <div id="domain-cards-container" class="domain-grid" style="display:none;">
+                  <h3 class="section-label">
+                      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M4 6h16M4 12h16M4 18h7"/>
+                      </svg>
+                      Practicar por Área
+                  </h3>
+                  <div id="domain-cards" class="domain-cards-wrapper">
+                      <!-- Generated by JS -->
+                  </div>
+              </div>
+
+              <!-- F3: SIMULATED EXAM BUTTON (per-course) -->
+              <button id="start-real-exam-btn" class="btn-exam-simulate" style="display:none;">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"/>
+                      <path d="M12 6v6l4 2"/>
+                  </svg>
+                  <div>
+                      <strong>Examen Simulado Real</strong>
+                      <small>45 preguntas | 5 por dominio | 120 min | Preguntas actualizadas</small>
+                  </div>
+              </button>
+
+              <!-- F10: FLASHCARD QUICK ACCESS -->
+              <button id="start-flashcards-btn" class="btn-flashcard-quick" style="display:none;">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="2" y="3" width="20" height="14" rx="2"/>
+                      <path d="M8 21h8M12 17v4"/>
+                  </svg>
+                  <div>
+                      <strong>Flashcards Rápidas</strong>
+                      <small id="flashcard-count-label">0 tarjetas disponibles</small>
+                  </div>
+              </button>
+
+              <!-- F1: WEAKNESS REVIEW PANEL (per-course) -->
+              <div id="weakness-shortcut" class="weakness-panel" style="display:none;">
+                  <div class="weakness-header">
+                      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                      </svg>
+                      <span>Repaso de Errores</span>
+                      <span id="weakness-count" class="weakness-badge">0</span>
+                  </div>
+                  <p class="weakness-desc">Practica las preguntas que has fallado anteriormente</p>
+                  <div id="weakness-domains"></div>
+                  <button id="start-weakness-btn" class="btn btn-primary">
+                      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M5 12h14M12 5l7 7-7 7"/>
+                      </svg>
+                      Iniciar Repaso
+                  </button>
+              </div>
+
+              <!-- F15: STUDY PLAN PANEL -->
+              <div id="study-plan-panel" class="study-plan" style="display:none;">
+                  <div class="study-plan-header">
+                      <div>
+                          <h3>
+                              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                                  <path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/>
+                                  <path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/>
+                              </svg>
+                              Plan de Estudio
+                          </h3>
+                          <small id="study-plan-subtitle" class="study-plan-sub">Recomendación personalizada</small>
+                      </div>
+                  </div>
+                  <div id="study-plan-content"></div>
+              </div>
+
+              <!-- F5: PROGRESS DASHBOARD (per-course) -->
+              <div id="dashboard-panel" class="dashboard-container" style="display:none;">
+                  <div class="dashboard-header">
+                      <h3>
+                          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                              <path d="M3 3v18h18"/>
+                              <path d="M7 16l4-8 4 4 4-8"/>
+                          </svg>
+                          Dashboard de Progreso
+                      </h3>
+                      <button id="close-dashboard" class="btn btn-outline btn-sm">Cerrar</button>
+                  </div>
+                  <div id="dashboard-kpis" class="dashboard-kpis"></div>
+                  <div class="dashboard-charts">
+                      <div id="dashboard-trend" class="dashboard-chart-card">
+                          <h4>Tendencia de Rendimiento</h4>
+                          <div id="trend-chart-svg"></div>
+                      </div>
+                      <div id="dashboard-radar" class="dashboard-chart-card">
+                          <h4>Fortalezas por Dominio</h4>
+                          <div id="radar-chart-svg"></div>
+                      </div>
+                  </div>
+                  <div id="dashboard-recommendation" class="dashboard-recommendation">
+                      <!-- Fxx: LESSONS LEARNED BUTTON -->
+                      <div id="lessons-learned-launcher" class="course-list" style="margin-top: 2rem; display: none;">
+                          <h3 class="section-title">LECCIONES APRENDIDAS</h3>
+                          <div class="course-item" onclick="document.getElementById('lessons-learned-modal').classList.remove('hidden')">
+                              <div class="course-info">
+                                  <h4>Repaso de Conocimientos</h4>
+                                  <p>Revisa las explicaciones de las fallas más comunes en esta categoría.</p>
+                              </div>
+                              <button class="btn btn-sm" style="border: 1px solid var(--primary-color); color: var(--primary-color); background: transparent; font-weight: bold;">
+                                  Ver Lecciones
+                              </button>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+            </div>
+
+            <!-- Features moved inside course-selection-area above -->
+
+            <!-- QUOTE + BONSAI + HISTORY WIDGET -->
+            <div class="dojo-wisdom-section">
+              <!-- Quote with integrated bonsai -->
+              <div class="wisdom-quote-card">
+                <div class="wisdom-quote-content">
+                  <div class="wisdom-bonsai" aria-hidden="true">
+                    <svg
+                      viewBox="0 0 120 160"
+                      width="80"
+                      height="110"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <!-- Trunk & branches (warm brown) -->
+                      <path
+                        d="M60 140 Q58 120 55 108 Q52 96 48 87 Q54 78 60 72"
+                        stroke="#8B6914"
+                        stroke-width="2.5"
+                        opacity="0.5"
+                      />
+                      <path
+                        d="M60 140 Q63 125 66 112 Q69 100 72 93"
+                        stroke="#8B6914"
+                        stroke-width="2"
+                        opacity="0.45"
+                      />
+                      <path
+                        d="M48 87 Q36 81 27 78"
+                        stroke="#8B6914"
+                        stroke-width="1.8"
+                        opacity="0.4"
+                      />
+                      <path
+                        d="M54 96 Q42 90 33 93"
+                        stroke="#8B6914"
+                        stroke-width="1.5"
+                        opacity="0.35"
+                      />
+                      <path
+                        d="M72 93 Q84 87 93 84"
+                        stroke="#8B6914"
+                        stroke-width="1.8"
+                        opacity="0.4"
+                      />
+                      <path
+                        d="M66 100 Q78 99 87 102"
+                        stroke="#8B6914"
+                        stroke-width="1.5"
+                        opacity="0.35"
+                      />
+                      <path
+                        d="M60 72 Q57 60 51 54"
+                        stroke="#8B6914"
+                        stroke-width="1.5"
+                        opacity="0.35"
+                      />
+                      <path
+                        d="M60 72 Q66 63 72 57"
+                        stroke="#8B6914"
+                        stroke-width="1.5"
+                        opacity="0.35"
+                      />
+                      <!-- Foliage canopy (soft green) -->
+                      <ellipse
+                        cx="27"
+                        cy="75"
+                        rx="15"
+                        ry="9"
+                        fill="#6da87a"
+                        opacity="0.15"
+                      />
+                      <ellipse
+                        cx="33"
+                        cy="90"
+                        rx="12"
+                        ry="7"
+                        fill="#6da87a"
+                        opacity="0.12"
+                      />
+                      <ellipse
+                        cx="93"
+                        cy="81"
+                        rx="15"
+                        ry="9"
+                        fill="#6da87a"
+                        opacity="0.15"
+                      />
+                      <ellipse
+                        cx="87"
+                        cy="99"
+                        rx="12"
+                        ry="7"
+                        fill="#6da87a"
+                        opacity="0.12"
+                      />
+                      <ellipse
+                        cx="51"
+                        cy="49"
+                        rx="13"
+                        ry="8"
+                        fill="#6da87a"
+                        opacity="0.15"
+                      />
+                      <ellipse
+                        cx="72"
+                        cy="52"
+                        rx="13"
+                        ry="8"
+                        fill="#6da87a"
+                        opacity="0.15"
+                      />
+                      <ellipse
+                        cx="60"
+                        cy="42"
+                        rx="17"
+                        ry="10"
+                        fill="#6da87a"
+                        opacity="0.18"
+                      />
+                      <!-- Cherry blossom flowers (sakura pink) -->
+                      <circle
+                        cx="22"
+                        cy="72"
+                        r="3"
+                        fill="#f8a4c8"
+                        opacity="0.45"
+                      />
+                      <circle
+                        cx="32"
+                        cy="68"
+                        r="2.5"
+                        fill="#f6b8d4"
+                        opacity="0.4"
+                      />
+                      <circle
+                        cx="38"
+                        cy="85"
+                        r="2"
+                        fill="#f8a4c8"
+                        opacity="0.35"
+                      />
+                      <circle
+                        cx="90"
+                        cy="78"
+                        r="3"
+                        fill="#f8a4c8"
+                        opacity="0.45"
+                      />
+                      <circle
+                        cx="98"
+                        cy="83"
+                        r="2"
+                        fill="#f6b8d4"
+                        opacity="0.35"
+                      />
+                      <circle
+                        cx="82"
+                        cy="95"
+                        r="2.5"
+                        fill="#f8a4c8"
+                        opacity="0.4"
+                      />
+                      <circle
+                        cx="48"
+                        cy="46"
+                        r="2.5"
+                        fill="#f6b8d4"
+                        opacity="0.4"
+                      />
+                      <circle
+                        cx="56"
+                        cy="39"
+                        r="2"
+                        fill="#f8a4c8"
+                        opacity="0.45"
+                      />
+                      <circle
+                        cx="66"
+                        cy="41"
+                        r="3"
+                        fill="#f8a4c8"
+                        opacity="0.45"
+                      />
+                      <circle
+                        cx="75"
+                        cy="48"
+                        r="2"
+                        fill="#f6b8d4"
+                        opacity="0.35"
+                      />
+                      <circle
+                        cx="60"
+                        cy="36"
+                        r="2.5"
+                        fill="#f8a4c8"
+                        opacity="0.4"
+                      />
+                      <!-- Falling petals -->
+                      <circle
+                        cx="40"
+                        cy="110"
+                        r="1.5"
+                        fill="#f8a4c8"
+                        opacity="0.3"
+                      />
+                      <circle
+                        cx="78"
+                        cy="118"
+                        r="1.2"
+                        fill="#f6b8d4"
+                        opacity="0.25"
+                      />
+                      <circle
+                        cx="52"
+                        cy="125"
+                        r="1"
+                        fill="#f8a4c8"
+                        opacity="0.2"
+                      />
+                      <!-- Pot/base (subtle) -->
+                      <path
+                        d="M36 140 L84 140 L78 156 L42 156 Z"
+                        fill="#8B6914"
+                        opacity="0.1"
+                      />
+                      <line
+                        x1="33"
+                        y1="140"
+                        x2="87"
+                        y2="140"
+                        stroke="#8B6914"
+                        stroke-width="2"
+                        opacity="0.2"
+                      />
+                    </svg>
+                  </div>
+                  <div class="wisdom-text">
+                    <p id="sensei-quote-text" class="quote-text">
+                      "El dato que buscas está en la pregunta, no en la
+                      respuesta."
+                    </p>
+                    <span id="sensei-quote-author" class="quote-author"
+                      >— Sensei de Datos</span
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <!-- History -->
+              <div class="wisdom-history">
+                <div class="wisdom-history-header">
+                  <h3>Historial</h3>
+                  <button
+                    id="clear-history-btn"
+                    class="btn btn-outline btn-sm"
+                    style="font-size: 0.75rem"
+                  >
+                    Borrar
+                  </button>
+                  <!-- F13: EXPORT CSV BUTTON -->
+                  <button onclick="if(typeof exportHistoryCSV==='function')exportHistoryCSV()" class="btn btn-outline btn-sm" style="font-size: 0.75rem; margin-left: 8px;">
+                      <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" style="vertical-align:middle;margin-right:4px;">
+                          <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                      </svg>
+                      CSV
+                  </button>
+                  <!-- F18: BACKUP/RESTORE BUTTONS -->
+                  <button onclick="if(typeof exportFullProgress==='function')exportFullProgress()" class="btn btn-outline btn-sm" style="font-size: 0.75rem; margin-left: 8px;">
+                      <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" style="vertical-align:middle;margin-right:4px;">
+                          <path d="M12 15l-5-5h3V4h4v6h3l-5 5zm-7 4v-2h14v2H5z"/>
+                      </svg>
+                      Backup
+                  </button>
+                  <label class="btn btn-outline btn-sm" style="font-size: 0.75rem; margin-left: 8px; cursor:pointer;">
+                      <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" style="vertical-align:middle;margin-right:4px;">
+                          <path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/>
+                      </svg>
+                      Restaurar
+                      <input type="file" accept=".json" style="display:none;" onchange="if(typeof importFullProgress==='function')importFullProgress(this.files[0])">
+                  </label>
+                </div>
+                <div
+                  id="history-list"
+                  style="max-height: 150px; overflow-y: auto"
+                >
+                  <!-- Injected via JS -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- End menu-container -->
+      </div>
+      <!-- End start-screen -->
+
+      <!-- NEW: Study Screen (Hidden) -->
+      <div id="study-screen" class="hidden" style="width: 100%; height: 100%">
+        <div class="study-layout">
+          <aside class="study-sidebar">
+            <button
+              id="study-back-btn"
+              class="btn btn-outline btn-sm"
+              style="margin-bottom: 1rem"
+            >
+              ← Volver al Menú
+            </button>
+            <h3 id="study-course-title">Estudio</h3>
+            <div id="study-toc" class="study-toc">
+              <!-- Injected via JS -->
+            </div>
+          </aside>
+          <main class="study-content">
+            <div id="study-detail-view">
+              <h2 id="study-item-title">Seleccione un tema</h2>
+              <div id="study-item-body" class="study-body-text">
+                <!-- Content -->
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+
+      <!-- Admin Modal (Hidden) -->
+      <div id="admin-modal" class="modal-overlay hidden" role="dialog" aria-labelledby="admin-modal-title" aria-modal="true">
+        <div class="modal-content admin-modal-expanded">
+          <h3 id="admin-modal-title">Módulo Administrativo</h3>
+
+          <!-- Tab Navigation -->
+          <div class="admin-tabs">
+            <button class="admin-tab active" data-tab="courses">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 19.5A2.5 2.5 0 016.5 17H20"/>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/>
+              </svg>
+              Cursos
+            </button>
+            <button class="admin-tab" data-tab="categories">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7"/>
+                <rect x="14" y="3" width="7" height="7"/>
+                <rect x="14" y="14" width="7" height="7"/>
+                <rect x="3" y="14" width="7" height="7"/>
+              </svg>
+              Categorías
+            </button>
+            <button class="admin-tab" data-tab="certifications">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="8" r="7"/>
+                <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>
+              </svg>
+              Certificaciones
+            </button>
+          </div>
+
+          <!-- TAB 1: Courses (existing) -->
+          <div class="admin-tab-content active" id="admin-tab-courses">
+            <div class="form-group">
+              <label for="admin-course-select">Seleccionar Curso:</label>
+              <select id="admin-course-select">
+                <!-- Injected via JS -->
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Idioma Predeterminado:</label>
+              <div class="radio-group">
+                <label
+                  ><input type="radio" name="admin-lang" value="en" /> Inglés
+                  (English)</label
+                >
+                <label
+                  ><input type="radio" name="admin-lang" value="es" />
+                  Español</label
+                >
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Estado del Curso:</label>
+              <div class="radio-group">
+                <label
+                  ><input type="radio" name="admin-status" value="active" />
+                  Activo</label
+                >
+                <label
+                  ><input type="radio" name="admin-status" value="coming" />
+                  Próximamente</label
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 2: Categories -->
+          <div class="admin-tab-content" id="admin-tab-categories">
+            <p class="admin-hint">Desactiva las categorías que no necesitas ver en el menú principal.</p>
+            <div id="admin-category-list" class="admin-toggle-list">
+              <!-- Injected via JS -->
+            </div>
+          </div>
+
+          <!-- TAB 3: Certifications -->
+          <div class="admin-tab-content" id="admin-tab-certifications">
+            <p class="admin-hint">Marca las certificaciones que ya has obtenido. Se mostrarán con un badge de verificación.</p>
+            <div id="admin-cert-list" class="admin-toggle-list">
+              <!-- Injected via JS -->
+            </div>
+          </div>
+
+          <div class="modal-actions">
+            <button id="admin-cancel" class="btn btn-outline">Cancelar</button>
+            <button id="admin-save" class="btn btn-primary">
+              Guardar Configuración
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quiz Config Modal (Hidden) -->
+      <div id="quiz-config-modal" class="modal-overlay hidden" role="dialog" aria-labelledby="quiz-config-title" aria-modal="true">
+        <div class="modal-content">
+          <h3 id="quiz-config-title">Configuración del Examen</h3>
+          <p>Seleccione la cantidad de preguntas para esta sesión.</p>
+
+          <div
+            class="form-group"
+            style="
+              padding-bottom: 1rem;
+              border-bottom: 1px solid var(--border-color);
+              margin-bottom: 1rem;
+            "
+          >
+            <label
+              style="font-weight: bold; display: block; margin-bottom: 0.5rem"
+              >Rango del Banco de Preguntas</label
+            >
+            <div style="display: flex; gap: 1rem; align-items: center">
+              <div style="flex: 1">
+                <label style="font-size: 0.8rem">Desde #</label>
+                <input
+                  type="number"
+                  id="config-range-start"
+                  min="1"
+                  class="form-control"
+                  style="width: 100%; padding: 0.4rem"
+                />
+              </div>
+              <div style="flex: 1">
+                <label style="font-size: 0.8rem">Hasta #</label>
+                <input
+                  type="number"
+                  id="config-range-end"
+                  min="1"
+                  class="form-control"
+                  style="width: 100%; padding: 0.4rem"
+                />
+              </div>
+            </div>
+            <small style="color: var(--text-muted, #64748b); font-size: 0.8em"
+              >Límites: 1 - <span id="global-total-display">0</span></small
+            >
+          </div>
+
+          <div class="form-group">
+            <label
+              >Preguntas Disponibles:
+              <span id="config-total-questions">0</span></label
+            >
+            <div style="display: flex; align-items: center; gap: 1rem">
+              <input
+                type="range"
+                id="config-slider"
+                min="1"
+                step="1"
+                style="flex: 1"
+              />
+              <span
+                id="config-count-display"
+                style="font-weight: bold; font-size: 1.2rem; min-width: 30px"
+                >10</span
+              >
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-top: 1rem">
+            <label>Filtrar por Palabra Clave (Opcional):</label>
+            <input
+              type="text"
+              id="config-search"
+              placeholder="Ej. Unity Catalog, Delta Live Tables..."
+              style="
+                width: 100%;
+                padding: 8px;
+                border: 1px solid var(--border-color);
+                border-radius: 4px;
+                background: var(--bg-surface);
+                color: var(--text-color);
+              "
+            />
+            <small style="color: var(--text-muted, #64748b); display: block; margin-top: 4px"
+              >Deja vacío para incluir todas las preguntas.</small
+            >
+          </div>
+
+          <div class="form-group" style="margin-top: 1rem">
+            <label style="display: flex; align-items: center; cursor: pointer">
+              <input
+                type="checkbox"
+                id="config-real-mode"
+                style="width: 20px; height: 20px; margin-right: 10px"
+              />
+              <div>
+                <span style="font-weight: bold">Modo Examen Real</span>
+                <br />
+                <small style="font-weight: normal; color: var(--text-muted, #64748b)"
+                  >Sin botón de "Mostrar Respuesta". Feedback solo al
+                  final.</small
+                >
+              </div>
+            </label>
+          </div>
+
+          <div
+            id="config-weakness-container"
+            class="form-group hidden"
+            style="
+              margin-top: 1rem;
+              background: rgba(220, 53, 69, 0.1);
+              padding: 0.5rem;
+              border-radius: 6px;
+              border: 1px solid var(--danger-color);
+            "
+          >
+            <label style="display: flex; align-items: center; cursor: pointer">
+              <input
+                type="checkbox"
+                id="config-weakness-mode"
+                style="width: 20px; height: 20px; margin-right: 10px"
+              />
+              <div>
+                <span style="font-weight: bold; color: var(--danger-color)"
+                  >Modo Ataque a Debilidades</span
+                >
+                <br />
+                <small
+                  id="config-weakness-label"
+                  style="font-weight: normal; color: var(--text-muted, #64748b)"
+                  >Repasar Fallos</small
+                >
+              </div>
+            </label>
+          </div>
+
+          <div class="form-group" style="margin-top: 1rem">
+            <label>Filtrar por Dominio (Opcional):</label>
+            <select
+              id="config-domain-select"
+              class="form-control"
+              style="width: 100%; padding: 0.5rem"
+            >
+              <option value="">-- Todos los Dominios --</option>
+            </select>
+          </div>
+
+          <div class="form-group" style="margin-top: 1rem">
+            <label style="display: block; margin-bottom: 5px"
+              >Orden de Preguntas:</label
+            >
+            <div style="display: flex; gap: 1rem">
+              <label
+                style="cursor: pointer; display: flex; align-items: center"
+              >
+                <input
+                  type="radio"
+                  name="order-mode"
+                  value="random"
+                  checked
+                  style="margin-right: 5px"
+                />
+                Aleatorio
+              </label>
+              <label
+                style="cursor: pointer; display: flex; align-items: center"
+              >
+                <input
+                  type="radio"
+                  name="order-mode"
+                  value="sequential"
+                  style="margin-right: 5px"
+                />
+                Secuencial (Orden Doc)
+              </label>
+            </div>
+          </div>
+
+          <div class="modal-actions">
+            <button id="config-cancel" class="btn btn-outline">Cancelar</button>
+            <button
+              id="config-start"
+              class="btn btn-primary"
+              onclick="startQuizAction()"
+            >
+              Iniciar Examen
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quiz Container (Initially Hidden) -->
+      <div
+        id="quiz-ui"
+        class="hidden"
+        role="region"
+        aria-label="Motor de examen"
+        style="width: 100%; display: flex; gap: 2rem"
+      >
+        <!-- Left Side: Question -->
+        <div class="question-container">
+          <div class="card" id="question-card">
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+              "
+            >
+              <div class="progress-info">
+                <span id="progress-text">Question 1 of 10</span>
+              </div>
+              <button id="finish-btn-top" class="btn btn-danger btn-sm">
+                Finalizar Examen
+              </button>
+            </div>
+
+            <hr
+              style="
+                margin: 1rem 0;
+                border: 0;
+                border-top: 1px solid var(--border-color);
+              "
+            />
+
+            <div
+              id="scenario-block"
+              class="hidden"
+              style="
+                background: var(--primary-light, rgba(79, 110, 247, 0.08));
+                padding: 1rem 1.25rem;
+                margin-bottom: 1rem;
+                border-radius: 12px;
+                border: 1px solid rgba(79, 110, 247, 0.15);
+              "
+            >
+              <!-- Scenario Text -->
+            </div>
+
+            <div
+              id="type-instruction"
+              style="
+                font-style: italic;
+                color: var(--secondary-color);
+                margin-bottom: 0.5rem;
+                font-size: 0.9rem;
+              "
+            >
+              <!-- Dynamic Instruction Text -->
+            </div>
+
+            <div class="question-text" id="question-text" aria-live="polite" aria-atomic="true">
+              <!-- Question Text Here -->
+            </div>
+
+            <div class="options-list" id="options-list" role="radiogroup" aria-label="Opciones de respuesta">
+              <!-- Options injected via JS -->
+            </div>
+
+            <div id="feedback-area" class="feedback-section hidden" role="alert" aria-live="assertive">
+              <h4 id="feedback-title">Result</h4>
+              <p id="feedback-explanation">Explanation...</p>
+              <div
+                class="latex-code"
+                style="
+                  margin-top: 0.5rem;
+                  font-family: monospace;
+                  font-size: 0.8rem;
+                  opacity: 0.7;
+                "
+              >
+                <strong>LaTeX Source:</strong> <span id="latex-source"></span>
+              </div>
+            </div>
+
+            <!-- Updated Control Bar Layout -->
+            <div class="control-bar">
+              <button
+                id="prev-btn"
+                class="btn btn-outline"
+                style="min-width: 100px"
+              >
+                Previous
+              </button>
+              <div style="flex: 1"></div>
+              <!-- Spacer -->
+              <button
+                id="check-btn"
+                class="btn btn-primary"
+                style="min-width: 120px"
+              >
+                Submit Answer
+              </button>
+              <div style="flex: 1"></div>
+              <!-- Spacer -->
+              <button
+                id="next-btn"
+                class="btn btn-secondary"
+                style="min-width: 100px"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+
+          <!-- Custom Confirmation Modal -->
+          <div
+            id="confirm-modal"
+            class="modal-overlay hidden"
+            role="alertdialog"
+            aria-labelledby="confirm-modal-title"
+            aria-describedby="confirm-msg"
+            aria-modal="true"
+            style="z-index: 2000"
+          >
+            <div
+              class="modal-content text-center"
+              style="animation: popIn 0.3s ease-out; max-width: 400px"
+            >
+              <div
+                style="
+                  font-size: 3rem;
+                  color: var(--warning-color);
+                  margin-bottom: 1rem;
+                "
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  width="48"
+                  height="48"
+                  fill="var(--warning-color)"
+                >
+                  <path
+                    d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"
+                  />
+                </svg>
+              </div>
+              <h3 id="confirm-modal-title" style="margin-bottom: 1rem">Preguntas Pendientes</h3>
+              <p
+                id="confirm-msg"
+                style="margin-bottom: 2rem; color: var(--secondary-color)"
+              >
+                Aún tienes preguntas sin responder. ¿Estás seguro de que quieres
+                finalizar?
+              </p>
+              <div style="display: flex; gap: 1rem; justify-content: center">
+                <button id="confirm-continue" class="btn btn-secondary">
+                  Continuar Examen
+                </button>
+                <button id="confirm-finish" class="btn btn-danger">
+                  Finalizar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side: Navigation Map -->
+        <aside class="sidebar">
+          <h3 id="map-title">Mapa de Preguntas</h3>
+          <div class="question-map" id="question-map">
+            <!-- Map Nodes injected via JS -->
+          </div>
+          <div
+            style="
+              margin-top: 2rem;
+              border-top: 1px solid var(--border-color);
+              padding-top: 1rem;
+            "
+          >
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                margin-bottom: 0.5rem;
+              "
+            >
+              <div
+                style="
+                  width: 15px;
+                  height: 15px;
+                  background: var(--success-color);
+                  border-radius: 50%;
+                "
+              ></div>
+              <span id="legend-answered">Respondida</span>
+            </div>
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                margin-bottom: 0.5rem;
+              "
+            >
+              <div
+                style="
+                  width: 15px;
+                  height: 15px;
+                  background: var(--warning-color);
+                  border-radius: 50%;
+                "
+              ></div>
+              <span id="legend-current">Actual</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.5rem">
+              <div
+                style="
+                  width: 15px;
+                  height: 15px;
+                  background: var(--border-color);
+                  border-radius: 50%;
+                "
+              ></div>
+              <span id="legend-pending">Pendiente</span>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <!-- Results Screen -->
+      <div id="results-screen" class="card hidden">
+        <h2 id="result-title">¡Examen Completado!</h2>
+        <div
+          style="
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 2rem 0;
+            color: var(--primary-color);
+          "
+        >
+          <span id="final-score">0</span>%
+        </div>
+        <div
+          id="score-fraction"
+          style="
+            font-size: 1.2rem;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+          "
+        >
+          <!-- X / Y questions -->
+        </div>
+        <p id="result-msg">¡Buen trabajo!</p>
+
+        <div
+          id="domain-breakdown-container"
+          class="hidden"
+          style="
+            margin-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            padding-top: 1rem;
+            text-align: left;
+          "
+        >
+          <!-- Domain Performance Breakdown -->
+        </div>
+
+        <div
+          id="review-container"
+          class="hidden"
+          style="text-align: left; margin-top: 2rem"
+        >
+          <!-- Injected via JS -->
+        </div>
+
+        <button id="restart-btn" class="btn btn-primary mt-4">
+          Al Menú Principal
+        </button>
+      </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div id="profile-modal" class="modal-overlay hidden" role="dialog" aria-labelledby="profile-modal-title" aria-modal="true">
+      <div class="modal-content" style="max-width: 500px">
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+          "
+        >
+          <h3
+            style="
+              margin: 0;
+              color: var(--primary-color);
+              display: flex;
+              align-items: center;
+              gap: 10px;
+            "
+          >
+            <svg
+              viewBox="0 0 24 24"
+              width="28"
+              height="28"
+              stroke="currentColor"
+              stroke-width="2"
+              fill="none"
+            >
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+            <span id="profile-modal-title">Mi Perfil</span>
+          </h3>
+          <button
+            id="sound-toggle-btn"
+            class="btn btn-sm btn-outline"
+            onclick="toggleSound()"
+            title="Activar/Desactivar Sonido"
+            style="
+              min-width: 40px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            "
+          >
+            <svg
+              viewBox="0 0 24 24"
+              width="20"
+              height="20"
+              stroke="currentColor"
+              stroke-width="2"
+              fill="none"
+            >
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+              <path
+                d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <div style="margin-bottom: 1rem">
+          <label style="display: block; margin-bottom: 5px; font-weight: 600"
+            >Nombre Completo</label
+          >
+          <input
+            type="text"
+            id="profile-fullname"
+            class="search-input"
+            style="width: 100%"
+            placeholder="Tu nombre real..."
+          />
+        </div>
+
+        <div style="margin-bottom: 1rem">
+          <label style="display: block; margin-bottom: 5px; font-weight: 600"
+            >Nickname (para saludos)</label
+          >
+          <input
+            type="text"
+            id="profile-nick"
+            class="search-input"
+            style="width: 100%"
+            placeholder="Como quieres que te llamemos..."
+          />
+        </div>
+
+        <div style="margin-bottom: 1.5rem">
+          <label
+            style="
+              display: flex;
+              align-items: center;
+              gap: 8px;
+              margin-bottom: 10px;
+              font-weight: 600;
+            "
+          >
+            <svg
+              viewBox="0 0 24 24"
+              width="20"
+              height="20"
+              stroke="currentColor"
+              stroke-width="2"
+              fill="none"
+            >
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+              <path d="M6 12v5c3 3 9 3 12 0v-5" />
+            </svg>
+            Certificaciones Obtenidas
+          </label>
+          <div
+            id="cert-list"
+            style="
+              background: rgba(0, 0, 0, 0.03);
+              padding: 10px;
+              border-radius: 8px;
+            "
+          >
+            <!-- Checkboxes injected by JS -->
+            <div style="margin-bottom: 5px">
+              <label
+                ><input type="checkbox" id="cert-databricks-da" /> Databricks
+                Data Analyst</label
+              >
+            </div>
+            <div>
+              <label
+                ><input type="checkbox" id="cert-dp-600" /> Microsoft Fabric
+                DP-600</label
+              >
+            </div>
+          </div>
+        </div>
+
+        <div
+          style="
+            border-top: 1px solid #eee;
+            padding-top: 1rem;
+            margin-top: 1rem;
+          "
+        >
+          <h4
+            style="
+              margin: 0 0 10px 0;
+              font-size: 0.9rem;
+              color: var(--text-muted, #64748b);
+              display: flex;
+              align-items: center;
+              gap: 8px;
+            "
+          >
+            <svg
+              viewBox="0 0 24 24"
+              width="18"
+              height="18"
+              stroke="currentColor"
+              stroke-width="2"
+              fill="none"
+            >
+              <path
+                d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"
+              />
+              <polyline points="17 21 17 13 7 13 7 21" />
+              <polyline points="7 3 7 8 15 8" />
+            </svg>
+            Gestión de Datos
+          </h4>
+          <div style="display: flex; gap: 10px">
+            <button
+              class="btn btn-outline"
+              style="
+                flex: 1;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+              "
+              onclick="exportData()"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                width="16"
+                height="16"
+                stroke="currentColor"
+                stroke-width="2"
+                fill="none"
+              >
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="17 8 12 3 7 8" />
+                <line x1="12" y1="3" x2="12" y2="15" />
+              </svg>
+              Exportar Backup
+            </button>
+            <button
+              class="btn btn-outline"
+              style="
+                flex: 1;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+              "
+              onclick="document.getElementById('import-file').click()"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                width="16"
+                height="16"
+                stroke="currentColor"
+                stroke-width="2"
+                fill="none"
+              >
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+              Importar Backup
+            </button>
+            <input
+              type="file"
+              id="import-file"
+              style="display: none"
+              onchange="importData(this)"
+            />
+          </div>
+          <p style="font-size: 0.75rem; color: var(--secondary-color); margin-top: 5px">
+            Guarda tu progreso en un archivo .json para no perderlo.
+          </p>
+        </div>
+
+        <div
+          style="
+            margin-top: 1.5rem;
+            text-align: right;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+          "
+        >
+          <button
+            class="btn btn-outline"
+            onclick="
+              document.getElementById('profile-modal').classList.add('hidden')
+            "
+          >
+            Cancelar
+          </button>
+          <button class="btn btn-primary" onclick="saveProfile()">
+            Guardar Cambios
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Badges Modal (Hidden) -->
+    <div id="badges-modal" class="modal-overlay hidden" role="dialog" aria-label="Logros y Cinturones" aria-modal="true">
+      <div
+        class="modal-content"
+        style="
+          max-width: 800px;
+          width: 90%;
+          max-height: 90vh;
+          display: flex;
+          flex-direction: column;
+          padding: 0;
+        "
+      >
+        <div
+          style="
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          "
+          class="modal-header-custom"
+        >
+          <div style="display: flex; gap: 15px">
+            <button
+              id="tab-badges-btn"
+              class="btn btn-primary"
+              onclick="switchModalTab('badges')"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                width="16"
+                height="16"
+                fill="currentColor"
+                style="vertical-align: middle; margin-right: 4px"
+              >
+                <path
+                  d="M12 2l2.4 7.4h7.6l-6 4.6 2.3 7L12 16.4 5.7 21l2.3-7-6-4.6h7.6z"
+                />
+              </svg>
+              Logros
+            </button>
+            <button
+              id="tab-library-btn"
+              class="btn btn-outline"
+              onclick="switchModalTab('library')"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                width="16"
+                height="16"
+                fill="currentColor"
+                style="vertical-align: middle; margin-right: 4px"
+              >
+                <path
+                  d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"
+                />
+              </svg>
+              Biblioteca
+            </button>
+          </div>
+        </div>
+
+        <div style="padding: 1.5rem; overflow-y: auto; flex: 1">
+          <!-- BADGES VIEW -->
+          <div id="view-badges" style="display: block">
+            <div
+              id="badges-grid"
+              style="
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 1rem;
+                margin-bottom: 2rem;
+              "
+            >
+              <!-- Injected via JS -->
+            </div>
+          </div>
+
+          <!-- LIBRARY VIEW -->
+          <div id="view-library" style="display: none">
+            <div
+              id="library-grid"
+              style="
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 1rem;
+              "
+            >
+              <!-- Injected via JS -->
+            </div>
+          </div>
+
+          <div
+            id="gamification-stats"
+            style="
+              background: rgba(0, 0, 0, 0.03);
+              padding: 1.5rem;
+              border-radius: 8px;
+              font-size: 0.95rem;
+              text-align: center;
+            "
+          >
+            <!-- Stats -->
+          </div>
+        </div>
+
+        <div
+          style="
+            padding: 1rem;
+            border-top: 1px solid var(--border-color);
+            border-radius: 0 0 12px 12px;
+            text-align: right;
+          "
+          class="modal-footer-custom"
+        >
+          <button
+            id="badges-close"
+            class="btn btn-primary"
+            onclick="
+              document.getElementById('badges-modal').classList.add('hidden')
+            "
+          >
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </div>    <!-- LESSONS LEARNED MODAL -->
+    <div id="lessons-learned-modal" class="modal-overlay hidden" role="dialog" aria-modal="true">
+        <div class="modal-content" style="max-width: 650px; width: 90%; max-height: 85vh; overflow-y: auto; position: relative;">
+            <button onclick="document.getElementById('lessons-learned-modal').classList.add('hidden')" style="position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 28px; cursor: pointer; color: var(--text-color);">&times;</button>
+            <h2 style="margin-top: 0; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 20px; color: var(--text-color)">Lecciones Aprendidas</h2>
+            
+            <div id="lessons-learned-content" style="display: flex; flex-direction: column; gap: 20px; line-height: 1.6; color: var(--text-color);">
+                <!-- Content injected dynamically via features.js -->
+            </div>
+
+            <div class="modal-actions" style="margin-top: 2rem; display: flex; justify-content: flex-end;">
+                <button class="btn btn-primary" onclick="document.getElementById('lessons-learned-modal').classList.add('hidden')">
+                    Cerrar Popout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="questions.js"></script>
+    <script src="questions_databricks.js"></script>
+    <script src="questions_mapping_missing.js"></script>
+    <script src="lessons_data.js"></script>
+    <script src="study_data.js"></script>
+    <!-- DP-600 -->
+    <script src="study_databricks.js"></script>
+    <script src="study_databricks_urgent.js"></script> <!-- Urgent exam topics deep-dive -->
+    <script src="study_databricks_expanded.js"></script> <!-- Full domain gap coverage -->
+    <script src="study_databricks_domains.js"></script> <!-- 9-Domain deep-dive from question bank analysis -->
+    <!-- Databricks New Module -->
+    <script src="questions_databricks_fundamentals.js"></script>
+    <script src="questions_databricks_aibi.js"></script>
+    <script src="questions_databricks_sql_analytics.js"></script>
+    <script src="questions_databricks_genai.js"></script>
+    <script src="study_databricks_fundamentals.js"></script>
+    <script src="flashcards_databricks.js"></script>
+    <script src="conceptos_databricks.js"></script>
+    <script src="comandos_sql_databricks.js"></script>
+    <!-- UNIR Visualización Interactiva -->
+    <script src="questions_unir_viz.js"></script>
+    <script src="study_unir_viz.js"></script>
+    <script src="flashcards_unir_viz.js"></script>
+    <script src="personajes_unir_viz.js"></script>
+    <!-- UNIR Herramientas de Visualización -->
+    <script src="questions_unir_herr.js"></script>
+    <script src="study_unir_herr.js"></script>
+    <script src="flashcards_unir_herr.js"></script>
+    <!-- UNAH Tesis -->
+    <script src="questions_unah_tesis.js"></script>
+    <script src="study_unah_tesis.js"></script>
+    <script src="flashcards_unah_tesis.js"></script>
+    <!-- Auto Restore Master Data -->
+    <script src="auto_restore_data.js"></script>
+    <script src="script.js"></script>
+    <script src="features.js"></script>
+    <!-- Supabase Cloud Backup -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-sync.js"></script>
+    <!-- Databricks Spanish Translation Toggle -->
+    <script src="translations_databricks_es.js"></script>
+    <script src="translate_toggle.js"></script>
+  </body>
+</html>

@@ -1,0 +1,87 @@
+Hello. In this demo, we are going to talk about how to clean, transform, and then chunk the parse text. In the previous demo, we showed how to use AI parse document function to parse documents into JSON format. And now we are going to show the next step.
+Norman Reynaldo Sabillon Castro 0 minutos 29 segundos
+So, by the end of this demo, you should be able to transform parsed JSON text into a clean, optionally markdown format using LLMs, and you should be able to compare these two methods. For each, you should be able to explain their benefits and limitations, and then...
+Norman Reynaldo Sabillon Castro 0 minutos 48 segundos
+you should be able to chunk this clean text and discuss how overlapping works. And then finally, you should be able to store this final clean and chunked data to a delta table so that it can later be used to compute embeddings and
+Norman Reynaldo Sabillon Castro 1 minuto 10 segundos
+Store it in vector database. Let's talk about the requirements. There should be parsed document table in JSON format, so if you have completed the previous demo, you should have this table ready. Then, to run the notebooks, you need serverless compute version 4.
+Norman Reynaldo Sabillon Castro 1 minuto 30 segundos
+And also, some dependencies are added, required drivers added to dependencies; those should be configured too. If you click the servers panel, you should see that the version 4 is selected, and this LangChain text splitter.
+Norman Reynaldo Sabillon Castro 1 minuto 48 segundos
+libraries installed. This should be done by default. So when you select serverless, it should do this for you. But if you face with any problems, especially in terms of library requirements, just make sure that you have this set up and then click apply. If it's not
+Norman Reynaldo Sabillon Castro 2 minutos 8 segundos
+if you face with any problems. So let's get started. The first step is we are going to run this setup code. This classroom setup is going to create the datasets for you if they are not already created. That's it. And this is the demo that we are going to use. Basically, in the previous demo, you should have the table created.
+Norman Reynaldo Sabillon Castro 2 minutos 30 segundos
+For you, the delta table with JSON documents created for you. Other than that, you don't need anything, so let's get started. How do we transform this JSON table to clean text? So, we have here two options: the first option is to use an LLM.
+Norman Reynaldo Sabillon Castro 2 minutos 49 segundos
+To do semantic cleaning and using AI query, so this method is gonna pass the JSON text to an LLM and ask LLM to convert this one to markdown text using JSON data there. So, for example, if the element is a table...
+Norman Reynaldo Sabillon Castro 3 minutos 10 segundos
+is going to convert that to markdown table. The fast and easiest way is just convert this JSON text to plain text. So we are going to talk about both of these methods and their advantages and limitations. So first, let's look at...
+Norman Reynaldo Sabillon Castro 3 minutos 29 segundos
+the table that we have. So we have dogs parts table that we created in previous demo and this chunk table is going to be the final table that we are going to store the chunk data. So you can see that our source table has a path, modification time, length, and most importantly
+Norman Reynaldo Sabillon Castro 3 minutos 49 segundos
+parsed content. So this parsed content was in JSON format. Let's start with the LLM semantic cleaning and transformation. So how it works is.
+Norman Reynaldo Sabillon Castro 4 minutos 2 segundos
+We are using an LLM. In this example, we are using GPT open source 20 building parameter. We are passing prompt. We are saying that you are a helpful assistant. We are going to give you a JSON object with pages, elements, and metadata, and we want you to convert this to clean.
+Norman Reynaldo Sabillon Castro 4 minutos 22 segundos
+readable markdown format. Also, we are adding this page divider to separate pages so that, you know, we can reference to those pages later. So this is a simple prompt. Then we are using the AI query function.
+Norman Reynaldo Sabillon Castro 4 minutos 42 segundos
+AI query is a generic function that is provided by Databricks and you passes an endpoint and then you passes your prompt along with the content that you pass and the response format is going to be text in this case. So here is how it's going to look like. So we pass
+Norman Reynaldo Sabillon Castro 5 minutos 1 segundo
+that JSON object, and then this is clean markdown text format. You can see that it is adding this page number, so zero, and of course is by document. So this will have only one page. And you can, oh, sorry, it has more than one page. So page zero, one, and yeah.
+Norman Reynaldo Sabillon Castro 5 minutos 21 segundos
+end of the document, there were two pages here. You can see that the markdown is created. So this is like header one, this was header two, and here you can see that you have nice markdown table format. So this is how you do that with LLM, but what are the limitation here? The limitation, it can be very expensive because
+Norman Reynaldo Sabillon Castro 5 minutos 43 segundos
+you are passing all that text into LM and you are paying for this token. So this is the limitation of this method, but of course you have the advantage. Why? Because you are keeping more structure and meaning and you are producing high quality markdown. So if you later use this one,
+Norman Reynaldo Sabillon Castro 6 minutos 3 segundos
+For your retrieval agent, then you are going to have more context there. The easiest or fast and cheap version is going to be just to extract the text from that JSON tree. And yeah, that will be it. But of course, in this method, we are going to lose some important structure and semantics.
+Norman Reynaldo Sabillon Castro 6 minutos 23 segundos
+Let's say for the headings, for table, we are going to lose that format. So it's going to have less contextual information, but we don't need to pay for the tokens. We are just going to use.
+Norman Reynaldo Sabillon Castro 6 minutos 37 segundos
+UDF to apply to all columns. In this case is going to be plain text and we are going to extract the plain text. So here we are extracting the text and you can see that here we don't have any semantics here. Well, you can add semantics. I'm going to show.
+Norman Reynaldo Sabillon Castro 6 minutos 57 segundos
+you the function that we used. So this is how we are defining extract contents UDF and this UDF is basically calling this function and it is very simple function that just extract page ID from the JSON object and also extract context from JSON based on the content of the element.
+Norman Reynaldo Sabillon Castro 7 minutos 20 segundos
+That's it. There's nothing too complicated. But of course, if you want, you can improve this and more semantics to your plain text. So for example, if it is a header, you can create a markdown style for that. And it's going to also work for you.
+Norman Reynaldo Sabillon Castro 7 minutos 40 segundos
+But we kept it very simple, so that you don't need to worry about that. So that's how it's done.
+Norman Reynaldo Sabillon Castro 7 minutos 48 segundos
+Now, let's talk about chunking. So we talk about how do you transform that JSON to plain text. And now let's talk about chunking. So what is chunking? Chunking is when we have a long text and we cannot pass that long text to LLM because LLMs has limited
+Norman Reynaldo Sabillon Castro 8 minutos 10 segundos
+window length context, right? In this example, of course, our text is very short, so it's not gonna exceed the LLM window are gonna be easily able to handle this, but we are just assuming that the text is long and we want to chunk that.
+Norman Reynaldo Sabillon Castro 8 minutos 29 segundos
+Here we are going to use LangChain TextSplitter library, but you can use any chunking library out there. We don't need to use LangChain, but an example here we are using LangChain. So what we do is we define chunk size and chunk overlap. So this is how many characters is going to be used to split.
+Norman Reynaldo Sabillon Castro 8 minutos 50 segundos
+the chunks and while splitting it is going to make sure that it is overlapping by this amount. Then we can define separator, how to separate them and also the schema because this is returned text is we are going to store that in delta and we want to define the schema here.
+Norman Reynaldo Sabillon Castro 9 minutos 11 segundos
+So here it is just, we are defining a simple map in pandas function and we are splitting, calling the split rows to iterate over column. And the result is going to be like this. So we are going to use that plain text and divide it into chunks so you can see that.
+Norman Reynaldo Sabillon Castro 9 minutos 33 segundos
+This product overview document now splitted into two, so it's splitted here and splitted here, because we defined the split page here, we define as separator, we define page here, you can see that it is splitted in the page, but of course you don't see.
+Norman Reynaldo Sabillon Castro 9 minutos 53 segundos
+The...
+Norman Reynaldo Sabillon Castro 9 minutos 55 segundos
+overlapping here because the text is very short, so it's not exceeding that limit that we defined chunk size. You can play with this and yeah, maybe let's say if you make it very small chunks and you can see how the chunk overlapping works. I'm going to just
+Norman Reynaldo Sabillon Castro 10 minutos 15 segundos
+Run this an example.
+Norman Reynaldo Sabillon Castro 10 minutos 20 segundos
+Yeah, you can see that when I lower the chunk size to very small chunks, you can see that is how it is now chunking. And yeah, this is the chunked. You can see that this is chunked into very small pieces. And here you can see how it is the overlapping worked here.
+Norman Reynaldo Sabillon Castro 10 minutos 43 segundos
+In some of the examples, you don't see the overlapping, but here you can see that there is motion control and deep, and then you can see that control and deep learning, right? And here you can see that data collected, data collected. So this is helpful when you pass this.
+Norman Reynaldo Sabillon Castro 11 minutos 1 segundo
+chunks into LLM, and the overlapping is going to help the LLM to understand the previous section, of course, a little bit. And this example is very small. We just like to demonstrate it, we use a very small chunk size and a very small overlap. But let's say, imagine you have a long text and you can use one
+Norman Reynaldo Sabillon Castro 11 minutos 24 segundos
+previous paragraph as overlap and you know that the LLM is going to understand what was in the previous paragraph or maybe the next paragraph and it's going to have more context there. Or you can maybe generate, these are more advanced options, but you can generate a summary of
+Norman Reynaldo Sabillon Castro 11 minutos 44 segundos
+previous pages and pass that as overlap to the LLM and the LLM so that understand what was before that and what's coming after that too.
+Norman Reynaldo Sabillon Castro 11 minutos 56 segundos
+So that is how chunking works. And the final step, we are going to save these chunks to delta table so that we can compute embeddings, convert this plain text to embeddings and store them in vector database. To do that, we are just writing as delta.
+Norman Reynaldo Sabillon Castro 12 minutos 17 segundos
+and override and because we are merging the schema, we define the schema, we want to define the schema and save it. But that's how it is stored.
+Norman Reynaldo Sabillon Castro 12 minutos 28 segundos
+And to wrap up here, we showed how to clean a parse document using two methods. We show how you can use an LLM to use it as a semantic way of cleaning data. Then we used a simple plain text method
+Norman Reynaldo Sabillon Castro 12 minutos 47 segundos
+To extract text from JSON object, then we showed how chunking works using library to divide text into chunks and show how you can use overlap to have more kind of semantic knowledge when you chunk data.
+Norman Reynaldo Sabillon Castro 13 minutos 7 segundos
+And we store the result into delta table so that we can use it later.
+Norman Reynaldo Sabillon Castro 13 minutos 12 segundos
+That was it for this demo. Thanks for watching.

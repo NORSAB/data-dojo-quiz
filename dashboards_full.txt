@@ -1,0 +1,416 @@
+﻿Loaded questions_databricks.js. Total questions: 300
+=== Dashboards & Visualizations (40 questions) ===
+
+Q1 [db-da-7] type:single_choice
+PROMPT: A data engineering team has created a Structured Streaming pipeline that processes data in micro-batches and populates gold-level tables every minute. A data analyst has created a dashboard based on this data. Stakeholders want the dashboard updated within one minute or less of new data becoming available.
+
+Which of the following cautions should the data analyst share prior to setting up the dashboard?
+  a) The required compute resources could be costly Ô£à
+  b) The gold-level tables are not appropriately clean for business reporting
+  c) The streaming data is not an appropriate data source for a dashboard
+  d) The streaming cluster is not fault tolerant
+  e) The dashboard cannot be refreshed that quickly
+CURRENT_EXPL: Continuously querying the gold-level tables every minute to update the dashboard puts a significant load on compute resources. The analyst should caution that this level of frequency might lead to substantial infrastructure costs.
+---END---
+
+Q2 [db-da-9] type:single_choice
+PROMPT: A data analyst wants to create a dashboard with three main sections: Development, Testing, and Production, and wants to clearly designate the sections using text.
+
+Which of the following tools can the data analyst use to designate these sections using text?
+  a) Separate endpoints for each section
+  b) Separate queries for each section
+  c) Markdown-based text boxes Ô£à
+  d) Direct text written into the dashboard in editing mode
+  e) Separate color palettes for each section
+CURRENT_EXPL: Markdown-based text boxes are the most suitable tool. Databricks dashboards support Markdown, allowing analysts to add formatted text and headings directly within the dashboard interface.
+---END---
+
+Q3 [db-da-33] type:single_choice
+PROMPT: Which of the following statements about a refresh schedule is **incorrect**?
+  a) A query can be refreshed anywhere from 1 minute to 2 weeks.
+  b) Refresh schedules can be configured in the Query Editor.
+  c) A query being refreshed on a schedule does not use a SQL Warehouse.
+  d) A refresh schedule is not the same as an alert.
+  e) You must have workspace administrator privileges to configure a refresh schedule. Ô£à
+CURRENT_EXPL: You do NOT need to be an admin to schedule a refresh. Typically, the query owner or users with 'Can Manage' permissions on the query can configure schedules.
+---END---
+
+Q4 [db-da-36] type:single_choice
+PROMPT: A data analyst has been asked to provide a list of options on how to share a dashboard with a client. It is a security requirement that the client does not gain access to any other information, resources, or artifacts in the database.
+Which of the following approaches cannot be used to share the dashboard and meet the security requirement?
+  a) Download the Dashboard as a PDF and share it with the client.
+  b) Set a refresh schedule for the dashboard and enter the client's email address in the "Subscribers" box.
+  c) Take a screenshot of the dashboard and share it with the client.
+  d) Generate a Personal Access Token that is good for 1 day and share it with the client. Ô£à
+  e) Download a PNG file of the visualizations in the dashboard and share them with the client.
+CURRENT_EXPL: Sharing a Personal Access Token (PAT) gives the client authenticated access to the API and potential resources acting as that user, violating the security requirement.
+---END---
+
+Q5 [db-da-37] type:single_choice
+PROMPT: A data analyst has been asked to produce a visualization that shows the flow of users through a website. Which of the following is used for visualizing this type of flow?
+  a) Heatmap
+  b) Choropleth
+  c) Word Cloud
+  d) Pivot Table
+  e) Sankey Ô£à
+CURRENT_EXPL: A Sankey diagram is specifically designed to visualize flows, transfers, and movements between different states or stages.
+---END---
+
+Q6 [db-da-38] type:single_choice
+PROMPT: An analyst writes a query that contains a query parameter. They then add an area chart visualization to the query. While adding the area chart visualization to a dashboard, the analyst chooses "Dashboard Parameter" for the query parameter associated with the area chart.
+
+Which of the following statements is true?
+  a) The area chart will use whatever is selected in the Dashboard Parameter while all or the other visualizations will remain changed regardless of their parameter use.
+  b) The area chart will use whatever is selected in the Dashboard Parameter along with all of the other visualizations in the dashboard that use the same parameter. Ô£à
+  c) The area chart will use whatever value is chosen on the dashboard at the time the area chart is added to the dashboard.
+  d) The area chart will use whatever value is input by the analyst when the visualization is added to the dashboard. The parameter cannot be changed by the user afterwards.
+  e) The area chart will convert to a Dashboard Parameter.
+CURRENT_EXPL: When linked to a Dashboard Parameter, the visualization shares the control with other widgets using the same parameter, allowing a single selection to update multiple charts simultaneously.
+---END---
+
+Q7 [db-da-39] type:single_choice
+PROMPT: A data analyst has been asked to configure an alert for a query that returns the income in the `accounts_receivable` table for a date range. The date range is configurable using a Date query parameter. The Alert does not work.
+
+Which of the following describes why the Alert does not work?
+  a) Alerts don't work with queries that access tables.
+  b) Queries that return results based on dates cannot be used with Alerts.
+  c) The wrong query parameter is being used. Alerts only work with Date and Time query parameters.
+  d) Queries that use query parameters cannot be used with Alerts. Ô£à
+  e) The wrong query parameter is being used. Alerts only work with dropdown list query parameters, not dates.
+CURRENT_EXPL: Queries that use query parameters introduce dynamic behavior that cannot be consistently evaluated by the alerting system. Databricks Alerts require a static query.
+---END---
+
+Q8 [db-da-40] type:single_choice
+PROMPT: Which of the following statements about adding visual appeal to visualizations in the Visualization Editor is incorrect?
+  a) Visualization scale can be changed.
+  b) Data Labels can be formatted.
+  c) Colors can be changed.
+  d) Borders can be added. Ô£à
+  e) Tooltips can be formatted.
+CURRENT_EXPL: The Visualization Editor does not provide a feature to add borders around the visualization. It focuses on data representation aspects like scale, colors, and labels.
+---END---
+
+Q9 [db-da-42] type:single_choice
+PROMPT: A data organization has a team of engineers developing data pipelines following the medallion architecture using Delta Live Tables. While the data analysis team working on a project is using gold-layer tables from these pipelines, they need to perform some additional processing of these tables prior to performing their analysis.
+
+Which of the following terms is used to describe this type of work?
+  a) Data blending
+  b) Last-mile dashboarding
+  c) Data testing
+  d) Last-mile ETL Ô£à
+  e) Data enhancement
+CURRENT_EXPL: This type of light, custom processing performed by analysts on top of the refined gold layer is often referred to as Last-mile ETL.
+---END---
+
+Q10 [db-da-43] type:single_choice
+PROMPT: Which of the following statements describes descriptive statistics?
+  a) A branch of statistics that uses summary statistics to quantitatively describe and summarize data. Ô£à
+  b) A branch of statistics that uses a variety of data analysis techniques to infer properties of an underlying distribution of probability.
+  c) A branch of statistics that uses quantitative variables that must take on a finite or countably infinite set of values.
+  d) A branch of statistics that uses summary statistics to categorically describe and summarize data.
+  e) A branch of statistics that uses quantitative variables that must take on an uncountable set of values.
+CURRENT_EXPL: Descriptive statistics focuses on using measures like mean, median, and mode to summarize and present the characteristics of a dataset.
+---END---
+
+Q11 [db-da-44] type:single_choice
+PROMPT: In which of the following situations will the mean value and median value of variable be meaningfully different?
+  a) When the variable contains no outliers
+  b) When the variable contains no missing values
+  c) When the variable is of the boolean type
+  d) When the variable is of the categorical type
+  e) When the variable contains a lot of extreme outliers Ô£à
+CURRENT_EXPL: Extreme outliers pull the mean towards them (skewing the distribution), while the median remains resistant, resulting in a significant difference between the two.
+---END---
+
+Q12 [db-da-45] type:single_choice
+PROMPT: A data analyst is working with gold-layer tables to complete an ad-hoc project. A stakeholder has provided the analyst with an additional dataset that can be used to augment the gold-layer tables already in use.
+
+Which of the following terms is used to describe this data augmentation?
+  a) Data testing
+  b) Ad-hoc improvements
+  c) Last-mile dashboarding
+  d) Last-mile ETL
+  e) Data enhancement Ô£à
+CURRENT_EXPL: Data enhancement is the process where data is made richer or more complete by adding new datasets to improve the utility of the original data.
+---END---
+
+Q13 [db-da-48] type:single_choice
+PROMPT: What is a benefit of using Databricks SQL for business intelligence (BI) analytics projects instead of using third-party BI tools?
+  a) Computations, data, and analytical tools on the same platform Ô£à
+  b) Advanced dashboarding capabilities
+  c) Simultaneous multi-user support
+  d) Automated alerting systems
+CURRENT_EXPL: It unifies computations, data storage, and analytical tools on the same platform, avoiding the need to move data out of the lakehouse for analysis.
+---END---
+
+Q14 [db-da-52] type:single_choice
+PROMPT: A data scientist has asked a data analyst to create histograms for every continuous variable in a data set. What describes a continuous variable?
+  a) A quantitative variable that never stops changing
+  b) A quantitative variable that can take on a finite or countably infinite set of values
+  c) A quantitative variable that can take on an uncountable set of values Ô£à
+  d) A categorical variable in which the number of categories continues to increase over time
+CURRENT_EXPL: A continuous variable can take on any value within a range (uncountable), including fractions and decimals.
+---END---
+
+Q15 [db-da-53] type:single_choice
+PROMPT: A data analyst has been asked to use the below table sales_table to rank products within region by the sales. Which query will accomplish this task?
+  a) 
+  b) 
+  c) 
+  d)  Ô£à
+CURRENT_EXPL: To rank strictly *within* regions as requested, `PARTITION BY region` is usually required, while `ORDER BY sales DESC` ranks them by sales.
+---END---
+
+Q16 [db-da-55] type:single_choice
+PROMPT: A data analyst is processing a complex aggregation on a table with zero null values...
+  a) 
+  b) 
+  c)  Ô£à
+  d) 
+CURRENT_EXPL: `WITH ROLLUP` generates subtotals for the specified columns in a hierarchical manner (e.g., total for group_1, and grand total), which matches the output shown.
+---END---
+
+Q17 [db-da-65] type:single_choice
+PROMPT: A data analyst wants to create a Databricks SQL dashboard with multiple data visualizations and multiple counters. What must be completed before adding the data visualizations and counters to the dashboard?
+  a) All data visualizations and counters must be created using Queries. Ô£à
+  b) A SQL warehouse must be turned on and selected.
+  c) A markdown-based tile must be added to the top of the dashboard.
+  d) The dashboard owner must also be the owner of the queries.
+CURRENT_EXPL: Visualizations and counters in a dashboard are built on top of Queries. You must create and save these Queries (and their associated visualizations) first.
+---END---
+
+Q18 [db-da-69] type:single_choice
+PROMPT: A dashboard contains a bar chart visualization. The bar chart has a Date widget parameter associated with it.
+
+Which statement about the Date widget parameter is true?
+  a) The Date widget parameter provides a start date and an end date that is used by a WHERE clause in the query that provides data to the bar chart. Ô£à
+  b) The Date widget parameter provides a start date and an end date that sets the x-axis range of the bar chart.
+  c) The Date widget parameter provides a start date and an end date that filters all visualizations in the dashboard.
+  d) The Date widget parameter functions only as a text box that tells the dashboard's users what date range the dashboard is using.
+CURRENT_EXPL: Widget parameters pass values (like a date range) into the underlying query's SQL code (typically in a WHERE clause) to filter the data before it is visualized.
+---END---
+
+Q19 [db-da-70] type:single_choice
+PROMPT: A data analyst needs to share a Databricks SQL dashboard with stakeholders who do not have Databricks accounts. The stakeholders need to be notified every time the dashboard is refreshed. Which approach minimizes effort?
+  a) By granting the stakeholders' email addresses permissions to the dashboard
+  b) By adding the stakeholders' email addresses to the refresh schedule subscribers list Ô£à
+  c) By adding the stakeholders' email addresses to the SQL Warehouse subscribers list
+  d) By downloading the dashboard as a PDF and emailing it manually
+CURRENT_EXPL: You can add non-account email addresses to a dashboard's scheduled refresh subscription. They will receive an email snapshot of the dashboard automatically.
+---END---
+
+Q20 [db-da-73] type:single_choice
+PROMPT: A data analyst has produced a visualization. A stakeholder has viewed the visualization and is complaining that the visualization is difficult to interpret. After looking at the visualization, the analyst determines that the scale of the y-axis must be changed. Where are the controls for changing the scale of the y-axis in Databricks SQL?
+  a) Query Editor -> Y Axis
+  b) Dashboard Editor -> Axes -> Y Axis
+  c) Visualization Editor -> Y Axis Ô£à
+  d) Settings -> User Settings -> Scaling
+CURRENT_EXPL: To change specific chart properties like axis scales, labels, or ranges, you must access the specific configuration within the Visualization Editor.
+---END---
+
+Q21 [db-da-82] type:single_choice
+PROMPT: Which data visualization use cases is best completed using Databricks SQL relative to other visualization tools?
+  a) Presentation-grade visualizations for publication
+  b) Organization-branded visualizations for marketing material
+  c) Custom, interactive visualizations on small data
+  d) Simple, exploratory visualizations on big data Ô£à
+CURRENT_EXPL: Databricks SQL visualizations are optimized for quick, exploratory analysis directly on large datasets residing in the lakehouse, rather than pixel-perfect polished presentations.
+---END---
+
+Q22 [db-da-83] type:single_choice
+PROMPT: A data analyst has written and saved a series of queries that reveal trends that need to be monitored by several stakeholders. Which tool should the data analyst use to share the results of all of the queries to be viewed at once?
+  a) A SQL warehouse (formerly known as a SQL endpoint)
+  b) A Query History page
+  c) A dashboard Ô£à
+  d) A data visualization tab on a Query page
+CURRENT_EXPL: Dashboards allow you to combine visualizations from multiple queries into a single view that can be easily shared with stakeholders.
+---END---
+
+Q23 [db-da-91] type:single_choice
+PROMPT: A data analyst uses Databricks to create a dashboard that monitors daily sales volumes and store performance. To ensure that area managers always see up-to-date data without having to manually intervene, the data analyst wants to automate the dashboard data refresh. Which process should the data analyst use to automatically refresh the data displayed, avoiding manual intervention?
+  a) Export the dashboard as a PDF the night before, so the team can see "recent" data the next day.
+  b) Use the dashboard's built-in scheduling option to set an automatic refresh at regular intervals. Ô£à
+  c) Set the Dashboard query to 'auto-update' by using a browser extension that reloads the tab at set intervals.
+  d) Ask all users to press the "Refresh" button on the dashboard whenever they want updated data.
+CURRENT_EXPL: Databricks dashboards can be scheduled to refresh automatically at specified intervals, ensuring stakeholders always view the most current data without manual effort.
+---END---
+
+Q24 [db-da-116] type:single_choice
+PROMPT: You want to share a dashboard with a stakeholder who does NOT have a Databricks account. You want them to receive an updated PDF of the dashboard every Monday morning. Which feature allows this?
+  a) This is not possible; all users must have accounts.
+  b) Dashboard Subscription with 'Destinations' configured for external email. Ô£à
+  c) Publish to Web.
+  d) Share via Delta Sharing.
+CURRENT_EXPL: In modern Databricks Dashboards, you can configure a Schedule with a Subscription Destination to send artifacts (PDFs) to email addresses outside the workspace, provided admin policies allow it.
+---END---
+
+Q25 [db-da-123] type:single_choice
+PROMPT: A data analyst has added a query parameter named `date_param` to a SQL query powering a dashboard widget. However, when they change the value of the parameter widget at the top of the dashboard, the visualization does not update. What step did the analyst likely miss?
+  a) The analyst did not refresh the browser page.
+  b) The analyst needs to map the dashboard-level parameter to the widget-level parameter in the settings. Ô£à
+  c) Parameters only work in the SQL Editor, not in Dashboards.
+  d) The dashboard subscription schedule has not been triggered yet.
+CURRENT_EXPL: Adding a parameter to a query doesn't automatically link it to the Dashboard's UI controls. You must explicitly map the Dashboard Parameter to the Query Parameter in the widget configuration.
+---END---
+
+Q26 [db-da-130] type:single_choice
+PROMPT: In a Databricks Dashboard, you have a dataset with thousands of rows. You add a Bar Chart and a Table widget. You want to configure the dashboard so that when a user clicks on a specific bar in the chart, the Table widget automatically filters to show only the records related to that bar. What feature is this?
+  a) Cross-filtering Ô£à
+  b) Parameter Mapping
+  c) Z-Order Indexing
+  d) Dynamic Views
+CURRENT_EXPL: **Cross-filtering** allows interactions between widgets on a dashboard. Clicking a data point on one visualization applies a temporary filter to other visualizations based on the same dataset.
+---END---
+
+Q27 [db-da-137] type:single_choice
+PROMPT: A data analyst is building a line chart in a Databricks SQL dashboard to visualize monthly revenue over two years. The analyst wants to overlay a visual indicator that helps identify anomalies and overall direction in the data. Which chart feature should the analyst enable?
+  a) Data Labels
+  b) Stacked Bars
+  c) Trend Lines Ô£à
+  d) Pie Chart
+  e) Heat Map
+CURRENT_EXPL: Trend Lines overlay a regression line or moving average on top of data points, helping analysts visually spot anomalies, trends, and deviations from the expected pattern over time.
+---END---
+
+Q28 [db-da-147] type:single_choice
+PROMPT: A data analyst wants to embed a published Databricks AI/BI dashboard into their company's internal web portal so employees can view it without navigating to Databricks. Which method should the analyst use?
+  a) Export the dashboard as a PDF and upload it to the portal
+  b) Embed the dashboard using an iframe, with the workspace admin approving the host domain Ô£à
+  c) Take a screenshot and embed the image
+  d) Use Databricks Connect to stream dashboard data to the portal
+  e) Dashboard embedding is not supported in Databricks
+CURRENT_EXPL: Databricks AI/BI Dashboards can be embedded into external web applications using iframes. The workspace admin must define allowed embedding surfaces and approve the domains of the host applications. Viewers may need Databricks credentials, or a service principal can be used for external users.
+---END---
+
+Q29 [db-da-148] type:single_choice
+PROMPT: A data analyst has created a dashboard and wants stakeholders to automatically receive a PDF snapshot of the dashboard via email every Monday morning. Which Databricks feature supports this?
+  a) SQL Alerts
+  b) Dashboard Subscriptions (Scheduled Email Delivery) Ô£à
+  c) Databricks Jobs
+  d) Delta Live Tables
+  e) Partner Connect
+CURRENT_EXPL: Dashboard Subscriptions allow configuring scheduled email delivery of dashboard snapshots as PDF attachments. When a dashboard schedule runs, subscribers receive a PDF snapshot via email. Snapshots can also be sent to Slack or Microsoft Teams channels.
+---END---
+
+Q30 [db-da-187] type:single_choice
+PROMPT: A BI analyst is designing a Databricks SQL dashboard that tracks monthly revenue for three product categories across two years. Leadership wants a chart that makes it straightforward to compare each category's trend over time and quickly spot seasonal patterns or declines without relying on additional filters or calculations.
+
+Which visualization type in Databricks SQL will clearly communicate the revenue trends and category comparisons described?
+  a) Multi-series line chart plotting month on the x-axis and revenue on the y-axis for each category. Ô£à
+  b) Single-value counter displaying combined revenue for the entire two-year period.
+  c) Pie chart showing each category's percentage of total revenue for the final month.
+  d) Scatter chart with revenue on the x-axis and profit margin on the y-axis for all transactions.
+CURRENT_EXPL: A multi-series line chart maps month on the X-axis and revenue on the Y-axis, rendering a separate line for each product category. This enables the viewer to follow a continuous timeline, making trends, seasonal peaks, and declines instantly visible. The overlay of three lines on a single axis facilitates direct category-to-category comparison without additional filters.
+---END---
+
+Q31 [db-da-188] type:single_choice
+PROMPT: A data analyst is preparing a quarterly analytics dashboard in Databricks and needs to share it with external stakeholders who are not members of the Databricks workspace. The stakeholders should be able to view the dashboard securely without being granted workspace access or edit permissions.
+
+Which approach should the analyst use to meet the requirements?
+  a) Enable external sharing by publishing the dashboard, turning on embedded credentials, and sharing the link with stakeholders. Ô£à
+  b) Add the external stakeholders as workspace admins in the Databricks environment and grant them CAN MANAGE permissions on the dashboard.
+  c) Assign the stakeholders to the All workspace users group and provide them with CAN EDIT permissions on the dashboard, even if they are not currently members of the workspace.
+  d) Export the dashboard as a PDF file and email it to the stakeholders, since Databricks dashboards offer an export-to-PDF feature.
+CURRENT_EXPL: Databricks lets you publish a dashboard to a shareable link that can be accessed by anyone who receives it, regardless of whether they hold a Databricks account. By configuring embedded credentials, the analyst controls what data the viewer can see while keeping the underlying workspace hidden. No workspace permissions are needed.
+---END---
+
+Q32 [db-da-214] type:single_choice
+PROMPT: A data analyst is monitoring delivery delays in real time using a Databricks dashboard shared with the operations team. After a meeting, the manager asks to add a new widget that graphically displays, with a gauge, the percentage of on-time shipments compared to the total. The data analyst needs to quickly modify the dashboard to add this information element.
+
+How should the analyst add a new widget to an existing dashboard in Databricks?
+  a) Export the data from a notebook as a static image and upload it to the dashboard as a visual reference.
+  b) Ask a platform administrator to add a materialized view for the on-time percentage, since visualizations require pre-aggregated values from the source to display correctly.
+  c) Click "Add Visualization" in the dashboard, select the desired type, and associate a query that calculates the requested percentage. Ô£à
+  d) Clone the existing dashboard, add the new visualization in the duplicate, and replace the original dashboard after review.
+CURRENT_EXPL: The standard Databricks dashboard workflow involves clicking 'Add Visualization' within the dashboard editor, selecting the desired chart type (like a Gauge), and associating it with a query that returns the necessary metric. Option A is static and not real-time. Option B is unnecessary as the query itself can handle the aggregation. Option D is an indirect and inefficient approach.
+---END---
+
+Q33 [db-da-238] type:single_choice
+PROMPT: A data analyst is exploring user engagement trends and wants to create a visualization while working interactively in a Databricks notebook. The analyst executes a SQL query using %sql and wants to turn the result into a line chart showing weekly user counts over time. Which step allows the analyst to create the chart directly in the notebook?
+  a) Save the query as a table, export it to Excel, and use ExcelÔÇÖs charting tools.
+  b) Wrap the SQL query in a Python plotly.express call using %python.
+  c) Use %sql to run the query, then copy the result into a new dashboard to access visualization options.
+  d) Use the display() function or %sql to run the query, then click the + icon in the result cell to add a visualization. Ô£à
+CURRENT_EXPL: After running a %sql query, the analyst can either call display() in Python or click the + icon in the result cell. Both actions create an inline chart directly within the notebook, preserving interactivity and allowing further manipulation without leaving the environment.
+---END---
+
+Q34 [db-da-280] type:multiple_choice
+PROMPT: A data analyst is preparing a sales performance presentation using Databricks notebooks. They have just loaded a Spark DataFrame with daily transaction data and wish to present a line chart showing total sales over time. However, when creating the visualization, they notice the line chart either does not display correctly, shows incomplete data, or the X-axis is not in chronological order. The analyst must resolve these issues to produce an accurate and informative line chart. Which two actions should the analyst take to ensure the line chart visualization in the Databricks notebook accurately depicts sales trends over time?
+  a) Check that the column selected for the X-axis contains continuous date or time values and is sorted appropriately. Ô£à
+  b) Aggregate the Y-axis (total sales) within the visualization editor if the data is not already aggregated to avoid overplotting. Ô£à
+  c) Enable 'Auto-format' for the X-axis to let Databricks automatically interpret date fields and fix ordering issues.
+  d) Ignore missing data points as Databricks automatically interpolates data gaps in line charts.
+  e) Use a scatter plot instead of a line chart, as it automatically handles unsorted and missing data points.
+CURRENT_EXPL: To create a valid line chart in a Databricks Notebook:
+
+1. **X-axis Sorting (Option A):** Line charts connect points in the order they appear in the dataset. If the X-axis (dates) is not sorted chronologically, the chart will display 'spaghetti' lines or incorrect sequences.
+
+2. **Aggregation (Option B):** If the dataset contains multiple transactions per day, displaying them without aggregation will cause 'overplotting' (multiple overlapping Y-values for one X-value). Using the visualization editor's aggregation features (like 'Sum') ensures a single, summary point per time interval.
+
+ÔÇó Option C is incorrect: Auto-formatting improves visuals but does not guarantee correctness of underlying data sorting or aggregation.
+
+ÔÇó Option D is incorrect: Gaps in data can mislead the viewer; they should be handled via SQL (e.g., COALESCE or filling) rather than ignored.
+
+ÔÇó Option E is incorrect: A scatter plot does not show the continuous progression or trend over time that a line chart provides.
+---END---
+
+Q35 [db-da-284] type:single_choice
+PROMPT: A data analyst team has built a real-time AI/BI dashboard in Databricks to monitor supply chain performance. They want to allow business users and groups to collaborate on the dashboard, but only a few users should be able to make changes while the rest have view access. The lead data analyst is configuring permissions in a way that is secure, scalable, and aligns with Databricks platform best practices. Which approach should the analyst use to configure dashboard-level access and permissions?
+  a) Request an administrator assign workspace permissions to all relevant users, granting Workspace Admin role to those who need edit on the dashboard.
+  b) Modify the Unity Catalog access settings for the dashboard's underlying dataset, granting SELECT privileges to viewers and UPDATE privileges to editors.
+  c) Open the dashboard, click 'Share,' select individual users or user groups from the Sharing dialog, assign roles such as CAN VIEW, CAN EDIT, or CAN MANAGE, and confirm to grant appropriate access. Ô£à
+  d) Add access control logic directly in each dashboard widget's SQL query using the current_user() function to restrict results by role.
+CURRENT_EXPL: Databricks provides a dedicated 'Share' dialog for dashboards that allows for granular, resource-level access control. This is the standard and recommended way to manage who can consume (CAN VIEW) or modify (CAN EDIT/MANAGE) a dashboard without granting broader workspace permissions.
+
+ÔÇó Option A is incorrect: Granting Workspace Admin roles for dashboard editing violates the principle of least privilege.
+
+ÔÇó Option B is incorrect: Unity Catalog manages data access (the 'what'), but dashboard permissions manage the application layer (the 'how it's displayed').
+
+ÔÇó Option D is incorrect: while 'current_user()' is useful for row-level security, it does not manage the ability to edit the dashboard layout or configuration.
+---END---
+
+Q36 [db-da-291] type:single_choice
+PROMPT: An analyst is designing an AI/BI Dashboard with multiple complex visualizations. To improve performance, they want users to choose all filter values (e.g., Date, Region, Product) BEFORE the dashboard triggers any query refreshes. Which setting in the Filter configuration is specifically designed for this 'delayed' or 'batched' execution?
+  a) Enable 'Automatic Update' in the Filter options.
+  b) Disable 'Automatic Update' to allow users to click a 'Refresh' button after changing filters. Ô£à
+  c) Use the 'Apply All' SQL Parameter in the source query.
+  d) Configure 'Run on Selection' to false for the entire Dashboard.
+CURRENT_EXPL: In Databricks AI/BI Dashboards (and legacy SQL Dashboards), toggling off 'Automatic Update' (or similar 'Run on change' defaults) prevents the dashboard from refreshing until the user manually triggers it. This is a critical performance optimization for complex dashboards where multiple filter changes would otherwise trigger redundant and expensive query executions.
+---END---
+
+Q37 [db-da-292] type:single_choice
+PROMPT: An analyst wants to create a 'Table' visualization in a Dashboard where clicking on a 'SalesOrder_ID' redirects the user to an internal support ticket system (e.g., https://tickets.company.com/id={ID}). How can this be accomplished within the Table visualization settings?
+  a) It requires a custom JavaScript snippet in the dashboard metadata.
+  b) Use the 'Link' type for the column and provide a URL template with curly braces {SalesOrder_ID}. Ô£à
+  c) Convert the SQL column to HTML in the source query (e.g., SELECT '<a href=...>'...).
+  d) This feature is only available in AI/BI Genie, not in standard Dashboards.
+CURRENT_EXPL: Both Legacy and AI/BI Dashboards allow 'Link' formatting in Table columns. By selecting the 'Link' type and defining a template like 'https://tickets.company.com/id={{SalesOrder_ID}}', the ID from each row is dynamically injected into the URL, allowing for rich cross-system navigation directly from the visualization.
+---END---
+
+Q38 [db-da-293] type:single_choice
+PROMPT: A company has a 'Monthly Performance' dashboard shared with the 'Exec' group. The dashboard is scheduled to refresh as 'Owner' (the analyst). If the analyst is deactivated in the IdP (Identity Provider) and removed from Databricks, what is the most likely outcome for the scheduled refresh?
+  a) The schedule is automatically transferred to the oldest member of the 'Exec' group.
+  b) The schedule continues to run normally using cached credentials.
+  c) The schedule fails to run because the owner's identity is no longer valid for authentication/execution. Ô£à
+  d) The schedule is paused and can only be resumed by a Workspace Admin using the 'Transfer Ownership' API.
+CURRENT_EXPL: Schedules (and alerts) in Databricks run with a specific identity. If the 'Run as' setting is 'Owner' and that user is deactivated or deleted, the execution engine cannot find a valid identity context, and the refresh will fail. Best practice is to use persistent Service Principals for critical production schedules or ensure ownership is transferred before deactivation.
+---END---
+
+Q39 [db-da-294] type:single_choice
+PROMPT: In a new AI/BI Dashboard, an analyst wants to enable a feature where clicking on a 'Region' bar in a Bar Chart automatically filters all other charts on the same page based on that specific region. What is this feature called and how is it enabled?
+  a) Click-Filter; enabled in the Dashboard global settings.
+  b) Dynamic Parameters; enabled by adding :region to every query.
+  c) Cross-filtering; enabled by toggling the interactive setting in the visualization's properties. Ô£à
+  d) Inter-widget linking; enabled via the 'Connect widgets' button on the canvas.
+CURRENT_EXPL: Cross-filtering allows a visualization (like a bar chart or map) to act as a filter for other visualizations. This interaction is defined in the visualization properties, making the dashboard feel 'alive' and allowing users to drill down into data by simply interacting with visual elements rather than typing in filter boxes.
+---END---
+
+Q40 [db-da-295] type:single_choice
+PROMPT: A data analyst needs to share a 'Daily Sales' AI/BI Dashboard with a peer who only has 'Can View' permissions on the Workspace. The peer reports they can see the dashboard layout but the visualizations show 'Permission Denied' errors. What configuration did the analyst MISS?
+  a) They forgot to grant 'Can Use' permissions on the underlying SQL Warehouse.
+  b) They did not grant 'Select' permissions on the source tables to the peer.
+  c) They must publish the dashboard with the 'Run as Owner' setting selected.
+  d) All of the above are possible missing configurations depending on the 'Run as' mode. Ô£à
+CURRENT_EXPL: Dashboards have a 'Run as' setting. If 'Run as Viewer' is selected, the viewer MUST have permissions on the Dashboard, the SQL Warehouse, and the source Data (tables/schemas). If 'Run as Owner' is selected, the viewer only needs access to the Dashboard. In AI/BI Dashboards, the default is often for viewers to interact using their own identity (Viewer), requiring broader security setup.
+---END---
+

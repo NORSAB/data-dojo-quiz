@@ -1,0 +1,400 @@
+=== Managing Data (35 questions) ===
+
+Q1 [db-da-11] type:single_choice
+PROMPT: A data analyst is attempting to drop a table my_table...
+  a) The table's data was larger than 10 GB
+  b) The table did not have a location
+  c) The table was external ✅
+  d) The table's data was smaller than 10 GB
+  e) The table was managed
+CURRENT_EXPL: When you DROP TABLE for an external table, Databricks only removes the metadata from the metastore. The underlying data files in the external storage location remain untouched.
+---END---
+
+Q2 [db-da-12] type:single_choice
+PROMPT: After running `DESCRIBE EXTENDED accounts.customers;`, the Type is listed as `EXTERNAL`...
+  a) Running SELECT * FROM delta.`dbfs:/...` results in an error.
+  b) Running SELECT * FROM accounts.customers will return all rows.
+  c) All files with the customers extension are deleted.
+  d) The table is removed from the metastore, and data files are deleted.
+  e) The table is removed from the metastore, but the underlying data files are untouched. ✅
+CURRENT_EXPL: Since this is an external (unmanaged) table, dropping the table only deletes the metadata. The data itself is untouched.
+---END---
+
+Q3 [db-da-18] type:single_choice
+PROMPT: A data analyst created and is the owner of the managed table my_ table. They now want to change ownership of the table to a single other user using Data Explorer.
+Which of the following approaches can the analyst use to complete the task?
+  a) Edit the Owner field in the table page by removing their own account
+  b) Edit the Owner field in the table page by selecting All Users
+  c) Edit the Owner field in the table page by selecting the new owner's account ✅
+  d) Edit the Owner field in the table page by selecting the Admins group
+  e) Edit the Owner field in the table page by removing all access
+CURRENT_EXPL: The correct method is to explicitly assign the new owner's account in the Owner field. This ensures a clear transfer of responsibility and privileges.
+---END---
+
+Q4 [db-da-19] type:single_choice
+PROMPT: A data analyst has a managed table `table_name` in database `database_name`. They would now like to remove the table from the database and all of the data files associated with the table. The rest of the tables in the database must continue to exist.\n\nWhich of the following commands can the analyst use to complete the task without producing an error?
+  a) DROP DATABASE database_name;
+  b) DROP TABLE database_name.table_name; ✅
+  c) DELETE TABLE database_name.table_name;
+  d) DELETE TABLE table_name FROM database_name;
+  e) DROP TABLE table_name FROM database_name;
+CURRENT_EXPL: When used with a managed table, `DROP TABLE` removes both the table's metadata from the metastore and the underlying data files. `database_name.table_name` specifies the target table correctly.
+---END---
+
+Q5 [db-da-54] type:single_choice
+PROMPT: A database was created in Databricks SQL using the following statement...
+  a) dbfs:/accounting/data/accounting.db
+  b) dbfs:/accounting/data
+  c) dbfs:/accounting/data.db
+  d) dbfs:/user/hive/warehouse/accounting.db ✅
+CURRENT_EXPL: Unless the location is specified at the *table* level or configured differently, managed databases in the Hive metastore typically default to the warehouse directory `dbfs:/user/hive/warehouse/accounting.db`.
+---END---
+
+Q6 [db-da-56] type:single_choice
+PROMPT: A managed table and an unmanaged (external) table were both created in Databricks SQL, and data were ingested into each table. Later, both tables were dropped. What is the status of data for each of those tables?
+  a) The data in both tables were deleted.
+  b) The data in the managed table were deleted, and the data in the unmanaged (external) table were left untouched. ✅
+  c) The data in the unmanaged (external) table were deleted and the data in the managed table were left untouched.
+  d) The data in both tables were left untouched.
+CURRENT_EXPL: Dropping a managed table deletes both metadata and data. Dropping an external table deletes only the metadata, leaving the underlying data files intact.
+---END---
+
+Q7 [db-da-58] type:single_choice
+PROMPT: Which location can be used to determine the owner of a managed table?
+  a) Review the Owner field in the table page using Catalog Explorer ✅
+  b) Review the Owner field in the database page using Data Explorer
+  c) Review the Owner field in the schema page using Data Explorer
+  d) Review the Owner field in the table page using the SQL Editor
+CURRENT_EXPL: Catalog Explorer provides detailed metadata for objects in Unity Catalog, including the Owner field for tables.
+---END---
+
+Q8 [db-da-93] type:single_choice
+PROMPT: A data analyst filters rows where the `tags` array includes the value 'sql'... How should the analyst query to filter for rows where the `tags` array contains 'sql'?
+  a) [CODE/TABLE]
+  b) [CODE/TABLE]
+  c) [CODE/TABLE]
+  d) [CODE/TABLE] ✅
+CURRENT_EXPL: To check for the existence of a value within an array column in Databricks SQL, the `array_contains()` function must be used.
+---END---
+
+Q9 [db-da-95] type:single_choice
+PROMPT: A data analyst is setting up a new AI/BI Genie space in Databricks to support natural language querying and ensure high-quality, governed responses. Which component is essential for configuring an effective Genie space that returns accurate and useful results?
+  a) Well-annotated datasets registered to Unity Catalog, curated sample queries, and domain-specific instructions ✅
+  b) A standalone chatbot application integrated with Databricks through custom APIs for user interaction
+  c) A dedicated physical server allocated for the Genie space to maximize availability and scalability
+  d) An external data warehouse configured to store and replicate all data used by the Genie space
+CURRENT_EXPL: Genie relies heavily on the semantic layer: rich metadata (descriptions) in Unity Catalog, verified sample SQL queries, and clear instructions to generate accurate answers.
+---END---
+
+Q10 [db-da-96] type:single_choice
+PROMPT: A data analyst wants to implement a use case that requires managing both structured and unstructured data. How will Unity Catalog help in this scenario?
+  a) It allows for the management of both structured data and unstructured data through objects such as tables and volumes. ✅
+  b) It requires all unstructured data to be converted into Delta Lake format before it can be managed.
+  c) It manages structured data in tabular format and unstructured files like images in blob storage.
+  d) It can catalog data coming from relational databases, excluding files and non-tabular data.
+CURRENT_EXPL: Unity Catalog manages structured data via Tables and unstructured data (files, images) via Volumes, providing a unified governance layer.
+---END---
+
+Q11 [db-da-126] type:single_choice
+PROMPT: An analyst needs to query a collection of PDF documents and images stored in cloud storage to perform analysis using AI functions. They want to manage access to these files using Unity Catalog governance. Which object should they create?
+  a) An External Table
+  b) A Volume ✅
+  c) A Delta Live Table
+  d) A View
+CURRENT_EXPL: In Unity Catalog, **Volumes** are specifically designed to govern non-tabular data (unstructured data like PDFs, images, audio) while maintaining the benefits of centralized governance.
+---END---
+
+Q12 [db-da-128] type:single_choice
+PROMPT: A critical table was accidentally deleted yesterday. You need to find out exactly *who* ran the `DROP TABLE` command and *when*. Which system table should you query?
+  a) system.billing.usage
+  b) system.information_schema.tables
+  c) system.access.audit ✅
+  d) system.storage.files
+CURRENT_EXPL: The `system.access.audit` table contains the audit logs for Unity Catalog. It records events like table creation, deletion (`DROP`), and access denials, including the user identity and timestamp.
+---END---
+
+Q13 [db-da-132] type:single_choice
+PROMPT: A data analyst needs to query data stored in an external PostgreSQL database directly from Databricks SQL without moving or copying the data. Which Databricks feature allows the analyst to create a federated catalog that points to the external database?
+  a) Delta Sharing
+  b) Lakehouse Federation ✅
+  c) Auto Loader
+  d) COPY INTO
+  e) Databricks Connect
+CURRENT_EXPL: Lakehouse Federation allows creating federated catalogs in Unity Catalog that point to external databases (PostgreSQL, MySQL, Snowflake, etc.), enabling direct queries from Databricks SQL without ETL or data movement.
+---END---
+
+Q14 [db-da-138] type:single_choice
+PROMPT: Which Unity Catalog feature automatically tracks the origin, transformations, and downstream consumers of a dataset at both the table and column level?
+  a) Data Masking
+  b) Data Lineage ✅
+  c) Delta Time Travel
+  d) Liquid Clustering
+  e) Row Filters
+CURRENT_EXPL: Data Lineage in Unity Catalog automatically captures and visualizes the flow of data through tables, views, and queries. It shows column-level and table-level dependencies, making it easy to trace data origins, transformations, and downstream impacts.
+---END---
+
+Q15 [db-da-139] type:single_choice
+PROMPT: In Unity Catalog, data assets are organized using a three-level namespace. Which of the following correctly represents this hierarchy?
+  a) Database → Table → Column
+  b) Workspace → Cluster → Query
+  c) Catalog → Schema → Table/View ✅
+  d) Account → User → Permission
+  e) Storage → Container → File
+CURRENT_EXPL: Unity Catalog uses a three-level namespace: Catalog → Schema (database) → Table/View. This allows you to reference any object as catalog.schema.table, providing a unified governance model across workspaces.
+---END---
+
+Q16 [db-da-143] type:single_choice
+PROMPT: A data analyst needs to create a full, independent backup of a production Delta table, including all data files and transaction history, so changes to the backup do not affect the original table. Which command should the analyst use?
+  a) CREATE TABLE backup_table SHALLOW CLONE production_table;
+  b) CREATE TABLE backup_table DEEP CLONE production_table; ✅
+  c) CREATE TABLE backup_table AS SELECT * FROM production_table;
+  d) COPY INTO backup_table FROM production_table;
+  e) INSERT INTO backup_table TABLE production_table;
+CURRENT_EXPL: DEEP CLONE creates a complete, independent copy of both the metadata and data files, including transaction history. Changes to the deep clone do not affect the source table and vice versa. SHALLOW CLONE only copies metadata and references original data files, so it is not fully independent.
+---END---
+
+Q17 [db-da-144] type:single_choice
+PROMPT: A data analyst wants to quickly create a lightweight copy of a large Delta table for read-only testing without duplicating all the data files. Which cloning method is most appropriate?
+  a) DEEP CLONE
+  b) SHALLOW CLONE ✅
+  c) CREATE TABLE AS SELECT (CTAS)
+  d) COPY INTO
+  e) INSERT OVERWRITE
+CURRENT_EXPL: SHALLOW CLONE copies only the metadata (schema, partitioning, transaction log) and references the source table's data files without duplicating them. This makes it fast and cost-effective for quick testing or exploration. However, if the source table is VACUUMed, files referenced by the shallow clone may be deleted.
+---END---
+
+Q18 [db-da-146] type:single_choice
+PROMPT: A data analyst runs VACUUM on a Delta table with the default retention period. What is the default retention threshold, and what happens to files older than this threshold that are no longer referenced by the transaction log?
+  a) 30 days; files are archived to cold storage
+  b) 7 days (168 hours); unreferenced files older than this are permanently deleted ✅
+  c) 24 hours; files are moved to a recycle bin
+  d) 90 days; files are compressed but not deleted
+  e) There is no default; the user must always specify a retention period
+CURRENT_EXPL: By default, Delta Lake retains old data files for 7 days (168 hours). Running VACUUM permanently deletes unreferenced files older than this retention period. Reducing the retention below 7 days requires overriding a safety check and may break time travel queries and corrupt active reads.
+---END---
+
+Q19 [db-da-149] type:single_choice
+PROMPT: What are Unity Catalog Volumes used for?
+  a) Storing only structured tabular data in Delta format
+  b) Providing governance over non-tabular data such as images, PDFs, logs, JSON files, and ML artifacts ✅
+  c) Managing compute cluster configurations
+  d) Storing SQL query results temporarily
+  e) Defining access control policies for users
+CURRENT_EXPL: Unity Catalog Volumes provide governance, security, and lineage tracking for non-tabular datasets (images, PDFs, logs, JSON, ML artifacts). They follow the three-level namespace (catalog.schema.volume) and files are accessed via /Volumes/<catalog>/<schema>/<volume>/<path>. Tables handle tabular data; Volumes handle everything else.
+---END---
+
+Q20 [db-da-177] type:single_choice
+PROMPT: A data analyst wants to compare the contents of a Delta table as they existed last week to the current state in order to track changes in sales records.
+
+Which Delta Lake feature enables this comparison?
+  a) RESTORE command
+  b) VACUUM retention settings
+  c) Time travel querying ✅
+  d) CLONE with VERSION AS OF
+CURRENT_EXPL: Time travel querying in Delta Lake lets you query the table at any retained snapshot using a timestamp, version number, or offset (VERSION AS OF, TIMESTAMP AS OF, etc.). This provides a read-only view of the table's state at the desired point in time without altering the current data. RESTORE modifies the table state. VACUUM removes old files. CLONE creates a copy but is not designed for comparison.
+---END---
+
+Q21 [db-da-194] type:single_choice
+PROMPT: Which Databricks SQL action is used to audit and view the history of operations performed on a Delta Lake table in Databricks?
+  a) Run a SELECT logs FROM table_name query
+  b) Use the SHOW TRANSACTIONS table_name command
+  c) Execute a VACUUM table_name statement
+  d) Use the DESCRIBE HISTORY table_name command ✅
+CURRENT_EXPL: In Databricks SQL, Delta Lake tables maintain an immutable transaction log that records every change (writes, schema updates, deletes, etc.). The built-in command DESCRIBE HISTORY queries this transaction log and returns a chronological view of all operations performed on the table, including timestamps, operation types, user IDs, and details of the change. Option A is invalid — there is no standard logs column or SELECT logs syntax. Option B (SHOW TRANSACTIONS) is not a supported Databricks SQL command. Option C (VACUUM) removes stale files and compacts storage; it does not provide any audit or historical view.
+---END---
+
+Q22 [db-da-200] type:single_choice
+PROMPT: A data analyst needs to programmatically mark a Unity Catalog table, sales_data, as certified so that it is discoverable as a trusted asset across their organization.
+
+Which SQL command can be used to meet the requirement?
+  a) ALTER TABLE sales_data SET TAGS ('system.Certified');
+  b) ALTER TABLE sales_data SET TAGS ('certified' = 'true'); ✅
+  c) GRANT CERTIFY ON TABLE sales_data TO analyst_group;
+  d) UPDATE TABLE sales_data ADD COMMENT 'Certified dataset';
+CURRENT_EXPL: Unity Catalog supports setting custom tags on objects with the clause SET TAGS ('key' = 'value'). To make a table discoverable as a trusted asset, you associate it with a recognizable tag such as certified = 'true'. Option B uses exactly this pattern. Option A (SET TAGS ('system.Certified')) is syntactically incomplete — tags must be defined as key-value pairs. Option C — there is no GRANT CERTIFY privilege or command in Unity Catalog. Option D — UPDATE TABLE … ADD COMMENT is not valid SQL in Unity Catalog; comments are added with SET COMMENT, not via an UPDATE statement.
+---END---
+
+Q23 [db-da-207] type:single_choice
+PROMPT: A data analyst has configured a Delta table with default retention settings. The analyst runs VACUUM operations weekly to manage storage costs. A business user asks to access data from 10 days ago for a compliance audit.
+
+What is the result of a time travel query in this scenario?
+  a) The time travel query will succeed because Delta Lake automatically backs up data for compliance purposes, regardless of VACUUM operations.
+  b) The time travel query will succeed because the default log retention period is 30 days, which is sufficient to access 10-day-old data.
+  c) The time travel query will fail because the default maximum table version is 7 and numbering resets after each VACUUM operation, making historical versions inaccessible.
+  d) The time travel query will fail because the default data file retention period is 7 days, and VACUUM operations have likely removed the required data files. ✅
+CURRENT_EXPL: Delta Lake enforces two complementary retention periods: transaction-log retention (30 days by default, metadata only) and data file retention (7 days by default). Running VACUUM removes data files whose corresponding snapshots are older than the 7-day data-file retention period. A query seeking 10-day-old data will fail because those older files have already been deleted. Option A is incorrect — Delta does not automatically back up data files for compliance. Option B — the 30-day log retention protects metadata, not the actual data files. Option C — Delta does not enforce a hard limit of 7 table versions.
+---END---
+
+Q24 [db-da-211] type:single_choice
+PROMPT: A data analyst needs to create a table in Unity Catalog for a production analytics workload. The table will be frequently queried and needs automatic performance optimization. The data should be governed by Unity Catalog with lifecycle management.
+
+Which approach should the data analyst use?
+  a) Create a foreign table using CREATE FOREIGN TABLE with external connections to maintain compatibility with external systems while keeping data in original location and get benefits like Liquid Clustering and Deletion Vectors.
+  b) Create a managed table using CREATE TABLE catalog.schema.table_name (columns...) allowing Unity Catalog to manage the data lifecycle, storage location, and provide automatic optimizations like Predictive Optimization. ✅
+  c) Create a temporary table using CREATE TEMPORARY TABLE for better performance and then convert it to a managed table later using ALTER TABLE SET MANAGED.
+  d) Create an external table using CREATE EXTERNAL TABLE catalog.schema.table_name LOCATION 's3://bucket/path/' to maintain control over the data location while benefiting from Unity Catalog governance.
+CURRENT_EXPL: Creating a managed table (CREATE TABLE) places the data under Unity Catalog's full governance, including management of the data lifecycle, storage location, and access control. Crucially, managed tables support Predictive Optimization and other automatic storage-level performance features that improve query latency for frequently accessed production workloads. Foreign (A) and External (D) tables keep data outside Unity Catalog's lifecycle management. Temporary tables (C) are session-scoped and cannot be used for production pipelines or long-term governance.
+---END---
+
+Q25 [db-da-213] type:single_choice
+PROMPT: A data analyst needs to share a certified dataset containing approved public economic indicators with an external research institution. The institution does not have access to the Databricks workspace. The dataset is managed in Unity Catalog and has already been reviewed and tagged appropriately.
+
+The analyst's requirements are:
+- Share the dataset securely and read-only
+- Ensure the institution receives only the specified tables
+- Avoid giving access to the full catalog or workspace
+- Maintain auditability and governance using Unity Catalog
+
+How should the analyst share the dataset?
+  a) Grant the external users access to Unity Catalog by adding their emails to the workspace.
+  b) Use COPY INTO to export the dataset into a managed Delta table, then use Unity Catalog's GRANT SELECT to provide access to the institution.
+  c) Use the GRANT SELECT command to give the external group's principal access to the table.
+  d) Create a Delta Share, add the required table, define a recipient, and ensure that a Unity Catalog metastore admin or privileged user in the recipient's workspace grants appropriate access permissions to their users. ✅
+CURRENT_EXPL: Delta Sharing provides secure, read-only data sharing across organizations without requiring a Databricks account/workspace for the recipient. It allows for fine-grained access control (sharing only specific tables), avoids workspace-wide exposure, and maintains audit trails within Unity Catalog. Option A grants too much access. Option C only works if the recipient is in the same Unity Catalog ecosystem. Option B is a manual process that lacks the built-in governance and auditing of Delta Sharing.
+---END---
+
+Q26 [db-da-216] type:single_choice
+PROMPT: A data analyst discovers that a group named developers has unauthorized access to sensitive data within the Unity Catalog catalog finance_catalog, which should be accessible only by the finance team.
+
+Which SQL command should the analyst use to remove the developers group's access to the catalog?
+  a) GRANT USAGE ON CATALOG 'finance_catalog' TO 'finance';
+  b) ALTER CATALOG 'finance_catalog' DROP PERMISSIONS FOR 'developers';
+  c) REVOKE USAGE ON CATALOG 'finance_catalog' FROM 'developers'; ✅
+  d) REVOKE USE ON CATALOG 'finance_catalog' FROM 'developers';
+CURRENT_EXPL: To withdraw previously granted privileges in Unity Catalog, you must use the REVOKE command. The required privilege for accessing a catalog is USAGE. Option C follows the correct syntax: REVOKE <privilege> ON CATALOG <name> FROM <principal>. Option A is for granting, Option B uses invalid syntax, and Option D uses the keyword 'USE' which is not a valid UC privilege.
+---END---
+
+Q27 [db-da-239] type:single_choice
+PROMPT: A data analyst needs to generate a sales report by joining a Unity Catalog-managed table with a table stored in a MySQL database. The analyst wants the join to be efficient, performed within Databricks, and governed using Unity Catalog permissions and lineage. Which approach should the data analyst use to meet these requirements?
+  a) Use Lakehouse Federation to create a foreign catalog for the MySQL database, then write a SQL query joining the Delta table and the federated MySQL table directly in Databricks. ✅
+  b) Write a Python script to connect to both sources separately, download the data and join them in memory outside Databricks.
+  c) Fully ingest the MySQL table into Databricks and store it as a new Delta table before joining.
+  d) Register the MySQL table as a temporary view in Databricks using a standard Spark JDBC read, then join it with the Unity Catalog-managed table using Databricks SQL.
+CURRENT_EXPL: Lakehouse Federation allows Databricks to externally expose a MySQL database as a federated catalog. Query execution happens natively within Databricks; Spark pushes the join operation down to the MySQL connector, minimizing data movement and maintaining governance/lineage within Unity Catalog.
+---END---
+
+Q28 [db-da-240] type:single_choice
+PROMPT: A data analyst is working with data stored as Parquet files in an S3 bucket and needs to create an external table in Databricks SQL that points to this existing data. Which command should the data analyst use to create this table?
+  a) CREATE TABLE sales (id INT, amount DOUBLE) USING PARQUET LOCATION 's3://bucket/sales'; ✅
+  b) CREATE EXTERNAL TABLE sales (id INT, amount DOUBLE) FROM 's3://bucket/sales';
+  c) EXPORT TABLE sales TO 's3://bucket/sales' AS PARQUET;
+  d) IMPORT TABLE sales AS DELTA FROM 's3://bucket/sales';
+CURRENT_EXPL: The standard Databricks SQL syntax for creating an external table (a table whose data is managed outside the Delta formal structure but accessible via SQL) with existing files is 'CREATE TABLE ... USING [format] LOCATION [path]'. Specifying the LOCATION clause automatically makes it an external table.
+---END---
+
+Q29 [db-da-358] type:single_choice
+PROMPT: A data analyst accidentally runs an UPDATE statement that corrupts 2 million records in a production table. The mistake was made 30 minutes ago and the table has had no other writes since.
+
+Which Delta Lake operation can undo this change most efficiently?
+  a) DELETE FROM table WHERE last_modified > DATE_SUB(CURRENT_TIMESTAMP(), 30) — to remove the corrupted rows.
+  b) RESTORE TABLE table TO VERSION AS OF (SELECT MAX(version) - 1 FROM (DESCRIBE HISTORY table)) — to restore the table to the version before the bad UPDATE. ✅
+  c) Run VACUUM to clean up the corrupted data files and regenerate the table.
+  d) Request the database administrator to restore from the most recent cloud backup.
+  e) Run OPTIMIZE to compact the corrupted files and fix the data automatically.
+CURRENT_EXPL: RESTORE TABLE is the fastest recovery mechanism for accidental data corruption. It reverts the entire table to a previous version by updating the transaction log pointer — no data copying needed. Time Travel ensures the pre-corruption version's files are still available (within the retention period). VACUUM should NOT be run before RESTORE, as it could delete the files needed.
+---END---
+
+Q30 [db-da-359] type:single_choice
+PROMPT: A data analyst writes:
+```sql
+INSERT INTO silver.customers
+SELECT id, name, email, signup_date, loyalty_tier
+FROM bronze.raw_customers
+```
+
+The query fails with: `Schema mismatch error: Cannot write to table silver.customers. Column 'loyalty_tier' not found in target table.`
+
+What Delta Lake feature caused this error, and how should the analyst resolve it?
+  a) Schema Enforcement blocked the write because the target table doesn't have a `loyalty_tier` column. The analyst should run ALTER TABLE silver.customers ADD COLUMN loyalty_tier STRING, or enable Schema Evolution with mergeSchema. ✅
+  b) The error is caused by a data type mismatch, not a missing column. The analyst should cast loyalty_tier to the correct type.
+  c) Delta Lake prevents INSERT operations on Silver-layer tables by design; MERGE INTO must be used.
+  d) The error occurs because bronze and silver tables are in different catalogs.
+  e) Schema Enforcement only applies to Parquet files, not Delta tables.
+CURRENT_EXPL: Schema Enforcement is a core Delta Lake feature that rejects writes with mismatched schemas. The write has a column (loyalty_tier) that doesn't exist in the target table. Resolution: (1) ALTER TABLE ADD COLUMN to add the new column explicitly, or (2) use .option('mergeSchema', 'true') / SET spark.databricks.delta.schema.autoMerge.enabled = true to enable automatic Schema Evolution.
+---END---
+
+Q31 [db-da-360] type:single_choice
+PROMPT: A data analyst runs `DESCRIBE HISTORY analytics.monthly_revenue` and sees the following versions:
+
+| version | timestamp | operation |
+|---------|-----------|------------|
+| 5 | 2026-03-30 | UPDATE |
+| 4 | 2026-03-29 | DELETE |
+| 3 | 2026-03-28 | UPDATE |
+| 2 | 2026-03-25 | WRITE |
+| 1 | 2026-03-20 | WRITE |
+| 0 | 2026-03-15 | CREATE |
+
+The analyst needs to compare today's data with the state from March 25.
+
+Which query performs this comparison?
+  a) SELECT * FROM analytics.monthly_revenue EXCEPT SELECT * FROM analytics.monthly_revenue@v2
+  b) SELECT * FROM analytics.monthly_revenue VERSION AS OF 5 EXCEPT ALL SELECT * FROM analytics.monthly_revenue VERSION AS OF 2 ✅
+  c) SELECT * FROM analytics.monthly_revenue TIMESTAMP AS OF '2026-03-25' MINUS SELECT * FROM analytics.monthly_revenue
+  d) DIFF analytics.monthly_revenue BETWEEN VERSION 2 AND VERSION 5
+  e) SELECT * FROM analytics.monthly_revenue WHERE _change_type = 'update_postimage'
+CURRENT_EXPL: Time Travel with VERSION AS OF allows querying any historical state. EXCEPT ALL returns rows present in the current version (5) but not in version 2, showing what was added/changed. The @v2 syntax is not standard Delta Lake SQL. DIFF is not a Delta command. Change Data Feed (_change_type) requires explicit enablement and tracks row-level changes differently.
+---END---
+
+Q32 [db-da-361] type:single_choice
+PROMPT: A data analyst is working with a Delta table that receives daily batch loads of 500MB from an ERP system. Over time, the table grows to 100GB with 15,000 small files from incremental loads.
+
+Which maintenance strategy should the analyst implement to keep query performance optimal?
+  a) Schedule daily VACUUM with 0 hours retention to immediately remove all old files.
+  b) Schedule regular OPTIMIZE to compact small files, followed by VACUUM with the default 7-day retention to clean up old files while preserving Time Travel capability. ✅
+  c) Rebuild the table weekly using DROP/CREATE to start fresh with optimal file sizes.
+  d) Increase the SQL Warehouse size to compensate for the performance impact of small files.
+  e) Enable Auto Loader, which automatically optimizes file sizes during ingestion.
+CURRENT_EXPL: The recommended maintenance pattern: (1) OPTIMIZE regularly to compact small files into larger, efficient files, (2) VACUUM after OPTIMIZE (with default 7-day retention) to reclaim storage from old, replaced files. VACUUM with 0 hours destroys Time Travel capability. Rebuilding tables is wasteful. Auto Loader doesn't optimize existing data.
+---END---
+
+Q33 [db-da-362] type:single_choice
+PROMPT: A data analyst needs to add a column `loyalty_score` (DOUBLE) to an existing Delta table with 50 million rows.
+
+Which statement correctly adds the column without rewriting any existing data?
+  a) ALTER TABLE customers ADD COLUMN loyalty_score DOUBLE — this modifies only the metadata (schema) in the Delta transaction log without touching data files. ✅
+  b) UPDATE customers SET loyalty_score = NULL — this implicitly adds the column if it doesn't exist.
+  c) CREATE OR REPLACE TABLE customers AS SELECT *, NULL AS loyalty_score FROM customers — to rebuild with the new column.
+  d) Adding a column requires dropping and recreating the table; ALTER TABLE ADD COLUMN is not supported for Delta tables.
+  e) INSERT INTO customers (loyalty_score) VALUES (NULL) — to create the column with a default value.
+CURRENT_EXPL: ALTER TABLE ADD COLUMN is a metadata-only operation in Delta Lake. It updates the schema in the transaction log without rewriting any data files. Existing files will return NULL for the new column. This is one of Delta Lake's advantages — schema changes are cheap and instantaneous regardless of table size.
+---END---
+
+Q34 [db-da-363] type:single_choice
+PROMPT: A data analyst runs the following query to update product prices:
+
+```sql
+MERGE INTO gold.products AS target
+USING staging.price_updates AS source
+ON target.product_id = source.product_id
+WHEN MATCHED THEN UPDATE SET target.price = source.new_price
+WHEN NOT MATCHED THEN INSERT (product_id, name, price) VALUES (source.product_id, source.name, source.new_price)
+```
+
+What ACID property does Delta Lake guarantee during this MERGE operation?
+  a) Atomicity only — either all changes apply or none do, but concurrent reads may see partial results.
+  b) Full ACID: the MERGE is atomic (all or nothing), consistent (schema enforced), isolated (concurrent readers see the table in its pre-MERGE state until commit), and durable (committed changes survive failures). ✅
+  c) Delta Lake provides eventual consistency, so other users may see partial MERGE results for a brief period.
+  d) ACID properties only apply to INSERT operations; MERGE bypasses transaction guarantees for performance.
+  e) Delta Lake provides ACID for single-table operations, but MERGE involves two tables, so it falls back to best-effort consistency.
+CURRENT_EXPL: Delta Lake provides full ACID transactions for all write operations including MERGE. The operation is Atomic (all changes commit together), Consistent (schema enforcement validated), Isolated (concurrent readers see the snapshot before the MERGE until it commits), and Durable (committed to the transaction log and cloud storage).
+---END---
+
+Q35 [db-da-364] type:single_choice
+PROMPT: A data analyst discovers that someone has enabled Change Data Feed (CDF) on a Silver-layer table. The analyst queries:
+
+```sql
+SELECT * FROM table_changes('silver.orders', 3, 5)
+```
+
+The results include columns `_change_type`, `_commit_version`, and `_commit_timestamp`.
+
+What does the `_change_type` column represent?
+  a) The SQL command type (INSERT, UPDATE, DELETE) that was executed on the table.
+  b) The type of row-level change: 'insert' for new rows, 'update_preimage' for old values before update, 'update_postimage' for new values after update, and 'delete' for removed rows. ✅
+  c) The schema change type (ADD COLUMN, DROP COLUMN, etc.) tracked at the table level.
+  d) The file-level change type showing which data files were added or removed.
+  e) A user-defined label that must be set manually when writing data.
+CURRENT_EXPL: Change Data Feed tracks row-level changes with `_change_type`: 'insert' (new row), 'update_preimage' (row values BEFORE update), 'update_postimage' (row values AFTER update), and 'delete' (removed row). This enables downstream consumers to process only changed data rather than full table scans — essential for efficient incremental ETL.
+---END---
+

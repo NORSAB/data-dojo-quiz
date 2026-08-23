@@ -1,0 +1,228 @@
+[
+  {
+    "id": "db-da-111",
+    "courseId": "databricks-da",
+    "lang": "en",
+    "type": "single_choice",
+    "prompt": "An analyst needs to ingest a large volume of JSON files from cloud storage into a Delta table using Databricks SQL. The schema of these JSON files evolves frequently (new columns are added). Which SQL function should be used to ingest these files while automatically handling schema evolution?",
+    "options": [
+      {
+        "id": "a",
+        "text": "read_files() with the 'cloud_files' format"
+      },
+      {
+        "id": "b",
+        "text": "COPY INTO with default settings"
+      },
+      {
+        "id": "c",
+        "text": "INSERT INTO ... SELECT FROM json.`path`"
+      },
+      {
+        "id": "d",
+        "text": "CREATE EXTERNAL TABLE"
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "explanation": "✅ CORRECT (A): read_files() with 'cloud_files' format invokes Auto Loader, which is specifically designed for:\n1. INCREMENTAL ingestion (processes only new files, not re-reading old ones)\n2. SCHEMA EVOLUTION (automatically adds new columns without breaking existing data)\n3. It maintains checkpoints to track which files have been processed.\n\n❌ Why others are wrong:\n• (B) COPY INTO with defaults: COPY INTO tracks processed files but does NOT support automatic schema evolution by default. You'd need mergeSchema = true, and even then it's less robust than Auto Loader for frequent schema changes.\n• (C) INSERT INTO ... SELECT FROM json.path: This re-reads ALL files every time (no idempotency), and has NO schema evolution support. Running this repeatedly creates duplicates.\n• (D) CREATE EXTERNAL TABLE: This creates a pointer to the files but doesn't actively ingest or evolve schema. It's a read-only reference, not an ingestion mechanism.\n\n🎯 EXAM TIP: Frequent schema changes + incremental load = Auto Loader (read_files with cloud_files). COPY INTO = simpler idempotent load but limited schema evolution.",
+    "domain": "Importing Data"
+  },
+  {
+    "id": "db-da-289",
+    "courseId": "databricks-da",
+    "lang": "en",
+    "type": "single_choice",
+    "prompt": "A table named raw_events has ingested duplicate data from a file loaded 3 days ago using COPY INTO. The analyst wants to verify exactly which files were processed and the timestamp of the operation. Which command provides a detailed history of ingestion operations, including operation IDs and source metadata?",
+    "options": [
+      {
+        "id": "a",
+        "text": "SELECT * FROM table_changes('raw_events', ...);"
+      },
+      {
+        "id": "b",
+        "text": "DESCRIBE HISTORY raw_events;"
+      },
+      {
+        "id": "c",
+        "text": "SHOW TBLPROPERTIES raw_events;"
+      },
+      {
+        "id": "d",
+        "text": "DESCRIBE DETAIL raw_events;"
+      }
+    ],
+    "correctIds": [
+      "b"
+    ],
+    "explanation": "✅ CORRECT (B): DESCRIBE HISTORY shows the complete transaction log for a Delta table, including:\n- Operation type (COPY INTO, WRITE, OPTIMIZE, MERGE, etc.)\n- Timestamp of each operation\n- operationMetrics: files added, rows inserted, bytes written\n- operationParameters: source file paths, format options used\n- userName: who performed the operation\n\nThis is exactly what you need to audit which files were loaded and when.\n\n❌ Why others are wrong:\n• (A) table_changes(): This is for Change Data Feed (CDF) — it shows ROW-LEVEL changes (what data changed), not FILE-LEVEL audit info. It doesn't tell you which files were ingested.\n• (C) SHOW TBLPROPERTIES: Shows table configuration (owner, location, format, etc.) but NOT transaction history or file-level audit information.\n• (D) DESCRIBE DETAIL: Shows current table metadata (location, size, number of files, format) but NOT the history of operations or which files were loaded.\n\n🎯 EXAM TIP: DESCRIBE HISTORY = transaction audit log (who did what, when, which files). DESCRIBE DETAIL = current table snapshot. table_changes = CDF row-level changes.",
+    "domain": "Importing Data"
+  },
+  {
+    "id": "db-da-290",
+    "courseId": "databricks-da",
+    "lang": "en",
+    "type": "single_choice",
+    "prompt": "A data analyst wants to create an external table so other users can load files directly. To do this securely, they need to define a path to an Azure Data Lake Storage Gen2 container. Which Unity Catalog object must be defined FIRST to grant secure access to a storage path without exposing account credentials (Key/SAS)?",
+    "options": [
+      {
+        "id": "a",
+        "text": "A Storage Credential"
+      },
+      {
+        "id": "b",
+        "text": "An External Location"
+      },
+      {
+        "id": "c",
+        "text": "A Volume"
+      },
+      {
+        "id": "d",
+        "text": "A Managed Table"
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "explanation": "✅ CORRECT (A): Unity Catalog's external access model has a strict 2-layer hierarchy:\n\n1️⃣ STORAGE CREDENTIAL → holds the cloud IAM identity (Azure Service Principal, AWS IAM Role, GCP Service Account)\n2️⃣ EXTERNAL LOCATION → maps a storage path (e.g., abfss://container@account/) to a Storage Credential\n\nThe question asks what's needed FIRST — you must create the Storage Credential before you can define an External Location. Without the credential, there's no way to authenticate to the cloud storage.\n\n❌ Why others are wrong:\n• (B) External Location: This is needed too, but it DEPENDS on a Storage Credential. You can't create an External Location without first having a credential. The question asks what's needed to 'define a path' — the credential is the foundation.\n• (C) Volume: Volumes are for managing individual files within Unity Catalog (like a folder), not for defining access to external storage containers.\n• (D) Managed Table: Managed tables store data IN Databricks' own storage. The question is about EXTERNAL storage (ADLS Gen2), which requires external access configuration.\n\n🎯 EXAM TIP: Credential → Location → External Table. This order is ALWAYS the same. Credential = WHO can access. Location = WHERE they can access. Table = WHAT data to expose.",
+    "domain": "Importing Data"
+  },
+  {
+    "id": "db-da-342",
+    "courseId": "databricks-da",
+    "lang": "en",
+    "type": "single_choice",
+    "prompt": "A data analyst needs to ingest a directory of JSON files that arrives incrementally in an S3 bucket. New files are added every hour. The analyst wants the ingestion to be idempotent — files already processed should not be re-ingested even if the pipeline is restarted.\n\nWhich Databricks SQL command is purpose-built for this idempotent incremental ingestion?",
+    "options": [
+      {
+        "id": "a",
+        "text": "INSERT INTO target_table SELECT * FROM json.`s3://bucket/data/` — since it reads all files, it naturally handles deduplication."
+      },
+      {
+        "id": "b",
+        "text": "COPY INTO target_table FROM 's3://bucket/data/' FILEFORMAT = JSON — it automatically tracks which files have been loaded and skips previously processed files."
+      },
+      {
+        "id": "c",
+        "text": "CREATE TABLE target_table AS SELECT * FROM json.`s3://bucket/data/` — using CTAS to reload the complete dataset each time."
+      },
+      {
+        "id": "d",
+        "text": "MERGE INTO target_table USING json.`s3://bucket/data/` — it deduplicates records based on a merge key."
+      },
+      {
+        "id": "e",
+        "text": "LOAD DATA INPATH 's3://bucket/data/' INTO TABLE target_table — the standard SQL data loading command."
+      }
+    ],
+    "correctIds": [
+      "b"
+    ],
+    "explanation": "✅ CORRECT (B): COPY INTO is designed specifically for IDEMPOTENT incremental ingestion:\n1. Tracks processed files using file-level checksums stored in the Delta transaction log\n2. On subsequent runs, automatically SKIPS already-processed files\n3. Only new/unprocessed files are loaded → no duplicates\n\nSyntax: COPY INTO target_table FROM 's3://...' FILEFORMAT = JSON\n\n❌ Why others are wrong:\n• (A) INSERT INTO ... SELECT: Re-reads ALL files in the directory every single run. Run it 5 times = 5x duplicated data. No file tracking mechanism.\n• (C) CREATE TABLE AS SELECT: Creates a NEW table each time. Doesn't support incremental appends. Only useful for one-time table creation.\n• (D) MERGE INTO: Can deduplicate records using a key, but still RE-READS all source files every time. More expensive and complex than COPY INTO for simple append scenarios.\n• (E) LOAD DATA INPATH: This is a Hive command, not supported in Databricks SQL. Even in Hive, it moves files rather than copying them.\n\n🎯 EXAM TIP: 'Idempotent' in the exam = COPY INTO or Auto Loader. INSERT INTO = always creates duplicates. MERGE = deduplicates rows but re-reads all files.",
+    "domain": "Importing Data"
+  },
+  {
+    "id": "db-da-344",
+    "courseId": "databricks-da",
+    "lang": "en",
+    "type": "single_choice",
+    "prompt": "A data analyst needs to create a temporary queryable reference to a set of Parquet files in an external S3 location without formally registering the data as a permanent table in Unity Catalog.\n\nWhich SQL syntax allows querying external files directly without creating a table?",
+    "options": [
+      {
+        "id": "a",
+        "text": "SELECT * FROM parquet.`s3://bucket/data/sales/` — using backtick-quoted path references to directly query files."
+      },
+      {
+        "id": "b",
+        "text": "SELECT * FROM EXTERNAL 's3://bucket/data/sales/' FORMAT PARQUET — using the EXTERNAL keyword for ad-hoc access."
+      },
+      {
+        "id": "c",
+        "text": "MOUNT 's3://bucket/data/' AS '/mnt/sales'; SELECT * FROM '/mnt/sales/' — mounting the storage first."
+      },
+      {
+        "id": "d",
+        "text": "CREATE TEMP VIEW sales AS PARQUET 's3://bucket/data/sales/' — creating a temporary Parquet reference."
+      },
+      {
+        "id": "e",
+        "text": "Direct file querying is not possible in Databricks; files must always be registered as tables first."
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "explanation": "✅ CORRECT (A): Databricks supports direct file path querying with the syntax: format.`path`\n\nExamples:\n- SELECT * FROM parquet.`s3://bucket/data/`\n- SELECT * FROM json.`s3://bucket/logs/`\n- SELECT * FROM csv.`s3://bucket/files/`\n\nThis is called PATH-BASED querying. Backticks around the path are REQUIRED. No table registration needed — perfect for ad-hoc exploration.\n\n❌ Why others are wrong:\n• (B) 'SELECT FROM EXTERNAL ... FORMAT': This syntax doesn't exist in Databricks SQL. Not valid.\n• (C) MOUNT + SELECT: MOUNT is a LEGACY approach (pre-Unity Catalog). Modern Databricks uses External Locations instead. Also, MOUNT requires admin privileges.\n• (D) CREATE TEMP VIEW AS PARQUET: This syntax is invalid. TEMP VIEWs are created with SQL queries, not format declarations.\n• (E) 'Not possible': Completely false — path-based querying is a core Databricks feature.\n\n🎯 EXAM TIP: format.`path` with backticks = instant ad-hoc querying. No registration, no table creation. Works for parquet, json, csv, delta, avro.",
+    "domain": "Importing Data"
+  },
+  {
+    "id": "db-da-347",
+    "courseId": "databricks-da",
+    "lang": "en",
+    "type": "single_choice",
+    "prompt": "A data analyst uploads a small CSV file (500 rows) through the Databricks workspace UI using the 'Create Table' wizard. After successful upload, the analyst notices the data is accessible.\n\nWhere does the uploaded data physically reside after using the UI upload feature?",
+    "options": [
+      {
+        "id": "a",
+        "text": "In a temporary session-scoped table that disappears when the analyst logs out."
+      },
+      {
+        "id": "b",
+        "text": "As a managed Delta table in Unity Catalog, stored in the managed storage location of the target catalog/schema."
+      },
+      {
+        "id": "c",
+        "text": "In the Databricks Control Plane as a cached dataset."
+      },
+      {
+        "id": "d",
+        "text": "As a CSV file attached to the analyst's personal workspace folder."
+      },
+      {
+        "id": "e",
+        "text": "In an external S3 bucket that requires separate storage configuration."
+      }
+    ],
+    "correctIds": [
+      "b"
+    ],
+    "explanation": "✅ CORRECT (B): When you upload a file through the Databricks UI, it becomes a MANAGED DELTA TABLE in Unity Catalog. This means:\n1. Data is stored in the managed storage location of the target schema/catalog\n2. The table is PERSISTENT — it survives session restarts and is accessible to other users\n3. It's fully governed by Unity Catalog (permissions, lineage, audit)\n4. Format is always Delta (even if you uploaded CSV, it converts to Delta)\n\n❌ Why others are wrong:\n• (A) 'Temporary session-scoped table': The uploaded data is PERMANENT, not temporary. It persists after you close your browser.\n• (C) 'Control Plane cached dataset': The Control Plane manages cluster orchestration and workspace metadata — it doesn't store user data.\n• (D) 'Personal workspace folder CSV': The data is converted from CSV to Delta format and stored in cloud storage, NOT attached as a raw file to your workspace.\n• (E) 'External S3 bucket': UI uploads create MANAGED tables (Databricks controls the storage location). No external storage configuration is needed.\n\n🎯 EXAM TIP: UI Upload = always creates a MANAGED Delta table. Managed = Databricks controls storage lifecycle. External = YOU control storage.",
+    "domain": "Importing Data"
+  },
+  {
+    "id": "db-da-349",
+    "courseId": "databricks-da",
+    "lang": "en",
+    "type": "single_choice",
+    "prompt": "A data analyst needs to create an external table in Unity Catalog that references data stored in the company's ADLS Gen2 account. The analyst writes:\n\n`CREATE TABLE analytics.ext_sales (id INT, amount DOUBLE) LOCATION 'abfss://container@account.dfs.core.windows.net/sales/'`\n\nThe query fails with a permission error.\n\nWhat is the most likely cause?",
+    "options": [
+      {
+        "id": "a",
+        "text": "The LOCATION URL syntax is incorrect for ADLS Gen2."
+      },
+      {
+        "id": "b",
+        "text": "An External Location must be registered in Unity Catalog that maps to this storage path, and a Storage Credential must be configured with appropriate cloud permissions."
+      },
+      {
+        "id": "c",
+        "text": "External tables can only point to S3, not ADLS Gen2."
+      },
+      {
+        "id": "d",
+        "text": "The analyst needs to run MOUNT first before creating external tables."
+      },
+      {
+        "id": "e",
+        "text": "Unity Catalog does not support external tables; all tables must be managed."
+      }
+    ],
+    "correctIds": [
+      "b"
+    ],
+    "explanation": "✅ CORRECT (B): Unity Catalog requires an EXTERNAL LOCATION to be registered before you can create an external table pointing to that path. The access chain is:\n\n1. Storage Credential → authenticates to cloud provider (Service Principal / IAM Role)\n2. External Location → maps a storage path (abfss://...) to a credential\n3. External Table → references the External Location path\n\nWithout step 2, Unity Catalog blocks the CREATE TABLE because the path 'abfss://...' is not registered.\n\n❌ Why others are wrong:\n• (A) 'LOCATION URL syntax incorrect': The abfss:// syntax IS correct for ADLS Gen2. The problem isn't syntax — it's the missing External Location registration.\n• (C) 'External tables only for S3': False — Unity Catalog supports external tables on S3, ADLS Gen2, and GCS. All three major cloud providers.\n• (D) 'MOUNT first': MOUNT is a LEGACY approach that bypasses Unity Catalog governance. Modern Databricks uses External Locations instead of MOUNTs.\n• (E) 'UC doesn't support external tables': Completely false. Unity Catalog fully supports external tables — it just requires proper governance objects (credential + location).\n\n🎯 EXAM TIP: Missing External Location is the #1 reason CREATE EXTERNAL TABLE fails. Always check: Credential → Location → Table.",
+    "domain": "Importing Data"
+  }
+]

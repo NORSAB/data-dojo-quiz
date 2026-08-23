@@ -1,0 +1,53 @@
+Demonstration on tagging and reproducible agents. In this demonstration, we are going to explore. We're going to explore MFlow tracing, tagging strategies, and also the Unity Catalog MFlow Model Registry, where we're going to register our models which allow for that reproducible
+Norman Reynaldo Sabillon Castro 0 minutos 37 segundos
+you know, production AI agent. Now, in general, our learning objectives include organizing our agent tracing. This includes our tagging strategies. So we're going to include tagging in here, creating some custom trace functions, logging our agents, registering, and
+Norman Reynaldo Sabillon Castro 0 minutos 56 segundos
+Finally, deploying and running inferencing on those agents.
+Norman Reynaldo Sabillon Castro 1 minuto
+Now, before we can get started, really, we've got to set up our environment, and that includes the compute and installing some dependencies. So, in order to select your compute, you can come up here to the upper right, and we are going to be using serverless, so you can click on that and it'll initialize that compute. It is the default, so I could have just come down here and click run.
+Norman Reynaldo Sabillon Castro 1 minuto 22 segundos
+and it would have defaulted to that compute. But it's always good to know and to be explicit with it. And you can also see some details about that environment. For example, we're using version 4.
+Norman Reynaldo Sabillon Castro 1 minuto 35 segundos
+Now, we're letting that run, and that's going to set up everything that we need in order to get started, including things like the data set that's going to be behind some of the tools. It's also going to build some functions, but we're going to be looking and setting up our location as well, so in UnityCatalog.
+Norman Reynaldo Sabillon Castro 1 minuto 54 segundos
+All of our models, our table or our data, our functions are all in Catalog DBX Academy, and we're gonna be using the lab user schema. Now this lab user is specifically my lab user. So for example, that data set we're using, that's here under table. So if I open that in Unity catalog,
+Norman Reynaldo Sabillon Castro 2 minutos 15 segundos
+We'll be able to see some additional details about this table. Here's the schema. Now this is a Airbnb San Francisco dataset. So different Airbnbs in San Francisco. It includes the ID and the name, summary information about them, and there's a lot of different things.
+Norman Reynaldo Sabillon Castro 2 minutos 34 segundos
+Information about the hosts, the neighborhood that they're in.
+Norman Reynaldo Sabillon Castro 2 minutos 38 segundos
+Their location, bathrooms, bedrooms.
+Norman Reynaldo Sabillon Castro 16 minutos 53 segundos
+Alright, so once we know, OK, it works. I can use it as a Python function. This is something I'd like to add to the Unity Catalog Model Registry, because it's still not over there yet. If I come here into Unity Catalog Browser.
+Norman Reynaldo Sabillon Castro 17 minutos 7 segundos
+I don't have any models yet. So I do need to set my registry to Databricks Unity Catalog because this is the ML Flow model registry in Unity Catalog. So hey ML Flow, set the Databricks Unity Catalog as your model registry location. Here's the catalog schema and name we're going to pass in and then please register this model.
+Norman Reynaldo Sabillon Castro 17 minutos 27 segundos
+The way I run that, grabs that model that's been defined. There's that model URI. So all that necessary information, all the dependencies and everything, it's there. And if I come back here to refresh.
+Norman Reynaldo Sabillon Castro 17 minutos 41 segundos
+Now I have my model, and if I open that in Unity Catalog.
+Norman Reynaldo Sabillon Castro 17 minutos 46 segundos
+Here's the model. Now, anytime I register a model in this catalog, in this schema with this name, it'll add a new version. So if I do this again and again, it'll consistently add new versions.
+Norman Reynaldo Sabillon Castro 17 minutos 59 segundos
+So, if I come over, there's version one, there's version two, just took a second to load. So you can see each time I register it, we do add the versions. Now, the model itself has some details, things like the storage location, for example, and the permissions. Each version also has
+Norman Reynaldo Sabillon Castro 18 minutos 19 segundos
+information. Now there's the overview page which includes some information like the source runs if you need to go and jump into the run and get your extra details there. You've got things like the model ID, the activity log, the input and output signature. You also see lineage. So here's what's upstream. There's functions, there's notebooks. If you look at the lineage graph,
+Norman Reynaldo Sabillon Castro 18 minutos 40 segundos
+You can see there's the table, there's the functions, all that lineage is captured for you. There's also the artifact section. So here's the model and any kind of traces that we do need an active SQL warehouse and currently no compute is there. So we would need that there to be able to see it.
+Norman Reynaldo Sabillon Castro 18 minutos 59 segundos
+in this location, but those traces do show up there as well.
+Norman Reynaldo Sabillon Castro 19 minutos 4 segundos
+So once we have that agent, we can pull rather than just from the model URI, right, from the ML flow run, we can actually pull it from Unity Catalog.
+Norman Reynaldo Sabillon Castro 19 minutos 13 segundos
+So here, I'm loading my Python function. We've got our model registry, and we're running our dot predict that way.
+Norman Reynaldo Sabillon Castro 19 minutos 23 segundos
+So then we can run our predictions and if we scroll down enough and get all of that in, we'll be able to see that final answer. There it is, hidden in there a little bit, the average listing price.
+Norman Reynaldo Sabillon Castro 19 minutos 38 segundos
+So yes, we have detailed metadata information. We can manage access to it. If we look back at our models, we can manage versions with things like aliases. So rather than deploying version two, you can deploy based off of a specific alias. So if I say this one is my
+Norman Reynaldo Sabillon Castro 19 minutos 57 segundos
+Broad model.
+Norman Reynaldo Sabillon Castro 19 minutos 59 segundos
+That's the alias. And I can say, Hey, please use the tagging and reproducible agent at prod. So use the prod version. And if let's say this version actually turns out to be better and I want that one, you can put it there. You can't have the same alias for two different model versions, but model versions can have multiple aliases. So I could add a second one here.
+Norman Reynaldo Sabillon Castro 20 minutos 21 segundos
+I'm Jade. So there is the Jade alias. So that's a nice way of being able to control. You can add tags here as well. You can even add govern tags within Unity Catalog. So we've been adding MF Flow tags. You can also have Unity Catalog tags here. So that gives us a nice idea
+Norman Reynaldo Sabillon Castro 20 minutos 40 segundos
+of tagging strategies, working with tracing, working with ML Flow, the runs, and the Unity Catalog ML Flow Model Registry. And now we can move on.

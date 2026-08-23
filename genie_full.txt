@@ -1,0 +1,279 @@
+=== AI/BI Genie Spaces (26 questions) ===
+
+Q1 [db-da-88] type:single_choice
+PROMPT: A data analyst is setting up a Genie space in Databricks. Which sequence should the analyst use for defining reasonable sample questions to help guide user interactions and improve Genie's accuracy?
+  a) Click "Configure" > "Context" in the Genie space, use the "SQL Queries" tab to add sample questions and matching SQL, then review and resolve any inconsistencies in the guidance provided. ✅
+  b) Create a dedicated notebook for each sample question, write the corresponding SQL query in the notebook, and link these notebooks to the Genie space using a workspace object reference.
+  c) Navigate to "Configure" > "Settings" and enter the sample questions directly into the "Description" field. Genie automatically parses this text to guide users.
+  d) Upload a spreadsheet with sample questions to the space, manually map each question to a SQL query in a separate document, and periodically update the mappings as new questions arise.
+CURRENT_EXPL: The correct workflow for training Genie is to provide sample questions and their corresponding correct SQL directly in the configuration context menu.
+---END---
+
+Q2 [db-da-94] type:single_choice
+PROMPT: A data analyst needs to programmatically mark the `sales_data` table in Unity Catalog as deprecated so that users across their organization can clearly see that it is no longer recommended for use. Which SQL command should they use?
+  a) [CODE/TABLE]
+  b) [CODE/TABLE]
+  c) [CODE/TABLE] ✅
+  d) [CODE/TABLE]
+CURRENT_EXPL: The standard way to mark a table's certification status in Unity Catalog is by setting the system tag `system.certification_status`.
+---END---
+
+Q3 [db-da-101] type:single_choice
+PROMPT: A data analyst needs to automate scheduled ETL jobs that ingest and transform data from multiple sources. The analyst wants to use multiple programming languages for flexibility and ensure that the pipeline can automatically handle schema changes as new data arrives. Which approach in Databricks should be used?
+  a) Separate Delta tables for each data source with fixed schemas
+  b) Unity Catalog with manual ETL scripts and cron-based scheduling
+  c) Databricks Workflows with Apache Spark notebooks and manual schema management
+  d) Lakeflow Spark Declarative Pipelines with Auto Loader ✅
+CURRENT_EXPL: Declarative Pipelines (like DLT) combined with Auto Loader provide schema evolution support and multi-language capabilities for robust ETL.
+---END---
+
+Q4 [db-da-109] type:single_choice
+PROMPT: A data analyst is setting up an AI/BI Genie space. They notice that Genie is struggling to correctly join tables because the relationship between `orders.cust_id` and `customers.id` is not explicitly defined in the metadata. Which Unity Catalog feature should the analyst use to fix this and improve Genie's accuracy?
+  a) Define a Primary Key on `customers.id` and a Foreign Key on `orders.cust_id`. ✅
+  b) Create a materialized view that pre-joins the tables.
+  c) Write a 'System Instruction' telling Genie to always join these tables.
+  d) Use Liquid Clustering on both columns.
+CURRENT_EXPL: Even though PK/FK constraints are not enforced in Databricks, defining them provides critical metadata that Genie uses to automatically understand the data model and join tables correctly.
+---END---
+
+Q5 [db-da-117] type:single_choice
+PROMPT: When defining 'Trusted Assets' in an AI/BI Genie space, what is the primary benefit?
+  a) It encrypts the data.
+  b) It guides the AI to prioritize these specific tables when generating answers, reducing hallucinations. ✅
+  c) It speeds up query performance by caching the assets.
+  d) It prevents users from querying any other table.
+CURRENT_EXPL: Trusted Assets act as a curated allow-list. It tells Genie: 'Use these tables to answer questions,' ensuring the AI doesn't pick up irrelevant or temporary tables from the catalog.
+---END---
+
+Q6 [db-da-122] type:single_choice
+PROMPT: In AI/BI Genie, what is the purpose of 'Draft Mode' vs 'Released Mode' (Publishing) for a space?
+  a) Draft Mode uses a smaller cluster to save costs.
+  b) Draft Mode is for the analyst to test and curate answers before end-users see them. ✅
+  c) Released Mode makes the data public to the internet.
+  d) There is no difference; changes are always live.
+CURRENT_EXPL: Draft mode is the staging environment for the analyst to verify logic and 'System Instructions'. End-users only interact with the Released version to ensure quality.
+---END---
+
+Q7 [db-da-150] type:single_choice
+PROMPT: When curating an AI/BI Genie space for optimal accuracy, a data analyst is deciding how many tables to include. What is the recommended best practice?
+  a) Include as many tables as possible so Genie has maximum context
+  b) Include only necessary tables (ideally five or fewer) and limit columns to focus the space ✅
+  c) Always include at least 20 tables to ensure comprehensive coverage
+  d) The number of tables has no impact on Genie accuracy
+  e) Only a single table can be added to a Genie space
+CURRENT_EXPL: For optimal Genie accuracy, Databricks recommends including only necessary tables (ideally five or fewer) and limiting columns to what is relevant. Too many tables and columns can confuse Genie's SQL generation. Additionally, well-documented table and column descriptions in Unity Catalog are critical for accuracy.
+---END---
+
+Q8 [db-da-185] type:single_choice
+PROMPT: A BI analyst has created a Genie space containing customer sales data and needs to share it with external stakeholders who are not workspace members. The stakeholders require the ability to ask questions about the data but should not have access to the underlying Databricks workspace or compute resources.
+
+How should the BI analyst share the Genie space with external stakeholders?
+  a) Share the Genie space with embedded credentials and assign the stakeholders as account users with published dashboard access. ✅
+  b) Export the Genie space data to CSV files and share via email with instructions to upload to their own Databricks workspace.
+  c) Create individual workspace accounts for each stakeholder and assign Databricks SQL access entitlement with CAN RUN permissions.
+  d) Grant the stakeholders workspace membership with Consumer access entitlement and CAN VIEW permissions on the Genie space.
+CURRENT_EXPL: A Genie space can be shared by publishing a dashboard or notebook that embeds the necessary credentials, allowing external users to run queries through the UI only. The stakeholders are added as account users (not workspace members), which isolates them from the underlying Databricks environment. This is secure, scalable, and meets the requirement of no workspace access.
+---END---
+
+Q9 [db-da-218] type:single_choice
+PROMPT: A data analyst is reviewing a Genie space used by operations managers and notices that multiple responses have been flagged as inaccurate.
+
+Which action should the analyst take to improve performance?
+  a) Add more tables and columns to the space because increasing the data volume improves Genie's ability to find the correct answers.
+  b) Update the instructions and add example SQL queries because this guides Genie to generate correct and context-aware responses. ✅
+  c) Turn off the feedback feature because it prevents noise from influencing Genie's learning mechanism.
+  d) Delete the flagged responses because this clears prior data that is biasing Genie's answer generation.
+CURRENT_EXPL: To improve Genie's performance and accuracy, it is best practice to provide explicit instructions and multiple example SQL queries (Few-shot prompting). This helps the model understand the expected output format and business context. Adding more tables (A) might add noise, while disabling feedback (C) or deleting history (D) prevents iterative improvement.
+---END---
+
+Q10 [db-da-220] type:single_choice
+PROMPT: A data analyst is curating a Genie space for the marketing team to explore campaign performance data. To ensure accurate and context-aware responses, the analyst includes curated Unity Catalog tables, writes clear domain instructions, and adds sample questions.
+
+Which additional step can the analyst take to maximize trust and reuse of frequently asked queries?
+  a) Disable the use of domain instructions to prevent bias in AI-generated answers.
+  b) Mark commonly used queries as Trusted Assets after verifying their correctness. ✅
+  c) Enable automatic query generation so users receive instant responses without review.
+  d) Allow users to edit the underlying datasets to improve Genie responses.
+CURRENT_EXPL: Marking verified and frequently used queries as 'Trusted Assets' in a Genie space provides a clear signal of quality and governance to users, encouraging reuse of high-fidelity logic. Disabling domain instructions (A) reduces context, while automatic generation without review (C) and editing source data (D) introduce risks to accuracy and integrity.
+---END---
+
+Q11 [db-da-282] type:single_choice
+PROMPT: A data analyst is setting up a Genie space in the Databricks Data Intelligence Platform to help business users generate sales reports using natural language. The analyst wants to ensure Genie provides accurate answers and visualizations based on the company's sales data, which is managed in Unity Catalog. The analyst has prepared sample queries and ensured that table and column metadata are well-annotated. Which action will improve the accuracy and relevance of Genie's responses when business users ask questions in the Genie space?
+  a) Include all available tables and columns from the company's data warehouse in the Genie space, regardless of their relevance.
+  b) Add only the necessary tables and columns to the Genie space and ensure all metadata in Unity Catalog is well-annotated. ✅
+  c) Remove primary and foreign key relationships from Unity Catalog to simplify the data model for Genie.
+  d) Populate Genie's configuration with default sample queries and generic business instructions using standard templates from the platform.
+CURRENT_EXPL: To optimize AI/BI Genie, it is critical to provide focus and context. Including only necessary tables and columns reduces confusion for the LLM and minimizes incorrect joins or mapping. Additionally, Genie heavily relies on Unity Catalog metadata (comments and descriptions) to understand the business meaning of columns, so high-quality annotations directly correlate with higher accuracy.
+
+• Option A is incorrect: Including too much irrelevant data ('noise') significantly degrades the model's ability to select the correct tables.
+
+• Option C is incorrect: Genie uses PK/FK relationships to understand how to join tables correctly; removing them breaks its understanding of the data model.
+
+• Option D is incorrect: Generic instructions are less effective than specific, custom metadata tailored to the actual schemas and business logic of the organization.
+---END---
+
+Q12 [db-da-296] type:single_choice
+PROMPT: An analyst is setting up an AI/BI Genie space for a sales team. They want to ensure that Genie prioritizes specific, pre-written 'Gold standard' queries for sensitive executive reports rather than generating new SQL on the fly. Which feature should they use to mark these queries as high-confidence sources?
+  a) Enable 'Priority Execution' in the Genie Settings.
+  b) Designate the source queries as 'Trusted Assets' within the Genie Space configuration. ✅
+  c) Add 'EXEC_PRIORITY' tags to the tables in Unity Catalog.
+  d)  Genie automatically trusts any query written by a Workspace Admin.
+CURRENT_EXPL: Trusted Assets are a core feature of AI/BI Genie that allow analysts to provide predefined, verified SQL queries for complex or sensitive calculations. When Genie identifies a question that matches a Trusted Asset, it uses that verified logic instead of attempting to generate new SQL, ensuring 100% accuracy for critical metrics.
+---END---
+
+Q13 [db-da-297] type:single_choice
+PROMPT: Users are complaining that AI/BI Genie is confusing 'Revenue' with 'Profit' in their natural language questions. What is the most effective and persistent way to correct this behavior without rewriting every query?
+  a) Rename the columns in the source Delta table to exactly match the users' words.
+  b) Provide clear descriptions and synonyms for the columns ('Revenue' vs 'Profit') in Unity Catalog metadata (Table/Column comments). ✅
+  c) Clear the Genie cache and ask the users to rephrase their questions.
+  d) Use the 'Sample Questions' feature to show Genie how to answer correctly.
+CURRENT_EXPL: Genie relies heavily on Unity Catalog metadata. By adding detailed 'Comments' and utilizing descriptive names (or semantic knowledge in Genie's 'Instructions'), the LLM gains the necessary context to distinguish between similar business terms. Metadata is the 'bridge' between natural language and SQL logic.
+---END---
+
+Q14 [db-da-298] type:single_choice
+PROMPT: Which of the following describes a key limitation of AI/BI Genie Spaces relative to standard SQL Dashboards?
+  a) Genie cannot be shared with users who only have 'Can View' permissions.
+  b) Genie cannot natively perform complex pivot operations or cross-table correlations without detailed semantic instructions or Trusted Assets. ✅
+  c) Genie spaces cannot connect to Unity Catalog managed tables.
+  d) Genie does not support any form of data visualization.
+CURRENT_EXPL: While powerful, Genie is a text-to-SQL interface. For many-to-many joins, complex window functions, or specialized pivots, it requires guidance through 'Instructions', 'Sample Questions', or 'Trusted Assets'. It is designed for ad-hoc exploration, while Dashboards are for predefined, production reporting.
+---END---
+
+Q15 [db-da-299] type:single_choice
+PROMPT: A Data Analyst wants to share a Genie Space so their manager can ask questions. The manager does not need to edit the space or add new tables. Which permission level should the analyst grant to the manager?
+  a) Can Manage
+  b) Can Use ✅
+  c) Can Edit
+  d) Any member of the Workspace already has access.
+CURRENT_EXPL: In AI/BI Genie, 'Can Use' allows a user to interact with the space (ask questions, view results) without changing the underlying configuration, instructions, or data sources. This is the standard permission for 'Consumers' of the Genie Space.
+---END---
+
+Q16 [db-da-300] type:single_choice
+PROMPT: An analyst is reviewing the 'History' tab in a Genie Space. They notice several questions where users gave a 'Thumbs Down' rating. What should be the analyst's immediate next step to improve Genie's performance for those specific failed questions?
+  a) Delete the failed questions from the history so Genie doesn't 'learn' from them.
+  b) Review the generated SQL, correct it, and add it as a 'Sample Question' or 'Trusted Asset' to the space. ✅
+  c) Restart the SQL Warehouse used by the Genie Space.
+  d) Tell the users they are asking 'out-of-scope' questions.
+CURRENT_EXPL: Genie improvement is an iterative process. By reviewing user feedback (history), an analyst can identify where the LLM is failing and provide 'curated' answers through Sample Questions or Trusted Assets, effectively teaching Genie the correct business logic for those specific scenarios.
+---END---
+
+Q17 [db-da-321] type:single_choice
+PROMPT: A data analyst configures a new Genie space. After adding three Unity Catalog tables (customers, orders, products), the analyst notices that Genie generates incorrect SQL when users ask about 'revenue' because the column is actually named `total_amount_usd`.
+
+What is the most effective action to resolve this issue?
+  a) Rename the column from `total_amount_usd` to `revenue` in the source table to match user expectations.
+  b) Add table and column descriptions/comments in Unity Catalog that explain business context, such as 'total_amount_usd represents the revenue from each transaction in US dollars.'
+  c) Create a separate view that aliases the column as `revenue` and add only the view to the Genie space.
+  d) Add a Trusted Asset (sample SQL query) that demonstrates the correct column usage for revenue calculations.
+  e) Both B and D: add descriptive comments to the catalog AND create Trusted Assets with sample queries. ✅
+CURRENT_EXPL: The best approach combines both: (B) adding column/table descriptions in Unity Catalog helps Genie understand the semantic meaning of columns, and (D) Trusted Assets provide vetted SQL examples that Genie uses as templates for similar questions. Together they teach Genie the correct business vocabulary mapping.
+---END---
+
+Q18 [db-da-322] type:single_choice
+PROMPT: A data analyst has configured a Genie space with 5 tables. Business users report that Genie sometimes returns queries that join tables incorrectly, producing inflated numbers due to many-to-many relationships.
+
+Which configuration step would most effectively prevent this issue?
+  a) Remove all but one table from the Genie space to eliminate joins entirely.
+  b) Add primary key and foreign key constraints as table comments in Unity Catalog, and create Trusted Assets with verified join patterns. ✅
+  c) Enable the 'strict join mode' setting in the Genie space configuration.
+  d) Ask users to specify exact join conditions in their natural language questions.
+  e) Replace the underlying tables with pre-joined flat tables that eliminate the need for any joins.
+CURRENT_EXPL: Genie uses table metadata (including documented relationships) and Trusted Assets to generate correct joins. By documenting PKs/FKs in catalog comments and providing sample queries with correct join patterns, the analyst teaches Genie the proper relationships. There is no 'strict join mode' — Genie relies on metadata and examples.
+---END---
+
+Q19 [db-da-323] type:single_choice
+PROMPT: A data analyst is evaluating whether a user question that Genie answered correctly should be saved as a Trusted Asset. The question was: 'Show me total sales by region for Q3.'
+
+What is a Trusted Asset in the context of AI/BI Genie Spaces?
+  a) A certified Delta table that has been approved by an administrator for use in AI-generated queries.
+  b) A vetted, pre-written SQL query that Genie uses as a reference template when answering similar natural language questions, ensuring accuracy and consistency. ✅
+  c) A machine learning model trained on company-specific data that enhances Genie's language understanding.
+  d) A read-only dashboard widget connected to a Genie space.
+  e) A user role with elevated permissions to validate Genie-generated queries before execution.
+CURRENT_EXPL: Trusted Assets are verified SQL queries saved by analysts that Genie uses as templates for answering similar questions. When a user asks something similar to a Trusted Asset, Genie adapts the verified query rather than generating SQL from scratch, significantly improving accuracy.
+---END---
+
+Q20 [db-da-324] type:single_choice
+PROMPT: A data analyst is setting up a Genie space for the finance team. The underlying tables contain sensitive salary data that only HR should see. The finance team should only see aggregated department budgets.
+
+How does Genie handle data access permissions?
+  a) Genie has its own permission system separate from Unity Catalog, and the analyst must configure access within the Genie space settings.
+  b) Genie inherits Unity Catalog permissions — users can only query data they already have SELECT access to, so the analyst should ensure the finance team lacks access to the salary table. ✅
+  c) Genie automatically masks sensitive columns detected by AI, regardless of Unity Catalog permissions.
+  d) All users who can access a Genie space automatically have full access to all tables configured in that space.
+  e) Genie can only access data through service accounts, bypassing individual user permissions.
+CURRENT_EXPL: Genie respects Unity Catalog's permission model. When a user queries through Genie, the SQL runs under their identity. If they lack SELECT permission on a table or column, the query fails. The analyst should only add tables the target audience has access to, or use column masking/row-level security in Unity Catalog.
+---END---
+
+Q21 [db-da-325] type:single_choice
+PROMPT: After deploying a Genie space, a data analyst reviews the conversation history and finds that 30% of user questions received responses flagged by users as inaccurate.
+
+What is the recommended iterative improvement workflow for enhancing Genie accuracy?
+  a) Delete the Genie space and create a new one with different tables.
+  b) Review flagged responses, identify patterns in misunderstood queries, then add Sample Questions with correct SQL and create Trusted Assets for recurring question types. ✅
+  c) Retrain the Genie language model on company-specific data using fine-tuning APIs.
+  d) Reduce the number of tables in the space until accuracy improves above 90%.
+  e) Switch to a larger SQL Warehouse to give Genie more compute for query generation.
+CURRENT_EXPL: Genie improvement is iterative: (1) review conversation history and flagged responses, (2) identify patterns in incorrect answers, (3) add curated Sample Questions with correct SQL, (4) create Trusted Assets for recurring query types. The LLM cannot be fine-tuned — it's guided through examples and metadata.
+---END---
+
+Q22 [db-da-326] type:single_choice
+PROMPT: A data analyst is configuring a Genie space for the logistics team. The space needs tables about shipments, warehouses, and delivery routes. The analyst has editor-level access to the Genie space.
+
+What is the correct sequence of steps to configure an effective Genie space?
+  a) 1) Create the space → 2) Add SQL Warehouse → 3) Write and test queries → 4) Invite users → 5) Monitor and refine.
+  b) 1) Create the space → 2) Connect a SQL Warehouse → 3) Add Unity Catalog tables with good descriptions → 4) Add Sample Questions/Trusted Assets → 5) Share with users and iterate based on feedback. ✅
+  c) 1) Create the space → 2) Upload CSV files → 3) Let Genie auto-discover schemas → 4) Share with users.
+  d) 1) Train the Genie model on logistics data → 2) Create the space → 3) Add tables → 4) Deploy.
+  e) 1) Create dashboards first → 2) Link dashboards to a Genie space → 3) Users interact with dashboards through Genie.
+CURRENT_EXPL: The correct Genie setup workflow: (1) create the space, (2) attach a SQL Warehouse for compute, (3) add Unity Catalog tables with rich descriptions and column comments, (4) seed with Sample Questions and Trusted Assets to guide Genie, (5) share and continuously improve based on user feedback and flagged responses.
+---END---
+
+Q23 [db-da-327] type:single_choice
+PROMPT: A data analyst adds a table with 50 columns to a Genie space but notices that Genie struggles with ambiguous column names like `status`, `type`, and `code`. Users get confused results when asking about order status vs shipment status.
+
+Which action would most improve Genie's ability to disambiguate these columns?
+  a) Rename all ambiguous columns to include the table name prefix (e.g., `order_status`, `shipment_status`).
+  b) Add detailed column-level COMMENT descriptions in Unity Catalog that explain the business meaning of each ambiguous column and create instructions in the Genie space. ✅
+  c) Split the table into multiple smaller tables, each with unique column names.
+  d) Remove the ambiguous columns from the Genie space and only expose non-ambiguous columns.
+  e) Create a glossary document and upload it as a PDF to the Genie space.
+CURRENT_EXPL: Adding COMMENT descriptions at the column level in Unity Catalog (e.g., COMMENT 'Order fulfillment status: pending, shipped, delivered, cancelled') and creating Genie space instructions that define business terminology are the most effective ways to help Genie disambiguate. Genie reads catalog metadata, not uploaded documents.
+---END---
+
+Q24 [db-da-328] type:single_choice
+PROMPT: A data analyst has configured Genie with two tables. Users can ask questions in natural language, and Genie generates SQL. A user asks: 'What were our top 5 products last month?'
+
+Genie returns incorrect results because 'top' could mean by revenue, by units sold, or by profit margin. How should the analyst prevent this ambiguity?
+  a) Configure Genie to always default to revenue-based ranking for any 'top' query.
+  b) Add Genie space instructions that define business terms (e.g., 'top products means ranked by revenue unless specified otherwise') and create Sample Questions demonstrating each variation. ✅
+  c) Disable the 'top' keyword in Genie's vocabulary settings.
+  d) Create a separate Genie space for each metric (revenue, units, margin) so users know which to use.
+  e) Train users to always specify the metric in their questions.
+CURRENT_EXPL: Genie space instructions allow analysts to define business terminology and default behaviors (e.g., 'top = by revenue unless specified'). Combined with Sample Questions that show variations ('Top products by revenue', 'Top products by units sold'), Genie learns to handle ambiguous terms correctly.
+---END---
+
+Q25 [db-da-329] type:single_choice
+PROMPT: A data analyst creates a Genie space and wants to control who can ask questions and who can manage the space configuration (add tables, create Trusted Assets).
+
+Which permission model applies to Genie spaces?
+  a) All workspace users automatically have full access to all Genie spaces.
+  b) Genie spaces support role-based access: owners can manage configuration, editors can add Trusted Assets and tables, and users with 'Can Use' permission can ask questions. ✅
+  c) Only workspace administrators can create and manage Genie spaces; regular users cannot.
+  d) Genie spaces are public by default and cannot have individual access controls.
+  e) Access is controlled exclusively through Unity Catalog permissions; Genie spaces have no independent permission settings.
+CURRENT_EXPL: Genie spaces have their own permission model: owners manage all settings, editors can modify tables and Trusted Assets, and users with 'Can Use' permission can ask questions. Data access within the space is still governed by Unity Catalog permissions — Genie permissions control space configuration access.
+---END---
+
+Q26 [db-da-330] type:single_choice
+PROMPT: A data analyst needs to ensure that a Genie space returns accurate responses about fiscal quarters. The company's fiscal year starts in April (Q1 = Apr-Jun, Q2 = Jul-Sep, Q3 = Oct-Dec, Q4 = Jan-Mar).
+
+How should the analyst configure Genie to correctly interpret fiscal quarter references?
+  a) Modify the SQL Warehouse's locale settings to use a fiscal calendar.
+  b) Add Genie space instructions that define the fiscal calendar (e.g., 'Fiscal Q1 = April to June') and create Trusted Assets with SQL that implements the fiscal quarter logic using CASE statements.
+  c) Create a pre-computed `fiscal_quarter` column in the source table and rename the `calendar_quarter` column to avoid confusion.
+  d) Both B and C: define fiscal calendar in instructions AND add a pre-computed fiscal quarter column with clear descriptions. ✅
+  e) Genie automatically detects non-standard fiscal calendars from the data patterns.
+CURRENT_EXPL: The most robust approach combines both: (B) Genie space instructions define the business rule, and (C) a pre-computed fiscal_quarter column with a clear COMMENT in Unity Catalog makes it unambiguous. This way Genie can either reference the column directly or use the instructions to generate correct date logic.
+---END---
+

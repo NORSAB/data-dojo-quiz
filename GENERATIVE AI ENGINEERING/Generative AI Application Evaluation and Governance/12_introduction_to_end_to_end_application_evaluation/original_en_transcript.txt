@@ -1,0 +1,5 @@
+Welcome to the last module for evaluation and governance course, which is end-to-end app evaluation. So what are we going to learn in this module? We're going to describe the importance of evaluating an entire AI system with respect to total performance and cost incurred. Typically, when we're looking at AI systems, we're trying to balance
+Norman Sabillon 0 minutos 25 segundos
+performance, as in prediction performance and task value, where are we providing value to the customer? And then the cost, right? There's always infrastructure costs and things that go with it, right? We're trying to build a business, so it needs to make sense that we're delivering value on the infrastructure that we're spending on. Right? We're going to recall the multi-component architecture of generative AI systems.
+Norman Sabillon 0 minutos 44 segundos
+We're going to describe the process of evaluating individual components to improve total AI system performance, and then we're going to describe custom metrics for individual components to help achieve system goals, and then describe online evaluation in context of long-term evaluation at scale.

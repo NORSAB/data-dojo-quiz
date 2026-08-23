@@ -1,0 +1,65 @@
+In this demo, we are going to talk about how to create a retrieval agent. To create this, we need to follow certain steps. First, we are going to talk about how we can use a vector search index as a tool for our agent. Then we are going to talk about tracing the agent workflow so that if there is an error or there is any issue, we can debug that.
+Norman Reynaldo Sabillon Castro 0 minutos 35 segundos
+And then we are going to talk how we can log the final agent into a registry. In this case, we are going to use Unity Catalog as a model registry, and we are going to register that retrieval agent. So by the end of this demo, you should be able to test your vector search functionality using AI Playground for rapid prototyping.
+Norman Reynaldo Sabillon Castro 0 minutos 59 segundos
+Then you should be able to build a retrieval agent using Lake Chain, and you should be able to use ML Flow Tracing to monitor and debug agent interactions with the tools that are defined. In this demo, we are going to have only vector search as a tool. And then finally, you should be able to register the agent as a model in Model Registry.
+Norman Reynaldo Sabillon Castro 1 minuto 21 segundos
+Let's talk about the requirements. First, you need to have a pre-created vector search endpoint that is going to be used vector search for the vector search index. This is created for you in this lab environment. In the previous demo, we showed how you can create a vector search endpoint, and in this environment it is created for you, so you don't need to do anything.
+Norman Reynaldo Sabillon Castro 1 minuto 43 segundos
+Then, to run this notebook, you need serverless compute version 4, and also there are some dependent libraries that need to be installed for this demo, and those are also added to serverless configuration, so you don't need to do anything, but if there is any issue with the serverless version.
+Norman Reynaldo Sabillon Castro 2 minutos 3 segundos
+or the libraries needed for this demo, you can easily go to environment section here and you will see the environment version and dependencies. Here in this demo, we will need vector search SDK, ML flow, skinny, Databricks LangChain and LangChain. If there's any issue or you want to change something here, you will do that and can click apply.
+Norman Reynaldo Sabillon Castro 2 minutos 28 segundos
+As I said, normally you don't need to do anything. This will be done for you when just you click serverless.
+Norman Reynaldo Sabillon Castro 2 minutos 36 segundos
+Right. Let us look at the setup. The classroom setup, when you run the classroom setup, it's going to check some requirements. So in this demo, we need serverless, we need a vector search endpoint that is ready. And in this demo, this is going to be the vector search endpoint we are going to use. And finally, we should have a vector search index.
+Norman Reynaldo Sabillon Castro 2 minutos 59 segundos
+So this vector search index was created in the previous demos. If you haven't done the previous demos, you must do that because this demo is going to use that vector search index for the agent.
+Norman Reynaldo Sabillon Castro 3 minutos 15 segundos
+Let us start with the first section. First, we need to create a vector search database, right, to retrieve our documents and pass it as context to the LLM to generate a response. So, to create an agent and use a library such as LangChain and all those kind of...
+Norman Reynaldo Sabillon Castro 16 minutos 25 segundos
+MLflow can extract that input example from here. But this section is important. We are using MLflow's Python log model because we are using agent as a code, right? We need to use Python.
+Norman Reynaldo Sabillon Castro 16 minutos 40 segundos
+Here we need to pass the model name, PythonWheel, which means, sorry, PythonModel, which means the main file that is going to be used. CodePath is the extra code or configuration that files that we are going to use, input example and then environment requirements. Those are all passed and then we are going to use log.model.
+Norman Reynaldo Sabillon Castro 17 minutos 2 segundos
+So when you log in, you can click here and see how the model is logged. But let's look from here. So if I go to my catalog,
+Norman Reynaldo Sabillon Castro 17 minutos 15 segundos
+and go to user, you can see that there is models here. If you click here, you can see your model, and this is the model name that we defined. It was Orion Knowledge Assistant. Let's open it in Catalog Explorer.
+Norman Reynaldo Sabillon Castro 17 minutos 32 segundos
+Here in the overview section, you can see the model, the versions. So right now we have only one version and then you have activity log, of course. And clicking on this model version, we can see how the model is registered. Here the important section to look to is the input and output. So
+Norman Reynaldo Sabillon Castro 17 minutos 52 segundos
+This is the input parameters that this model accepts. You know, like you can pass the top P, you can use maximum tokens, maximum output tokens, and so forth. And then the output is going to be object.
+Norman Reynaldo Sabillon Castro 18 minutos 8 segundos
+Then you have a lineage option, which we are going to skip, but here the important section is the artifacts. You can see how the model is logged here. This agent.py is the main agent file. These are the requirements for Conda. And if you look at the requirements, for example,
+Norman Reynaldo Sabillon Castro 18 minutos 27 segundos
+These are the requirements that we define. So it is the ML Flow Model Registry is a packaging environment, so you can run this model anywhere because it is going to install all the requirements and dependencies for you.
+Norman Reynaldo Sabillon Castro 18 minutos 41 segundos
+And if you look at the code folder, you can see the agent config file is stored here because we defined it as here. We defined it as extra code code path here. It's stored there, right? So this is how the model is registered in model registry.
+Norman Reynaldo Sabillon Castro 19 minutos 1 segundo
+Now, let us.
+Norman Reynaldo Sabillon Castro 19 minutos 4 segundos
+Register it first. This step was logging, so it's logged and now to register it we are going to define the UC model name and register the model, right? So the model register, the register model is actually is going to look here. So I already run this step. That's why.
+Norman Reynaldo Sabillon Castro 19 minutos 23 segundos
+started here. But yeah, this is how it's the model is registered.
+Norman Reynaldo Sabillon Castro 19 minutos 29 segundos
+To test the model, we can use MLflow Python load model. So here, up here, we use log model, right? This is how we logged it.
+Norman Reynaldo Sabillon Castro 19 minutos 41 segundos
+Then we use register model to register it.
+Norman Reynaldo Sabillon Castro 19 minutos 45 segundos
+Then, if we are going to retrieve the model back, let's say, to use it, we are going to load the model and we are going to pass the model URI to load the model, right? But this is how we load the model, and each model, each ML Flow model flavor has predict function, and in the predict function.
+Norman Reynaldo Sabillon Castro 20 minutos 4 segundos
+We are passing the input data. Input data is going to be the example query that we want to pass and then yeah, return response. So here we are going to use what is Orion. That's our query. You can see the output here is long because when you are loading the model, it is going to...
+Norman Reynaldo Sabillon Castro 20 minutos 23 segundos
+load the model from the model registry, install all dependencies for you, and then use that environment for inference. So here you can see that this is the output.
+Norman Reynaldo Sabillon Castro 20 minutos 40 segundos
+I'm not gonna, we already look at the model registry UI, so I'm gonna skip this part.
+Norman Reynaldo Sabillon Castro 20 minutos 48 segundos
+And yeah, that's it. So to just make a quick summary here, what we did is first we tested our vector search index using AI playground. AI playground showed us how to how the agent is works, right? And retrieval agent works without actually coding anything. So we just use AI playground to test our vector search index to make sure that everything
+Norman Reynaldo Sabillon Castro 21 minutos 12 segundos
+is working as expected, then we passed into actually building our agent using LangChain. We use ML flow tracing to track agent interaction, so if any problem happens or if there's any performance issues, you can debug that.
+Norman Reynaldo Sabillon Castro 21 minutos 31 segundos
+Using ML flow tracing, then we used agent as a code approach, and we created a configuration file, so the agent can load that configuration file and use some of those parameters, and then we defined those defined these resources, and then we registered the model.
+Norman Reynaldo Sabillon Castro 21 minutos 50 segundos
+To Model Registry.
+Norman Reynaldo Sabillon Castro 21 minutos 54 segundos
+So that was it for this demo. I hope you enjoy it and see you in another demo.

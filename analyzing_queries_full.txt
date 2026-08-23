@@ -1,0 +1,277 @@
+=== Analyzing Queries (28 questions) ===
+
+Q1 [db-da-32] type:single_choice
+PROMPT: How can a data analyst determine if query results were pulled from the cache?
+  a) Go to the Query History tab and click on the text of the query. The slideout shows if the results came from the cache.
+  b) Go to the Alerts tab and check the Cache Status alert.
+  c) Go to the Queries tab and click on Cache Status. The status will be green if the results from the last run came from the
+  d) Go to the SQL Warehouse (formerly SQL Endpoints) tab and click on Cache. The Cache file will show the contents of the ca
+  e) Go to the Data tab and click Last Query. The details of the query will show if the results came from the cache.
+CURRENT_EXPL: Query History provides execution details for each query. Clicking on a specific query reveals a slideout with metadata, including whether the result was fetched from the cache.
+---END---
+
+Q2 [db-da-51] type:single_choice
+PROMPT: Query History provides Databricks SQL users with a lot of benefits. A data analyst has been asked to share all of these benefits with their team as part of a training exercise. One of the benefit stat
+  a) It can be used to troubleshoot slow running queries.
+  b) It can be used to view the query plan of queries that have run.
+  c) It can be used to debug queries.
+  d) It can be used to automate query execution on multiple warehouses (formerly endpoints).
+CURRENT_EXPL: Query History monitors past executions but does not have functionality to automate or schedule future query executions.
+---END---
+
+Q3 [db-da-72] type:single_choice
+PROMPT: In which scenario should a data analyst create and use a user-defined function (UDF)?
+  a) When the result of logic needs to be restricted to certain users
+  b) When logic needs to be deployed within a subquery
+  c) When complex logic cannot be implemented with built-in capabilities
+  d) When simple logic needs to be optimized for scaling purposes
+CURRENT_EXPL: UDFs are designed to encapsulate custom, often complex logic that isn't available through standard built-in SQL functions, allowing for reusability.
+---END---
+
+Q4 [db-da-79] type:single_choice
+PROMPT: Where in the Databricks SQL workspace can a data analyst configure a refresh schedule for a query when the query is not attached to a dashboard or alert?
+  a) Data Explorer
+  b) The Visualization Editor
+  c) The Query Editor
+  d) The Dashboard Editor
+CURRENT_EXPL: Queries can be scheduled to run independently directly from the Query Editor interface.
+---END---
+
+Q5 [db-da-87] type:multiple_choice
+PROMPT: A data analyst is migrating data lakehouse workloads to Databricks. The analyst manages a large table with thousands of columns and several billion rows. The analyst is concerned about scan performanc
+  a) Photon leverages a columnar, vectorized execution engine for efficient scan and aggregation operations.
+  b) Photon automatically merges small files into a single large file before processing.
+  c) Photon processes data row by row for maximum compatibility with legacy systems.
+  d) Photon automatically parallelizes all queries across multiple clusters without additional configuration.
+  e) Photon uses a caching layer to transcode data into a CPU-efficient format for faster scan performance.
+CURRENT_EXPL: Photon improves performance on large datasets using a vectorized C++ execution engine (A) and a specialized caching layer that transcodes data for faster scanning (E).
+---END---
+
+Q6 [db-da-90] type:single_choice
+PROMPT: A data analyst is evaluating options to optimize query performance on a large table with frequently changing query filters. The analyst is considering using Liquid Clustering versus traditional Hive-s
+  a) Liquid Clustering allows changing clustering columns without rewriting existing data, while partitioning requires reproc
+  b) Liquid Clustering supports more data types than partitioning, including nested structures and arrays.
+  c) Liquid Clustering provides better compression ratios than partitioned tables, reducing storage costs.
+  d) Liquid Clustering automatically creates backup copies of data files, while partitioning does not.
+CURRENT_EXPL: Liquid Clustering offers flexibility to change clustering keys on the fly without the expensive rewrite required by traditional partitioning, adapting to evolving query patterns.
+---END---
+
+Q7 [db-da-99] type:single_choice
+PROMPT: A data analyst needs to quickly estimate unique user sessions... What is the primary advantage of using APPROX_COUNT_DISTINCT instead of COUNT_DISTINCT?
+  a) APPROX_COUNT_DISTINCT provides exact counts, while COUNT_DISTINCT only provides estimates
+  b) APPROX_COUNT_DISTINCT can only be used with string columns, while COUNT_DISTINCT works with numeric columns
+  c) APPROX_COUNT_DISTINCT uses the HyperLogLog++ algorithm to provide fast approximate counts with configurable accuracy
+  d) APPROX_COUNT_DISTINCT requires less memory by storing only the first 1000 unique values
+CURRENT_EXPL: It trades a small amount of accuracy for significant performance gains using the HyperLogLog++ algorithm, which is ideal for massive datasets.
+---END---
+
+Q8 [db-da-100] type:single_choice
+PROMPT: A data analyst has noticed that a key dashboard is loading slowly and suspects a specific SQL query may be causing performance issues. To diagnose the root cause, the analyst wants to review query exe
+  a) Use the SQL Dashboard Editor to identify slow-performing queries by reviewing visualization types and layout.
+  b) Use the Query Profiler to examine long-term trends in query performance across multiple executions.
+  c) Use Query Insights to view metrics such as duration, rows read, and execution history for the query.
+  d) Use Lakehouse Monitoring to view real-time alerts and trends across all data pipelines that run in Unity Catalog.
+CURRENT_EXPL: Query Insights (part of Query History/Performance view) allows users to analyze historical performance trends, execution counts, and resource usage for specific queries.
+---END---
+
+Q9 [db-da-103] type:single_choice
+PROMPT: A data analyst is using Databricks Unity Catalog. The datasets are tagged by sensitivity, and confidential data is marked with the tag key `confidential`. The data analyst needs to quickly find all ta
+  a) confidential:true
+  b) tag-confidential
+  c) tag:confidential
+  d) search tag = 'confidential'
+CURRENT_EXPL: The workspace search uses the syntax `tag:<tag_key>` to filter assets by a specific tag in Unity Catalog.
+---END---
+
+Q10 [db-da-104] type:single_choice
+PROMPT: A data analyst is troubleshooting a query in Databricks SQL that fails when processing large datasets. Logs indicate the job aborts due to resource constraint errors. Which Query Profile metric should
+  a) Shuffle read size per operator
+  b) Time spent per operator
+  c) Memory peak per operator
+  d) Bytes spilled to disk per operator
+CURRENT_EXPL: Memory peak per operator directly shows the maximum RAM consumed by a specific stage/operator, identifying the culprit for OOM (Out Of Memory) errors.
+---END---
+
+Q11 [db-da-107] type:single_choice
+PROMPT: Despite having `SELECT` permission on tables and `USAGE` on schemas, a data analyst is unable to access objects. Which action enables the data analyst to access the objects?
+  a) Grant MANAGE TABLE access.
+  b) Grant MANAGE DATABASE access on the containing catalog.
+  c) Grant USE CATALOG on the containing catalog.
+  d) Grant OWNERSHIP of the table to the Data Analyst.
+CURRENT_EXPL: In Unity Catalog's hierarchy, you must have `USE CATALOG` on the parent catalog (and `USE SCHEMA`) to access any object inside it, regardless of table-level permissions.
+---END---
+
+Q12 [db-da-108] type:single_choice
+PROMPT: A data analyst team wants to understand the best practices and limitations of caching in Databricks. What is the limitation when using caching to reduce development time and query latency?
+  a) Query result caching works best with non-deterministic queries like NOW().
+  b) Caching CSV or JSON files with Delta Cache is fully supported.
+  c) Delta Cache (disk cache) automatically caches Parquet files on local SSDs ... but only supports Parquet files stored on 
+  d) Spark caching always improves performance and should be applied liberally.
+CURRENT_EXPL: The Delta Cache (Disk Cache) is optimized specifically for Parquet files (the format of Delta tables) and works with supported cloud object storage systems.
+---END---
+
+Q13 [db-da-112] type:single_choice
+PROMPT: You have a table `events` that uses Liquid Clustering. Over time, you notice query performance degrading slightly as new data is added. What command should you schedule to run periodically to maintain
+  a) VACUUM events
+  b) ANALYZE TABLE events COMPUTE STATISTICS
+  c) OPTIMIZE events
+  d) REORG TABLE events APPLY (PURGE)
+CURRENT_EXPL: For Liquid Clustering, `OPTIMIZE` incrementally re-clusters the data based on the defined clustering keys to ensure data is co-located for fast skipping.
+---END---
+
+Q14 [db-da-115] type:single_choice
+PROMPT: An analyst wants to filter a high-cardinality column `session_id` in a 5TB table. They originally used Hive-style partitioning on `session_id`, but this caused performance issues. They switched to Liq
+  a) Data Skew
+  b) Small Files Problem
+  c) Metadata locking
+  d) Predicate pushdown failure
+CURRENT_EXPL: Partitioning by a high-cardinality column (like unique IDs) creates thousands or millions of physical directories with tiny files. This overwhelms the metadata service and degrades performance.
+---END---
+
+Q15 [db-da-118] type:single_choice
+PROMPT: An analyst runs `DELETE FROM my_table WHERE id = 1`. They want to confirm that the data is physically removed from storage immediately to comply with a GDPR 'Right to be Forgotten' request. Is the DEL
+  a) Yes, DELETE removes data physically.
+  b) No, they must run `VACUUM my_table RETAIN 0 HOURS` to remove physical files.
+  c) No, they must run `OPTIMIZE`.
+  d) No, they must drop the table.
+CURRENT_EXPL: `DELETE` in Delta Lake is a soft-delete (logical). The data remains in history for Time Travel. To strictly remove physical files immediately, `VACUUM` with 0 retention is required (ignoring the defau
+---END---
+
+Q16 [db-da-119] type:single_choice
+PROMPT: How do you define Liquid Clustering on a Delta table when creating it using SQL?
+  a) CREATE TABLE ... PARTITIONED BY (col1)
+  b) CREATE TABLE ... CLUSTER BY (col1, col2)
+  c) CREATE TABLE ... OPTIMIZE ZORDER BY (col1)
+  d) CREATE TABLE ... WITH CLUSTERING = TRUE
+CURRENT_EXPL: `CLUSTER BY` is the specific DDL syntax to enable Liquid Clustering. `PARTITIONED BY` is for Hive-style partitioning, and `ZORDER` is an optimization command, not a creation clause.
+---END---
+
+Q17 [db-da-121] type:single_choice
+PROMPT: You are analyzing query performance using System Tables. You want to query the billing usage data programmatically. Which specific table should you query?
+  a) system.information_schema.columns
+  b) system.billing.usage
+  c) main.default.usage_logs
+  d) system.access.audit
+CURRENT_EXPL: `system.billing.usage` is the standard system table provided by Unity Catalog to expose consumption and pricing data for all workspaces.
+---END---
+
+Q18 [db-da-145] type:single_choice
+PROMPT: What does Predictive Optimization do for Unity Catalog managed tables?
+  a) It automatically generates SQL queries based on user prompts
+  b) It automatically performs maintenance operations like compaction, VACUUM, and Liquid Clustering to improve query perform
+  c) It predicts future query results based on historical data
+  d) It automatically creates dashboards from query results
+  e) It automatically scales SQL warehouses based on predicted workload
+CURRENT_EXPL: Predictive Optimization is a feature that automates maintenance operations for Unity Catalog managed tables. It intelligently triggers compaction, VACUUM, and Liquid Clustering based on data usage pat
+---END---
+
+Q19 [db-da-153] type:single_choice
+PROMPT: A data analyst has created a Materialized View in Databricks SQL to speed up a frequently used dashboard query. How are the refresh operations for this Materialized View managed?
+  a) The analyst must manually refresh the Materialized View every time using the SQL Editor
+  b) Databricks automatically creates a serverless pipeline that handles refresh operations, which can be scheduled or trigge
+  c) Materialized Views are always up-to-date in real-time with no refresh needed
+  d) Refresh is handled by an external orchestration tool like Airflow
+  e) Materialized Views cannot be refreshed once created
+CURRENT_EXPL: When you create a Materialized View in Databricks SQL, a serverless pipeline is automatically generated to manage refresh operations. Refreshes can be scheduled at regular intervals or triggered manua
+---END---
+
+Q20 [db-da-201] type:single_choice
+PROMPT: A data analyst is troubleshooting a query in Databricks SQL that fails when processing large datasets and complex join operations. Logs indicate that the job consistently aborts due to resource constr
+  a) Time spent per operator
+  b) Shuffle read size per operator
+  c) Memory peak per operator
+  d) Bytes spilled to disk per operator
+CURRENT_EXPL: The Memory peak per operator metric shows the maximum memory consumption that each individual operator (e.g., join, aggregation, sort) required during the query execution. By locating the operator wit
+---END---
+
+Q21 [db-da-350] type:single_choice
+PROMPT: A data analyst runs a query that takes 45 minutes to complete. The analyst opens the Query Profile and notices that 90% of the execution time is spent in a single 'Scan' stage reading a 200GB table, e
+  a) Add an index on the `date` column to speed up the filter operation.
+  b) Apply Liquid Clustering on the `date` column (or ZORDER BY date) so that the filter can skip irrelevant files through da
+  c) Increase the SQL Warehouse size to add more compute nodes for parallel scanning.
+  d) Convert the table from Delta to Parquet format for faster read performance.
+  e) Add a LIMIT 1000 clause to reduce the amount of data returned.
+CURRENT_EXPL: Liquid Clustering (or ZORDER BY) organizes data files by the specified columns. When filtering on `date`, Delta Lake's data skipping reads file-level statistics and skips files that don't contain the 
+---END---
+
+Q22 [db-da-351] type:single_choice
+PROMPT: A data analyst uses the Query Profile to analyze a slow-running query and notices a 'Sort Merge Join' between two large tables. A colleague suggests it should be a 'Broadcast Hash Join' instead.
+
+Unde
+  a) When both tables are larger than 1GB, a Broadcast Hash Join is always more efficient.
+  b) When one of the joined tables is small enough (typically under 10MB by default) to be broadcast to all worker nodes, eli
+  c) Broadcast Hash Join is never chosen automatically; it must always be specified with a query hint.
+  d) When the join is performed on a primary key column, Databricks always uses Broadcast Hash Join.
+  e) Broadcast Hash Join is only available when using Photon-enabled warehouses.
+CURRENT_EXPL: Databricks automatically chooses Broadcast Hash Join when one table is small enough to fit in memory on each worker node (default threshold ~10MB, configurable). The small table is 'broadcast' to all 
+---END---
+
+Q23 [db-da-352] type:single_choice
+PROMPT: A data analyst writes a query that uses `SELECT *` from a table with 150 columns, but the dashboard only needs 5 specific columns. The Query Profile shows high I/O and memory usage.
+
+Which principle e
+  a) Parquet stores data row-by-row, so reading all columns is the same cost as reading 5 columns.
+  b) Parquet is a columnar format — each column is stored separately. SELECT * forces reading all 150 column files, while sel
+  c) SELECT * is slow because it triggers a full table lock, preventing other queries from running.
+  d) The inefficiency comes from network transfer, not storage I/O — the same amount of data is scanned regardless.
+  e) SELECT * is only slow on external tables; managed Delta tables are unaffected.
+CURRENT_EXPL: Parquet (Delta's underlying format) is columnar — each column is stored in a separate column chunk. When you SELECT only 5 of 150 columns, Databricks reads only those 5 column chunks, skipping 145 oth
+---END---
+
+Q24 [db-da-353] type:single_choice
+PROMPT: A data analyst runs OPTIMIZE on a Gold-layer table with 50,000 small files (each under 1MB). After optimization, the table has 500 files of approximately 100MB each. Dashboard query time improves from
+  a) OPTIMIZE adds indexes to the Delta table, enabling faster lookups on filtered queries.
+  b) OPTIMIZE compacts many small files into fewer, larger files (targeting ~1GB), reducing the overhead of opening thousands
+  c) OPTIMIZE caches the table data in memory on the SQL Warehouse, so subsequent reads avoid disk I/O.
+  d) OPTIMIZE converts the table from Parquet to a proprietary Databricks format with better compression.
+  e) OPTIMIZE rewrites queries to use more efficient execution plans.
+CURRENT_EXPL: OPTIMIZE solves the 'small files problem' by compacting many small files into fewer, optimally-sized files (target ~1GB). Reading 500 large files is dramatically faster than reading 50,000 small files
+---END---
+
+Q25 [db-da-354] type:single_choice
+PROMPT: A data analyst creates a SQL alert on a query: `SELECT COUNT(*) AS failed_jobs FROM job_status WHERE status = 'FAILED' AND date = CURRENT_DATE()`. The alert should trigger when more than 10 jobs fail 
+  a) Set the alert trigger to: 'Value column = failed_jobs, Condition = greater than, Threshold = 10' with a refresh schedule
+  b) Set the alert to trigger when the query returns more than 10 rows.
+  c) Create a dashboard visualization and enable the 'alert on threshold' feature in the chart settings.
+  d) Write a Python script that polls the query results and sends email notifications.
+  e) Alerts only support string comparisons, not numeric thresholds.
+CURRENT_EXPL: Databricks SQL Alerts work on single aggregated values: the query must return one row with a numeric value column. The alert monitors that value against a threshold condition (greater than, less than,
+---END---
+
+Q26 [db-da-355] type:single_choice
+PROMPT: A data analyst is comparing two approaches to optimize a query that filters on both `country` and `product_category`:
+
+- Approach A: `OPTIMIZE table ZORDER BY (country, product_category)`
+- Approach B
+  a) They are identical in behavior; Liquid Clustering is just a new name for ZORDER.
+  b) ZORDER requires manually running OPTIMIZE to re-cluster data after writes, while Liquid Clustering automatically reorgan
+  c) ZORDER supports more columns than Liquid Clustering, making it better for wide tables.
+  d) Liquid Clustering only works with Serverless warehouses, while ZORDER works with all warehouse types.
+  e) ZORDER provides better query performance than Liquid Clustering in all scenarios.
+CURRENT_EXPL: The key difference: ZORDER is a manual operation — you must run OPTIMIZE ... ZORDER BY after data changes. Liquid Clustering (CLUSTER BY) is automatic and incremental — data is reorganized during writ
+---END---
+
+Q27 [db-da-356] type:single_choice
+PROMPT: A data analyst runs `DESCRIBE HISTORY sales.transactions` and sees 500 versions in the transaction log. The analyst is concerned about the storage cost of maintaining all these historical versions.
+
+W
+  a) DELETE FROM sales.transactions WHERE version < 400 — to remove old version records.
+  b) VACUUM sales.transactions RETAIN 168 HOURS — to delete data files older than 7 days that are no longer referenced by the
+  c) OPTIMIZE sales.transactions — to compact files and automatically remove old versions.
+  d) ALTER TABLE sales.transactions SET TBLPROPERTIES ('delta.logRetentionDuration' = '1 day') — to delete the transaction lo
+  e) DROP TABLE sales.transactions; CREATE TABLE sales.transactions — to recreate with only the latest data.
+CURRENT_EXPL: VACUUM removes old data files that are no longer referenced by the current or recent table versions and exceed the retention period (default 7 days / 168 hours). It reclaims storage while preserving T
+---END---
+
+Q28 [db-da-357] type:single_choice
+PROMPT: A data analyst writes a CTE (Common Table Expression) that is referenced three times in the main query. The Query Profile shows the CTE's computation is repeated three times.
+
+Which optimization strat
+  a) Replace the CTE with a TEMPORARY VIEW, which is only computed once.
+  b) Materialize the CTE result into a TEMPORARY VIEW or cached table, so it is computed once and reused for all three refere
+  c) CTEs are always computed only once in Databricks; the Query Profile is showing parallelized execution, not redundancy.
+  d) Use subqueries instead of CTEs, as subqueries are automatically cached by the optimizer.
+  e) Add an ORDER BY to the CTE to force materialization.
+CURRENT_EXPL: In most SQL engines including Databricks, CTEs are inlined — each reference re-executes the CTE query. If a CTE is referenced multiple times, materializing it (CREATE TEMPORARY VIEW AS, or caching) en
+---END---
+

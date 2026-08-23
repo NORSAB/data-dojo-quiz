@@ -1,0 +1,41 @@
+In this demo, we are going to talk about how to create a retrieval agent. To create this, we need to follow certain steps. First, we are going to talk about how we can use a vector search index as a tool for our agent. Then we are going to talk about tracing the agent workflow so that if there is an error or there is any issue, we can debug that.
+Norman Reynaldo Sabillon Castro 0 minutos 35 segundos
+And then we are going to talk how we can log the final agent into a registry. In this case, we are going to use Unity Catalog as a model registry, and we are going to register that retrieval agent. So by the end of this demo, you should be able to test your vector search functionality using AI Playground for rapid prototyping.
+Norman Reynaldo Sabillon Castro 0 minutos 59 segundos
+Then you should be able to build a retrieval agent using Lake Chain, and you should be able to use ML Flow Tracing to monitor and debug agent interactions with the tools that are defined. In this demo, we are going to have only vector search as a tool. And then finally, you should be able to register the agent as a model in Model Registry.
+Norman Reynaldo Sabillon Castro 1 minuto 21 segundos
+Let's talk about the requirements. First, you need to have a pre-created vector search endpoint that is going to be used vector search for the vector search index. This is created for you in this lab environment. In the previous demo, we showed how you can create a vector search endpoint, and in this environment it is created for you, so you don't need to do anything.
+Norman Reynaldo Sabillon Castro 1 minuto 43 segundos
+Then, to run this notebook, you need serverless compute version 4, and also there are some dependent libraries that need to be installed for this demo, and those are also added to serverless configuration, so you don't need to do anything, but if there is any issue with the serverless version.
+Norman Reynaldo Sabillon Castro 2 minutos 3 segundos
+or the libraries needed for this demo, you can easily go to environment section here and you will see the environment version and dependencies. Here in this demo, we will need vector search SDK, ML flow, skinny, Databricks LangChain and LangChain. If there's any issue or you want to change something here, you will do that and can click apply.
+Norman Reynaldo Sabillon Castro 2 minutos 28 segundos
+As I said, normally you don't need to do anything. This will be done for you when just you click serverless.
+Norman Reynaldo Sabillon Castro 2 minutos 36 segundos
+Right. Let us look at the setup. The classroom setup, when you run the classroom setup, it's going to check some requirements. So in this demo, we need serverless, we need a vector search endpoint that is ready. And in this demo, this is going to be the vector search endpoint we are going to use. And finally, we should have a vector search index.
+Norman Reynaldo Sabillon Castro 2 minutos 59 segundos
+So this vector search index was created in the previous demos. If you haven't done the previous demos, you must do that because this demo is going to use that vector search index for the agent.
+Norman Reynaldo Sabillon Castro 3 minutos 15 segundos
+Let us start with the first section. First, we need to create a vector search database, right, to retrieve our documents and pass it as context to the LLM to generate a response. So, to create an agent and use a library such as LangChain and all those kind of...
+Norman Reynaldo Sabillon Castro 3 minutos 36 segundos
+coding is quite complex. We can easily see the whole agent actually in AI playground. To access AI playground, you can go to AI ML section and click playground. Playground is a perfect place to do rapid prototyping so you can interact with the LLMs, add tools and see the response.
+Norman Reynaldo Sabillon Castro 3 minutos 59 segundos
+and also see all the tracing. So here we are going to use vector search index. So to test that, I'm going to go to my catalog.
+Norman Reynaldo Sabillon Castro 4 minutos 9 segundos
+click the DBX Academy catalog and using my schema so you should have your schema here based on your username and then in the table section you can see the vector search index that we created in previous demo. I'm going to open it in
+Norman Reynaldo Sabillon Castro 4 minutos 27 segundos
+Catalog Explorer and here on the right top, you can see there is try in playground option. So if you click here, it's going to open up AI playground. In AI playground, you have this section that is chat conversation area, so you can type text at the system prompt.
+Norman Reynaldo Sabillon Castro 4 minutos 46 segundos
+And here you have the LLM model that you are going to use for interacting with and the tools. As you can see that the tools is already selected for us. Vector search index is already added here as a tool. And for the model, I'm going to use, let's say, GPT 5.1. In the demo, we are going to use the open source version, but
+Norman Reynaldo Sabillon Castro 5 minutos 8 segundos
+Let's use this one.
+Norman Reynaldo Sabillon Castro 5 minutos 10 segundos
+And to test that, I have some example questions here, so I'm going to use one of those.
+Norman Reynaldo Sabillon Castro 5 minutos 20 segundos
+So to just give a quick reminder, this dataset was based on Orion called Robotics Company, which is of course a fake company that we created some documents for it. The idea here is we are trying to create an agent, a knowledge assistant agent that is going to answer user queries, user questions.
+Norman Reynaldo Sabillon Castro 5 minutos 41 segundos
+And the agent is going to use internal document as sources to support the answer, right? Because LLM doesn't know anything about Oreo.
+Norman Reynaldo Sabillon Castro 5 minutos 53 segundos
+Let us ask this question and see how the agent is going to, the AI playground is going to generate response. So you can see that we are using reasoning model. So it is in the thinking process, deciding if it will use the tool or not, and then the answer is generated.
+Norman Reynaldo Sabillon Castro 6 minutos 13 segundos
+You can see the all details here. But what is cool here is Agent, this AI playground is actually listing the resources too. So these are the resources that are the same resources that we have in our vector search and we chunked this. So if you click that, so you can see

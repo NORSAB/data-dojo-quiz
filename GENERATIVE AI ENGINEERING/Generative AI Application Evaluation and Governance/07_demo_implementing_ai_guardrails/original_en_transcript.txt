@@ -1,0 +1,45 @@
+So the first demo, we're going to be talking about implementing AI guardrails, right? Except in this demo, instead of using prompt engineering, we're going to be talking about how we can do this via a large language model, in this case with LlamaGuard. Right? So we're going to be taking LlamaGuard from the Databricks marketplace, we'll be deploying that into our environment. And then once we have that,
+Norman Reynaldo Sabillon Castro 0 minutos 48 segundos
+We'll be testing that model with guardrails, and then we'll customize the guardrails with LlamaGuard with our own custom taxonomy, and then integrate that with a chat model. So let's jump into a demo. We talked already about AI security, and we talked about guardrails, and we talked about the built-in features in Databricks of how we can go and
+Norman Reynaldo Sabillon Castro 1 minuto 8 segundos
+use the safety filter or prompt engineering to build some of those capabilities. Right now, what happens if you want to go and build your own guardrail, right, or build your own model to go and do that? So the idea here is using a language model-based guardrail versus trying to leverage the prompt.
+Norman Reynaldo Sabillon Castro 1 minuto 27 segundos
+or the safety API as a way to go and do that. So in this case, we're going to be showing how we can use LlamaGuard to act as a guardrail and how do we integrate that into our chat model. So that's what we're doing here, focusing on implementing guardrails for a simple generative AI application. By the end of this demo, we'll talk about kind of why you need guardrails, which we've discussed before.
+Norman Reynaldo Sabillon Castro 1 minuto 48 segundos
+right? How do we need it for a given response? And then how we can use an LLM to go and do that for us. Right. That's what we'll be doing here. Yeah, I ran this notebook again before. We have our requirements and our classroom setup that we always need to run to set up our configurations and everything. That's all good to go.
+Norman Reynaldo Sabillon Castro 2 minutos 7 segundos
+And in this demo, we're going to go and use LlamaGuard, understand how LlamaGuard works, and then integrate that into our chat bot. So step one is we need to go and implement LM-based guardrail using LlamaGuard. So if you're not familiar with LlamaGuard, we can go and take a look at that. So let me go to the marketplace. So we'll open up the marketplace.
+Norman Reynaldo Sabillon Castro 2 minutos 26 segundos
+And in there we have models, right? And the model we're looking for here is Longmegard.
+Norman Reynaldo Sabillon Castro 2 minutos 35 segundos
+Great. That should pop up our LamaGuard model. And you can see here, LamaGuard is an open source model that is developed by Meta. And you can go and use it to go and build a guardrail. So that's the model that we're going to use here. So it's a 7 billion parameter model that we have. So this is the model. You can read into it. We're going to talk about this in a little bit.
+Norman Reynaldo Sabillon Castro 2 minutos 56 segundos
+And that's out there that we can import into our environment to go and deploy. So I've already actually did that. I've actually taken it out, brought it into my environment, and made it ready to deploy. So you can actually see I have it deployed here in my serving endpoint as this model. That's this endpoint. And then we have, this is the model that actually imported. So
+Norman Reynaldo Sabillon Castro 3 minutos 16 segundos
+Here it is inside the catalog, the model that I have. Anyway, so we have that. I've brought it into the environment. It's deployed to a model serving endpoint. I did this at a time because it does take quite a while. Sometimes it can take up to 30 minutes because it's bringing up infrastructure, deploying the model, doing all this stuff behind the scenes for you. But in this case, it's already deployed for me.
+Norman Reynaldo Sabillon Castro 7 minutos 1 segundo
+Okay, so that's great. Now, these outputs aren't very useful with telling us why it is unsafe because we put everything into one category. So let's customize our llama guardrails and make that taxonomy a little bit better. Right, so that's what we're going to do.
+Norman Reynaldo Sabillon Castro 7 minutos 16 segundos
+So that's what we're going to do here. Instead, we're going to define each of those categories, right? So violence and hate, sexual content, criminal planning, guns and illegal activity, regulated and controlled substances, right? And financial sensitive data, right? So you can see here a lot more description and categorization. And with this, hopefully that gives us better output.
+Norman Reynaldo Sabillon Castro 7 minutos 35 segundos
+when we do classify it as unsafe, right? So that's going to be the goal. So with that, we're going to feed that into the model. So now if we go and feed that, right, hopefully we get a different result, right? So unsafe user chat, unsafe categories, and you can see here it maps to three, right? And 3 here is a little bit more helpful because it's mapping to this particular category.
+Norman Reynaldo Sabillon Castro 7 minutos 54 segundos
+A lot more useful for us versus the other one, which is just a catch-all.
+Norman Reynaldo Sabillon Castro 7 minutos 59 segundos
+All right, OK, so...
+Norman Reynaldo Sabillon Castro 8 minutos 1 segundo
+We talked about how we can use LlamaGuard to basically classify safe and unsafe content. We talked about how we can customize LlamaGuard with a taxonomy to get us more detailed reasons why it was unsafe. So what does it look like to integrate with a chat model? So that's what we're going to do here in step 3.
+Norman Reynaldo Sabillon Castro 8 minutos 20 segundos
+We're actually going to integrate Lama Guard with a chat model. So very common is to create a pipeline where we have model acting as a guardrail as input, then the model that actually processes the user question, and then it acting again as a guardrail as X. So in this case, we're going to use Lama Guard in conjunction with our primary model, which is in this case, we're going to use next role as our primary model.
+Norman Reynaldo Sabillon Castro 8 minutos 40 segundos
+And we're going to go and define the query for the chat. So here's the function to go and talk to Mextrol and the endpoint and passing through the messages. And then here we're going to go and define another chat version that is a safe version of it. So what it's going to do is it's first going to send it to LlamaGuard and it's going to check if it's safe or not.
+Norman Reynaldo Sabillon Castro 8 minutos 59 segundos
+If it is, then it's going to send it to the model, and then the model is going to send some output. We're going to then also check it again on output with LamaGuard, and if it's good, we'll send out the response rates. You can see here, if it doesn't pass, it's going to say user prompts classified as blank, fail safety measures, or model response is classified as blank, fail safety measures, right? So we get that there.
+Norman Reynaldo Sabillon Castro 9 minutos 19 segundos
+All right, so continuing down, let's go and give the parsing of the category here, right, to help get the taxonomy. So instead of the numbers, getting the name of those numbers, right? And then here we have an example of that. Here's a safe user chat. So user, I want love, right? And then running a query.
+Norman Reynaldo Sabillon Castro 9 minutos 38 segundos
+Right, so you can see here the LLM's response and the output, right? And then here is an example with how can I rob a bank, right? And you can see here user prompt classified as criminal planning, fail safety measures, right? And we can see that there. And then you can see here us passing through an example of
+Norman Reynaldo Sabillon Castro 9 minutos 58 segundos
+Unsafe, right? And you can see here that unsafe check as well that we got. So you can see there kind of example of how we can implement guardrails here with another custom model. And you can see how we can use LlamaGuard to really customize what we want it to check.
+Norman Reynaldo Sabillon Castro 10 minutos 15 segundos
+All right, so that wraps that up.

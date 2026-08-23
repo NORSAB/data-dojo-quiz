@@ -1,0 +1,171 @@
+﻿Loaded questions_databricks.js. Total questions: 300
+=== Q1 [db-da-4] LINE:
+PROMPT: Which of the following approaches can be used to connect Databricks to Fivetran for data ingestion?
+OPTIONS: a:Use Workflows to establish a SQL warehouse for Fivetran to i | b:Use Delta Live Tables to establish a cluster for Fivetran to | c:Use Partner Connect's automated workflow to establish a clus | d:Use Partner Connect's automated workflow to establish a SQL  | e:Use Workflows to establish a cluster for Fivetran to interac
+CORRECT: d
+EXPLANATION: Partner Connect streamlines the setup process by automating the creation of the necessary SQL warehouse and configuring the connection details between Fivetran and Databricks.
+
+=== Q2 [db-da-8] LINE:
+PROMPT: Which of the following approaches can be used to ingest data directly from cloud-based object storage?
+OPTIONS: a:Create an external table while specifying the DBFS storage p | b:Create an external table while specifying the DBFS storage p | c:It is not possible to directly ingest data from cloud-based  | d:Create an external table while specifying the object storage | e:Create an external table while specifying the object storage
+CORRECT: e
+EXPLANATION: The LOCATION clause in the CREATE EXTERNAL TABLE statement specifies the path to the data within the object storage. This is the standard method for directly ingesting data.
+
+=== Q3 [db-da-67] LINE:
+PROMPT: What does Partner Connect do when connecting Power BI and Tableau?
+OPTIONS: a:Creates a PAT, downloads/installs ODBC driver, and downloads | b:Creates a PAT and emails it to you. | c:Downloads a configuration file only. | d:Downloads and installs an ODBC driver only.
+CORRECT: a
+EXPLANATION: Partner Connect simplifies the connection process by automating the creation of security tokens (PAT), obtaining drivers, and providing pre-configured connection files.
+
+=== Q4 [db-da-71] LINE:
+PROMPT: What describes Partner Connect in Databricks?
+OPTIONS: a:It allows for free use of Databricks partner tools through a | b:It allows multi-directional connection between Databricks an | c:It exposes connection information to third-party tools via D | d:It is a feature that runs Databricks partner tools on a Data
+CORRECT: b
+EXPLANATION: Partner Connect simplifies the integration process, making it easier to establish data connections between Databricks and various partner ecosystems (BI, ingestion, etc.)
+
+=== Q5 [db-da-80] LINE:
+PROMPT: A stakeholder has provided a data analyst with a lookup dataset in the form of a 50-row CSV file. The data analyst needs to upload this dataset for use as a table in Databricks SQL. Which approach sho
+OPTIONS: a:Create a table by uploading the file using the Create page w | b:Create a table via a connection between Databricks and the d | c:Create a table by uploading the file to cloud storage and th | d:Create a table by manually copying and pasting the data valu
+CORRECT: a
+EXPLANATION: The 'Create' page in Databricks SQL allows for a simple drag-and-drop upload of small CSV files to quickly create a table, which is ideal for a 50-row lookup file.
+
+=== Q6 [db-da-111] LINE:
+PROMPT: An analyst needs to ingest a large volume of JSON files from cloud storage into a Delta table using Databricks SQL. The schema of these JSON files evolves frequently (new columns are added). Which SQL
+OPTIONS: a:read_files() with the 'cloud_files' format | b:COPY INTO with default settings | c:INSERT INTO ... SELECT FROM json.`path` | d:CREATE EXTERNAL TABLE
+CORRECT: a
+EXPLANATION: In Databricks SQL, `read_files` invokes Auto Loader (format `cloud_files`), which is specifically designed to handle schema evolution and efficient incremental ingestion of files.
+
+=== Q7 [db-da-114] LINE:
+PROMPT: You are browsing the Databricks Marketplace to find a weather dataset to enrich your sales analysis. Once you 'install' a data product from the Marketplace, how does it appear in your workspace?
+OPTIONS: a:As a set of CSV files in DBFS. | b:As a read-only Catalog in Unity Catalog. | c:As a Dashboard. | d:You must download it via API first.
+CORRECT: b
+EXPLANATION: Marketplace installs create a new Catalog (or schema) in your Unity Catalog. These contain read-only tables that you can query immediately without copying data (Zero-Copy).
+
+=== Q8 [db-da-124] LINE:
+PROMPT: An analyst needs to import a CSV file via `COPY INTO`, but the schema of the CSV might contain new columns in the future. They want these new columns to be automatically added to the target Delta tabl
+OPTIONS: a:('mergeSchema' = 'true') | b:('overwriteSchema' = 'true') | c:('enforceSchema' = 'false') | d:('autoEvolve' = 'true')
+CORRECT: a
+EXPLANATION: The `mergeSchema` option in `COPY INTO` (and Spark writes) allows the operation to evolve the target table's schema by adding any new columns found in the source data.
+
+=== Q9 [db-da-136] LINE:
+PROMPT: A stakeholder has provided a data analyst with a single 20-row CSV file that needs to be quickly loaded into a Delta table for ad-hoc analysis. The analyst does not have access to cloud object storage
+OPTIONS: a:Auto Loader | b:COPY INTO | c:Upload File via the Databricks SQL UI | d:Delta Sharing | e:CREATE TABLE AS SELECT
+CORRECT: c
+EXPLANATION: The Upload File feature in the Databricks SQL UI is designed for lightweight ingestion of individual small files (CSV, JSON, etc.) without requiring object storage configuration. It is ideal for ad-hoc loading of small datasets like lookup tables or quick imports.
+
+=== Q10 [db-da-152] LINE:
+PROMPT: A data analyst needs to process Change Data Capture (CDC) records from a source system into a Delta table, handling inserts, updates, and deletes automatically while managing out-of-order records. Whi
+OPTIONS: a:MERGE INTO with manual CDC logic | b:COPY INTO with schema evolution | c:FLOW AUTO CDC clause in streaming tables | d:INSERT OVERWRITE | e:CREATE VIEW with filtering logic
+CORRECT: c
+EXPLANATION: The FLOW AUTO CDC clause simplifies CDC processing by automatically handling inserts, updates, deletes, and out-of-order records based on defined keys and sequence columns. It supports SCD Type 1 (direct updates) and SCD Type 2 (history tracking), eliminating the need for complex manual MERGE INTO logic.
+
+=== Q11 [db-da-231] LINE:
+PROMPT: A data engineer is ingesting large volumes of semi-structured log data stored in an S3 bucket into Databricks. The data arrives continuously throughout the day, and the engineer needs to implement an 
+OPTIONS: a:Build a custom Spark Structured Streaming job that tracks pr | b:Use Auto Loader to incrementally ingest data from S3. | c:Build a custom API-driven ingestion pipeline to pull data fr | d:Use Delta Sharing to share data with Databricks from externa
+CORRECT: b
+EXPLANATION: Auto Loader is the optimized service for incremental ingestion from cloud storage (like S3). It handles checkpointing automatically and features 'schema evolution' (cloudFiles.schema.auto) to handle changes without manual restarts or intervention, making it much simpler than custom streaming jobs (A).
+
+=== Q12 [db-da-283] LINE:
+PROMPT: A data analyst needs to ingest a new CSV file containing sales data into Databricks. The analyst prefers a simple, no-code solution that is secure and integrates with the company's data governance too
+OPTIONS: a:UI (Drag-and-drop file ingestion) | b:Auto Loader | c:SQL Batch ingestion | d:Notebook's scheduled ETL
+CORRECT: a
+EXPLANATION: Databricks provides a built-in 'Create Table' UI that allows users to drag and drop small to medium-sized files (like CSVs) and automatically creates a table in Unity Catalog. This is a fully 'no-code' approach that respects security clusters and governance settings, making it the best choice for quick, manual ingestion.
+
+ÔÇó Option B is incorrect: Auto Loader is a 'low-code' streaming solution designed for continuous ingestion from cloud storage, not a simple drag-and-drop UI for one-off files.
+
+ÔÇó Option C is incorrect: Batch ingestion via SQL (e.g., COPY INTO) requires writing code.
+
+ÔÇó Option D is incorrect: Scheduled ETL in a notebook is the most complex option, requiring both code and workflow configuration.
+
+=== Q13 [db-da-286] LINE:
+PROMPT: A data analyst is configuring Auto Loader to ingest JSON files from S3. The source data is inconsistent; occasionally, a numeric column arrives as a string. The analyst wants to capture these corrupt 
+OPTIONS: a:Use schemaEvolutionMode = 'failFast' and the _corrupt_record | b:Use schemaEvolutionMode = 'rescue' and its associated _rescu | c:This behavior is automatic by default and data is saved to _ | d:Use schemaEvolutionMode = 'addNewColumns' and enable cloudFi
+CORRECT: b
+EXPLANATION: The 'rescue' mode ensures that any data not matching the expected schema (due to type mismatch or extra columns) is stored in a special JSON column named _rescued_data. This prevents data loss and production failures. While Auto Loader enables some features by default, explicitly setting the mode to 'rescue' (often via the rescuedDataColumn configuration) is the standard way to ensure this integrity check is active.
+
+=== Q14 [db-da-287] LINE:
+PROMPT: A data analyst needs to load CSV files from an external location into a Delta table named silver_sales. Some files might have incorrect delimiters or headers. Which SQL command allows the analyst to p
+OPTIONS: a:COPY INTO silver_sales FROM ... DRY RUN; | b:SELECT * FROM read_files(...) LIMIT 10; | c:COPY INTO silver_sales FROM ... VALIDATE ALL; | d:COPY INTO silver_sales FROM ... CHECK ERROR;
+CORRECT: c
+EXPLANATION: The VALIDATE keyword (specifically VALIDATE ALL or a specific number of rows) allows the execution engine to scan the source files and report format or schema errors without actually writing any records to the target Delta table. This is a common pre-check for production pipelines.
+
+=== Q15 [db-da-288] LINE:
+PROMPT: A data analyst is ingesting data from an S3 bucket containing millions of small files in a deep directory structure. The default Directory Listing process in Auto Loader is taking too long and increas
+OPTIONS: a:Increase the size of the SQL Warehouse cluster. | b:Switch to COPY INTO with the modifiedAfter parameter. | c:Configure cloudFiles.useNotifications to true to use cloud n | d:Use Delta Lake's RESTORE command to synchronize metadata.
+CORRECT: c
+EXPLANATION: File Notification mode (using services like AWS SQS/SNS or Azure Event Grid) is significantly more efficient than 'Directory Listing' when dealing with millions of files in long-term storage. Databricks only processes the files notified by the cloud service instead of performing an expensive recursive scan of the entire storage bucket.
+
+=== Q16 [db-da-289] LINE:
+PROMPT: A table named raw_events has ingested duplicate data from a file loaded 3 days ago using COPY INTO. The analyst wants to verify exactly which files were processed and the timestamp of the operation. W
+OPTIONS: a:SELECT * FROM table_changes('raw_events', ...); | b:DESCRIBE HISTORY raw_events; | c:SHOW TBLPROPERTIES raw_events; | d:DESCRIBE DETAIL raw_events;
+CORRECT: b
+EXPLANATION: DESCRIBE HISTORY displays all transactions and audit logs for a Delta table. For ingestion operations like COPY INTO or OPTIMIZE, it includes technical details in the 'operationMetrics' column (such as files added, rows inserted, or file paths) that help audit and troubleshoot the data load process.
+
+=== Q17 [db-da-290] LINE:
+PROMPT: A data analyst wants to create an external table so other users can load files directly. To do this securely, they need to define a path to an Azure Data Lake Storage Gen2 container. Which Unity Catal
+OPTIONS: a:A Storage Credential | b:An External Location | c:A Volume | d:A Managed Table
+CORRECT: a
+EXPLANATION: In Unity Catalog, secure access to external storage follows a specific hierarchy: first, a 'Storage Credential' must be created to hold the IAM role or Service Principal information. Then, an 'External Location' is defined to link that credential to a specific URL/path. Without the credential, the location cannot safely connect to the cloud provider.
+
+=== Q18 [db-da-342] LINE:
+PROMPT: A data analyst needs to ingest a directory of JSON files that arrives incrementally in an S3 bucket. New files are added every hour. The analyst wants the ingestion to be idempotent ÔÇö files already pr
+OPTIONS: a:INSERT INTO target_table SELECT * FROM json.`s3://bucket/dat | b:COPY INTO target_table FROM 's3://bucket/data/' FILEFORMAT = | c:CREATE TABLE target_table AS SELECT * FROM json.`s3://bucket | d:MERGE INTO target_table USING json.`s3://bucket/data/` ÔÇö it  | e:LOAD DATA INPATH 's3://bucket/data/' INTO TABLE target_table
+CORRECT: b
+EXPLANATION: COPY INTO is designed for idempotent incremental ingestion. It tracks which files have already been loaded (via file-level checksums) and automatically skips them on subsequent runs. INSERT INTO re-reads all files every time (causing duplicates). MERGE deduplicates records but still re-reads all files.
+
+=== Q19 [db-da-343] LINE:
+PROMPT: A data analyst receives a 2GB CSV file with pipe-delimited fields (`|`), a custom date format (`dd-MM-yyyy`), and some rows with malformed data. The analyst needs to load this into a Delta table while
+OPTIONS: a:COPY INTO target FROM '/path/file.csv' FILEFORMAT = CSV FORM | b:COPY INTO target FROM '/path/file.csv' FILEFORMAT = CSV FORM | c:COPY INTO target FROM '/path/file.csv' FILEFORMAT = PARQUET  | d:INSERT INTO target SELECT * FROM csv.'/path/file.csv' ÔÇö stan | e:COPY INTO target FROM '/path/file.csv' FILEFORMAT = CSV FORM
+CORRECT: a
+EXPLANATION: COPY INTO with FORMAT_OPTIONS allows specifying delimiter, date format, header handling, and error mode. PERMISSIVE mode handles malformed rows by setting them to null rather than failing the entire load. FAILFAST would abort on the first error, which is too aggressive for files with known quality issues.
+
+=== Q20 [db-da-344] LINE:
+PROMPT: A data analyst needs to create a temporary queryable reference to a set of Parquet files in an external S3 location without formally registering the data as a permanent table in Unity Catalog.
+
+Which 
+OPTIONS: a:SELECT * FROM parquet.`s3://bucket/data/sales/` ÔÇö using back | b:SELECT * FROM EXTERNAL 's3://bucket/data/sales/' FORMAT PARQ | c:MOUNT 's3://bucket/data/' AS '/mnt/sales'; SELECT * FROM '/m | d:CREATE TEMP VIEW sales AS PARQUET 's3://bucket/data/sales/'  | e:Direct file querying is not possible in Databricks; files mu
+CORRECT: a
+EXPLANATION: Databricks SQL supports direct file path querying using the format `format.path` syntax with backticks (e.g., parquet.`s3://path/`, json.`s3://path/`, csv.`s3://path/`). This is useful for ad-hoc exploration before deciding to formalize data into managed tables.
+
+=== Q21 [db-da-345] LINE:
+PROMPT: A data analyst creates an external table pointing to a shared S3 location:
+
+`CREATE TABLE analytics.ext_logs LOCATION 's3://shared-bucket/logs/'`
+
+Another team later adds new Parquet files to the same
+OPTIONS: a:Run REFRESH TABLE analytics.ext_logs to update the table met | b:Drop and recreate the table, because external tables cannot  | c:Run VACUUM to force a scan of the external location. | d:The new files should appear automatically; the issue is like | e:Run COPY INTO to manually ingest the new files into the exis
+CORRECT: a
+EXPLANATION: REFRESH TABLE updates the metadata cache for external tables, forcing Databricks to rescan the external location and discover new files. Unlike managed Delta tables (which auto-detect changes via the transaction log), external tables may need explicit refresh to see files added externally.
+
+=== Q22 [db-da-346] LINE:
+PROMPT: A data analyst needs to load data from an external PostgreSQL database into a Databricks Delta table. The source table has 10 million rows and is updated daily.
+
+Which approach is most appropriate for
+OPTIONS: a:Use COPY INTO with JDBC connection strings to pull data dire | b:Use a Partner Connect tool (e.g., Fivetran) for the initial  | c:Export the PostgreSQL data as CSV files daily and upload the | d:Create a foreign table in Unity Catalog that queries Postgre | e:Both B and D are valid approaches: Fivetran for physical rep
+CORRECT: e
+EXPLANATION: Both approaches are valid: (B) Fivetran/Partner Connect provides physical replication with CDC for low-latency dashboards; (D) Lakehouse Federation creates virtual tables that query PostgreSQL directly, useful when data freshness must be real-time. The choice depends on query frequency, latency tolerance, and cost considerations.
+
+=== Q23 [db-da-347] LINE:
+PROMPT: A data analyst uploads a small CSV file (500 rows) through the Databricks workspace UI using the 'Create Table' wizard. After successful upload, the analyst notices the data is accessible.
+
+Where does
+OPTIONS: a:In a temporary session-scoped table that disappears when the | b:As a managed Delta table in Unity Catalog, stored in the man | c:In the Databricks Control Plane as a cached dataset. | d:As a CSV file attached to the analyst's personal workspace f | e:In an external S3 bucket that requires separate storage conf
+CORRECT: b
+EXPLANATION: When uploading files through the Databricks UI, the data is imported into a managed Delta table in Unity Catalog. The underlying files are stored in the managed storage location associated with the target schema. This makes the data persistent, governed, and accessible to authorized users.
+
+=== Q24 [db-da-348] LINE:
+PROMPT: A data analyst runs COPY INTO to load JSON files that contain nested objects (e.g., `{"user": {"name": "Alice", "address": {"city": "NYC"}}}`).
+
+The resulting table has a column `user` of type STRUCT.
+OPTIONS: a:SELECT user->address->city FROM target_table | b:SELECT user.address.city FROM target_table | c:SELECT GET_JSON_OBJECT(user, '$.address.city') FROM target_t | d:SELECT user['address']['city'] FROM target_table | e:SELECT FLATTEN(user).city FROM target_table
+CORRECT: b
+EXPLANATION: In Databricks SQL, nested STRUCT fields are accessed using dot notation: column.field.subfield. Since `user` is a STRUCT containing `address` (also a STRUCT containing `city`), the correct syntax is `user.address.city`. Arrow notation (`->`) is not supported; GET_JSON_OBJECT is for raw JSON strings, not STRUCT columns.
+
+=== Q25 [db-da-349] LINE:
+PROMPT: A data analyst needs to create an external table in Unity Catalog that references data stored in the company's ADLS Gen2 account. The analyst writes:
+
+`CREATE TABLE analytics.ext_sales (id INT, amount
+OPTIONS: a:The LOCATION URL syntax is incorrect for ADLS Gen2. | b:An External Location must be registered in Unity Catalog tha | c:External tables can only point to S3, not ADLS Gen2. | d:The analyst needs to run MOUNT first before creating externa | e:Unity Catalog does not support external tables; all tables m
+CORRECT: b
+EXPLANATION: Unity Catalog governs external data access through two objects: (1) Storage Credentials (cloud IAM role/service principal) and (2) External Locations (mapping from a storage path to a credential). Without an External Location registered for the ADLS path, Unity Catalog blocks access regardless of the analyst's workspace permissions.
+

@@ -1,0 +1,114 @@
+﻿Loaded questions_databricks.js. Total questions: 300
+=== DASHBOARDS & VISUALIZATIONS (40 questions) ===
+
+--- Q1 [db-da-7] ---
+PROMPT: A data engineering team has created a Structured Streaming pipeline that processes data in micro-batches and populates gold-level tables every minute. A data analyst has created a dashboard based on t
+OPTIONS: a:The required compute resources could be costly | b:The gold-level tables are not appropriately clean for busine | c:The streaming data is not an appropriate data source for a d | d:The streaming cluster is not fault tolerant | e:The dashboard cannot be refreshed that quickly
+CORRECT: a
+EXPLANATION: Continuously querying the gold-level tables every minute to update the dashboard puts a significant load on compute resources. The analyst should caution that this level of frequency might lead to substantial infrastructure costs.
+
+--- Q2 [db-da-9] ---
+PROMPT: A data analyst wants to create a dashboard with three main sections: Development, Testing, and Production, and wants to clearly designate the sections using text.
+
+Which of the following tools can the
+OPTIONS: a:Separate endpoints for each section | b:Separate queries for each section | c:Markdown-based text boxes | d:Direct text written into the dashboard in editing mode | e:Separate color palettes for each section
+CORRECT: c
+EXPLANATION: Markdown-based text boxes are the most suitable tool. Databricks dashboards support Markdown, allowing analysts to add formatted text and headings directly within the dashboard interface.
+
+--- Q3 [db-da-33] ---
+PROMPT: Which of the following statements about a refresh schedule is **incorrect**?
+OPTIONS: a:A query can be refreshed anywhere from 1 minute to 2 weeks. | b:Refresh schedules can be configured in the Query Editor. | c:A query being refreshed on a schedule does not use a SQL War | d:A refresh schedule is not the same as an alert. | e:You must have workspace administrator privileges to configur
+CORRECT: e
+EXPLANATION: You do NOT need to be an admin to schedule a refresh. Typically, the query owner or users with 'Can Manage' permissions on the query can configure schedules.
+
+--- Q4 [db-da-36] ---
+PROMPT: A data analyst has been asked to provide a list of options on how to share a dashboard with a client. It is a security requirement that the client does not gain access to any other information, resour
+OPTIONS: a:Download the Dashboard as a PDF and share it with the client | b:Set a refresh schedule for the dashboard and enter the clien | c:Take a screenshot of the dashboard and share it with the cli | d:Generate a Personal Access Token that is good for 1 day and  | e:Download a PNG file of the visualizations in the dashboard a
+CORRECT: d
+EXPLANATION: Sharing a Personal Access Token (PAT) gives the client authenticated access to the API and potential resources acting as that user, violating the security requirement.
+
+--- Q5 [db-da-37] ---
+PROMPT: A data analyst has been asked to produce a visualization that shows the flow of users through a website. Which of the following is used for visualizing this type of flow?
+OPTIONS: a:Heatmap | b:Choropleth | c:Word Cloud | d:Pivot Table | e:Sankey
+CORRECT: e
+EXPLANATION: A Sankey diagram is specifically designed to visualize flows, transfers, and movements between different states or stages.
+
+--- Q6 [db-da-38] ---
+PROMPT: An analyst writes a query that contains a query parameter. They then add an area chart visualization to the query. While adding the area chart visualization to a dashboard, the analyst chooses "Dashbo
+OPTIONS: a:The area chart will use whatever is selected in the Dashboar | b:The area chart will use whatever is selected in the Dashboar | c:The area chart will use whatever value is chosen on the dash | d:The area chart will use whatever value is input by the analy | e:The area chart will convert to a Dashboard Parameter.
+CORRECT: b
+EXPLANATION: When linked to a Dashboard Parameter, the visualization shares the control with other widgets using the same parameter, allowing a single selection to update multiple charts simultaneously.
+
+--- Q7 [db-da-39] ---
+PROMPT: A data analyst has been asked to configure an alert for a query that returns the income in the `accounts_receivable` table for a date range. The date range is configurable using a Date query parameter
+OPTIONS: a:Alerts don't work with queries that access tables. | b:Queries that return results based on dates cannot be used wi | c:The wrong query parameter is being used. Alerts only work wi | d:Queries that use query parameters cannot be used with Alerts | e:The wrong query parameter is being used. Alerts only work wi
+CORRECT: d
+EXPLANATION: Queries that use query parameters introduce dynamic behavior that cannot be consistently evaluated by the alerting system. Databricks Alerts require a static query.
+
+--- Q8 [db-da-40] ---
+PROMPT: Which of the following statements about adding visual appeal to visualizations in the Visualization Editor is incorrect?
+OPTIONS: a:Visualization scale can be changed. | b:Data Labels can be formatted. | c:Colors can be changed. | d:Borders can be added. | e:Tooltips can be formatted.
+CORRECT: d
+EXPLANATION: The Visualization Editor does not provide a feature to add borders around the visualization. It focuses on data representation aspects like scale, colors, and labels.
+
+--- Q9 [db-da-42] ---
+PROMPT: A data organization has a team of engineers developing data pipelines following the medallion architecture using Delta Live Tables. While the data analysis team working on a project is using gold-laye
+OPTIONS: a:Data blending | b:Last-mile dashboarding | c:Data testing | d:Last-mile ETL | e:Data enhancement
+CORRECT: d
+EXPLANATION: This type of light, custom processing performed by analysts on top of the refined gold layer is often referred to as Last-mile ETL.
+
+--- Q10 [db-da-43] ---
+PROMPT: Which of the following statements describes descriptive statistics?
+OPTIONS: a:A branch of statistics that uses summary statistics to quant | b:A branch of statistics that uses a variety of data analysis  | c:A branch of statistics that uses quantitative variables that | d:A branch of statistics that uses summary statistics to categ | e:A branch of statistics that uses quantitative variables that
+CORRECT: a
+EXPLANATION: Descriptive statistics focuses on using measures like mean, median, and mode to summarize and present the characteristics of a dataset.
+
+--- Q11 [db-da-44] ---
+PROMPT: In which of the following situations will the mean value and median value of variable be meaningfully different?
+OPTIONS: a:When the variable contains no outliers | b:When the variable contains no missing values | c:When the variable is of the boolean type | d:When the variable is of the categorical type | e:When the variable contains a lot of extreme outliers
+CORRECT: e
+EXPLANATION: Extreme outliers pull the mean towards them (skewing the distribution), while the median remains resistant, resulting in a significant difference between the two.
+
+--- Q12 [db-da-45] ---
+PROMPT: A data analyst is working with gold-layer tables to complete an ad-hoc project. A stakeholder has provided the analyst with an additional dataset that can be used to augment the gold-layer tables alre
+OPTIONS: a:Data testing | b:Ad-hoc improvements | c:Last-mile dashboarding | d:Last-mile ETL | e:Data enhancement
+CORRECT: e
+EXPLANATION: Data enhancement is the process where data is made richer or more complete by adding new datasets to improve the utility of the original data.
+
+--- Q13 [db-da-48] ---
+PROMPT: What is a benefit of using Databricks SQL for business intelligence (BI) analytics projects instead of using third-party BI tools?
+OPTIONS: a:Computations, data, and analytical tools on the same platfor | b:Advanced dashboarding capabilities | c:Simultaneous multi-user support | d:Automated alerting systems
+CORRECT: a
+EXPLANATION: It unifies computations, data storage, and analytical tools on the same platform, avoiding the need to move data out of the lakehouse for analysis.
+
+--- Q14 [db-da-52] ---
+PROMPT: A data scientist has asked a data analyst to create histograms for every continuous variable in a data set. What describes a continuous variable?
+OPTIONS: a:A quantitative variable that never stops changing | b:A quantitative variable that can take on a finite or countab | c:A quantitative variable that can take on an uncountable set  | d:A categorical variable in which the number of categories con
+CORRECT: c
+EXPLANATION: A continuous variable can take on any value within a range (uncountable), including fractions and decimals.
+
+--- Q15 [db-da-53] ---
+PROMPT: A data analyst has been asked to use the below table sales_table to rank products within region by the sales. Which query will accomplish this task?
+node : D:\2026\Simulador de Preguntas\audit_dash_genie.js:12
+At line:1 char:1
++ node audit_dash_genie.js 2>&1 | Out-File -FilePath dash_genie_audit.t ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (D:\2026\Simulad...ash_genie.js:12:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  console.log('OPTIONS:', q.options.map(o => o.id + ':' + o.text.substring(0, 60)).join(' | '));
+                                                                 ^
+
+TypeError: Cannot read properties of undefined (reading 'substring')
+    at D:\2026\Simulador de Preguntas\audit_dash_genie.js:12:66
+    at Array.map (<anonymous>)
+    at D:\2026\Simulador de Preguntas\audit_dash_genie.js:12:37
+    at Array.forEach (<anonymous>)
+    at Object.<anonymous> (D:\2026\Simulador de Preguntas\audit_dash_genie.js:9:12)
+    at Module._compile (node:internal/modules/cjs/loader:1761:14)
+    at Object..js (node:internal/modules/cjs/loader:1893:10)
+    at Module.load (node:internal/modules/cjs/loader:1481:32)
+    at Module._load (node:internal/modules/cjs/loader:1300:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+
+Node.js v24.11.1

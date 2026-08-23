@@ -1,0 +1,306 @@
+=== Platform Understanding (30 questions) ===
+
+Q1 [db-da-1] type:single_choice
+PROMPT: Which of the following layers of the medallion architecture is most commonly used by data analysts?
+  a) None of these layers are used by data analysts
+  b) Gold
+  c) All of these layers are used equally by data analysts
+  d) Silver
+  e) Bronze
+CURRENT_EXPL: The correct answer is Gold because it represents the refined, aggregated, and business-ready data designed for consumption by data analysts. Data analysts use the Gold layer most often because it prov
+---END---
+
+Q2 [db-da-3] type:single_choice
+PROMPT: Which of the following describes how Databricks SQL should be used in relation to other business intelligence (BI) tools like Tableau, Power BI, and Looker?
+  a) As an exact substitute with the same level of functionality
+  b) As a substitute with less functionality
+  c) As a complete replacement with additional functionality
+  d) As a complementary tool for professional-grade presentations
+  e) As a complementary tool for quick in-platform BI work
+CURRENT_EXPL: Databricks SQL complements dedicated BI tools by providing a convenient and efficient means for in-platform data exploration and prototyping, while specialized BI tools are used for advanced analysis 
+---END---
+
+Q3 [db-da-5] type:single_choice
+PROMPT: Data professionals with varying titles use the Databricks SQL service as the primary touchpoint with the Databricks Lakehouse Platform. However, some users will use other services like Databricks Mach
+  a) Business analyst
+  b) SQL analyst
+  c) Data engineer
+  d) Business intelligence analyst
+  e) Data analyst
+CURRENT_EXPL: Data Engineers primarily use Databricks Data Science & Engineering for Spark-based data processing. Databricks SQL functions as a secondary tool for data engineers, assisting in tasks like data valida
+---END---
+
+Q4 [db-da-10] type:single_choice
+PROMPT: A data analyst needs to use the Databricks Lakehouse Platform to quickly create SQL queries and data visualizations. The solution must support serverless compute and visualizations within a dashboard.
+  a) Delta Lake
+  b) Databricks Notebooks
+  c) Tableau
+  d) Databricks Machine Learning
+  e) Databricks SQL
+CURRENT_EXPL: Databricks SQL is designed explicitly for SQL queries, supports serverless compute (Serverless SQL Warehouses), and integrates data visualization capabilities within dashboards.
+---END---
+
+Q5 [db-da-14] type:single_choice
+PROMPT: Delta Lake stores table data as a series of data files. Which of the following is stored alongside data files when using Delta Lake?
+  a) None of these
+  b) Table metadata, data summary visualizations, and owner account information
+  c) Table metadata
+  d) Data summary visualizations
+  e) Owner account information
+CURRENT_EXPL: Delta Lake meticulously manages metadata (transaction logs, schema info, statistics) alongside data files to provide transactional guarantees and versioning.
+---END---
+
+Q6 [db-da-15] type:single_choice
+PROMPT: Which of the following is an advantage of using a Delta Lake-based data lakehouse over common data lake solutions?
+  a) ACID transactions
+  b) Flexible schemas
+  c) Data deletion
+  d) Scalable storage
+  e) Open-source formats
+CURRENT_EXPL: Traditional data lakes often lack ACID guarantees. Delta Lake addresses this by providing ACID transactions on top of the data lake, ensuring atomic and consistent updates.
+---END---
+
+Q7 [db-da-16] type:single_choice
+PROMPT: Which of the following benefits of using Databricks SQL is provided by Data Explorer?
+  a) It can be used to run UPDATE queries.
+  b) It can be used to view metadata and data, as well as view/change permissions.
+  c) It can be used to produce dashboards.
+  d) It can be used to make visualizations.
+  e) It can be used to connect to third party BI tools.
+CURRENT_EXPL: Data Explorer is designed for discovery and governance. It allows users to view metadata (schema, types), preview data, and manage permissions on data assets.
+---END---
+
+Q8 [db-da-50] type:single_choice
+PROMPT: What is an advantage of using a Delta Lake-based data lakehouse over classic enterprise data warehouse solutions?
+  a) Open-source formats
+  b) Schema enforcement
+  c) ACID transactions
+  d) Generic optimizations
+CURRENT_EXPL: While classic EDWs have ACID, the question in this exam context highlights ACID as a key feature brought by Delta Lake to the Lakehouse architecture.
+---END---
+
+Q9 [db-da-63] type:single_choice
+PROMPT: What is used as a compute resource for Databricks SQL?
+  a) Standard clusters
+  b) Single-node clusters
+  c) SQL warehouses
+  d) Downstream BI tools integrated with Databricks SQL
+CURRENT_EXPL: SQL Warehouses are the optimized compute engines dedicated to executing SQL queries in Databricks SQL.
+---END---
+
+Q10 [db-da-81] type:single_choice
+PROMPT: Which open-source project helps to enable the data lakehouse by adding organization, reliability, performance, and data governance to data lake architectures?
+  a) MLflow
+  b) Apache Spark
+  c) Delta Lake
+  d) Databricks SQL
+CURRENT_EXPL: Delta Lake is the storage layer that adds ACID transactions, schema enforcement, and reliability to the data lake, enabling the Lakehouse architecture.
+---END---
+
+Q11 [db-da-97] type:single_choice
+PROMPT: A data analyst is reviewing the status of alerts in the Databricks SQL Alerts listing page. One alert was recently executed, and the monitored value met the defined condition and exceeded the threshol
+  a) Status: TRIGGERED
+  b) Status: YES
+  c) Status: SUCCESS
+  d) Status: OK
+CURRENT_EXPL: When an alert's condition is evaluated as true (threshold met), the status is reported as `TRIGGERED`.
+---END---
+
+Q12 [db-da-98] type:single_choice
+PROMPT: A data analyst wants to generate insights from large, complex datasets. The analyst needs to quickly understand the meaning of various data columns, ask questions in natural language, and receive AI-d
+  a) Genie Spaces
+  b) Data Intelligence Engine
+  c) Unity Catalog
+  d) Databricks Assistant
+CURRENT_EXPL: The Data Intelligence Engine (formerly Databricks IQ) is the underlying AI engine that understands your data's semantics to power features like Genie and Assistant.
+---END---
+
+Q13 [db-da-141] type:single_choice
+PROMPT: Which of the following best describes the relationship between Databricks SQL and the overall Databricks Data Intelligence Platform?
+  a) Databricks SQL is a standalone product that does not integrate with other Databricks services
+  b) Databricks SQL is the service within the Data Intelligence Platform specifically designed for analysts to write SQL quer
+  c) Databricks SQL is only used for machine learning model training
+  d) Databricks SQL replaces all external BI tools and provides identical functionality
+  e) Databricks SQL is a deprecated service that has been replaced by Notebooks
+CURRENT_EXPL: Databricks SQL is the analyst-facing service of the Data Intelligence Platform. It provides serverless SQL warehouses, a SQL editor, AI/BI dashboards, alerts, and visualization capabilities designed f
+---END---
+
+Q14 [db-da-142] type:single_choice
+PROMPT: Which of the following best describes the architecture of a Data Lakehouse?
+  a) A traditional data warehouse deployed on cloud infrastructure with no support for unstructured data
+  b) A raw data lake that stores files without any governance, reliability, or schema enforcement
+  c) An architecture that combines the reliability, governance, and performance of a data warehouse with the flexibility, sca
+  d) A system exclusively designed for batch processing of structured data
+  e) A distributed relational database optimized for OLTP workloads
+CURRENT_EXPL: The Data Lakehouse architecture combines the best features of both data warehouses (ACID transactions, schema enforcement, governance) and data lakes (scalable storage, support for diverse data types,
+---END---
+
+Q15 [db-da-176] type:single_choice
+PROMPT: A data architect has informed a data analyst team that its organization will now use a data design pattern that will logically organize data in a lakehouse, with the goal of incrementally and progress
+  a) Medallion architecture
+  b) Change data feed
+  c) Delta Lake
+  d) Data mesh
+CURRENT_EXPL: The medallion architecture (bronze-silver-gold layers) is the standard design pattern that defines multiple zones to represent stages of data quality and transformation, enabling incremental improveme
+---END---
+
+Q16 [db-da-179] type:single_choice
+PROMPT: How are analytical models mapped to the Gold layer in the Delta Lake medallion architecture on Databricks?
+  a) The Gold layer is primarily used for storing backup copies of all data for disaster recovery purposes.
+  b) The Gold layer stores raw, unprocessed data for initial ingestion and schema evolution.
+  c) The Gold layer is used for data cleaning, deduplication, and joining across domains to establish data integrity.
+  d) The Gold layer contains de-normalized data models optimized for analytics, reporting, and machine learning.
+CURRENT_EXPL: The Gold layer holds denormalized, curated models that are purpose-built for analytics, reporting, and machine-learning workloads. Gold tables are the final, production-ready datasets that have passed
+---END---
+
+Q17 [db-da-184] type:single_choice
+PROMPT: What is the primary role of a SQL Warehouse in Databricks?
+  a) SQL Warehouses are primarily used for ETL operations and data transformations, offering better performance for batch pro
+  b) SQL Warehouses are specialized compute resources designed specifically for SQL query execution, powered by the Photon en
+  c) SQL Warehouses are general-purpose compute resources that support Python, Scala, R, and SQL workloads, with automatic li
+  d) SQL Warehouses function as data storage systems that maintain cached query results and provide direct access to Delta ta
+CURRENT_EXPL: A SQL Warehouse in Databricks is a dedicated compute cluster that executes SQL statements. It is purpose-built for SQL workloads and powered by the Photon execution engine, which provides vectorized q
+---END---
+
+Q18 [db-da-191] type:single_choice
+PROMPT: An analyst needs external datasets and analytics assets to enrich their lakehouse reporting. The organization uses Databricks with Unity Catalog enabled and wants fast, governed access to third-party 
+  a) It provides a marketplace for purchasing compute resources and serverless SQL warehouses that are managed outside the Un
+  b) It enables scheduling of ETL pipelines to load partner data into proprietary formats before use in Databricks SQL.
+  c) It allows the BI Analyst to copy external datasets into their workspace for offline analysis, eliminating dependency on 
+  d) It enables direct, governed access to live external data, notebooks, models, and dashboards via Delta Sharing—without da
+CURRENT_EXPL: Databricks Marketplace provides live external data sources (datasets, notebooks, models, dashboards) shared via Delta Sharing that can be accessed with the same security policies enforced in Unity Cat
+---END---
+
+Q19 [db-da-202] type:single_choice
+PROMPT: A data analyst encounters an unclear error while running a SQL query in the Databricks SQL Editor. The analyst wants to quickly understand and resolve the issue.
+
+How can Databricks Assistant help the
+  a) Databricks Assistant requires switching to a notebook environment to provide any debugging support.
+  b) Databricks Assistant only supports Python code and cannot help with SQL queries.
+  c) Databricks Assistant can only create new queries and does not assist with debugging.
+  d) Databricks Assistant can analyze the error, suggest solutions, and provide corrected code directly in the SQL Editor.
+CURRENT_EXPL: Databricks Assistant is embedded in the SQL Editor and can interpret runtime errors, propose fixes, and return ready-to-run SQL statements without leaving the editor. This accelerates root-cause analy
+---END---
+
+Q20 [db-da-301] type:single_choice
+PROMPT: A data analyst's Serverless SQL Warehouse starts in under 5 seconds, but a colleague's Classic SQL Warehouse takes over 4 minutes to become available. Both are configured with the same cluster size. T
+  a) Serverless warehouses use pre-warmed compute pools managed by Databricks, eliminating cold-start provisioning delays tha
+  b) Classic warehouses require manual driver installation before each startup, while Serverless warehouses cache the drivers
+  c) Serverless warehouses run on the Control Plane with lower latency, while Classic warehouses must provision resources in 
+  d) Classic warehouses need to download Delta Lake libraries on each startup, while Serverless warehouses have them pre-inst
+  e) Serverless warehouses bypass the Unity Catalog authentication step, while Classic warehouses must authenticate on every 
+CURRENT_EXPL: Serverless SQL Warehouses achieve near-instant startup (2-6 seconds) because Databricks maintains pre-warmed compute pools. Classic warehouses must provision cloud VMs from scratch in the customer's c
+---END---
+
+Q21 [db-da-302] type:single_choice
+PROMPT: A company is evaluating Databricks for their analytics workloads. The security team is concerned about data privacy and wants to understand where customer data is stored and processed.
+
+Which statemen
+  a) The Control Plane stores all customer data in encrypted form, while the Data Plane handles only query execution and retu
+  b) The Control Plane manages the UI, job orchestration, and notebook management, while customer data remains in the Data Pl
+  c) Both planes store customer data, but the Control Plane only stores metadata while the Data Plane stores the raw files.
+  d) The Data Plane is managed entirely by Databricks and the Control Plane resides in the customer's cloud infrastructure.
+  e) The Control Plane and Data Plane are interchangeable terms for the same infrastructure component.
+CURRENT_EXPL: The Control Plane is managed by Databricks and handles orchestration (UI, notebooks, job scheduling, cluster management). The Data Plane resides in the customer's cloud account (AWS/Azure/GCP) where a
+---END---
+
+Q22 [db-da-303] type:single_choice
+PROMPT: A data analyst needs to choose between a Pro SQL Warehouse and a Serverless SQL Warehouse for a new analytics project. The project involves complex aggregation queries on a 500GB Delta table that run 
+  a) Serverless warehouses do not support Photon, so Pro is needed for optimal query performance on large tables.
+  b) Pro warehouses support more concurrent queries than Serverless warehouses.
+  c) The cost model differs: Serverless charges per-query with instant scaling, while Pro requires the warehouse to remain ru
+  d) Serverless warehouses cannot connect to Unity Catalog, making Pro the only option for governed data.
+  e) Pro warehouses have exclusive access to the Query Profile tool, which is essential for optimizing complex aggregations.
+CURRENT_EXPL: The key trade-off is the cost model. With 15-minute refresh intervals, a Pro warehouse either stays running (costly) or shuts down and cold-starts each time (slow). Serverless offers instant startup a
+---END---
+
+Q23 [db-da-304] type:single_choice
+PROMPT: A team is debating whether to use Databricks SQL or Databricks Notebooks for their daily analytics workflow. The team primarily writes SQL queries, creates dashboards, and sets up alerts for KPI monit
+  a) Databricks SQL should be used when the team needs to write Python or Scala code for complex transformations.
+  b) Databricks SQL is preferred for SQL-centric workflows that include query authoring, dashboard creation, alerting, and di
+  c) Notebooks should always be preferred because they support SQL cells and offer more flexibility than the SQL Editor.
+  d) Databricks SQL is only appropriate for ad-hoc queries and cannot be used for production workloads.
+  e) Databricks SQL requires a separate license from the standard Databricks platform subscription.
+CURRENT_EXPL: Databricks SQL is purpose-built for SQL-centric analytics workflows: SQL Editor for queries, native dashboards, alerting on query results, and SQL Warehouses that BI tools connect to directly. Noteboo
+---END---
+
+Q24 [db-da-305] type:single_choice
+PROMPT: A data analyst runs `DESCRIBE EXTENDED sales.transactions` and notices the `Type` field shows `MANAGED`. The analyst then runs `DROP TABLE sales.transactions`.
+
+After the table is dropped, what happen
+  a) The data files remain in cloud storage and can be accessed using the Delta path directly.
+  b) The metadata is removed but the data files are preserved because Unity Catalog protects all data by default.
+  c) Both the metadata in the metastore and the underlying data files are permanently deleted.
+  d) The data files are moved to a recycle bin and can be recovered within 30 days.
+  e) The data files are preserved but marked as read-only to prevent accidental access.
+CURRENT_EXPL: For MANAGED tables, DROP TABLE removes both the metadata from the metastore AND the underlying data files. This is the key distinction from EXTERNAL tables, where DROP only removes metadata while data
+---END---
+
+Q25 [db-da-306] type:single_choice
+PROMPT: An organization is migrating from a traditional data warehouse to the Databricks Lakehouse Platform. The CTO asks: 'What makes a Lakehouse different from simply putting a data warehouse on top of a da
+  a) The Lakehouse uses a proprietary file format that is incompatible with open-source tools, ensuring performance through v
+  b) Delta Lake adds ACID transactions, schema enforcement, and time travel directly on top of open Parquet files in cloud st
+  c) The Lakehouse stores structured data in a warehouse and unstructured data in a lake, keeping them as separate systems wi
+  d) The Lakehouse replaces cloud storage with a new distributed file system that provides faster I/O than S3 or ADLS.
+  e) The Lakehouse is simply a marketing term for a data lake with built-in visualization tools.
+CURRENT_EXPL: The Lakehouse innovation is Delta Lake: Parquet files + Transaction Log = warehouse-quality reliability (ACID, schema enforcement, time travel) directly on cheap cloud storage. No separate warehouse c
+---END---
+
+Q26 [db-da-307] type:single_choice
+PROMPT: A data analyst is troubleshooting slow dashboard performance and discovers the SQL Warehouse has Photon disabled. The analyst enables Photon by switching to a Pro warehouse type.
+
+Which statement accu
+  a) Photon replaces Spark entirely with a GPU-accelerated engine that requires rewriting queries in a Photon-specific syntax
+  b) Photon is a vectorized query engine written in C++ that accelerates Spark SQL workloads without requiring any code chang
+  c) Photon works by pre-computing all possible query results and caching them, so queries return instantly from cache.
+  d) Photon only accelerates Python and Scala workloads; SQL queries do not benefit from Photon optimization.
+  e) Photon compresses data files to 10% of their original size, making I/O operations faster.
+CURRENT_EXPL: Photon is a native vectorized query engine written in C++ that runs alongside Spark. It accelerates SQL and DataFrame workloads transparently — no code changes required. Benchmarks show up to 12x perf
+---END---
+
+Q27 [db-da-308] type:single_choice
+PROMPT: A data analyst needs to connect Tableau to Databricks for interactive dashboarding. The analyst has access to both a Databricks cluster and a SQL Warehouse.
+
+Which compute resource should the analyst 
+  a) A cluster, because Tableau requires a Spark context that only clusters provide.
+  b) A SQL Warehouse, because it provides an ODBC/JDBC endpoint optimized for BI tool connectivity and concurrent query execu
+  c) Either resource works identically; there is no performance or functionality difference for BI tools.
+  d) Tableau can only connect to Databricks through the REST API, so neither clusters nor SQL Warehouses are directly used.
+  e) A cluster configured with the Tableau driver package, because SQL Warehouses do not support third-party BI tools.
+CURRENT_EXPL: SQL Warehouses are designed for BI tool connectivity. They expose ODBC/JDBC endpoints, handle high concurrency efficiently, and are optimized for the interactive query patterns that BI tools like Tabl
+---END---
+
+Q28 [db-da-309] type:single_choice
+PROMPT: A data analyst wants to browse available tables, view their schemas, check column-level comments, and review access permissions — all without writing any SQL.
+
+Which Databricks feature provides this c
+  a) The SQL Editor's autocomplete feature, which displays schema information inline.
+  b) Catalog Explorer (Data Explorer), which provides a visual interface for browsing data objects, viewing metadata, and man
+  c) The Databricks CLI, which provides a `databricks tables list` command for schema browsing.
+  d) Delta Live Tables (DLT) pipeline viewer, which shows all tables and their lineage.
+  e) The Workspace file browser, where tables appear as files that can be previewed.
+CURRENT_EXPL: Catalog Explorer (formerly Data Explorer) is the visual interface in Databricks for discovering, browsing, and governing data assets. It shows catalogs, schemas, tables, columns, comments, tags, linea
+---END---
+
+Q29 [db-da-310] type:single_choice
+PROMPT: An organization wants to connect their HR system (Workday) to Databricks for automated employee data ingestion. A data engineer suggests using Partner Connect.
+
+What does Partner Connect automate in t
+  a) It automatically transforms the HR data into the medallion architecture format before loading.
+  b) It provisions a SQL Warehouse and configures the connection credentials so the partner tool (Workday/Fivetran) can push 
+  c) It creates a direct VPN tunnel between the HR system and the Databricks workspace for secure data transfer.
+  d) It automatically generates ETL notebooks that extract data from the partner system.
+  e) It replaces the need for the partner tool entirely by providing built-in connectors for all supported systems.
+CURRENT_EXPL: Partner Connect streamlines integration by automatically provisioning a SQL Warehouse (or cluster) and configuring the authentication credentials needed for the partner tool to connect. It reduces set
+---END---
+
+Q30 [db-da-311] type:single_choice
+PROMPT: A data analyst notices that their SQL Warehouse has an 'Auto Stop' setting of 10 minutes and a dashboard refresh schedule of every 30 minutes. The analyst observes that the warehouse frequently cold-s
+  a) Disable Auto Stop completely so the warehouse never shuts down.
+  b) Switch to a Serverless SQL Warehouse, which provides near-instant startup (2-6 seconds) and only charges for compute use
+  c) Increase the Auto Stop timer to 35 minutes so the warehouse stays warm between refreshes.
+  d) Add a dummy query that runs every 5 minutes to keep the warehouse alive.
+  e) Reduce the dashboard refresh interval to every 5 minutes to keep the warehouse constantly active.
+CURRENT_EXPL: Serverless SQL Warehouses solve the cold-start vs cost dilemma: they start in 2-6 seconds (no cold-start penalty) and auto-scale to zero when idle (no cost for idle time). Options C and D waste resour
+---END---
+

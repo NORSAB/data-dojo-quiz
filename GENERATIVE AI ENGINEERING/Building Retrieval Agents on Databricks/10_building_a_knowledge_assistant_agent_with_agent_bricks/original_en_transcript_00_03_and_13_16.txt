@@ -1,0 +1,55 @@
+Hi, in this demo, we are going to talk about how to build a knowledge assistant agent using AgentBricks. AgentBricks is a Databricks product that provides you a declarative way of creating agents and also improving agent quality through feedback.
+Norman Reynaldo Sabillon Castro 0 minutos 47 segundos
+and labeling sessions. So in this demo, this is a scenario that we have. We want to create a knowledge assistant for Orion. Orion is a humanoid robotic company and this knowledge assistant is going to be used by field engineers and they will ask questions about
+Norman Reynaldo Sabillon Castro 1 minuto 9 segundos
+let's say, robot's firmware, they are going to ask questions about robot's motor, firmware, or other internal safety details and standards. So the assistant should use internal documents to answer these questions.
+Norman Reynaldo Sabillon Castro 1 minuto 29 segundos
+By the end of this demo, you should be able to identify the key components and requirements for creating a knowledge assistant using AgentBricks. You should be able to configure and create a knowledge assistant using Unity catalog volumes. You should be able to implement agent testing and evaluating the
+Norman Reynaldo Sabillon Castro 1 minuto 50 segundos
+agent answer. And also you should be able to improve agent quality through labeling session. And finally, you should be able to apply best practices for creating high-performing agents.
+Norman Reynaldo Sabillon Castro 2 minutos 4 segundos
+In this demo, you will need to have Agent Bricks enabled, of course, and you should have a serverless version 4 to run the notebook. We only have this setup script in this notebook; the rest is gonna be done through the UI, so in this setup script.
+Norman Reynaldo Sabillon Castro 2 minutos 23 segundos
+This is going to create a volume for us, and in this volume we have some documents that we are going to use to create a knowledge base for our assistant. If you go to catalog, your catalog here.
+Norman Reynaldo Sabillon Castro 2 minutos 38 segundos
+Go to DBX Academy, and this is your schema, so each user is gonna have their own schema here, and then here you can see that we have this volume with eight documents that we are gonna use. All right, let us start by creating an agent. So, to create an agent...
+Norman Reynaldo Sabillon Castro 2 minutos 58 segundos
+From the left panel, you will go to agents. And then from here, there are different agent types that you are going to you can create with Agent Bricks. In this demo, we are going to use a knowledge assistant agent, and you can see that this is a type of agent for a reg architectures or document question and answer.
+Norman Reynaldo Sabillon Castro 3 minutos 22 segundos
+So I'm going to click this one. For the agent name, we are going to enter a name. Let's say Urion Knowledge Assistant.
+Norman Reynaldo Sabillon Castro 13 minutos 7 segundos
+All right, so you can see the response is generated, but it is for a simple question. This seems like a very long and too detailed, so I'm going to tune the style of the agent. So, I am going to add a question, and my SIME is going to provide guidelines for this question. This is the question that I manually did that.
+Norman Reynaldo Sabillon Castro 13 minutos 29 segundos
+But also, of course, your experts can provide guidelines for any question here. So this one, what is Orion is going to be answered, is going to be evaluated by an expert. So to create a label session, we are going to click start labeling session.
+Norman Reynaldo Sabillon Castro 13 minutos 47 segundos
+This is going to create a link for us that we can share with experts and also we can define the permissions for this link. So this link can be shared with your subject matter experts to collect feedback. So I'm going to click this link. This link is going to
+Norman Reynaldo Sabillon Castro 14 minutos 6 segundos
+open up a list of tasks and the expert is going to provide guideline here. So here is my question and the expert is going to see the output of this question.
+Norman Reynaldo Sabillon Castro 14 minutos 21 segundos
+the response from the agent. So you can see that is quite long. So I, as an expert, am going to provide guidelines here. So I'm going to say make it short
+Norman Reynaldo Sabillon Castro 14 minutos 35 segundos
+Build.
+Norman Reynaldo Sabillon Castro 14 minutos 37 segundos
+Three.
+Norman Reynaldo Sabillon Castro 14 minutos 38 segundos
+Sentences, and then the other guideline can be, yeah, let's say you want to start with an interesting sentence, right, and then click save.
+Norman Reynaldo Sabillon Castro 14 minutos 55 segundos
+So, as an expert, I provided my guidelines for this question, and you can go to other questions to review them.
+Norman Reynaldo Sabillon Castro 15 minutos 5 segundos
+So yeah, that's how you do that. Now I'm going to go back here and when the expert is done with the question, right, then we need to merge this data set to our example data set. To do that, I'm just going to click merge and then click confirm.
+Norman Reynaldo Sabillon Castro 15 minutos 26 segundos
+Yeah, you can see that the guidelines are now merged to the examples data set, and if I go back and ask the same question.
+Norman Reynaldo Sabillon Castro 15 minutos 37 segundos
+see how if my agent is following the guidelines.
+Norman Reynaldo Sabillon Castro 15 minutos 44 segundos
+Yeah, as you can see that response is very shorter and yeah, it's following our guidelines.
+Norman Reynaldo Sabillon Castro 15 minutos 50 segundos
+Cool, let's.
+Norman Reynaldo Sabillon Castro 15 minutos 53 segundos
+Go back to our agents.
+Norman Reynaldo Sabillon Castro 15 minutos 57 segundos
+Now, the final thing is to clean up the resources. As this agent is consuming both a vector search endpoint and also model serving endpoint, we are going to delete that to
+Norman Reynaldo Sabillon Castro 16 minutos 11 segundos
+Not use the resources. Yeah, so that was it for this demo. In this demo, we showed how to create a knowledge assistant agent using Databricks in a declarative way. We showed how to configure a Unity catalog volume as knowledge source, and also we showed how you can improve your agents.
+Norman Reynaldo Sabillon Castro 16 minutos 32 segundos
+quality using guidelines, both manually adding guidelines and also collecting guidelines from experts. So, that's it for this demo. I hope you enjoyed and see you in next demo.

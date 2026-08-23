@@ -1,0 +1,829 @@
+=== Executing Queries (70 questions) ===
+
+Q1 [db-da-2] type:single_choice
+PROMPT: A data analyst has recently joined a new team that uses Databricks SQL, but the analyst has never used Databricks before. The analyst wants to know where in Databricks SQL they can write and execute S
+  a) Data page
+  b) Dashboards page
+  c) Queries page
+  d) Alerts page
+  e) SQL Editor page
+CURRENT_EXPL: The SQL Editor is specifically designed for SQL development. It provides features such as syntax highlighting, auto-completion, query history, and result visualization. Data analysts use this editor t
+---END---
+
+Q2 [db-da-6] type:single_choice
+PROMPT: A data analyst has set up a SQL query to run every four hours on a SQL endpoint, but the SQL endpoint is taking too long to start up with each run.
+
+Which of the following changes can the data analyst
+  a) Reduce the SQL endpoint cluster size
+  b) Increase the SQL endpoint cluster size
+  c) Turn off the Auto stop feature
+  d) Increase the minimum scaling value
+  e) Use a Serverless SQL endpoint
+CURRENT_EXPL: Serverless SQL endpoints eliminate the warm-up period associated with traditional SQL endpoints because they are managed by Databricks, offering immediate compute availability.
+---END---
+
+Q3 [db-da-20] type:single_choice
+PROMPT: A data analyst runs the following command:\n\n```sql\nSELECT age, country\nFROM my_table\nWHERE age >= 75 AND country = 'canada';\n```\n\nWhich of the following tables represents the output of the abo
+  a) | age | country |
+|---|---|
+| 80 | canada |
+| NULL | canada |
+| 90 | NULL |
+  b) | age | country |
+|---|---|
+| 80 | NULL |
+| 75 | NULL |
+| 90 | NULL |
+  c) | id | age | country |
+|---|---|---|
+| 900 | 80 | canada |
+| 901 | 75 | canada |
+| 902 | 90 | canada |
+  d) | age | country |
+|---|---|
+| 80 | canada |
+| 14 | canada |
+| 90 | canada |
+  e) | age | country |
+|---|---|
+| 80 | canada |
+| 75 | canada |
+| 90 | canada |
+CURRENT_EXPL: The query filters for `age >= 75` AND `country = 'canada'`. Option E is the only table where all rows satisfy both conditions (Age is 75, 80, 90 and Country is 'canada') and only the selected columns 
+---END---
+
+Q4 [db-da-21] type:single_choice
+PROMPT: A data analyst runs the following command:
+
+```sql
+INSERT INTO stakeholders.suppliers TABLE stakeholders.new_suppliers;
+```
+
+What is the result of running this command?
+  a) The suppliers table now contains both the data it had before and the data from new_suppliers, and duplicates are deleted
+  b) The command fails because it is written incorrectly.
+  c) The suppliers table now contains both the data it had before and the data from new_suppliers, including any duplicate da
+  d) The suppliers table now contains the data from the new_suppliers table, and new_suppliers contains data from suppliers.
+  e) The suppliers table now contains only the data from the new_suppliers table.
+CURRENT_EXPL: The `INSERT INTO ... TABLE` command appends data from the source table to the target table. It does not automatically remove duplicate rows; if duplicates exist in the source, they are added.
+---END---
+
+Q5 [db-da-22] type:single_choice
+PROMPT: A data engineer is working with a nested array column products...
+  a) array distinct(products)
+  b) explode(products)
+  c) reduce(products)
+  d) array(products)
+  e) flatten(products)
+CURRENT_EXPL: `explode(products)` takes an array column and creates a new row for each element in the array, duplicating the other columns for each new row.
+---END---
+
+Q6 [db-da-23] type:single_choice
+PROMPT: A data analysis team is working with the table_bronze SQL table as a source for one of its most complex projects. A stakeholder of the project notices that some of the downstream data is duplicative. 
+  a) [CODE/TABLE]
+  b) [CODE/TABLE]
+  c) [CODE/TABLE]
+  d) [CODE/TABLE]
+  e) [CODE/TABLE]
+CURRENT_EXPL: `SELECT DISTINCT *` is the standard SQL clause to retrieve only unique rows. Combining this with `CREATE TABLE ... AS` creates a new table with the deduplicated data.
+---END---
+
+Q7 [db-da-24] type:single_choice
+PROMPT: A business analyst has been asked to create a data entity/object called sales_by_employee. It should always stay up-to-date when new data are added to the sales table. The new entity should have the c
+  a) [CODE/TABLE]
+  b) [CODE/TABLE]
+  c) [CODE/TABLE]
+  d) [CODE/TABLE]
+  e) [CODE/TABLE]
+CURRENT_EXPL: A View (`CREATE OR REPLACE VIEW`) is a virtual table defined by a query. It does not store data itself but runs the query every time it is accessed, ensuring the data is always up-to-date.
+---END---
+
+Q8 [db-da-25] type:single_choice
+PROMPT: A data analyst has been asked to use the below table sales_table...
+  a) [CODE/TABLE]
+  b) [CODE/TABLE]
+  c) [CODE/TABLE]
+  d) [CODE/TABLE]
+  e) [CODE/TABLE]
+CURRENT_EXPL: ✅ CORRECT (D): To rank products WITHIN each region, you need the RANK() or PERCENT_RANK() window function with PARTITION BY region ORDER BY sales DESC. The PARTITION BY clause creates separate ranking
+---END---
+
+Q9 [db-da-26] type:single_choice
+PROMPT: In which of the following situations should a data analyst use higher-order functions?
+  a) When custom logic needs to be applied to simple, unnested data
+  b) When custom logic needs to be converted to Python-native code
+  c) When custom logic needs to be applied at scale to array data objects
+  d) When built-in functions are taking too long to perform tasks
+  e) When built-in functions need to run through the Catalyst Optimizer
+CURRENT_EXPL: Higher-order functions in Spark SQL (like `transform`, `filter` on arrays) are designed to apply custom logic efficiently to elements within complex data types like arrays and maps without exploding t
+---END---
+
+Q10 [db-da-27] type:single_choice
+PROMPT: Consider two statements using LEFT SEMI JOIN and LEFT ANTI JOIN...
+  a) The first statement will return all data from the customers table and matching data from the orders table. The second st
+  b) When the first statement is run, only rows from the customers table that have at least one match with the orders table o
+  c) There is no difference between the result sets for both statements.
+  d) Both statements will fail because Databricks SQL does not support those join types.
+  e) When the first statement is run, all rows from the customers table will be returned and only the customer_id from the or
+CURRENT_EXPL: `LEFT SEMI JOIN` returns rows from the left table that have a match in the right. `LEFT ANTI JOIN` returns rows from the left table that do NOT have a match in the right.
+---END---
+
+Q11 [db-da-28] type:single_choice
+PROMPT: A data analyst has created a UDF... Which code block applies this function?
+  a) [CODE/TABLE]
+  b) [CODE/TABLE]
+  c) [CODE/TABLE]
+  d) [CODE/TABLE]
+  e) [CODE/TABLE]
+CURRENT_EXPL: To apply a UDF, you call it like a standard function, passing the column names as arguments: `price(col1, col2)`.
+---END---
+
+Q12 [db-da-29] type:single_choice
+PROMPT: A data analyst has written a query to count customers per region...
+  a) The query is using count(*), which will count all the customers in the customers table, no matter the region.
+  b) The query is missing a GROUP BY region clause.
+  c) The query is using ORDER BY, which is not allowed in an aggregation.
+  d) There are no mistakes in the query.
+  e) The query is selecting region, but region should only occur in the ORDER BY clause.
+CURRENT_EXPL: When using an aggregate function like `COUNT` with a non-aggregated column like `region`, a `GROUP BY` clause is required to define the groups.
+---END---
+
+Q13 [db-da-30] type:single_choice
+PROMPT: A data analyst is processing a complex aggregation... Which query produced the result?
+  a) [CODE/TABLE]
+  b) [CODE/TABLE]
+  c) [CODE/TABLE]
+  d) [CODE/TABLE]
+  e) [CODE/TABLE]
+CURRENT_EXPL: `WITH CUBE` generates subtotals for all possible combinations of the grouping columns (totals for group_1, totals for group_2, and the grand total).
+---END---
+
+Q14 [db-da-31] type:single_choice
+PROMPT: Which of the following is a benefit of Databricks SQL using ANSI SQL as its standard SQL dialect?
+  a) It has increased customization capabilities
+  b) It is easy to migrate existing SQL queries to Databricks SQL
+  c) It allows for the use of Photon's computation optimizations
+  d) It is more performant than other SQL dialects
+  e) It is more compatible with Spark's interpreters
+CURRENT_EXPL: ANSI SQL compliance ensures broad compatibility, making it significantly easier to migrate existing queries and workloads from other systems to Databricks.
+---END---
+
+Q15 [db-da-34] type:single_choice
+PROMPT: A data analyst creates a Databricks SQL Query where the result set has the following schema: region STRING number_of_customer INT
+When the analyst clicks on the "Add visualization" button on the SQL E
+  a) Violin Chart
+  b) Line Chart
+  c) Bar Chart
+  d) Histogram
+  e) There is no default. The user must choose a visualization type.
+CURRENT_EXPL: Databricks heuristics often default to a Line Chart when analyzing a quantitative value (`number_of_customer`) against a qualitative or categorical value (`region`), although a Bar Chart might also be
+---END---
+
+Q16 [db-da-35] type:single_choice
+PROMPT: A data analyst has created a Query in Databricks SQL, and now they want to create two data visualizations from that Query and add both of those data visualizations to the same Databricks SQL Dashboard
+  a) They will need to alter the Query to return two separate sets of results.
+  b) They will need to add two separate visualizations to the dashboard based on the same Query.
+  c) They will need to create two separate dashboards.
+  d) They will need to decide on a single data visualization to add to the dashboard.
+  e) They will need to copy the Query and create one data visualization per query.
+CURRENT_EXPL: You can create multiple visualization widgets from a single query execution and add them individually to a dashboard without duplicating the underlying query.
+---END---
+
+Q17 [db-da-46] type:single_choice
+PROMPT: A data analyst needs to query the data in `my_table`. They want to return the values in columns `user_id` and `email_address` where records fit the following filter criteria: `age` is greater than 25 
+  a) [CODE/TABLE]
+  b) [CODE/TABLE]
+  c) [CODE/TABLE]
+  d) [CODE/TABLE]
+CURRENT_EXPL: This query correctly selects only the `user_id` and `email_address` columns and applies the filter `age > 25` and `country = 'Canada'`.
+---END---
+
+Q18 [db-da-49] type:single_choice
+PROMPT: A data analyst wants the following output...
+  a) [CODE/TABLE]
+  b) [CODE/TABLE]
+  c) [CODE/TABLE]
+  d) [CODE/TABLE]
+CURRENT_EXPL: The query requires a `COUNT(order_id)` and a `GROUP BY customer_name`. (Note: The source marks 'C' as the answer but Option D contains the correct standard SQL syntax with 'AS' and 'GROUP BY'. The pro
+---END---
+
+Q19 [db-da-57] type:single_choice
+PROMPT: Which statement about subqueries is correct?
+  a) Subqueries are not available in Databricks SQL.
+  b) Subqueries can be used like other user-defined functions to transform data into different data types.
+  c) Subqueries can retrieve data without requiring the creation of a table or view.
+  d) Subqueries can be used like other built-in functions to transform data into different data types.
+CURRENT_EXPL: Subqueries allow you to retrieve and use data dynamically within another query without the need to formally define and create a persistent table or view.
+---END---
+
+Q20 [db-da-61] type:single_choice
+PROMPT: Which SQL standards does Databricks SQL use as its default SQL dialect?
+  a) Databricks SQL
+  b) Spark SQL
+  c) ANSI
+  d) Delta SQL
+CURRENT_EXPL: Databricks SQL uses ANSI SQL as its standard dialect, ensuring broad compatibility with other systems and standard SQL syntax.
+---END---
+
+Q21 [db-da-62] type:single_choice
+PROMPT: A data analyst is working in an organization that utilizes a multi-hop, medallion architecture. They have been tasked with creating a new Gold table from an existing Silver table.
+
+Which query is perf
+  a) [CODE/TABLE]
+  b) [CODE/TABLE]
+  c) [CODE/TABLE]
+  d) [CODE/TABLE]
+CURRENT_EXPL: Moving from Silver (`cleaned_transactions`) to Gold involves aggregation and business logic. Option C aggregates sales by store, which is typical for a Gold-level business report.
+---END---
+
+Q22 [db-da-64] type:single_choice
+PROMPT: A data analyst has opened up the SQL Editor page and written a new SQL statement. The data analyst now wants to save that statement to easily refer back to it later to add it to a dashboard. The resul
+  a) Save the SQL statement as a Dashboard
+  b) Save the SQL statement within a Notebook
+  c) Save the SQL statement as a Query
+  d) Save the SQL statement in the Query History page
+CURRENT_EXPL: Saving as a Query object is the standard way to persist SQL statements in Databricks SQL for reuse and dashboard integration.
+---END---
+
+Q23 [db-da-66] type:single_choice
+PROMPT: An analyst has been asked to combine the data in two tables: suppliers and new_suppliers. It's possible that some of the supplier_id values match in both tables, meaning that those particular supplier
+  a) [CODE/TABLE]
+  b) [CODE/TABLE]
+  c) [CODE/TABLE]
+  d) [CODE/TABLE]
+CURRENT_EXPL: `MERGE INTO` allows conditional logic. `WHEN NOT MATCHED THEN INSERT *` ensures only new records are added, preventing duplicates for existing IDs.
+---END---
+
+Q24 [db-da-68] type:single_choice
+PROMPT: A data analyst is working with a nested array column products... The analyst wants to return the first item...
+  a) products.1
+  b) products.0
+  c) products[0]
+  d) products[1]
+CURRENT_EXPL: Databricks SQL (and Spark SQL) uses 0-based indexing for array access with bracket notation. `products[0]` retrieves the first element.
+---END---
+
+Q25 [db-da-76] type:single_choice
+PROMPT: A data analyst has been asked to determine which customers have placed an order in the past year and which customers have not placed an order in the past year. This can be determined with one statemen
+  a) Left Semi Join
+  b) Left Join
+  c) Middle Join
+  d) Left Anti Join
+CURRENT_EXPL: A Left Join returns all records from the left table (`customers`) and matched records from the right (`orders`). This allows identifying customers with orders (match) and those without (NULL on the ri
+---END---
+
+Q26 [db-da-77] type:single_choice
+PROMPT: A data analyst has come across a column in a table that contains personally identifiable information (PII). The data analyst should not have access to this type of PII data. How should the data analys
+  a) Stop working with the data and delete the table and any existing metadata or data files.
+  b) Stop working with the data and proceed with the project using other data.
+  c) Stop working with the data and notify their supervisor to ensure the data is handled following organizational and legal 
+  d) Drop the column containing PII data and continue with the project without notifying anybody.
+CURRENT_EXPL: The correct protocol is to immediately stop accessing the unauthorized data and escalate to a supervisor to ensure compliance with legal and organizational policies.
+---END---
+
+Q27 [db-da-84] type:single_choice
+PROMPT: A data analyst needs to create an empty managed table `table_name` in database `database_name` with a specific schema. The table needs to be recreated and empty, regardless of whether or not the table
+  a) [CODE/TABLE]
+  b) [CODE/TABLE]
+  c) [CODE/TABLE]
+  d) [CODE/TABLE]
+CURRENT_EXPL: `CREATE OR REPLACE TABLE` ensures the table is dropped and recreated if it exists. Defining columns in parentheses `(col type, ...)` is the standard syntax for defining the schema.
+---END---
+
+Q28 [db-da-85] type:single_choice
+PROMPT: Data professionals with varying responsibilities use the Databricks Lakehouse Platform. Which role in the Databricks Lakehouse Platform use Databricks SQL as their primary service?
+  a) Data scientist
+  b) Data engineer
+  c) Platform architect
+  d) Business analyst
+CURRENT_EXPL: Business analysts are the primary audience for Databricks SQL, using it for ad-hoc queries, reporting, and dashboards.
+---END---
+
+Q29 [db-da-86] type:single_choice
+PROMPT: A data analyst tries to calculate daily sales but gets multiple rows... Which corrected query produces exactly one row per product per day?
+  a) [CODE/TABLE]
+  b) [CODE/TABLE]
+  c) [CODE/TABLE]
+  d) [CODE/TABLE]
+CURRENT_EXPL: Using `GROUP BY product_id, sale_date` with the aggregate function `SUM(sale_amount)` correctly collapses the rows to the desired granularity (one row per product/day).
+---END---
+
+Q30 [db-da-89] type:single_choice
+PROMPT: A data analyst team is building reliable, production-grade data pipelines on Databricks. They require a solution that allows them to define data transformations declaratively, automatically enforce da
+  a) Lakeflow Jobs
+  b) Lakeflow Tables
+  c) Lakeflow Spark Declarative Pipelines
+  d) Lakeflow Connect
+CURRENT_EXPL: Lakeflow Spark Declarative Pipelines (often referring to Delta Live Tables logic) are designed for declarative ETL with built-in quality expectations and automated orchestration.
+---END---
+
+Q31 [db-da-92] type:multiple_choice
+PROMPT: A data analyst is configuring a Genie space to support natural language questions about product sales, including fields like `region_code`, `sku`, and `channel_type`. The analyst notices that Genie of
+  a) Provide sample values for ambiguous columns to help Genie infer the data's meaning and usage.
+  b) Write domain-specific instructions that describe how terms like region and channel relate to the business.
+  c) Add more columns from the underlying tables to give Genie access to a broader set of data points for reasoning.
+  d) Add descriptions to columns using Unity Catalog so Genie can use them as context during query generation.
+  e) Include example queries that reflect how business users refer to the data in everyday language.
+CURRENT_EXPL: Adding descriptions in Unity Catalog provides semantic context (D), and providing example queries helps Genie map business terminology to the correct SQL logic (E).
+---END---
+
+Q32 [db-da-105] type:single_choice
+PROMPT: A data analyst needs to improve the performance of a daily sales report that aggregates data from a large transactions table. The report is run multiple times a day, but the underlying data only chang
+  a) Create a materialized view that precomputes the daily sales aggregation.
+  b) Use a dynamic view to compute the aggregation on each query.
+  c) Use a standard view and schedule a notebook to cache results.
+  d) Set up a streaming table to ingest new sales data in real time.
+CURRENT_EXPL: Materialized views precompute and store the results. Since the source data changes only once a day, this avoids recomputing the heavy aggregation for every report run.
+---END---
+
+Q33 [db-da-106] type:single_choice
+PROMPT: A data analyst is working interactively in a Databricks notebook. The analyst executes a SQL query using `%sql` and wants to turn the result into a line chart showing weekly user counts over time. Whi
+  a) Save the query as a table, export it to Excel, and use Excel's charting tools.
+  b) Wrap the SQL query in a Python plotly express call using %python.
+  c) Use the display() function or %sql to run the query, then click the + icon in the result cell to add a visualization.
+  d) Use %sql to run the query, then copy the result into a new dashboard to access visualization options.
+CURRENT_EXPL: Databricks notebooks have a built-in visualization feature. Running a query with `%sql` (or `display()`) provides a '+' button in the results to instantly add charts.
+---END---
+
+Q34 [db-da-127] type:single_choice
+PROMPT: A team of data analysts wants to follow software engineering best practices for their SQL queries. They need to version control their queries, track changes over time, and collaborate using branches. 
+  a) Query History
+  b) Databricks Git Folders (Repos)
+  c) Workspace Browser
+  d) System Tables
+CURRENT_EXPL: Databricks SQL integrates with **Git Folders (formerly Repos)**. This allows analysts to save SQL files into a Git repository (GitHub, Azure DevOps, GitLab) to handle versioning, branching, and CI/CD.
+---END---
+
+Q35 [db-da-129] type:single_choice
+PROMPT: You are calculating the average sales amount using `AVG(sales_amount)`. The column contains some `NULL` values. How does the `AVG` function handle these nulls in Databricks SQL?
+  a) It treats NULLs as 0 and includes them in the average calculation.
+  b) It ignores/skips the NULL values completely.
+  c) It returns NULL if any value in the column is NULL.
+  d) It throws a runtime error.
+CURRENT_EXPL: Standard SQL aggregate functions like `AVG`, `SUM`, `MIN`, and `MAX` automatically **ignore NULL values**. They do NOT treat them as zero. (e.g., Average of `[10, NULL, 20]` is `15`, not `10`).
+---END---
+
+Q36 [db-da-133] type:single_choice
+PROMPT: A data analyst accidentally ran an UPDATE statement that corrupted data in a Delta table. They need to restore the table to its state as of version 5. Which command restores the table?
+  a) ROLLBACK TABLE my_table TO VERSION 5;
+  b) RESTORE TABLE my_table TO VERSION AS OF 5;
+  c) SELECT * FROM my_table VERSION AS OF 5;
+  d) UNDO TABLE my_table VERSION 5;
+  e) RESET TABLE my_table TO VERSION 5;
+CURRENT_EXPL: RESTORE TABLE my_table TO VERSION AS OF n restores the table to that specific version, undoing all subsequent changes. Note that SELECT * FROM table VERSION AS OF n only queries data at that version w
+---END---
+
+Q37 [db-da-151] type:single_choice
+PROMPT: A streaming table in Databricks SQL needs to reprocess all data from its source because its definition was changed. Which refresh mode should the analyst use?
+  a) REFRESH STREAMING TABLE my_table INCREMENTAL;
+  b) REFRESH STREAMING TABLE my_table FULL;
+  c) TRUNCATE TABLE my_table;
+  d) DROP AND RECREATE the streaming table
+  e) ALTER TABLE my_table SET REFRESH MODE = FULL;
+CURRENT_EXPL: REFRESH STREAMING TABLE ... FULL truncates the table and reprocesses all data from the source based on the updated definition. By default, streaming table refreshes are incremental (only processing ne
+---END---
+
+Q38 [db-da-155] type:single_choice
+PROMPT: A data analyst notices that a SQL warehouse is experiencing high query queuing during peak hours. The warehouse is configured with a minimum of 1 cluster and maximum of 1 cluster. What change should t
+  a) Reduce the cluster size to small
+  b) Increase the maximum number of clusters (scaling) for the SQL warehouse
+  c) Switch from Serverless to Pro warehouse
+  d) Disable auto-stop
+  e) Enable Photon engine
+CURRENT_EXPL: Increasing the maximum number of clusters allows the SQL warehouse to scale out horizontally during peak hours, distributing concurrent queries across multiple clusters and reducing queue times. This 
+---END---
+
+Q39 [db-da-157] type:single_choice
+PROMPT: A data analyst has two result sets from different queries. They want to combine the results, keeping only distinct rows and removing duplicates. Which SQL set operation should they use?
+  a) UNION ALL
+  b) UNION
+  c) INTERSECT
+  d) EXCEPT
+  e) CROSS JOIN
+CURRENT_EXPL: UNION combines two result sets and automatically removes duplicate rows. UNION ALL combines them but keeps all duplicates. INTERSECT returns only rows common to both sets. EXCEPT returns rows from the
+---END---
+
+Q40 [db-da-158] type:single_choice
+PROMPT: A data analyst runs the following query:
+
+SELECT employee_id, salary,
+  LAG(salary) OVER (ORDER BY hire_date) AS prev_salary
+FROM employees;
+
+What does the `prev_salary` column contain for the FIRST r
+  a) The same salary value as the current row
+  b) NULL
+  c) 0
+  d) An error is thrown because there is no previous row
+  e) The salary of the last row in the result set
+CURRENT_EXPL: LAG() returns the value from the previous row in the ordered window. For the first row, there is no previous row, so LAG() returns NULL by default. You can specify a default value as LAG(salary, 1, 0)
+---END---
+
+Q41 [db-da-159] type:single_choice
+PROMPT: A data analyst writes the following query to categorize customers:
+
+SELECT customer_id, total_purchases,
+  CASE
+    WHEN total_purchases >= 1000 THEN 'Platinum'
+    WHEN total_purchases >= 500 THEN 'G
+  a) Platinum
+  b) Gold
+  c) Silver
+  d) Bronze
+  e) NULL
+CURRENT_EXPL: CASE WHEN evaluates conditions top-to-bottom and returns the result for the FIRST match. 750 >= 1000 is FALSE, but 750 >= 500 is TRUE, so 'Gold' is returned. The remaining conditions are not evaluated
+---END---
+
+Q42 [db-da-160] type:single_choice
+PROMPT: A data analyst has the following data in the `orders` table:
+
+| order_id | discount |
+|----------|----------|
+| 1        | 10       |
+| 2        | NULL     |
+| 3        | 25       |
+| 4        | NULL 
+  a) NULL
+  b) 0
+  c) 10
+  d) An error because NULL cannot be compared
+  e) The average of all non-NULL discount values
+CURRENT_EXPL: COALESCE returns the first non-NULL argument. For order_id = 2, discount is NULL, so COALESCE skips it and returns the next argument: 0. COALESCE(NULL, 0) = 0.
+---END---
+
+Q43 [db-da-161] type:single_choice
+PROMPT: A data analyst wants to aggregate daily sales into monthly totals. Which query correctly truncates dates to the month level and sums the revenue?
+
+(A) SELECT DATE_TRUNC('MONTH', sale_date) AS month, S
+  a) Only (A)
+  b) Only (B)
+  c) (A) and (C) both work correctly, but (B) loses the year information
+  d) (D) All produce the same result
+  e) None of the above
+CURRENT_EXPL: DATE_TRUNC('MONTH', sale_date) returns the first day of the month (e.g., 2025-03-01), preserving the year. DATE_FORMAT with 'yyyy-MM' also preserves year+month. However, MONTH(sale_date) returns only 
+---END---
+
+Q44 [db-da-162] type:single_choice
+PROMPT: A data analyst runs a LEFT JOIN:
+
+SELECT c.customer_name, o.order_id, o.amount
+FROM customers c
+LEFT JOIN orders o ON c.customer_id = o.customer_id;
+
+Customer 'Alice' exists in the customers table but
+  a) Alice is excluded from the result
+  b) Alice appears with order_id = NULL and amount = NULL
+  c) Alice appears with order_id = 0 and amount = 0
+  d) The query throws an error
+  e) Alice appears with order_id = '' (empty string) and amount = 0
+CURRENT_EXPL: LEFT JOIN returns ALL rows from the left table (customers) regardless of whether there is a match in the right table (orders). When there is no match, the columns from the right table are filled with 
+---END---
+
+Q45 [db-da-163] type:single_choice
+PROMPT: A data analyst has a `sales` table with columns: product, quarter, revenue. The analyst wants to transform the data so each quarter becomes its own column. Which query achieves this?
+
+(A) SELECT * FRO
+  a) (A) — PIVOT rotates quarter rows into columns
+  b) (B) — GROUP BY with column names creates the pivot
+  c) (C) — UNPIVOT transforms rows to columns
+  d) Both (A) and (B) are correct
+  e) None of the above
+CURRENT_EXPL: PIVOT transforms rows into columns by aggregating values. The syntax PIVOT (SUM(revenue) FOR quarter IN ('Q1','Q2','Q3','Q4')) rotates the quarter values into column headers with SUM(revenue) as value
+---END---
+
+Q46 [db-da-164] type:single_choice
+PROMPT: A data analyst has a table `orders` with a column `items` of type ARRAY<STRING>:
+
+| order_id | items                     |
+|----------|---------------------------|
+| 1        | ['laptop', 'mouse']    
+  a) 3 rows
+  b) 6 rows
+  c) 1 row
+  d) An error because EXPLODE cannot be used in SELECT
+  e) 9 rows
+CURRENT_EXPL: EXPLODE() takes an array column and generates one output row for each element in the array. Order 1 has 2 items → 2 rows; Order 2 has 1 item → 1 row; Order 3 has 3 items → 3 rows. Total: 2 + 1 + 3 = 6
+---END---
+
+Q47 [db-da-165] type:single_choice
+PROMPT: A data analyst runs the following query to rank employees by salary within each department:
+
+SELECT employee_id, department, salary,
+  DENSE_RANK() OVER (PARTITION BY department ORDER BY salary DESC) 
+  a) 1, 2, 3, 4
+  b) 1, 2, 2, 3
+  c) 1, 2, 2, 4
+  d) 1, 2, 3, 3
+  e) 1, 1, 2, 3
+CURRENT_EXPL: DENSE_RANK assigns the same rank to tied values and does NOT skip ranks after ties. 100K→1, 90K→2, 90K→2 (tie), 80K→3 (not 4). Compare with RANK() which skips: 1, 2, 2, 4. And ROW_NUMBER() which gives
+---END---
+
+Q48 [db-da-166] type:single_choice
+PROMPT: A data analyst writes the following query:
+
+SELECT department, COUNT(*) AS emp_count
+FROM employees
+WHERE emp_count > 5
+GROUP BY department;
+
+The query fails. What is the error and how should it be fi
+  a) WHERE cannot reference an alias; replace WHERE with HAVING: HAVING COUNT(*) > 5
+  b) COUNT(*) is not allowed in WHERE; remove the WHERE clause entirely
+  c) The GROUP BY should come before WHERE; swap their positions
+  d) Change COUNT(*) to SUM(1)
+  e) Add ORDER BY before WHERE
+CURRENT_EXPL: WHERE filters rows BEFORE aggregation and cannot use aggregate functions or column aliases. HAVING filters AFTER aggregation and can reference aggregate expressions. The fix is: SELECT department, COU
+---END---
+
+Q49 [db-da-167] type:single_choice
+PROMPT: A data analyst writes a CTE to find the top salesperson per region:
+
+WITH ranked AS (
+  SELECT region, salesperson, total_sales,
+    ROW_NUMBER() OVER (PARTITION BY region ORDER BY total_sales DESC) A
+  a) All salespeople from all regions
+  b) Exactly one row per region: the salesperson with the highest total_sales in each region
+  c) Only the single top salesperson across all regions
+  d) An error because CTEs cannot use window functions
+  e) Multiple rows per region if there are ties
+CURRENT_EXPL: ROW_NUMBER assigns a unique sequential number within each PARTITION (region), ordered by total_sales DESC. Filtering WHERE rn = 1 returns exactly one row per region (the top salesperson). Even with ti
+---END---
+
+Q50 [db-da-168] type:single_choice
+PROMPT: A data analyst needs to find all customers who placed an order in 2024 but NOT in 2025. Which query correctly solves this?
+
+(A) SELECT customer_id FROM orders WHERE YEAR(order_date) = 2024
+    EXCEPT
+
+  a) Only (A) is correct
+  b) Only (B) is correct
+  c) Only (C) is correct
+  d) (A) and (C) are both correct
+  e) All three are correct
+CURRENT_EXPL: EXCEPT returns rows from the first query that are NOT in the second query — exactly what is needed. Query (B) is wrong because a single row cannot have order_date in both 2024 and 2025 simultaneously 
+---END---
+
+Q51 [db-da-169] type:single_choice
+PROMPT: A data analyst needs to calculate each employee's salary as a percentage of the department total. Which query is correct?
+
+SELECT employee_id, department, salary,
+  ROUND(salary * 100.0 / SUM(salary) 
+  a) This query will fail because SUM() cannot be used with OVER in a SELECT
+  b) This query is correct — it calculates each salary as a percentage of the department total using a window function
+  c) This query will return 100% for every row
+  d) This query requires a GROUP BY department clause to work
+  e) This query will return NULL for all rows
+CURRENT_EXPL: SUM(salary) OVER (PARTITION BY department) computes the total salary for each department without collapsing rows. Dividing each row's salary by this total gives the percentage contribution of each emp
+---END---
+
+Q52 [db-da-170] type:single_choice
+PROMPT: A data analyst runs:
+
+SELECT customer_id, order_date, amount,
+  LEAD(order_date) OVER (PARTITION BY customer_id ORDER BY order_date) AS next_order_date
+FROM orders;
+
+What does `next_order_date` contai
+  a) The current order_date (same value)
+  b) NULL
+  c) The first order_date of the customer (wraps around)
+  d) An error is thrown
+  e) CURRENT_DATE()
+CURRENT_EXPL: LEAD() returns the value from the NEXT row in the window. For the last row in each partition (customer), there is no next row, so LEAD() returns NULL by default. You can specify a default: LEAD(order_
+---END---
+
+Q53 [db-da-171] type:single_choice
+PROMPT: A data analyst writes:
+
+MERGE INTO target t
+USING source s
+ON t.id = s.id
+WHEN MATCHED THEN UPDATE SET t.name = s.name, t.updated_at = CURRENT_TIMESTAMP()
+WHEN NOT MATCHED THEN INSERT (id, name, updat
+  a) A new duplicate row is inserted
+  b) The existing row in target is updated with the source name and current timestamp
+  c) The row is deleted from both tables
+  d) An error because MERGE cannot have both MATCHED and NOT MATCHED
+  e) Nothing happens — MERGE only processes NOT MATCHED rows
+CURRENT_EXPL: MERGE INTO performs an upsert. When the ON condition matches (id exists in both tables), the WHEN MATCHED clause executes (UPDATE). When the source row has no match in target, the WHEN NOT MATCHED cla
+---END---
+
+Q54 [db-da-172] type:single_choice
+PROMPT: A data analyst runs:
+
+SELECT order_id, order_date,
+  DATEDIFF(CURRENT_DATE(), order_date) AS days_since_order
+FROM orders
+WHERE DATEDIFF(CURRENT_DATE(), order_date) > 30;
+
+Assuming today is 2026-03-26
+  a) 25
+  b) 30
+  c) The row is excluded because 25 is NOT > 30
+  d) 26
+  e) 1
+CURRENT_EXPL: DATEDIFF(CURRENT_DATE(), '2026-03-01') = 25 days. The WHERE clause filters for days_since_order > 30, so 25 does NOT satisfy this condition and the row is excluded from the results entirely. Only orde
+---END---
+
+Q55 [db-da-173] type:single_choice
+PROMPT: A data analyst runs:
+
+SELECT
+  UPPER(TRIM('  Hello World  ')) AS result;
+
+What is the value of `result`?
+  a)   Hello World  
+  b) HELLO WORLD
+  c)   HELLO WORLD  
+  d) hello world
+  e) Hello World
+CURRENT_EXPL: Functions are evaluated from inside out. TRIM('  Hello World  ') first removes leading and trailing spaces → 'Hello World'. Then UPPER('Hello World') converts all characters to uppercase → 'HELLO WORL
+---END---
+
+Q56 [db-da-174] type:single_choice
+PROMPT: A data analyst runs:
+
+SELECT department, employee_id, salary,
+  FIRST_VALUE(employee_id) OVER (
+    PARTITION BY department ORDER BY salary DESC
+  ) AS top_earner
+FROM employees;
+
+What does the `top_e
+  a) The employee_id of the lowest-paid employee in each department
+  b) The employee_id of the first employee hired in each department
+  c) The employee_id of the highest-paid employee in each department (same value for all rows in the department)
+  d) A different employee_id for each row
+  e) NULL for all rows
+CURRENT_EXPL: FIRST_VALUE takes the first value in the window frame. Since the window is ordered by salary DESC, the first value is the employee_id of the highest-paid employee. This value is the same for all rows 
+---END---
+
+Q57 [db-da-175] type:single_choice
+PROMPT: A data analyst runs:
+
+SELECT product_id, quantity, unit_price,
+  CASE
+    WHEN quantity > 100 THEN unit_price * 0.80
+    WHEN quantity > 50 THEN unit_price * 0.90
+    ELSE unit_price
+  END AS discount
+  a) 50
+  b) 45
+  c) 40
+  d) 36
+  e) NULL
+CURRENT_EXPL: CASE WHEN evaluates conditions top-to-bottom. 120 > 100 is TRUE (first condition), so it returns unit_price * 0.80 = 50 * 0.80 = 40. The second condition (> 50) is never evaluated because the first ma
+---END---
+
+Q58 [db-da-182] type:single_choice
+PROMPT: A data analyst needs to join two tables, orders and customers, using both customer_id and region_id as join keys. The goal is to return only rows where both values match in the two tables.
+
+Which SQL 
+  a) SELECT * FROM orders INNER JOIN customers ON orders.customer_id = customers.customer_id;
+  b) SELECT * FROM orders INNER JOIN customers USING (customer_id, region_id);
+  c) SELECT * FROM orders INNER JOIN customers ON orders.customer_id = customers.customer_id AND orders.region_id = customers
+  d) SELECT * FROM orders LEFT JOIN customers ON orders.customer_id = customers.customer_id AND orders.region_id = customers.
+CURRENT_EXPL: The requirement specifies both customer_id and region_id must match, so the join needs a compound equality condition on these columns. Option C explicitly adds two join predicates in the ON clause. Op
+---END---
+
+Q59 [db-da-183] type:single_choice
+PROMPT: A data analyst wants to identify product categories that meet two criteria:
+
+1. Each category contains more than 10 products.
+2. The average price of products in the category is greater than $50.
+
+Whi
+  a) SELECT category, COUNT(*) FROM products GROUP BY category HAVING COUNT(*) > 10 AND AVG(price) > 50;
+  b) SELECT category, COUNT(*) FROM products WHERE COUNT(*) > 10 GROUP BY category HAVING AVG(price) > 50;
+  c) SELECT category, COUNT(*) FROM products HAVING COUNT(*) > 10 GROUP BY category WHERE AVG(price) > 50;
+  d) SELECT category, COUNT(*) FROM products GROUP BY category WHERE COUNT(*) > 10 AND AVG(price) > 50;
+CURRENT_EXPL: Option A is correct because GROUP BY must precede HAVING, and only the HAVING clause can filter on aggregate results (COUNT(*) and AVG(price)). Both conditions are correctly placed in HAVING. Option B
+---END---
+
+Q60 [db-da-190] type:single_choice
+PROMPT: A data analyst is enabling analytics on raw Parquet files stored in an external Amazon S3 bucket. The files must be queried directly using Databricks SQL without duplicating the data. The analyst also
+  a) CREATE TABLE catalog.schema.table_name USING PARQUET AS SELECT * FROM parquet.'s3://my-bucket/data/';
+  b) CREATE TABLE catalog.schema.table_name OPTIONS ('path' 's3://my-bucket/data/') STORED AS PARQUET;
+  c) CREATE EXTERNAL TABLE catalog.schema.table_name USING DELTA LOCATION 's3://my-bucket/data/';
+  d) CREATE TABLE catalog.schema.table_name USING PARQUET LOCATION 's3://my-bucket/data/';
+CURRENT_EXPL: CREATE TABLE … USING PARQUET LOCATION creates a metadata-only table in Unity Catalog that points directly to the existing Parquet files in S3 without any data copy. The USING PARQUET clause tells Data
+---END---
+
+Q61 [db-da-192] type:single_choice
+PROMPT: A data analyst is working with the following table my_table:
+
+customer_name    | dollars_spent
+Hex Sprockets    | [125.34, 100.15, 9003.99]
+Dented Fenders   | [16.99, 200.85, 33.49, 88.17]
+
+The analys
+  a) TRANSFORM(hundreds_spent, dollars_spent / 100)
+  b) TRANSFORM(dollars_spent, value / 100) AS hundreds_spent
+  c) TRANSFORM(dollars_spent, value -> value / 100) AS hundreds_spent
+  d) TRANSFORM(dollars_spent, dollars_spent / 100) AS hundreds_spent
+CURRENT_EXPL: The TRANSFORM function in Databricks SQL takes an array column and a lambda expression that is applied to each element of the array. The correct syntax is TRANSFORM(array_column, value -> expression) 
+---END---
+
+Q62 [db-da-199] type:single_choice
+PROMPT: A data analyst filters rows where the tags array includes the value 'sql' using this query:
+
+SELECT * FROM main.analytics.articles WHERE tags = 'sql';
+
+This query returns no results.
+
+How should the a
+  a) SELECT * FROM main.analytics.articles WHERE tags IN ('sql');
+  b) SELECT * FROM main.analytics.articles WHERE tags LIKE '%sql%';
+  c) SELECT * FROM main.analytics.articles WHERE 'sql' IN tags;
+  d) SELECT * FROM main.analytics.articles WHERE array_conatins (tags, 'sql');
+CURRENT_EXPL: In Databricks SQL an array column can be tested for a specific element with the syntax 'value' IN (array_column). This predicate returns true when the literal 'sql' appears anywhere inside the tags ar
+---END---
+
+Q63 [db-da-209] type:single_choice
+PROMPT: A data analyst is working in a Databricks workspace with Unity Catalog enabled. While using a shared SQL Warehouse, the analyst runs the following query:
+
+SELECT * FROM sales_data;
+
+This query results
+  a) Set the spark.databricks.sql.initial.catalog.namespace Spark configuration in the cluster attached to the SQL Warehouse.
+  b) Run the following command to set the default catalog and schema for the current session:
+USE CATALOG corp_data;
+USE SCHE
+  c) Modify the workspace-level catalog default so that all SQL Warehouses automatically point to corp_data.reporting.
+  d) Set spark.sql.default.database to corp_data.reporting.sales_data in the SQL Warehouse runtime configuration.
+CURRENT_EXPL: In Databricks SQL, a query runs with an implicit session-level catalog and schema. When a user does not qualify an object, the engine resolves it against the current catalog/schema set in the session.
+---END---
+
+Q64 [db-da-212] type:single_choice
+PROMPT: A data analyst team is working with large datasets stored as Delta tables (Parquet format) in Databricks on Azure Data Lake. The teams want to speed up query performance and reduce repeated computatio
+  a) Query result caching in Databricks SQL works best with non-deterministic queries that use functions like NOW() or RAND()
+  b) Caching CSV or JSON files with Delta Cache is fully supported and recommended for best performance.
+  c) Delta Cache (disk cache) automatically caches Parquet files on local SSDs and improves read performance, but only suppor
+  d) Spark caching always improves performance and should be applied liberally to all dataframes regardless of size or query 
+CURRENT_EXPL: Delta Cache (disk cache) monitors Parquet files read from Azure Blob Storage or Azure Data Lake (ADLS). When a file is accessed, it is cached on the driver/executor local SSDs to speed up subsequent r
+---END---
+
+Q65 [db-da-223] type:single_choice
+PROMPT: A data analyst is working with a Unity Catalog table named sales_data that contains customer order information. The order_quantity column is defined as an INTEGER, but occasionally has values of -1, i
+  a) CREATE VIEW clean_sales_data AS SELECT * FROM sales_data WHERE order_quantity IS NOT NULL AND order_quantity > 0;
+  b) CREATE VIEW clean_sales_data AS SELECT * FROM sales_data WHERE ABS(order_quantity) != 1;
+  c) CREATE VIEW clean_sales_data AS SELECT * FROM sales_data HAVING order_quantity != -1;
+  d) CREATE VIEW clean_sales_data AS SELECT * FROM sales_data WHERE order_quantity != -1;
+CURRENT_EXPL: To exclude specific values in a simple row-level filter, the `WHERE` clause with an inequality operator (`!=` or `<>`) is the standard and most performant approach. Option A is overly restrictive (rem
+---END---
+
+Q66 [db-da-224] type:single_choice
+PROMPT: A data analyst is building a parameterized SQL query in Databricks to filter sales data by region and year. The analyst wants to test the query with different parameter values before adding it to a da
+  a) Hard-code the region and year values directly into the SQL query and rerun it for each test.
+  b) Use parameter markers (e.g., :region, :year) in the SQL query and enter their values in the input boxes before running t
+  c) Replace the column names (e.g., region, year) with question marks ("?") and expect Databricks to prompt for values at ru
+  d) Add the parameters as variables in a Python notebook cell and reference them in the SQL query.
+CURRENT_EXPL: Databricks SQL supports named parameters prefixed with a colon (e.g., `:region`). When these markers are detected in the SQL editor, the UI automatically renders input widgets, allowing for dynamic te
+---END---
+
+Q67 [db-da-232] type:single_choice
+PROMPT: A data analyst needs to quickly estimate the number of unique user sessions in a dataset containing billions of records on Databricks SQL. Due to performance constraints, the analyst must ensure the q
+  a) APPROX_COUNT_DISTINCT provides exact counts, while COUNT DISTINCT only provides estimates.
+  b) APPROX_COUNT_DISTINCT can only be used with string columns, while COUNT DISTINCT works with numeric columns.
+  c) APPROX_COUNT_DISTINCT uses the HyperLogLog++ algorithm to provide fast approximate counts with configurable accuracy (de
+  d) APPROX_COUNT_DISTINCT requires less memory by storing only the first 1000 unique values.
+CURRENT_EXPL: APPROX_COUNT_DISTINCT uses the HyperLogLog++ (HLL) algorithm to find the number of distinct elements without having to look at every single one exactly like COUNT(DISTINCT) does. This is extremely eff
+---END---
+
+Q68 [db-da-245] type:single_choice
+PROMPT: A data analyst is given a sales table with the columns product_id, sale_date, and sale_amount. The analyst's goal is to calculate the total sales per product per day, with exactly one row per product 
+  a) SELECT product_id, sale_date, sale_amount, SUM(sale_amount) OVER (PARTITION BY product_id ORDER BY sale_date) AS daily_t
+  b) SELECT product_id, sale_date, sale_amount, SUM(sale_amount) OVER (ORDER BY product_id, sale_date) AS daily_total FROM sa
+  c) SELECT product_id, sale_date, sale_amount, ROW_NUMBER() OVER (PARTITION BY product_id ORDER BY sale_date) AS row_num FRO
+  d) SELECT product_id, sale_date, SUM(sale_amount) AS daily_total
+FROM sales
+GROUP BY product_id, sale_date
+ORDER BY product
+CURRENT_EXPL: In SQL, the GROUP BY clause is specifically designed to collapse multiple rows that share the same values in specified columns into a single summary row. Using SUM(sale_amount) with GROUP BY product_i
+---END---
+
+Q69 [db-da-247] type:multiple_choice
+PROMPT: A data analyst is migrating data lakehouse workloads to Databricks. The analyst manages a large table with thousands of columns and several billion rows. The analyst is concerned about scan performanc
+  a) Photon leverages a columnar, vectorized execution engine for efficient scan and aggregation operations.
+  b) Photon automatically merges small files into a single large file before processing.
+  c) Photon processes data row by row for maximum compatibility with legacy systems.
+  d) Photon automatically parallelizes all queries across multiple clusters without additional configuration.
+  e) Photon uses a caching layer to transcode data into a CPU-efficient format for faster scan performance.
+CURRENT_EXPL: Photon addresses big data challenges through two core mechanisms:
+
+• Why Option A is Correct: Photon is a native execution engine built from the ground up in C++ to overcome the limitations of the Jav
+---END---
+
+Q70 [db-da-281] type:multiple_choice
+PROMPT: A data analyst is designing a Databricks SQL dashboard with interactive filtering via parameters. Which two parameter types are supported in Databricks SQL?
+  a) String
+  b) Boolean
+  c) Array
+  d) Floating Point
+  e) Dropdown List
+CURRENT_EXPL: Databricks SQL supports several underlying parameter types for interactive dashboards:
+
+1. **String (Option A):** The most common type, used for text filtering.
+2. **Boolean (Option B):** Used for tog
+---END---
+

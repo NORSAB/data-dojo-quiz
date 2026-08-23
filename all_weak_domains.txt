@@ -1,0 +1,383 @@
+﻿Loaded questions_databricks.js. Total questions: 300
+=== DASHBOARDS & VISUALIZATIONS (40 questions) ===
+
+Q1 [db-da-7] CORRECT:a
+  EXPL: Continuously querying the gold-level tables every minute to update the dashboard puts a significant load on compute resources. The analyst should caution that this level of frequency might lead to sub
+
+Q2 [db-da-9] CORRECT:c
+  EXPL: Markdown-based text boxes are the most suitable tool. Databricks dashboards support Markdown, allowing analysts to add formatted text and headings directly within the dashboard interface.
+
+Q3 [db-da-33] CORRECT:e
+  EXPL: You do NOT need to be an admin to schedule a refresh. Typically, the query owner or users with 'Can Manage' permissions on the query can configure schedules.
+
+Q4 [db-da-36] CORRECT:d
+  EXPL: Sharing a Personal Access Token (PAT) gives the client authenticated access to the API and potential resources acting as that user, violating the security requirement.
+
+Q5 [db-da-37] CORRECT:e
+  EXPL: A Sankey diagram is specifically designed to visualize flows, transfers, and movements between different states or stages.
+
+Q6 [db-da-38] CORRECT:b
+  EXPL: When linked to a Dashboard Parameter, the visualization shares the control with other widgets using the same parameter, allowing a single selection to update multiple charts simultaneously.
+
+Q7 [db-da-39] CORRECT:d
+  EXPL: Queries that use query parameters introduce dynamic behavior that cannot be consistently evaluated by the alerting system. Databricks Alerts require a static query.
+
+Q8 [db-da-40] CORRECT:d
+  EXPL: The Visualization Editor does not provide a feature to add borders around the visualization. It focuses on data representation aspects like scale, colors, and labels.
+
+Q9 [db-da-42] CORRECT:d
+  EXPL: This type of light, custom processing performed by analysts on top of the refined gold layer is often referred to as Last-mile ETL.
+
+Q10 [db-da-43] CORRECT:a
+  EXPL: Descriptive statistics focuses on using measures like mean, median, and mode to summarize and present the characteristics of a dataset.
+
+Q11 [db-da-44] CORRECT:e
+  EXPL: Extreme outliers pull the mean towards them (skewing the distribution), while the median remains resistant, resulting in a significant difference between the two.
+
+Q12 [db-da-45] CORRECT:e
+  EXPL: Data enhancement is the process where data is made richer or more complete by adding new datasets to improve the utility of the original data.
+
+Q13 [db-da-48] CORRECT:a
+  EXPL: It unifies computations, data storage, and analytical tools on the same platform, avoiding the need to move data out of the lakehouse for analysis.
+
+Q14 [db-da-52] CORRECT:c
+  EXPL: A continuous variable can take on any value within a range (uncountable), including fractions and decimals.
+
+Q15 [db-da-53] CORRECT:d
+  EXPL: To rank strictly *within* regions as requested, `PARTITION BY region` is usually required, while `ORDER BY sales DESC` ranks them by sales.
+
+Q16 [db-da-55] CORRECT:c
+  EXPL: `WITH ROLLUP` generates subtotals for the specified columns in a hierarchical manner (e.g., total for group_1, and grand total), which matches the output shown.
+
+Q17 [db-da-65] CORRECT:a
+  EXPL: Visualizations and counters in a dashboard are built on top of Queries. You must create and save these Queries (and their associated visualizations) first.
+
+Q18 [db-da-69] CORRECT:a
+  EXPL: Widget parameters pass values (like a date range) into the underlying query's SQL code (typically in a WHERE clause) to filter the data before it is visualized.
+
+Q19 [db-da-70] CORRECT:b
+  EXPL: You can add non-account email addresses to a dashboard's scheduled refresh subscription. They will receive an email snapshot of the dashboard automatically.
+
+Q20 [db-da-73] CORRECT:c
+  EXPL: To change specific chart properties like axis scales, labels, or ranges, you must access the specific configuration within the Visualization Editor.
+
+Q21 [db-da-82] CORRECT:d
+  EXPL: Databricks SQL visualizations are optimized for quick, exploratory analysis directly on large datasets residing in the lakehouse, rather than pixel-perfect polished presentations.
+
+Q22 [db-da-83] CORRECT:c
+  EXPL: Dashboards allow you to combine visualizations from multiple queries into a single view that can be easily shared with stakeholders.
+
+Q23 [db-da-91] CORRECT:b
+  EXPL: Databricks dashboards can be scheduled to refresh automatically at specified intervals, ensuring stakeholders always view the most current data without manual effort.
+
+Q24 [db-da-116] CORRECT:b
+  EXPL: In modern Databricks Dashboards, you can configure a Schedule with a Subscription Destination to send artifacts (PDFs) to email addresses outside the workspace, provided admin policies allow it.
+
+Q25 [db-da-123] CORRECT:b
+  EXPL: Adding a parameter to a query doesn't automatically link it to the Dashboard's UI controls. You must explicitly map the Dashboard Parameter to the Query Parameter in the widget configuration.
+
+Q26 [db-da-130] CORRECT:a
+  EXPL: **Cross-filtering** allows interactions between widgets on a dashboard. Clicking a data point on one visualization applies a temporary filter to other visualizations based on the same dataset.
+
+Q27 [db-da-137] CORRECT:c
+  EXPL: Trend Lines overlay a regression line or moving average on top of data points, helping analysts visually spot anomalies, trends, and deviations from the expected pattern over time.
+
+Q28 [db-da-147] CORRECT:b
+  EXPL: Databricks AI/BI Dashboards can be embedded into external web applications using iframes. The workspace admin must define allowed embedding surfaces and approve the domains of the host applications. V
+
+Q29 [db-da-148] CORRECT:b
+  EXPL: Dashboard Subscriptions allow configuring scheduled email delivery of dashboard snapshots as PDF attachments. When a dashboard schedule runs, subscribers receive a PDF snapshot via email. Snapshots ca
+
+Q30 [db-da-187] CORRECT:a
+  EXPL: A multi-series line chart maps month on the X-axis and revenue on the Y-axis, rendering a separate line for each product category. This enables the viewer to follow a continuous timeline, making trend
+
+Q31 [db-da-188] CORRECT:a
+  EXPL: Databricks lets you publish a dashboard to a shareable link that can be accessed by anyone who receives it, regardless of whether they hold a Databricks account. By configuring embedded credentials, t
+
+Q32 [db-da-214] CORRECT:c
+  EXPL: The standard Databricks dashboard workflow involves clicking 'Add Visualization' within the dashboard editor, selecting the desired chart type (like a Gauge), and associating it with a query that retu
+
+Q33 [db-da-238] CORRECT:d
+  EXPL: After running a %sql query, the analyst can either call display() in Python or click the + icon in the result cell. Both actions create an inline chart directly within the notebook, preserving interac
+
+Q34 [db-da-280] CORRECT:a,b
+  EXPL: To create a valid line chart in a Databricks Notebook:
+
+1. **X-axis Sorting (Option A):** Line charts connect points in the order they appear in the dataset. If the X-axis (dates) is not sorted chrono
+
+Q35 [db-da-284] CORRECT:c
+  EXPL: Databricks provides a dedicated 'Share' dialog for dashboards that allows for granular, resource-level access control. This is the standard and recommended way to manage who can consume (CAN VIEW) or 
+
+Q36 [db-da-291] CORRECT:b
+  EXPL: In Databricks AI/BI Dashboards (and legacy SQL Dashboards), toggling off 'Automatic Update' (or similar 'Run on change' defaults) prevents the dashboard from refreshing until the user manually trigger
+
+Q37 [db-da-292] CORRECT:b
+  EXPL: Both Legacy and AI/BI Dashboards allow 'Link' formatting in Table columns. By selecting the 'Link' type and defining a template like 'https://tickets.company.com/id={{SalesOrder_ID}}', the ID from eac
+
+Q38 [db-da-293] CORRECT:c
+  EXPL: Schedules (and alerts) in Databricks run with a specific identity. If the 'Run as' setting is 'Owner' and that user is deactivated or deleted, the execution engine cannot find a valid identity context
+
+Q39 [db-da-294] CORRECT:c
+  EXPL: Cross-filtering allows a visualization (like a bar chart or map) to act as a filter for other visualizations. This interaction is defined in the visualization properties, making the dashboard feel 'al
+
+Q40 [db-da-295] CORRECT:d
+  EXPL: Dashboards have a 'Run as' setting. If 'Run as Viewer' is selected, the viewer MUST have permissions on the Dashboard, the SQL Warehouse, and the source Data (tables/schemas). If 'Run as Owner' is sel
+
+
+=== AI/BI GENIE SPACES (26 questions) ===
+
+Q1 [db-da-88] CORRECT:a
+  EXPL: The correct workflow for training Genie is to provide sample questions and their corresponding correct SQL directly in the configuration context menu.
+
+Q2 [db-da-94] CORRECT:c
+  EXPL: The standard way to mark a table's certification status in Unity Catalog is by setting the system tag `system.certification_status`.
+
+Q3 [db-da-101] CORRECT:d
+  EXPL: Declarative Pipelines (like DLT) combined with Auto Loader provide schema evolution support and multi-language capabilities for robust ETL.
+
+Q4 [db-da-109] CORRECT:a
+  EXPL: Even though PK/FK constraints are not enforced in Databricks, defining them provides critical metadata that Genie uses to automatically understand the data model and join tables correctly.
+
+Q5 [db-da-117] CORRECT:b
+  EXPL: Trusted Assets act as a curated allow-list. It tells Genie: 'Use these tables to answer questions,' ensuring the AI doesn't pick up irrelevant or temporary tables from the catalog.
+
+Q6 [db-da-122] CORRECT:b
+  EXPL: Draft mode is the staging environment for the analyst to verify logic and 'System Instructions'. End-users only interact with the Released version to ensure quality.
+
+Q7 [db-da-150] CORRECT:b
+  EXPL: For optimal Genie accuracy, Databricks recommends including only necessary tables (ideally five or fewer) and limiting columns to what is relevant. Too many tables and columns can confuse Genie's SQL 
+
+Q8 [db-da-185] CORRECT:a
+  EXPL: A Genie space can be shared by publishing a dashboard or notebook that embeds the necessary credentials, allowing external users to run queries through the UI only. The stakeholders are added as accou
+
+Q9 [db-da-218] CORRECT:b
+  EXPL: To improve Genie's performance and accuracy, it is best practice to provide explicit instructions and multiple example SQL queries (Few-shot prompting). This helps the model understand the expected ou
+
+Q10 [db-da-220] CORRECT:b
+  EXPL: Marking verified and frequently used queries as 'Trusted Assets' in a Genie space provides a clear signal of quality and governance to users, encouraging reuse of high-fidelity logic. Disabling domain
+
+Q11 [db-da-282] CORRECT:b
+  EXPL: To optimize AI/BI Genie, it is critical to provide focus and context. Including only necessary tables and columns reduces confusion for the LLM and minimizes incorrect joins or mapping. Additionally, 
+
+Q12 [db-da-296] CORRECT:b
+  EXPL: Trusted Assets are a core feature of AI/BI Genie that allow analysts to provide predefined, verified SQL queries for complex or sensitive calculations. When Genie identifies a question that matches a 
+
+Q13 [db-da-297] CORRECT:b
+  EXPL: Genie relies heavily on Unity Catalog metadata. By adding detailed 'Comments' and utilizing descriptive names (or semantic knowledge in Genie's 'Instructions'), the LLM gains the necessary context to 
+
+Q14 [db-da-298] CORRECT:b
+  EXPL: While powerful, Genie is a text-to-SQL interface. For many-to-many joins, complex window functions, or specialized pivots, it requires guidance through 'Instructions', 'Sample Questions', or 'Trusted 
+
+Q15 [db-da-299] CORRECT:b
+  EXPL: In AI/BI Genie, 'Can Use' allows a user to interact with the space (ask questions, view results) without changing the underlying configuration, instructions, or data sources. This is the standard perm
+
+Q16 [db-da-300] CORRECT:b
+  EXPL: Genie improvement is an iterative process. By reviewing user feedback (history), an analyst can identify where the LLM is failing and provide 'curated' answers through Sample Questions or Trusted Asse
+
+Q17 [db-da-321] CORRECT:e
+  EXPL: The best approach combines both: (B) adding column/table descriptions in Unity Catalog helps Genie understand the semantic meaning of columns, and (D) Trusted Assets provide vetted SQL examples that G
+
+Q18 [db-da-322] CORRECT:b
+  EXPL: Genie uses table metadata (including documented relationships) and Trusted Assets to generate correct joins. By documenting PKs/FKs in catalog comments and providing sample queries with correct join p
+
+Q19 [db-da-323] CORRECT:b
+  EXPL: Trusted Assets are verified SQL queries saved by analysts that Genie uses as templates for answering similar questions. When a user asks something similar to a Trusted Asset, Genie adapts the verified
+
+Q20 [db-da-324] CORRECT:b
+  EXPL: Genie respects Unity Catalog's permission model. When a user queries through Genie, the SQL runs under their identity. If they lack SELECT permission on a table or column, the query fails. The analyst
+
+Q21 [db-da-325] CORRECT:b
+  EXPL: Genie improvement is iterative: (1) review conversation history and flagged responses, (2) identify patterns in incorrect answers, (3) add curated Sample Questions with correct SQL, (4) create Trusted
+
+Q22 [db-da-326] CORRECT:b
+  EXPL: The correct Genie setup workflow: (1) create the space, (2) attach a SQL Warehouse for compute, (3) add Unity Catalog tables with rich descriptions and column comments, (4) seed with Sample Questions 
+
+Q23 [db-da-327] CORRECT:b
+  EXPL: Adding COMMENT descriptions at the column level in Unity Catalog (e.g., COMMENT 'Order fulfillment status: pending, shipped, delivered, cancelled') and creating Genie space instructions that define bu
+
+Q24 [db-da-328] CORRECT:b
+  EXPL: Genie space instructions allow analysts to define business terminology and default behaviors (e.g., 'top = by revenue unless specified'). Combined with Sample Questions that show variations ('Top prod
+
+Q25 [db-da-329] CORRECT:b
+  EXPL: Genie spaces have their own permission model: owners manage all settings, editors can modify tables and Trusted Assets, and users with 'Can Use' permission can ask questions. Data access within the sp
+
+Q26 [db-da-330] CORRECT:d
+  EXPL: The most robust approach combines both: (B) Genie space instructions define the business rule, and (C) a pre-computed fiscal_quarter column with a clear COMMENT in Unity Catalog makes it unambiguous. 
+
+
+=== MANAGING DATA (35 questions) ===
+
+Q1 [db-da-11] CORRECT:c
+  EXPL: When you DROP TABLE for an external table, Databricks only removes the metadata from the metastore. The underlying data files in the external storage location remain untouched.
+
+Q2 [db-da-12] CORRECT:e
+  EXPL: Since this is an external (unmanaged) table, dropping the table only deletes the metadata. The data itself is untouched.
+
+Q3 [db-da-18] CORRECT:c
+  EXPL: The correct method is to explicitly assign the new owner's account in the Owner field. This ensures a clear transfer of responsibility and privileges.
+
+Q4 [db-da-19] CORRECT:b
+  EXPL: When used with a managed table, `DROP TABLE` removes both the table's metadata from the metastore and the underlying data files. `database_name.table_name` specifies the target table correctly.
+
+Q5 [db-da-54] CORRECT:d
+  EXPL: Unless the location is specified at the *table* level or configured differently, managed databases in the Hive metastore typically default to the warehouse directory `dbfs:/user/hive/warehouse/account
+
+Q6 [db-da-56] CORRECT:b
+  EXPL: Dropping a managed table deletes both metadata and data. Dropping an external table deletes only the metadata, leaving the underlying data files intact.
+
+Q7 [db-da-58] CORRECT:a
+  EXPL: Catalog Explorer provides detailed metadata for objects in Unity Catalog, including the Owner field for tables.
+
+Q8 [db-da-93] CORRECT:d
+  EXPL: To check for the existence of a value within an array column in Databricks SQL, the `array_contains()` function must be used.
+
+Q9 [db-da-95] CORRECT:a
+  EXPL: Genie relies heavily on the semantic layer: rich metadata (descriptions) in Unity Catalog, verified sample SQL queries, and clear instructions to generate accurate answers.
+
+Q10 [db-da-96] CORRECT:a
+  EXPL: Unity Catalog manages structured data via Tables and unstructured data (files, images) via Volumes, providing a unified governance layer.
+
+Q11 [db-da-126] CORRECT:b
+  EXPL: In Unity Catalog, **Volumes** are specifically designed to govern non-tabular data (unstructured data like PDFs, images, audio) while maintaining the benefits of centralized governance.
+
+Q12 [db-da-128] CORRECT:c
+  EXPL: The `system.access.audit` table contains the audit logs for Unity Catalog. It records events like table creation, deletion (`DROP`), and access denials, including the user identity and timestamp.
+
+Q13 [db-da-132] CORRECT:b
+  EXPL: Lakehouse Federation allows creating federated catalogs in Unity Catalog that point to external databases (PostgreSQL, MySQL, Snowflake, etc.), enabling direct queries from Databricks SQL without ETL 
+
+Q14 [db-da-138] CORRECT:b
+  EXPL: Data Lineage in Unity Catalog automatically captures and visualizes the flow of data through tables, views, and queries. It shows column-level and table-level dependencies, making it easy to trace dat
+
+Q15 [db-da-139] CORRECT:c
+  EXPL: Unity Catalog uses a three-level namespace: Catalog ÔåÆ Schema (database) ÔåÆ Table/View. This allows you to reference any object as catalog.schema.table, providing a unified governance model across works
+
+Q16 [db-da-143] CORRECT:b
+  EXPL: DEEP CLONE creates a complete, independent copy of both the metadata and data files, including transaction history. Changes to the deep clone do not affect the source table and vice versa. SHALLOW CLO
+
+Q17 [db-da-144] CORRECT:b
+  EXPL: SHALLOW CLONE copies only the metadata (schema, partitioning, transaction log) and references the source table's data files without duplicating them. This makes it fast and cost-effective for quick te
+
+Q18 [db-da-146] CORRECT:b
+  EXPL: By default, Delta Lake retains old data files for 7 days (168 hours). Running VACUUM permanently deletes unreferenced files older than this retention period. Reducing the retention below 7 days requir
+
+Q19 [db-da-149] CORRECT:b
+  EXPL: Unity Catalog Volumes provide governance, security, and lineage tracking for non-tabular datasets (images, PDFs, logs, JSON, ML artifacts). They follow the three-level namespace (catalog.schema.volume
+
+Q20 [db-da-177] CORRECT:c
+  EXPL: Time travel querying in Delta Lake lets you query the table at any retained snapshot using a timestamp, version number, or offset (VERSION AS OF, TIMESTAMP AS OF, etc.). This provides a read-only view
+
+Q21 [db-da-194] CORRECT:d
+  EXPL: In Databricks SQL, Delta Lake tables maintain an immutable transaction log that records every change (writes, schema updates, deletes, etc.). The built-in command DESCRIBE HISTORY queries this transac
+
+Q22 [db-da-200] CORRECT:b
+  EXPL: Unity Catalog supports setting custom tags on objects with the clause SET TAGS ('key' = 'value'). To make a table discoverable as a trusted asset, you associate it with a recognizable tag such as cert
+
+Q23 [db-da-207] CORRECT:d
+  EXPL: Delta Lake enforces two complementary retention periods: transaction-log retention (30 days by default, metadata only) and data file retention (7 days by default). Running VACUUM removes data files wh
+
+Q24 [db-da-211] CORRECT:b
+  EXPL: Creating a managed table (CREATE TABLE) places the data under Unity Catalog's full governance, including management of the data lifecycle, storage location, and access control. Crucially, managed tabl
+
+Q25 [db-da-213] CORRECT:d
+  EXPL: Delta Sharing provides secure, read-only data sharing across organizations without requiring a Databricks account/workspace for the recipient. It allows for fine-grained access control (sharing only s
+
+Q26 [db-da-216] CORRECT:c
+  EXPL: To withdraw previously granted privileges in Unity Catalog, you must use the REVOKE command. The required privilege for accessing a catalog is USAGE. Option C follows the correct syntax: REVOKE <privi
+
+Q27 [db-da-239] CORRECT:a
+  EXPL: Lakehouse Federation allows Databricks to externally expose a MySQL database as a federated catalog. Query execution happens natively within Databricks; Spark pushes the join operation down to the MyS
+
+Q28 [db-da-240] CORRECT:a
+  EXPL: The standard Databricks SQL syntax for creating an external table (a table whose data is managed outside the Delta formal structure but accessible via SQL) with existing files is 'CREATE TABLE ... USI
+
+Q29 [db-da-358] CORRECT:b
+  EXPL: RESTORE TABLE is the fastest recovery mechanism for accidental data corruption. It reverts the entire table to a previous version by updating the transaction log pointer ÔÇö no data copying needed. Time
+
+Q30 [db-da-359] CORRECT:a
+  EXPL: Schema Enforcement is a core Delta Lake feature that rejects writes with mismatched schemas. The write has a column (loyalty_tier) that doesn't exist in the target table. Resolution: (1) ALTER TABLE A
+
+Q31 [db-da-360] CORRECT:b
+  EXPL: Time Travel with VERSION AS OF allows querying any historical state. EXCEPT ALL returns rows present in the current version (5) but not in version 2, showing what was added/changed. The @v2 syntax is 
+
+Q32 [db-da-361] CORRECT:b
+  EXPL: The recommended maintenance pattern: (1) OPTIMIZE regularly to compact small files into larger, efficient files, (2) VACUUM after OPTIMIZE (with default 7-day retention) to reclaim storage from old, r
+
+Q33 [db-da-362] CORRECT:a
+  EXPL: ALTER TABLE ADD COLUMN is a metadata-only operation in Delta Lake. It updates the schema in the transaction log without rewriting any data files. Existing files will return NULL for the new column. Th
+
+Q34 [db-da-363] CORRECT:b
+  EXPL: Delta Lake provides full ACID transactions for all write operations including MERGE. The operation is Atomic (all changes commit together), Consistent (schema enforcement validated), Isolated (concurr
+
+Q35 [db-da-364] CORRECT:b
+  EXPL: Change Data Feed tracks row-level changes with `_change_type`: 'insert' (new row), 'update_preimage' (row values BEFORE update), 'update_postimage' (row values AFTER update), and 'delete' (removed row
+
+
+=== DATA MODELING (22 questions) ===
+
+Q1 [db-da-59] CORRECT:c
+  EXPL: Visualizations are tools for communication; choosing different types (bar, line, scatter) highlights different aspects, trends, or relationships within the same dataset.
+
+Q2 [db-da-60] CORRECT:d
+  EXPL: Variance quantifies the spread or dispersion of a dataset relative to its mean (central value).
+
+Q3 [db-da-110] CORRECT:b
+  EXPL: In the Delta Sharing model, storage and compute are decoupled. The provider pays for hosting the data (storage), but the consumer must bring their own compute (SQL Warehouse) to process and read it.
+
+Q4 [db-da-113] CORRECT:a
+  EXPL: Materialized Views leverage advanced incremental computation features that are not available in the 'Standard' tier SQL Warehouses. You must use Pro or Serverless.
+
+Q5 [db-da-120] CORRECT:b
+  EXPL: In Databricks, Primary and Foreign Keys are 'Informational Constraints'. They are used for documentation and query optimization (and by Genie), but they are NOT enforced during data ingestion.
+
+Q6 [db-da-134] CORRECT:b
+  EXPL: A Star Schema is an analytical modeling approach with a central fact table (containing measures like sales amount, quantity) connected to multiple denormalized dimension tables (like product, customer
+
+Q7 [db-da-154] CORRECT:b
+  EXPL: Regular (non-temporary) views created with CREATE VIEW are persistent objects stored in Unity Catalog. They survive session ends and restarts. Any user with the appropriate permissions (SELECT on the 
+
+Q8 [db-da-156] CORRECT:b
+  EXPL: In Unity Catalog, PRIMARY KEY and FOREIGN KEY constraints are informational (declarative) only ÔÇö they are NOT enforced. They serve as metadata hints for query optimizers and BI tools to understand tab
+
+Q9 [db-da-178] CORRECT:c
+  EXPL: In Data Vault 2.0, Hubs store unique business keys, Satellites store descriptive attributes, and Links model relationships between those keys. When multiple hubs are involved in a relationship, the re
+
+Q10 [db-da-186] CORRECT:d
+  EXPL: In a star schema, dimension tables each have a surrogate primary key that uniquely identifies each dimension row. The fact table stores transactional metrics and contains foreign-key columns that refe
+
+Q11 [db-da-285] CORRECT:b
+  EXPL: For reporting and business intelligence workloads in Databricks SQL, the **Star Schema** is the recommended design. It features a central fact table surrounded by denormalized dimension tables, which 
+
+Q12 [db-da-312] CORRECT:b
+  EXPL: A star schema has a central fact table surrounded by denormalized dimension tables. Each dimension connects directly to the fact table via foreign keys. This is the most common pattern in the Gold lay
+
+Q13 [db-da-313] CORRECT:b
+  EXPL: The medallion architecture progressively refines data: Bronze = raw ingestion (append-only, no transformations), Silver = cleaned, deduplicated, joined data (enterprise source of truth), Gold = busine
+
+Q14 [db-da-314] CORRECT:b
+  EXPL: CREATE OR REPLACE TABLE ... AS SELECT creates a managed Delta table with the aggregated results. Option A creates a VIEW (not a materialized table). The GROUP BY must reference the expression directly
+
+Q15 [db-da-315] CORRECT:b
+  EXPL: MERGE INTO (upsert) is the correct Delta Lake operation for deduplication with composite keys. It matches on the composite key (order_id + line_item_id), updates existing records, and inserts new ones
+
+Q16 [db-da-316] CORRECT:b
+  EXPL: Surrogate keys decouple the data warehouse from source system changes. If a natural key changes (e.g., patient ID format changes), the surrogate key remains stable. They also enable Slowly Changing Di
+
+Q17 [db-da-317] CORRECT:c
+  EXPL: The Silver layer is the 'Enterprise Source of Truth.' It's where data from multiple Bronze sources is cleaned, joined, deduplicated, and conformed. The key indicators are: data from multiple sources, 
+
+Q18 [db-da-318] CORRECT:b
+  EXPL: For dashboard performance, a materialized Gold-layer TABLE (created via CTAS) is preferred when aggregating large volumes. The dashboard reads 500 pre-computed rows instead of re-executing a 50M-row a
+
+Q19 [db-da-319] CORRECT:b
+  EXPL: Type 2 SCD requires maintaining multiple rows per entity with effective dates. MERGE INTO with custom logic handles this: when an address changes, the existing record gets an end_date, and a new recor
+
+Q20 [db-da-320] CORRECT:b
+  EXPL: Embedding dimension attributes directly in fact tables creates update anomalies. If a product's category changes, only new transactions reflect the update ÔÇö historical records retain the old category.
+
+Q21 [db-da-331] CORRECT:c
+  EXPL: A materialized TABLE is best for Gold-layer concurrent access: results are pre-computed (no repeated aggregation), Delta supports efficient concurrent reads, and it persists across sessions. TEMPORARY
+
+Q22 [db-da-332] CORRECT:b
+  EXPL: VACUUM removes old data files that are no longer referenced by the current table version and are older than the retention period. Time Travel queries need those old files to reconstruct historical ver
+

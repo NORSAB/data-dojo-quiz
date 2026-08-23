@@ -1,0 +1,37 @@
+﻿node : D:\2026\Simulador de Preguntas\questions_databricks.js:135
+At line:1 char:1
++ node -e "global.window={questionsData:[]};require('./questions_databr ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (D:\2026\Simulad...tabricks.js:135:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+    "explanation": "Ô£à CORRECT (D): Partner Connect creates a SQL WAREHOUSE (not a cluster) for Fivetran. This is key 
+ÔÇö Fivetran is a data ingestion tool that connects via SQL interface, so it needs a SQL Warehouse endpoint.\n\nÔØî 
+Why others are wrong:\nÔÇó (A) Workflows: Workflows orchestrate jobs/notebooks, they don't create SQL endpoints for 
+external tools.\nÔÇó (B) Delta Live Tables: DLT defines data pipelines, not connection endpoints for 3rd-party 
+tools.\nÔÇó (C) Partner Connect + cluster: Close, but Partner Connect creates a SQL Warehouse, NOT a cluster. Clusters 
+are for notebooks/Spark jobs.\nÔÇó (E) Workflows + cluster: Same issue ÔÇö Workflows don't create connection 
+endpoints.\n\nƒÄ» EXAM TIP: Partner Connect = automated setup wizard. For BI/ingestion tools, it always provisions a 
+SQL Warehouse (the SQL interface), never a general-purpose cluster.",,
+                                                                                                                       
+                                                                                                                       
+                                                                                                                       
+                                                                                                                       
+                                                                                                                       
+                                                                                                                       
+                                                                                                                       
+                          ^
+
+SyntaxError: Unexpected token ','
+    at wrapSafe (node:internal/modules/cjs/loader:1692:18)
+    at Module._compile (node:internal/modules/cjs/loader:1735:20)
+    at Object..js (node:internal/modules/cjs/loader:1893:10)
+    at Module.load (node:internal/modules/cjs/loader:1481:32)
+    at Module._load (node:internal/modules/cjs/loader:1300:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.require (node:internal/modules/cjs/loader:1504:12)
+    at require (node:internal/modules/helpers:152:16)
+    at [eval]:1:34
+
+Node.js v24.11.1

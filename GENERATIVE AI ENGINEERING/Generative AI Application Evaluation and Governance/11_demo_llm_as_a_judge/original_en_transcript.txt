@@ -1,0 +1,43 @@
+In this case, in that LLM as a judge, I'm going to show how we can use that to go and create a custom metric of professionalism. We're going to define some examples, define the rubric for it, and then we're going to let the LLM go and use that rubric to go and evaluate our own examples that we have, right? So we're going to go and do that. Okay, so this
+Norman Sabillon 0 minutos 28 segundos
+In this demo, it's continuation for the evaluation demos. And in the last demo, we showed how do we evaluate when we have a ground truth or a benchmark data set that we can use to compare against and use that to compare different models. But the problem with a lot of generative AI applications is in a lot of
+Norman Sabillon 0 minutos 47 segundos
+cases, the tasks or what we're trying to do, there isn't a benchmark to use to work with, or the benchmarks that do exist don't align either deep enough or specific enough to the task that we're trying to do. So one strategy that has evolved is using an LLM to judge the output of an LLM. LLMs have this reasoning capability
+Norman Sabillon 1 minuto 9 segundos
+And we found that they're actually quite good, in some cases, as good as humans when it comes to judging the output of another LLM. So in this demo, we're going to show how to use LLMs to evaluate using another LLM. And then we're going to look at how we can define a custom metric using that. And we're going to show how we can do this
+Norman Sabillon 1 minuto 29 segundos
+all using ML Flow. The new ML Flow evaluate has support for albums as a judge, and we'll talk about how we can go and define that. So I ran this before, making sure, again, run your requirements, run your setup. We're good to go.
+Norman Sabillon 1 minuto 43 segundos
+So why go and do LLMs as a judge? I talked about it before, but really we found that there's three main things. Even if you can do human eval is more costly in a lot of cases. Using LLM as a judge is just a much more economical way to go and scale evaluation for LLM based applications.
+Norman Sabillon 2 minutos 2 segundos
+It can save us time. Humans take time. They're busy. We have a lot of things that we're trying to do. So whereas LLM is on command, we can have it go and do things, and we can automate on it, which is really big. So in a lot of cases, it's a great piece to help us automate our testing and evaluation, and then really putting humans where
+Norman Sabillon 2 minutos 21 segundos
+The LLM can't figure it out. So elements of judge is a really popular strategy. We can also do custom metrics as well. So in this case, we're going to consider a custom metric called professionalism, where we measure the style of the output of the LLM and check it for professionalism. Is it professional or not? And that's really useful for a lot of us that are building chat bots to customers.
+Norman Sabillon 2 minutos 41 segundos
+where we want to make sure that the chat style is reflective of our customer, of our company's branding and things like that. Okay, so for this demo, we'll be using a chat bot system. So for our chat bot system, we have here, we can answer simple questions like, what is Data Brick Spectre Search?
+Norman Sabillon 3 minutos
+And then it goes and answers that. And we're really less worried about the system and really more about evaluating the system. So I'm not going to go into the details of this chatbot system. Here we're really concerned about is evaluating its response. And in this case, defining a custom metric that we're going to use in LLM to go and generate measurements.
+Norman Sabillon 6 minutos 45 segundos
+So here's our evaluation data, 2 samples. Be very unprofessional in your response. What is Apache Spark? And then what is Apache Spark? Those are inputs. And then we'll pass that to our chatbot system to generate some outputs that then we're going to evaluate. So let's go and do that.
+Norman Sabillon 7 minutos 1 segundo
+So here we're creating iterations, so it's passing it to the model, have it go and generate the answer. And we're testing that here, making sure we get an answer. So you can see the first one a little more casual, whereas the second one is a little more professional, like staying with the style of the way the question was asked. And then we can go and send it to ML Flow Evaluate.
+Norman Sabillon 7 minutos 23 segundos
+And you'll see here with ML flow evaluate, similar to before, we have our question iteration, so the eval data. And then the thing here is because we're not measuring it to a target data set, you'll notice that's not here. There's no target that we're trying to hit. And the model type here is question answering. And then the metric we're using is the professional metric that we defined earlier.
+Norman Sabillon 7 minutos 45 segundos
+So it's going to go and run an experiment. It's going to go and evaluate it against that. And then it's going to log that out. So here we can see the results of that. So let's go and look at it in ML flow. You can see here the last run. You can see the experiment, the notebook. You can see the values for this. You can see the value, the score, one and three.
+Norman Sabillon 8 minutos 4 segundos
+I think we only ran it on 2 samples. We can all see the toxicity scores. We can look at the artifacts, right? And you can see here the example and the outputs that we got. So here you can see the outputs, token count, professionalism, and then you can see the reasoning that's here. So you can see that for each example. We can also pull that up in our notebook as well. So here I'm pulling it up as a table. So here's our results. You can see same thing, similar to what we saw in ML flow.
+Norman Sabillon 8 minutos 29 segundos
+And then you can see here the responses. If we look at the first one, hey there, buddy, really casual kind of response. The response is usually casual, includes the phrase like, hey there, buddy, includes things since sliced bread, whereas the second one is in a formal, respectful tone. That gets a score. That's really cool. Basically, what it means is if we have a task that we don't have a benchmark,
+Norman Sabillon 8 minutos 49 segundos
+What it allows us to do is start using LLMs as a way to scale and automate our evaluations right on custom tasks that otherwise would be very difficult to go and do and get this process started in cases where we either don't have a ground truth data set or we don't have human bandwidth to go and do that or human capital to go and do that.
+Norman Sabillon 9 minutos 9 segundos
+and we can leverage an LLM to do that for it. Now, a couple of things as LLM best practices. Use small rubric scales. What we found is evaluation scale that are small, like 1 to 3 or 1 to 5, don't do 1 to 10. It's a lot harder for the LLM to pick between those. So that's typically something. Provide A variety of examples. Typically,
+Norman Sabillon 9 minutos 29 segundos
+examples, not just a lot, but variety. You want good examples and bad examples for the model so that it can get a better understanding of what is a one, what is a two, what is a three. Consider it an additive scale. So one point for X, one point for Y, zero points for Z, and then adding those up, that might be a way to break down the evaluation actually.
+Norman Sabillon 9 minutos 48 segundos
+That might be a great way so that we can then decompose the evaluation and then use a high token LM. If you're able to use more tokens, you can provide more context. So when it comes to that, we're talking about context windows. The models that have a larger context window mean that we can provide them more examples so that we can get better results out of it. So that is LM as a judge. Pretty cool.
+Norman Sabillon 10 minutos 7 segundos
+another strategy when it comes to evaluating generative AI applications, especially when we don't have a ground truth or a data set to work with, and how we can do that on Databricks with MLflow and its integrations to the platform.
+Norman Sabillon 10 minutos 30 segundos
+We are going to do elements.

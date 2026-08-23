@@ -1,0 +1,14 @@
+backups/
+backups_archive/
+backup_pre_modular_monolith/
+scratch/
+output/
+tmp/
+node_modules/
+*.bak*
+*.broken_latest
+*.py
+*.log
+*.zip
+*.tar.gz
+*.tmp

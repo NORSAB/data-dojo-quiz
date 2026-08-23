@@ -1,0 +1,79 @@
+Welcome to this demo. In this demo, we are going to talk about how to parse documents to structured data. If you are using any document for agents, you need to convert those documents to structured format, and...
+Norman Reynaldo Sabillon Castro 0 minutos 32 segundos
+For MAC, it is the same. So in this time, we are going to show how to do that using Databricks AI parse document function. This is a special function that is going to help you to parse documents and convert them to plain text.
+Norman Reynaldo Sabillon Castro 0 minutos 52 segundos
+By the end of this demo, you should be able to parse different document formats, such as PDF or images, for example, using the AI parse document function. Then you should be able to understand the parse output schema. You should be able to identify and
+Norman Reynaldo Sabillon Castro 1 minuto 12 segundos
+explain key metadata fields in the parse output of the AI parse document functions, and then we should be able to also visualize and debug the parse document content.
+Norman Reynaldo Sabillon Castro 1 minuto 26 segundos
+Next, let's talk about some requirements. In this demo, you are required to have a volume containing sample documents. This is in the lab environment. This is created for you, so you don't need to do anything. And I'm going to show you the volume now. Then you should have certain.
+Norman Reynaldo Sabillon Castro 1 minuto 47 segundos
+When you select the serverless and run, it should select the environment version for you, but if not, just click here on this serverless environment icon and make sure that the environment for is selected and then click apply. If different environment version is selected, you need to change it and then click apply.
+Norman Reynaldo Sabillon Castro 2 minutos 11 segundos
+So, that's it. Next is going to be setup section. So, the setup section is going to configure this demo environment for you. First is going to prepare a dataset for you that we are going to use in this demo. It's going to do some checks and here this is the volume that you will need.
+Norman Reynaldo Sabillon Castro 2 minutos 30 segundos
+In this demo, it's going to be DB Academy is the catalog name, and the schema name is going to be your schema name, like user schema name, and in this schema you will have a volume called Orion Docs, and let us view that. So, if I go to the catalog...
+Norman Reynaldo Sabillon Castro 2 minutos 49 segundos
+And select the DBX Academy catalog.
+Norman Reynaldo Sabillon Castro 2 minutos 53 segundos
+Select my schema, and here you can see that I already ran the code, so I have a table and then volumes. You should have these two volumes. This one is going to be used in this demo, and this one is going to be used for other demos. So make sure that you have this volume created for you.
+Norman Reynaldo Sabillon Castro 6 minutos 8 segundos
+AI document parse parses a document. This is how it parses. First, you can see that there is a document object, is a JSON object here, and then there is error status and metadata. So if there is any error while parsing the document, let's say if...
+Norman Reynaldo Sabillon Castro 6 minutos 27 segundos
+maybe you couldn't parse one section or there was like a problem while reading the document, then you are going to see the details here.
+Norman Reynaldo Sabillon Castro 6 minutos 36 segundos
+And this is the section, the document section, how it's parsed, so you can see that there is document, and in this document object there are elements, and these elements are all elements that are in this document, so it's going to be, for example, coordinate of this box, which is...
+Norman Reynaldo Sabillon Castro 6 minutos 57 segundos
+or your robotics and description is null and the type is section header. So AI parse document is not just parsing the text, it also understands the context and it defines whether this object is as a header, page footer, or it is a text, is it a caption, figure.
+Norman Reynaldo Sabillon Castro 7 minutos 18 segundos
+All those kind of things are defined for you, and this is important when you to provide a richer context for the documents.
+Norman Reynaldo Sabillon Castro 7 minutos 27 segundos
+Then we can list the documents using SQL list and the path. So it's just to list the files that are parsed. And you can see that here there is a parsed image folder. So a new folder created in the same path that we passed to ARParse.
+Norman Reynaldo Sabillon Castro 7 minutos 46 segundos
+And this is going to have all parsed images. So each page is going to be converted to also an image.
+Norman Reynaldo Sabillon Castro 7 minutos 57 segundos
+Yeah, this is the same here. You can see that all parsed documents are created here. So each page is created as an image here. So you should have the same number of images as number of pages here.
+Norman Reynaldo Sabillon Castro 8 minutos 14 segundos
+This was how AI Parse document can be used with Python. There's also SQL support for that too. You can use SQL. For SQL, it is kind of the same format, it's just in the Databricks SQL format. So you are using AI Parse document, then yeah, the only difference is this mapping format.
+Norman Reynaldo Sabillon Castro 8 minutos 34 segundos
+And that's it. Then you are reading files as binary file and you're passing this to that select statement.
+Norman Reynaldo Sabillon Castro 8 minutos 44 segundos
+Yeah, it's going to be the same output. So I'm going to skip this section. I showed this one just to make sure that you know there is a Python way of doing that and also SQL way of doing that. So all AI function in Databricks has support for both Python and SQL.
+Norman Reynaldo Sabillon Castro 9 minutos 3 segundos
+Then let's look at the metadata that is extracted. So the AI parse is going to return a document object. And this document object that can be pages, page number, text, table, images, and also some metadata.
+Norman Reynaldo Sabillon Castro 9 minutos 23 segundos
+And here, we showed how you can select using the select statement to extract those objects. So here, for example, we are selecting the parts content document pages, then we are selecting elements, then
+Norman Reynaldo Sabillon Castro 9 minutos 42 segundos
+Error status, corrupted data, and metadata, and you will see that each of these is created in a new column. So, if you scroll back here, yeah, there is no error, there is no corrupted data, and for metadata, this is the metadata section, and these are the elements.
+Norman Reynaldo Sabillon Castro 10 minutos 2 segundos
+This is the pages and this is the path. So elements again, it is just extracted. So this way we are extracting by document. We are going to look into how to view.
+Norman Reynaldo Sabillon Castro 10 minutos 21 segundos
+This element extracted elements on the document, and to inspect that to see if that is done correctly.
+Norman Reynaldo Sabillon Castro 10 minutos 29 segundos
+Here we have a DocumentRenderer helper class. So this is not something that is shipped with AI parseDocument function. So this is just a class that we created and it is reading these JSON objects and displays them on the result that is.
+Norman Reynaldo Sabillon Castro 10 minutos 49 segundos
+parsed. I'm going to just show how it looks like. So here, this function creates this nice visual output. Here you can see that we have document summary. I'm just parsing, just selecting one of these documents, so not all of them. And here you can see that there are three pages in this document.
+Norman Reynaldo Sabillon Castro 11 minutos 11 segundos
+There are only two elements, and here are the element colors and resolution, everything, and here is how it is parsed, so you can see that this is a page header, then there is a section header, text, text, these are all correct.
+Norman Reynaldo Sabillon Castro 11 minutos 30 segundos
+Then there is a figure and then capture action. You can see that.
+Norman Reynaldo Sabillon Castro 11 minutos 36 segundos
+Same for the second page.
+Norman Reynaldo Sabillon Castro 11 minutos 39 segundos
+and then third page.
+Norman Reynaldo Sabillon Castro 11 minutos 42 segundos
+So this is important because it is not just extracting plain text, but it's also understanding each section and annotating that. So in this example, we had a figure here and it is annotating that this is a figure and this is a caption for that.
+Norman Reynaldo Sabillon Castro 12 minutos 2 segundos
+So, imagine if you are going to use this one as part of your retrieval agent, and you want to, let's say, generate an output for a question, and you can say that this is explained in page two and figure on the left, for example.
+Norman Reynaldo Sabillon Castro 12 minutos 22 segundos
+Because we know also the coordinates of the image, and we know that this image is on page X, we can give a reference to that specific page and generate an answer that is letting user know where they can look at it. So this is why it is important.
+Norman Reynaldo Sabillon Castro 12 minutos 42 segundos
+All right, so that's it. That's how we used AI parse document to extract the content of the document. Now we need to store this text to a delta table and use that later in other demos. So in the next demo, for example, we are gonna
+Norman Reynaldo Sabillon Castro 13 minutos 3 segundos
+Use how to clean the extracted data, how to divide it into chunks, and then those chunks are gonna be used for vector search to store in vector format and search based on that. So, we are just here defining the output table and...
+Norman Reynaldo Sabillon Castro 13 minutos 22 segundos
+writing as delta, that's it, nothing too complicated.
+Norman Reynaldo Sabillon Castro 13 minutos 28 segundos
+So, to wrap up in this demo, we showed how to use AI parse document, both in Python and in SQL, to parse documents. We show different metadata fields that are extracted, and then, as an optional section, we visualize.
+Norman Reynaldo Sabillon Castro 13 minutos 48 segundos
+this output and show how you can inspect and see if the parsing is done correctly. So that's it for this demo and thanks for watching.

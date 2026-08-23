@@ -1,0 +1,439 @@
+Pregunta 1 de 20
+What is the primary benefit of using the ResponsesAgent interface over traditional agent interfaces?
+
+
+It provides compatibility with OpenAI Responses schema while adding Databricks-specific enhancements
+
+
+It requires less memory to operate
+
+
+It's faster than other interfaces
+
+
+It only works with SQL functions
+
+Opciones
+Ha dado la respuesta correcta y su puntuación es 5
+Respuesta correcta
+Puntuación: 5
+Respuesta correcta:
+It provides compatibility with OpenAI Responses schema while adding Databricks-specific enhancements
+
+Pregunta 2 de 20
+In the MLflow tracing demo, what decorator is used to add custom tracing to Python functions?
+
+
+@mlflow.trace
+
+
+@mlflow.log
+
+
+@mlflow.track
+
+
+@mlflow.monitor
+
+Opciones
+Ha dado la respuesta correcta y su puntuación es 5
+Respuesta correcta
+Puntuación: 5
+Respuesta correcta:
+@mlflow.trace
+
+Pregunta 3 de 20
+Which execution mode is required for Python UC functions when using serverless compute?
+
+
+Serverless mode
+
+
+Both serverless and local modes are supported equally
+
+
+Local mode only
+
+
+Distributed mode
+
+Opciones
+Ha dado la respuesta correcta y su puntuación es 5
+Respuesta correcta
+Puntuación: 5
+Respuesta correcta:
+Serverless mode
+
+Pregunta 4 de 20
+What are the three fundamental principles that AI agents operate on?
+
+
+Planning, Execution, Monitoring
+
+
+Perception, Decision-Making, Action
+
+
+Data, Model, Interface
+
+
+Input, Processing, Output
+
+Opciones
+Ha dado la respuesta correcta y su puntuación es 5
+Respuesta correcta
+Puntuación: 5
+Respuesta correcta:
+Perception, Decision-Making, Action
+
+Pregunta 5 de 20
+Which method is used to test UC Python functions programmatically in the demo?
+
+
+client.execute_function()
+
+
+client.test_function()
+
+
+client.run_function()
+
+
+client.call_function()
+
+Opciones
+Ha dado la respuesta correcta y su puntuación es 5
+Respuesta correcta
+Puntuación: 5
+Respuesta correcta:
+client.execute_function()
+
+Pregunta 6 de 20
+In the Python function registration demo, what is the correct way to import libraries within a UC Python function?
+
+
+Import them inside the function body
+
+
+Import them outside the function definition
+
+
+Libraries cannot be imported in UC Python functions
+
+
+Import them at the top of the notebook
+
+Opciones
+Ha dado la respuesta correcta y su puntuación es 5
+Respuesta correcta
+Puntuación: 5
+Respuesta correcta:
+Import them inside the function body
+
+Pregunta 7 de 20
+When creating tagged traces in MLflow, how do you update tags for an active trace?
+
+
+mlflow.add_tags(tags)
+
+
+mlflow.trace_tags(tags)
+
+
+mlflow.set_tags(tags)
+
+
+mlflow.update_current_trace(tags)
+
+Opciones
+Ha dado la respuesta correcta y su puntuación es 5
+Respuesta correcta
+Puntuación: 5
+Respuesta correcta:
+mlflow.update_current_trace(tags)
+
+Pregunta 8 de 20
+In the context of Unity Catalog Functions, what does "DETERMINISTIC" mean when creating a SQL function?
+
+
+The function can only be called once
+
+
+The function will always execute in the same order
+
+
+The function always returns the same result for the same inputs
+
+
+The function requires admin privileges to execute
+
+Opciones
+Ha dado la respuesta correcta y su puntuación es 5
+Respuesta correcta
+Puntuación: 5
+Respuesta correcta:
+The function always returns the same result for the same inputs
+
+Pregunta 9 de 20
+Which of the following is NOT one of the five types of AI agents by complexity mentioned in the lecture?
+
+
+Simple Reflex Agents
+
+
+Model-Based Reflex Agents
+
+
+Distributed Learning Agents
+
+
+Utility-Based Agents
+
+Opciones
+Ha dado la respuesta correcta y su puntuación es 5
+Respuesta correcta
+Puntuación: 5
+Respuesta correcta:
+Distributed Learning Agents
+
+Pregunta 10 de 20
+What makes Unity Catalog Functions as Agent Tools different from traditional functions?
+
+
+They are designed for dynamic discovery and use by AI agents with rich metadata
+
+
+They require special hardware to run
+
+
+They only work with SQL databases
+
+
+They execute faster than regular functions
+
+Opciones
+Ha dado la respuesta correcta y su puntuación es 5
+Respuesta correcta
+Puntuación: 5
+Respuesta correcta:
+They are designed for dynamic discovery and use by AI agents with rich metadata
+
+Pregunta 11 de 20
+Which Agent Bricks type is specifically designed for extracting structured data from unstructured sources?
+
+
+Information Extraction (IE)
+
+
+Custom LLM (CLLM)
+
+
+Knowledge Assistant (KA)
+
+
+Multi-Agent Supervisor (MAS)
+
+Opciones
+Ha dado la respuesta correcta y su puntuación es 5
+Respuesta correcta
+Puntuación: 5
+Respuesta correcta:
+Information Extraction (IE)
+
+Pregunta 12 de 20
+Which of the following is NOT a supported agent authoring framework mentioned in the lecture?
+
+
+DSPy
+
+
+LangChain
+
+
+TensorFlow Agents
+
+
+OpenAI
+
+Opciones
+Ha dado la respuesta correcta y su puntuación es 5
+Respuesta correcta
+Puntuación: 5
+Respuesta correcta:
+TensorFlow Agents
+
+Pregunta 13 de 20
+When enabling MLflow tracing for LangChain agents, which command is used?
+
+
+mlflow.trace.enable()
+
+
+mlflow.start_tracing()
+
+
+mlflow.enable_tracing()
+
+
+mlflow.langchain.autolog()
+
+Opciones
+Ha dado la respuesta correcta y su puntuación es 5
+Respuesta correcta
+Puntuación: 5
+Respuesta correcta:
+mlflow.langchain.autolog()
+
+Pregunta 14 de 20
+Which registry URI must be set to register models to Unity Catalog?
+
+
+unity-catalog
+
+
+databricks
+
+
+uc-registry
+
+
+databricks-uc
+
+Opciones
+Ha dado la respuesta correcta y su puntuación es 5
+Respuesta correcta
+Puntuación: 5
+Respuesta correcta:
+databricks-uc
+
+Pregunta 15 de 20
+In the LangChain demo, what class is used to wrap Unity Catalog functions as LangChain tools?
+
+
+DatabricksToolkit
+
+
+LangChainUCBridge
+
+
+UCFunctionToolkit
+
+
+UCToolWrapper
+
+Opciones
+Ha dado la respuesta correcta y su puntuación es 5
+Respuesta correcta
+Puntuación: 5
+Respuesta correcta:
+UCFunctionToolkit
+
+Pregunta 16 de 20
+What is the main purpose of MLflow tracing in agent development?
+
+
+To reduce the cost of running agents
+
+
+To provide step-by-step visibility into agent reasoning, tool usage, and performance metrics
+
+
+To automatically fix bugs in agent code
+
+
+To make agents run faster
+
+Opciones
+Ha dado la respuesta correcta y su puntuación es 5
+Respuesta correcta
+Puntuación: 5
+Respuesta correcta:
+To provide step-by-step visibility into agent reasoning, tool usage, and performance metrics
+
+Pregunta 17 de 20
+In MLflow tracing, what is a "span"?
+
+
+A single operation that records when it started and ended, along with metadata, inputs, and outputs
+
+
+The total time an agent takes to respond
+
+
+The memory used by an agent
+
+
+The number of tokens processed
+
+Opciones
+Ha dado la respuesta correcta y su puntuación es 5
+Respuesta correcta
+Puntuación: 5
+Respuesta correcta:
+A single operation that records when it started and ended, along with metadata, inputs, and outputs
+
+Pregunta 18 de 20
+What is the purpose of the resources parameter when logging an agent model to MLflow?
+
+
+To set the model's execution timeout
+
+
+To configure the model's scaling parameters
+
+
+To define automatic authentication passthrough for specified resources
+
+
+To specify memory requirements
+
+Opciones
+Ha dado la respuesta correcta y su puntuación es 5
+Respuesta correcta
+Puntuación: 5
+Respuesta correcta:
+To define automatic authentication passthrough for specified resources
+
+Pregunta 19 de 20
+When creating UC SQL functions for agent use, which parameter is essential for providing context to the LLM about what the function does?
+
+
+DETERMINISTIC
+
+
+RETURNS
+
+
+LANGUAGE SQL
+
+
+COMMENT
+
+Opciones
+Ha dado la respuesta correcta y su puntuación es 5
+Respuesta correcta
+Puntuación: 5
+Respuesta correcta:
+COMMENT
+
+Pregunta 20 de 20
+In the demo, what file format is used to store agent configuration separately from the main notebook?
+
+
+.toml
+
+
+.yaml
+
+
+.json
+
+
+.xml
+
+Opciones
+Ha dado la respuesta incorrecta y su puntuación es 0
+Respuesta incorrecta
+Puntuación: 0
+Respuesta correcta:
+.json

@@ -1,0 +1,218 @@
+=== Data Modeling (22 questions) ===
+
+Q1 [db-da-59] type:single_choice
+PROMPT: Which statement about visualizations is true?
+  a) All visualizations must use the same data in order to be included in the same Databricks SQL dashboard.
+  b) Line charts are the preferred visualization type for categorical data.
+  c) Different visualizations can be used to tell different stories about the data.
+  d) There is no difference between the bar chart and a histogram in Databricks SQL.
+CURRENT_EXPL: Visualizations are tools for communication; choosing different types (bar, line, scatter) highlights different aspects, trends, or relationships within the same dataset.
+---END---
+
+Q2 [db-da-60] type:single_choice
+PROMPT: What describes the variance of a set of values?
+  a) Variance is a measure of how far a single observed value is from a set of values.
+  b) Variance is a measure of how far an observed value is from the variable's maximum or minimum value.
+  c) Variance is a measure of central tendency of a set of values.
+  d) Variance is a measure of how far a set of values is spread out from the set's central value.
+CURRENT_EXPL: Variance quantifies the spread or dispersion of a dataset relative to its mean (central value).
+---END---
+
+Q3 [db-da-110] type:single_choice
+PROMPT: You are querying a shared table provided by a partner via Delta Sharing. You want to understand who pays for the compute costs when you execute a `SELECT` query against this shared table.
+  a) The data provider pays for compute; you pay for storage.
+  b) You (the data consumer) pay for the compute resources used to query the data.
+  c) Compute costs are split 50/50 between provider and consumer.
+  d) There are no compute costs for shared tables.
+CURRENT_EXPL: In the Delta Sharing model, storage and compute are decoupled. The provider pays for hosting the data (storage), but the consumer must bring their own compute (SQL Warehouse) to process and read it.
+---END---
+
+Q4 [db-da-113] type:single_choice
+PROMPT: A data analyst creates a Materialized View (MV) to speed up a complex dashboard query. However, the refresh of the MV fails. Upon investigation, they realize they are using a Standard SQL Warehouse. W
+  a) Materialized Views require a Serverless or Pro SQL Warehouse.
+  b) Materialized Views can only be refreshed by Admin users.
+  c) The underlying tables were not Delta tables.
+  d) Standard Warehouses cannot write data.
+CURRENT_EXPL: Materialized Views leverage advanced incremental computation features that are not available in the 'Standard' tier SQL Warehouses. You must use Pro or Serverless.
+---END---
+
+Q5 [db-da-120] type:single_choice
+PROMPT: In Unity Catalog, you define a Primary Key and a Foreign Key relationship between two tables. You then attempt to insert an order with a `customer_id` that does not exist in the `customers` table. Wha
+  a) The insert fails with a 'Constraint Violation' error.
+  b) The insert succeeds.
+  c) The insert is quarantined in a 'Bad Records' table.
+  d) The insert succeeds, but the `customer_id` is set to NULL.
+CURRENT_EXPL: In Databricks, Primary and Foreign Keys are 'Informational Constraints'. They are used for documentation and query optimization (and by Genie), but they are NOT enforced during data ingestion.
+---END---
+
+Q6 [db-da-134] type:single_choice
+PROMPT: In the context of data modeling for analytics, which of the following correctly describes a Star Schema?
+  a) A single flat table containing all columns and rows without any normalization
+  b) A central fact table surrounded by multiple denormalized dimension tables, optimized for analytical queries
+  c) A fully normalized schema with no data redundancy, used primarily for OLTP workloads
+  d) A schema with multiple fact tables and no dimension tables
+  e) A hierarchical schema where each level inherits the schema of the parent table
+CURRENT_EXPL: A Star Schema is an analytical modeling approach with a central fact table (containing measures like sales amount, quantity) connected to multiple denormalized dimension tables (like product, customer
+---END---
+
+Q7 [db-da-154] type:single_choice
+PROMPT: A data analyst creates a regular (non-temporary) VIEW in Databricks SQL using CREATE VIEW. After logging out and logging back in, what is the status of the view?
+  a) The view is dropped because all views are session-scoped
+  b) The view persists in Unity Catalog and can be queried by any user with appropriate permissions
+  c) The view persists but the underlying data is deleted
+  d) The view is converted to a table automatically
+  e) The view can only be accessed by the creator
+CURRENT_EXPL: Regular (non-temporary) views created with CREATE VIEW are persistent objects stored in Unity Catalog. They survive session ends and restarts. Any user with the appropriate permissions (SELECT on the 
+---END---
+
+Q8 [db-da-156] type:single_choice
+PROMPT: In Unity Catalog, a data analyst defines a PRIMARY KEY on the orders table and a FOREIGN KEY on order_items referencing orders. The analyst then tries to insert a row into order_items with an order_id
+  a) The insert fails with a foreign key constraint violation error
+  b) The insert succeeds because Unity Catalog PRIMARY KEY and FOREIGN KEY constraints are informational only and are not enf
+  c) The row is inserted but automatically flagged as orphaned
+  d) The insert is queued until a matching order_id exists in orders
+  e) The orders table is automatically updated to include the missing order_id
+CURRENT_EXPL: In Unity Catalog, PRIMARY KEY and FOREIGN KEY constraints are informational (declarative) only — they are NOT enforced. They serve as metadata hints for query optimizers and BI tools to understand tab
+---END---
+
+Q9 [db-da-178] type:single_choice
+PROMPT: A BI analyst is building an analytical data model in Databricks using Delta Lake tables. The source system contains transactional sales data that changes frequently. The analyst chooses to apply the D
+  a) Hub Table
+  b) Satellite Table
+  c) Link Table
+  d) Reference Table
+CURRENT_EXPL: In Data Vault 2.0, Hubs store unique business keys, Satellites store descriptive attributes, and Links model relationships between those keys. When multiple hubs are involved in a relationship, the re
+---END---
+
+Q10 [db-da-186] type:single_choice
+PROMPT: A company uses a star schema to analyze sales data. The sales fact table records transactions, and dimension tables include products, stores, and dates.
+
+How are primary and foreign keys used to enabl
+  a) The fact table and dimension tables are joined using arbitrary columns, and primary/foreign key relationships are not re
+  b) The fact table contains primary keys that directly match the primary keys in each dimension table, allowing for one-to-o
+  c) Both fact and dimension tables use only foreign keys, and joins are performed using non-unique columns.
+  d) Each dimension table has a primary key, which is referenced as a foreign key in the fact table. This structure allows th
+CURRENT_EXPL: In a star schema, dimension tables each have a surrogate primary key that uniquely identifies each dimension row. The fact table stores transactional metrics and contains foreign-key columns that refe
+---END---
+
+Q11 [db-da-285] type:single_choice
+PROMPT: An analyst is designing a data model in Databricks to support analytical queries for sales reporting. The company wants to enable fast, flexible analysis of sales by product, store, and time, and expe
+  a) Data Vault 2.0 Schema
+  b) Star Schema
+  c) Normalized (3NF) Schema
+  d) Snowflake Schema
+CURRENT_EXPL: For reporting and business intelligence workloads in Databricks SQL, the **Star Schema** is the recommended design. It features a central fact table surrounded by denormalized dimension tables, which 
+---END---
+
+Q12 [db-da-312] type:single_choice
+PROMPT: A data analyst is designing a dimensional model for a retail company in the Gold layer. The fact table `fact_sales` contains transaction records, and the dimension tables include `dim_product`, `dim_s
+  a) A snowflake schema where dimension tables are normalized into sub-dimensions for storage efficiency.
+  b) A star schema where the central fact table connects directly to denormalized dimension tables via foreign keys.
+  c) A data vault model with hub, link, and satellite tables for historized data loading.
+  d) A flat table design where all dimensions are embedded as columns in the fact table.
+  e) A graph model where products, stores, and customers are represented as nodes with relationship edges.
+CURRENT_EXPL: A star schema has a central fact table surrounded by denormalized dimension tables. Each dimension connects directly to the fact table via foreign keys. This is the most common pattern in the Gold lay
+---END---
+
+Q13 [db-da-313] type:single_choice
+PROMPT: A BI analyst is building a reporting layer in Databricks. The Bronze layer contains raw JSON event logs, the Silver layer has cleaned and deduplicated event records, and the Gold layer must provide ag
+  a) Bronze stores aggregated KPIs, Silver stores cleaned records, Gold stores raw ingested data.
+  b) Bronze stores raw data as-is (append-only), Silver stores cleaned/deduplicated data (source of truth), Gold stores busin
+  c) All three layers store the same data but with different access permissions applied.
+  d) Bronze and Silver are optional staging areas; only Gold contains actual queryable tables.
+  e) Bronze stores external data, Silver stores internal data, and Gold merges both into a unified view.
+CURRENT_EXPL: The medallion architecture progressively refines data: Bronze = raw ingestion (append-only, no transformations), Silver = cleaned, deduplicated, joined data (enterprise source of truth), Gold = busine
+---END---
+
+Q14 [db-da-314] type:single_choice
+PROMPT: A data analyst needs to create a Gold-layer table that shows monthly revenue by region. The source data in the Silver layer has one row per transaction with columns: `transaction_id`, `region`, `amoun
+  a) CREATE VIEW gold.monthly_revenue AS SELECT region, DATE_TRUNC('month', transaction_date) AS month, SUM(amount) AS revenu
+  b) CREATE OR REPLACE TABLE gold.monthly_revenue AS SELECT region, DATE_TRUNC('month', transaction_date) AS month, SUM(amoun
+  c) INSERT INTO gold.monthly_revenue SELECT * FROM silver.transactions WHERE amount > 0;
+  d) CREATE EXTERNAL TABLE gold.monthly_revenue LOCATION 's3://bucket/gold/' AS SELECT region, SUM(amount) FROM silver.transa
+  e) MERGE INTO gold.monthly_revenue USING silver.transactions ON 1=1 WHEN MATCHED THEN UPDATE SET revenue = amount;
+CURRENT_EXPL: CREATE OR REPLACE TABLE ... AS SELECT creates a managed Delta table with the aggregated results. Option A creates a VIEW (not a materialized table). The GROUP BY must reference the expression directly
+---END---
+
+Q15 [db-da-315] type:single_choice
+PROMPT: A data analyst discovers that an important fact table has a composite primary key consisting of `order_id` and `line_item_id`. The analyst needs to ensure that no duplicate combinations exist when new
+  a) INSERT INTO with a WHERE NOT EXISTS subquery to filter existing records.
+  b) MERGE INTO with a match condition on both order_id AND line_item_id, specifying WHEN MATCHED THEN UPDATE and WHEN NOT MA
+  c) DELETE all existing records and re-INSERT the complete dataset from Silver.
+  d) CREATE OR REPLACE TABLE to rebuild the entire Gold table on each run.
+  e) Use COPY INTO to append data, as it automatically deduplicates based on primary keys.
+CURRENT_EXPL: MERGE INTO (upsert) is the correct Delta Lake operation for deduplication with composite keys. It matches on the composite key (order_id + line_item_id), updates existing records, and inserts new ones
+---END---
+
+Q16 [db-da-316] type:single_choice
+PROMPT: A data analyst is designing a star schema for a healthcare analytics dashboard. The fact table `fact_visits` has foreign keys to `dim_patient`, `dim_doctor`, `dim_facility`, and `dim_date`. A stakehol
+  a) Surrogate keys are required by Delta Lake and cannot be replaced with natural keys.
+  b) Surrogate keys provide stable, immutable identifiers that protect the model from changes in source system business keys 
+  c) Natural keys consume more storage space than integer surrogate keys, and the sole purpose is storage optimization.
+  d) Surrogate keys enable encryption of dimension records, which natural keys cannot support.
+  e) Surrogate keys are only necessary when using snowflake schemas, not star schemas.
+CURRENT_EXPL: Surrogate keys decouple the data warehouse from source system changes. If a natural key changes (e.g., patient ID format changes), the surrogate key remains stable. They also enable Slowly Changing Di
+---END---
+
+Q17 [db-da-317] type:single_choice
+PROMPT: A data analyst queries a Silver-layer table and notices it contains columns from three different source systems joined together: CRM contacts, ERP orders, and web analytics sessions. The table has bee
+  a) Bronze: raw ingestion of multiple sources into a single landing table.
+  b) Gold: business-ready aggregations for dashboard consumption.
+  c) Silver: the enterprise data source of truth where cleaned, joined, and deduplicated data from multiple sources converges
+  d) This violates medallion architecture principles because multiple sources should never be combined in a single table.
+  e) Platinum: an unofficial fourth layer for cross-source integrated datasets.
+CURRENT_EXPL: The Silver layer is the 'Enterprise Source of Truth.' It's where data from multiple Bronze sources is cleaned, joined, deduplicated, and conformed. The key indicators are: data from multiple sources, 
+---END---
+
+Q18 [db-da-318] type:single_choice
+PROMPT: A data analyst must decide between creating a VIEW and a materialized TABLE in the Gold layer for a dashboard query that aggregates 50 million Silver-layer records into 500 summary rows.
+
+Which approa
+  a) A VIEW, because it always returns fresh data and consumes no additional storage.
+  b) A TABLE (CTAS), because the dashboard will read 500 pre-computed rows instead of re-aggregating 50 million rows on every
+  c) A VIEW, because Gold-layer objects should never be materialized tables.
+  d) A TEMPORARY VIEW, because dashboard queries are always session-scoped.
+  e) There is no performance difference between a VIEW and a TABLE for aggregation queries in Databricks.
+CURRENT_EXPL: For dashboard performance, a materialized Gold-layer TABLE (created via CTAS) is preferred when aggregating large volumes. The dashboard reads 500 pre-computed rows instead of re-executing a 50M-row a
+---END---
+
+Q19 [db-da-319] type:single_choice
+PROMPT: A data analyst is working with a Delta table that stores customer records. The business requires tracking historical changes to customer addresses over time (Type 2 SCD). Which approach enables the an
+  a) Use Time Travel with VERSION AS OF to query any historical state of the table on demand.
+  b) Use MERGE INTO with custom logic that inserts new records for changed addresses while marking previous records with an e
+  c) Enable Auto Loader to automatically version customer records as they change.
+  d) Use OPTIMIZE with ZORDER BY address to keep historical addresses together for fast retrieval.
+  e) Enable Change Data Feed (CDF) which automatically creates a Type 2 SCD table.
+CURRENT_EXPL: ✅ CORRECT (B): The recommended maintenance strategy: regular OPTIMIZE to compact small files into larger ones, followed by VACUUM with default 7-day retention to clean up old files while preserving Ti
+---END---
+
+Q20 [db-da-320] type:single_choice
+PROMPT: A data analyst notices that a fact table in the Gold layer contains both `product_name` and `product_category` columns embedded directly, rather than referencing a `dim_product` table via a foreign ke
+  a) No problem — Gold-layer fact tables should always contain denormalized dimension attributes for query performance.
+  b) If a product is reclassified to a different category, the historical fact records will have inconsistent category values
+  c) Denormalized fact tables cannot be queried with SQL GROUP BY clauses.
+  d) The only issue is increased storage cost; there are no analytical implications.
+  e) Denormalized fact tables prevent the use of Delta Lake features like Time Travel.
+CURRENT_EXPL: Embedding dimension attributes directly in fact tables creates update anomalies. If a product's category changes, only new transactions reflect the update — historical records retain the old category.
+---END---
+
+Q21 [db-da-331] type:single_choice
+PROMPT: A data analyst needs to create a table in the Gold layer but is unsure whether to use a VIEW, a materialized TABLE, or a TEMPORARY VIEW. The data will be accessed by 20 concurrent dashboard users thro
+  a) A TEMPORARY VIEW, because it is the most efficient for concurrent access and persists across sessions.
+  b) A VIEW, because it guarantees the freshest data by re-executing the query on every access.
+  c) A materialized Delta TABLE created via CTAS, because it pre-computes results, supports concurrent reads efficiently, and
+  d) A GLOBAL TEMPORARY VIEW, because it is shared across all users and sessions.
+  e) All three options perform identically for concurrent access patterns.
+CURRENT_EXPL: A materialized TABLE is best for Gold-layer concurrent access: results are pre-computed (no repeated aggregation), Delta supports efficient concurrent reads, and it persists across sessions. TEMPORARY
+---END---
+
+Q22 [db-da-332] type:single_choice
+PROMPT: A data analyst runs `SELECT * FROM silver.events VERSION AS OF 5` and gets the expected historical data. However, after running `VACUUM silver.events RETAIN 24 HOURS`, the same Time Travel query fails
+  a) VACUUM deleted the transaction log entries for version 5, making it unreferenceable.
+  b) VACUUM physically removed the old Parquet data files that version 5 referenced, because they were older than the 24-hour
+  c) VACUUM resets the version counter, so version 5 now refers to a different snapshot.
+  d) Time Travel is disabled automatically after VACUUM runs on a table.
+  e) VACUUM only affects metadata; the analyst must have accidentally dropped the table.
+CURRENT_EXPL: VACUUM removes old data files that are no longer referenced by the current table version and are older than the retention period. Time Travel queries need those old files to reconstruct historical ver
+---END---
+

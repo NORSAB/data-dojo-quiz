@@ -1,0 +1,39 @@
+So let's go and start with one that we can talk about, which is licensing that we mentioned, right? So when it comes to licensing, how do we go and understand that? What are the things that we should think about? And we're jumping into a demo here where we can talk about some data sets that Databricks provides. So in this demo, we'll be talking.
+Norman Reynaldo Sabillon Castro 0 minutos 49 segundos
+Talking about the Databricks marketplace, looking at how we can access data sets, review the licensing information forward, and how to ingest that into our Databricks environment.
+Norman Reynaldo Sabillon Castro 1 minuto
+Right. So we just talked about evaluation when it comes to generative AI applications. We also talked about the challenge when it comes to evaluation, when it comes to control, that a lot of these models will show bias and all these other concerns that we have. So it's really important.
+Norman Reynaldo Sabillon Castro 1 minuto 19 segundos
+In order to get those models to perform well, we talked about how we can approach it from a systematic design standpoint with things like RAG, as well as multi-stage reasoning. But ultimately, at some point, in order to get good models and good performance, we need good data sets to either use to evaluate our models' performance against,
+Norman Reynaldo Sabillon Castro 1 minuto 39 segundos
+or to go and use to train new models or fine-tune models. So really what we're going to do in this demo is not really about code, but more about looking at data sets and understanding kind of licensing and copyright and things around that. And understand that really well because when it comes to enterprise, the data that we use is very important in the licensing, in the
+Norman Reynaldo Sabillon Castro 2 minutos 1 segundo
+concerns around that are very important, right? So in this demo, we're going to focus about reviewing licensing associated with various data sets that we might want to use for our models, right, either for training or evaluation. And then we'll also want to go and understand that. So really, end of this demo, recognize the potential legal concerns over data sets that we use for our AI models.
+Norman Reynaldo Sabillon Castro 2 minutos 21 segundos
+and then look at the data sets that are available inside the Databricks platform through the Databricks marketplace. And then ultimately, you would also want to go and assess your legal counsel, right? All these different data sets have different licensing around them, right? So to go and get started, there's not really any code that we need to run here, but in the demo, we're going to go to the marketplace. We're going to look at
+Norman Reynaldo Sabillon Castro 2 minutos 41 segundos
+two different data sets, right? So one that would be okay for our application, and then we're going to look one that would not be okay for us to use. We're going to go to the Databricks Marketplace and look at that. And the nice thing about the Databricks Marketplace is instead of us having to go out and try to find these data sets or collect them ourselves, a lot of third-party providers have already done that hard work for us, and they've actually provided it.
+Norman Reynaldo Sabillon Castro 3 minutos 4 segundos
+as a asset that we can just go and leverage inside the marketplace, right? It's just a data set that we can download and import into our environment, right? That's really helpful because it makes things a little bit easier and faster for us, right? That's great. Two main reasons we might want to use it. If we're looking at RAG applications, it might bring in additional reference information to improve our RAG applications, or it might be good to use for training.
+Norman Reynaldo Sabillon Castro 3 minutos 24 segundos
+Things like that, so...
+Norman Reynaldo Sabillon Castro 6 minutos 53 segundos
+Let's go and take a look at another one. So going back to the lab, right? So product links, we open the licensing, and then we took a look at it. Let's go and take a look at another one. The other one that we're going to look at is from ReArc. And ReArc, we're going to be looking at the personal information data set, income data set, and that's from Fred, right? So that's what we're going to do.
+Norman Reynaldo Sabillon Castro 7 minutos 12 segundos
+We're going to pull that in, and we're going to go and look at that data. I actually have it already preloaded the page for it. So here's the WeArc personal income Fred data set. You can see the information of the data sources here, right? So this sources personal income data, right? You can see it as updated monthly that we have. We can look at that there.
+Norman Reynaldo Sabillon Castro 7 minutos 32 segundos
+We can look at getting instant access. The other one was already imported. So here, this is what it would look like to import the data set. So here we have that. We can bring it in. I can bring it on to Databricks here. All right, give it a name. Looks like someone else on my team has already imported it. And then I can click this to agree to the terms and conditions. But one thing that we want to look at is
+Norman Reynaldo Sabillon Castro 7 minutos 53 segundos
+Maybe look at the licensing here. Looks like terms and service.
+Norman Reynaldo Sabillon Castro 7 minutos 58 segundos
+Right, from rearc, and this would be the same thing. You would want to go and look at this to see if that works with your legal team. Right? Okay, you have two data sets. Let's actually import that one. Sorry, let me go and open that up again.
+Norman Reynaldo Sabillon Castro 8 minutos 17 segundos
+Sorry, I lost that page, so let me open it up again.
+Norman Reynaldo Sabillon Castro 8 minutos 23 segundos
+This is it. So we can import it in. I think someone's already imported it. So let me go and try to find that in our catalog so then we don't have to reload it again. So let me go to the catalog. So here's how you would find it. So here you can see someone's already loaded it up before. So here's that data set. And here's our catalog.
+Norman Reynaldo Sabillon Castro 8 minutos 42 segundos
+our data here, and you can see the information. It looks like it only has two columns. We can look at the sample data. I don't have permissions to see it here, so in this case, nothing that I can see. You can import it and take a look at it yourself, but we can see here it just includes information about personal income and the time.
+Norman Reynaldo Sabillon Castro 9 minutos 2 segundos
+Right, for it. Right. Okay, so with that, we took a look at 2 data sets. We looked at how it is to get inset access to it. And really the main thing is Databricks makes this really easy to go and import data sets from third party providers. And it's really important that part of that is also understanding the legal
+Norman Reynaldo Sabillon Castro 9 minutos 21 segundos
+license around each of those data sets, right? So just something to be aware about when you're working with that out there, when building generative AI applications or training them on those data sets

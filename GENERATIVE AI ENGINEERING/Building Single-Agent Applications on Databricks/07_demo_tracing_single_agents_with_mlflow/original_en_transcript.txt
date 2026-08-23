@@ -1,0 +1,87 @@
+Welcome to the Databricks Academy demonstration on tracing single agents with MLflow. I'm Jade Lauzen. I'm a Databricks technical instructor, and I'm going to walk you through this. Now, in this demonstration, we're going to be diving deep into the idea of tracing.
+Norman Reynaldo Sabillon Castro 0 minutos 34 segundos
+An agent, in a simple description, is a brain with an access to tools that they can choose to use. So you have an LLM that can execute different functions, make different API calls, things like that. Now, an agent can choose the steps it takes. You want to be able to dive deep and trace
+Norman Reynaldo Sabillon Castro 0 minutos 54 segundos
+through each of those steps. Some of it is for development purposes, validation purposes, compliance. You also maybe want to know where the bottleneck is. So, Hey, this agent call took a really long time. Why was there something in there that was extra long? Was there one step, one tool that maybe you could go in there and improve?
+Norman Reynaldo Sabillon Castro 1 minuto 14 segundos
+Oh, it errored. Where was the error? What was the error? You want to be able to go in and trace. And ML flow gives us that capability with tracing. So that's what we're going to look at today. And we're going to look at the built-in auto logging capabilities. We're also going to do some custom work in there as well.
+Norman Reynaldo Sabillon Castro 1 minuto 36 segundos
+So we're gonna start by configuring ML flow experiments. Those are, think of them as kind of the big containers that your different runs, your different traces will sit in. So that's gonna give us basically the place to look for, to work with it. We're gonna do automatic tracking.
+Norman Reynaldo Sabillon Castro 1 minuto 56 segundos
+excuse me, automatic tracing, and then we're going to interpret the outputs, get some chance to get some analysis in there, and then we're going to do some custom. And we're going to do it with the MLFlow.trace decorator. And we're going to look at the children and parent span. Now span is a word that we're going to use
+Norman Reynaldo Sabillon Castro 2 minutos 18 segundos
+throughout. Span is, let's say, one step of work. Think about that. An agent is going to have many different steps of work. It's going to do many different things. So we want to be able to see each of those different steps. So it's a timed record of one step of work. And it starts when maybe a function begins.
+Norman Reynaldo Sabillon Castro 2 minutos 38 segundos
+And then, when that function ends, so does that span, and in MLFlow, for each span, it records inputs, outputs, duration, errors; those all kind of get tracked in there, and you put a collection of spans together and you have a trace, so the trace is kind of the...
+Norman Reynaldo Sabillon Castro 2 minutos 58 segundos
+whole tree of spans and it is a tree because you have parent and child, so they are able to nest. So here's the big function. Here's all those sub things that we did to work with that. So that's kind of what we're looking at. So the idea of a span, think of it as like a step or a function that agent is taking. Now before we can
+Norman Reynaldo Sabillon Castro 3 minutos 18 segundos
+start working, we've got to get in our environment set up in a way that's going to make it work. And that means compute and dependencies. So our compute is going to be serverless compute, so we're going to come up here to upper right, we're going to choose serverless, and give that a couple seconds, it'll be ready to go, and we can start installing our dependencies.
+Norman Reynaldo Sabillon Castro 18 minutos 37 segundos
+and it's called validate input.
+Norman Reynaldo Sabillon Castro 18 minutos 41 segundos
+This is my trace. Now, what's involved in the validate input? Well, here's my definition for validating input. And in this case, we're going to look at the link.
+Norman Reynaldo Sabillon Castro 18 minutos 54 segundos
+there's a minimum length that it needs to be. And if the question is too short, we want you to know that.
+Norman Reynaldo Sabillon Castro 19 minutos
+Question cannot be empty. Minimum length, we also need to address what happens if it's empty. And if it returns true, then it's a cleaned question. So we have this here as a trace. Now we have the process question here as a trace as well. So the process question says, hey, here's my definition. And this includes validate the input that we're going to.
+Norman Reynaldo Sabillon Castro 19 minutos 21 segundos
+Run this.
+Norman Reynaldo Sabillon Castro 19 minutos 23 segundos
+with that and then process the clean. So kind of a two-step here that we're looking to work with. Validate the input and then process the question.
+Norman Reynaldo Sabillon Castro 19 minutos 33 segundos
+And this is that validated response. So this is based off of that. So let's make sure we have that definition run.
+Norman Reynaldo Sabillon Castro 19 minutos 41 segundos
+And then, let's test this out.
+Norman Reynaldo Sabillon Castro 19 minutos 45 segundos
+So if I run process question, I say what is the average permission?
+Norman Reynaldo Sabillon Castro 19 minutos 51 segundos
+This is what we get. So the process question had validate input. So if you come up here, there's that process question, there's its name, so that's showed up there.
+Norman Reynaldo Sabillon Castro 20 minutos 1 segundo
+And we had the step to validate.
+Norman Reynaldo Sabillon Castro 20 minutos 6 segundos
+The input.
+Norman Reynaldo Sabillon Castro 20 minutos 9 segundos
+See how that works? So we built out a parent and a child because the one called the other.
+Norman Reynaldo Sabillon Castro 20 minutos 15 segundos
+The process question, Val, the input was part of it, and we can go in, we can see the inputs and outputs for each one.
+Norman Reynaldo Sabillon Castro 20 minutos 23 segundos
+the attributes, the events, the summary piece. So that's how that worked. We defined our tracing, and then we said, look, we want to run process question. We ran process question, and that traced both of them, just based on how they were defined.
+Norman Reynaldo Sabillon Castro 20 minutos 39 segundos
+Now if we do something that's going to cause an error, because remember there was a length requirement, we can pass in the question just high.
+Norman Reynaldo Sabillon Castro 20 minutos 48 segundos
+And what we end up with...
+Norman Reynaldo Sabillon Castro 20 minutos 52 segundos
+Is an error.
+Norman Reynaldo Sabillon Castro 20 minutos 55 segundos
+Our key error was cleaned question. If we look at this, well, hey, what was the event? What was the error? There was an exception. It was cleaned question. We can look at our traces. And if I look at the validate input,
+Norman Reynaldo Sabillon Castro 21 minutos 9 segundos
+Validate input has a min length of five. That was part of what it was defined to be. So the error came back as question is too short. That was the output of this step. If I look at events, if I look at attributes, there wasn't any here because this did exactly what it was supposed to do. It was supposed to check the length and said, hey,
+Norman Reynaldo Sabillon Castro 21 minutos 28 segundos
+We're passing this back with error. No, it's not valid. It's too short. And that caused process question.
+Norman Reynaldo Sabillon Castro 21 minutos 37 segundos
+To give me that exception, and it was the cleaned question exception method, so we're able to work with that now. Example 2 here, a little bit more involved, or at least adding an extra layer to it, because we're not just doing tool calling, we're actually doing LLM calling. So, in this case, the span type is...
+Norman Reynaldo Sabillon Castro 21 minutos 56 segundos
+Chat model, and we're going to...
+Norman Reynaldo Sabillon Castro 22 minutos
+do agent dot ask. So if we run function call LLM, it's going to actually ask the agent a question. And then we have the process question again. So in this case, we're still validating our input, but after we validated our input and we have those results, we've got our cleaned question.
+Norman Reynaldo Sabillon Castro 22 minutos 20 segundos
+And we're then going to call the LLM.
+Norman Reynaldo Sabillon Castro 22 minutos 25 segundos
+Okay, so our steps here to process the question doesn't just include validate, it includes validate and then call the LLM. So now that's defined, let's actually run that. And we should see the new span type in there as well. There we go. So step one, validate the input.
+Norman Reynaldo Sabillon Castro 22 minutos 45 segundos
+and then call LLM. Now, that call LLM, the auto log is still in place. So auto log says, look, this involves chatting with Databricks, so we called the LLM. It had access to a tool, so it executed that tool, and then chatted. So this is what we saw earlier, and we just added the process question on top of it.
+Norman Reynaldo Sabillon Castro 23 minutos 4 segundos
+and added that in as part of my custom trade.
+Norman Reynaldo Sabillon Castro 23 minutos 7 segundos
+We're able to see each of those, right? That's a parent. We were able to build those out. So now everything is a little bit better, potentially organized for debugging, giving you maybe a little bit extra information, able to validate. And similarly, if you saw an error.
+Norman Reynaldo Sabillon Castro 23 minutos 24 segundos
+You see the partial trace because it didn't continue. Step one errored.
+Norman Reynaldo Sabillon Castro 23 minutos 28 segundos
+that we didn't go in and chat with DataWerks.
+Norman Reynaldo Sabillon Castro 23 minutos 32 segundos
+We do have that. And if we look at this, you can see that process question also gets timed, right? They're each defined spans. So the general things like the latency, it takes in the inputs, the outputs, those are all collected with very little code on your point. Hey, this was a chat model. So this is what you need to be able to do.
+Norman Reynaldo Sabillon Castro 23 minutos 53 segundos
+grab the inputs and outputs. So it's kind of a ability to customize without fully scripting everything out. So some of those are abstracted away. So that gave us a chance to dive through tracing with ML Flow and we had a single agent that we were tracing for this one.
+Norman Reynaldo Sabillon Castro 24 minutos 12 segundos
+Thank you.

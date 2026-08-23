@@ -1,0 +1,71 @@
+Welcome to Databricks Academy. This is a demonstration on building UC Unity catalog functions as agent tools, and we're going to use the AI playground to do this. I'm Jade Lauzen. I'm a Databricks instructor, and I'm going to walk you through this. So in general,
+Norman Reynaldo Sabillon Castro 0 minutos 27 segundos
+what we're looking to do here is to build out tools for our agents. An AI agent is really a brain, an LLM, that has access to tools that it can use. Now, those tools can vary significantly, right? They could be API calls they'd like to
+Norman Reynaldo Sabillon Castro 0 minutos 47 segundos
+execute. They can be queries to data. They can be entire chains of events to build out. You've got lots of different options when working with them. We're going to do and use UnityCatalog functions in this case. So hey, we've got some logic
+Norman Reynaldo Sabillon Castro 1 minuto 6 segundos
+that we'd like to be able to execute. And we're going to do it using both SQL and Python. So we're going to build out a SQL function and a Python function, just to really kind of understand some of the differences and the similarities between them, because those are the two types of functions that you can work with. So our learning objectives include
+Norman Reynaldo Sabillon Castro 1 minuto 26 segundos
+Creating and registering both of them, so we got to go and create the functions. We're going to use some pretty simple logic, but we're learning the building blocks for things that are more complex. We're going to make sure that they work, and we're going to look at how to equip functions, right? How do I actually?
+Norman Reynaldo Sabillon Castro 1 minuto 45 segundos
+give these tools to the AI agent and we're going to then test them out in the playground because that's where we're going to give that access to. I just really kind of understand the tools that are available to us and the strengths and the weaknesses of both. Before we can get started though, we've got to set up our classroom. And what does classroom setup include? Well,
+Norman Reynaldo Sabillon Castro 2 minutos 5 segundos
+It includes compute. Now we're going to use serverless compute. So if you look up here in the upper right, you'll see the drop down. This is where you could choose your compute. Now serverless is the default, so we don't really have to do anything. We could just hit run on our logic cells, but that's there going to initialize that serverless environment and it is environment.
+Norman Reynaldo Sabillon Castro 2 minutos 25 segundos
+Or is what we're looking to use. If you ever need to understand and change that up, you can do that here. There's that base environment that we're working on in this one. Now, after that, we just need to install some dependencies, get everything set up. This is a demonstration. So some of the.
+Norman Reynaldo Sabillon Castro 2 minutos 43 segundos
+heavy lifting is going to be done in the back end. And we're going to install one Unity Catalog AI. So when we're looking to build out these functions, we need something that's going to abstract some of the complexities and make life a little bit easier for everyone. And Unity Catalog AI for Databricks does that. It helps.
+Norman Reynaldo Sabillon Castro 3 minutos 3 segundos
+do the underlying plumbing that comes with building out these functions for things like our AI agent. So we're going to install that and then we're also going to do our classroom setup. Now many and most of Databricks labs and demonstration notebooks have this classroom setup. So it's the magic command run.
+Norman Reynaldo Sabillon Castro 15 minutos 12 segundos
+With the agent in place, they are just...
+Norman Reynaldo Sabillon Castro 15 minutos 16 segundos
+different models, chat models that are deployed in the model serving endpoint. So we've got that list and that list matches this. Now we're going to pick a brain. We're also going to pick tools. We're going to attach those functions we just built, which are the tools to that brain.
+Norman Reynaldo Sabillon Castro 15 minutos 36 segundos
+And then we can talk to it and we can ask a question. Now, as far as what brain to choose, you can be very flexible with the brains you're looking to work with. Now, the one they're suggesting here is GPT-OSS-20B. So that's 20 billion parameters. So that makes this a mid-sized.
+Norman Reynaldo Sabillon Castro 15 minutos 56 segundos
+LLM and it's open sourced. So if we go find our list here and we scroll down, there is the open source 20 B. This is a good one for agents being mid-sized. It has enough understanding to be able to choose what tools to work, to execute it, but it's not going to get so bogged down as you would sometimes with larger LLM.
+Norman Reynaldo Sabillon Castro 16 minutos 19 segundos
+So you've got that there as an option. And we're going to then, after we do that, add some tools to this. So we're going to add our neighborhood average price tool, as well as the Airbnb posting information. And then we're going to ask it a question to compare the average price admission
+Norman Reynaldo Sabillon Castro 16 minutos 37 segundos
+right? That's a neighborhood with detailed information for listing 958 and looking at which provides a better value. Now I do want to do a little comparison. One of the cool things you can do in the playground is actually compare side by side different LMs, different agents, different models.
+Norman Reynaldo Sabillon Castro 16 minutos 57 segundos
+And so I'm going to actually add an endpoint. So here is GPT OS 20 with no tools attached. Here I'm actually going to add a second one.
+Norman Reynaldo Sabillon Castro 17 minutos 9 segundos
+And I'm going to add a tool.
+Norman Reynaldo Sabillon Castro 17 minutos 11 segundos
+Now I'm just going to add one of the two because we have access to two different tools. I'm just going to add the average neighborhood price. And now that I have that one tool attached, I'm going to come down here and ask the question.
+Norman Reynaldo Sabillon Castro 17 minutos 23 segundos
+and it's synced. So both are going to be asked the question. So we're going to have GPT OSS 20 and then that with tools. Now, if you look at the 20, it gave you some information right away. Like I'm happy to help compare, but I need more details. In other words, I'd love to help. I can't really give you a relevant answer.
+Norman Reynaldo Sabillon Castro 17 minutos 44 segundos
+because it doesn't know it. Over here, well, it has access to a tool that could potentially pull in information. So it pulled in the average neighborhood price, because that's the tool it had access to. And now it says I'm ready to compare, but I need detailed listings for 958.
+Norman Reynaldo Sabillon Castro 18 minutos 1 segundo
+So let me come over here and let me add both functions to this side.
+Norman Reynaldo Sabillon Castro 18 minutos 10 segundos
+So now this has access to both tools. I am going to clear out the chat history so that it doesn't remember what it said before. And let me ask that question again.
+Norman Reynaldo Sabillon Castro 18 minutos 22 segundos
+Same question, we're comparing the average price and admission. So this one had access to the one, so it went in and asked it and it still says hey I need more information. This one said okay first I get the average neighborhood price and then oh I also need information about the listing so here's another function that by its very
+Norman Reynaldo Sabillon Castro 18 minutos 41 segundos
+comment, very description is able to do that and it comes back with that information and says hey I asked this information and we're able to get some out. Now it's not able to give us a great answer because our function didn't actually give the listing price. That wasn't part of the information that was pulled out and this is where you're like
+Norman Reynaldo Sabillon Castro 19 minutos 1 segundo
+Okay. So maybe I build another function that does that, or I add it as part of this. So including the reviews and the ratings, we actually pull out the numeric information.
+Norman Reynaldo Sabillon Castro 19 minutos 14 segundos
+So we're able to say, look, I want to do the pricing, the average pricing of that. Now, prices do change in Airbnb based on time of year, based off of date. So maybe it needs to be able to say, look, look at the dates you're looking for. Maybe we'll be able to compare there or look at the average throughout the year. So there's a lot of different context that can come into that.
+Norman Reynaldo Sabillon Castro 19 minutos 34 segundos
+But you do have that ability. Now let me remove that endpoint. And here we go. So now I have my tools and my agents.
+Norman Reynaldo Sabillon Castro 19 minutos 43 segundos
+Now, we're not going to move on from here; this is actually the end of the demonstration, but just to give you a bit of a heads up.
+Norman Reynaldo Sabillon Castro 19 minutos 49 segundos
+There is a button here to create an agent notebook, and if you choose that, it'll build out the notebook, the code to build this agent, to evaluate this agent, to register this agent, and to deploy this agent, and all of that will be there in a notebook that you can run and you can modify, but it gives you...
+Norman Reynaldo Sabillon Castro 20 minutos 8 segundos
+This.
+Norman Reynaldo Sabillon Castro 20 minutos 10 segundos
+as something that you can grab and go. So it does give you that extra last piece.
+Norman Reynaldo Sabillon Castro 20 minutos 16 segundos
+So in general, we built out two functions, looked at strengths, weaknesses, the flexibilities, how we do that, tested each one.
+Norman Reynaldo Sabillon Castro 20 minutos 26 segundos
+created a agent toolkit. It worked better with two than it did with one.
+Norman Reynaldo Sabillon Castro 20 minutos 31 segundos
+and were able to monitor that. We were able to go in, ask questions, analyze what was going on.
+Norman Reynaldo Sabillon Castro 20 minutos 39 segundos
+So, that brings us here to the end of our demo for building Unity Catalog functions as agent tools with the AI Playground.

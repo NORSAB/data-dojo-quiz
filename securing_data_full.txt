@@ -1,0 +1,247 @@
+=== Securing Data (24 questions) ===
+
+Q1 [db-da-13] type:single_choice
+PROMPT: Which of the following should data analysts consider when working with personally identifiable information (PII) data?
+  a) Organization-specific best practices for PII data
+  b) Legal requirements for the area in which the data was collected
+  c) None of these considerations
+  d) Legal requirements for the area in which the analysis is being performed
+  e) All of these considerations
+CURRENT_EXPL: Responsible data analysis involving PII demands a comprehensive approach that encompasses organizational policies, data origin jurisdiction laws, and the jurisdiction where the analysis is performed.
+---END---
+
+Q2 [db-da-17] type:single_choice
+PROMPT: The stakeholders.customers table has 15 columns and 3,000 rows...
+  a) The view remains available and SELECT * FROM stakeholders.eur_customers will execute correctly.
+  b) The view has been dropped.
+  c) The view is not available in the metastore, but the underlying data can be accessed with SELECT * FROM delta.`stakeholde
+  d) The view remains available but attempting to SELECT from it results in an empty result set because data in views are aut
+  e) The view has been converted into a table.
+CURRENT_EXPL: TEMPORARY views are visible only to the session that created them and are dropped automatically when the session ends (e.g., user logs out).
+---END---
+
+Q3 [db-da-41] type:single_choice
+PROMPT: A data team has been given a series of projects by a consultant that need to be implemented in the Databricks Lakehouse Platform. Which of the following projects should be completed in Databricks SQL?
+  a) Testing the quality of data as it is imported from a source
+  b) Tracking usage of feature variables for machine learning projects
+  c) Combining two data sources into a single, comprehensive dataset
+  d) Segmenting customers into like groups using a clustering algorithm
+  e) Automating complex notebook-based workflows with multiple tasks
+CURRENT_EXPL: Databricks SQL excels at data warehousing tasks such as querying, joining, and aggregating data from different sources to create comprehensive datasets.
+---END---
+
+Q4 [db-da-47] type:single_choice
+PROMPT: Which example of data projects represents a common analytics application to be completed in Databricks SQL?
+  a) Augmenting gold-layer tables with additional external information
+  b) Automating complex notebook-based workflows with multiple tasks
+  c) Testing the quality of data as it is imported from a source
+  d) Segmenting customers into like groups using a clustering algorithm
+CURRENT_EXPL: Working with gold-layer tables (clean, business-ready data) and performing additional joins or enhancements is a typical use case for Databricks SQL.
+---END---
+
+Q5 [db-da-75] type:single_choice
+PROMPT: A data analyst has two data sources that are providing similar but complementary information. The analyst wants to combine these sources of data into a single, comprehensive dataset for ongoing use fo
+  a) Last-mile ETL
+  b) Ad-hoc improvements
+  c) Data testing
+  d) Data blending
+CURRENT_EXPL: Data blending refers to the process of combining data from multiple sources into a unified dataset to create a more comprehensive view for analysis.
+---END---
+
+Q6 [db-da-78] type:single_choice
+PROMPT: A data engineering team has created a Structured Streaming pipeline that processes data in micro-batches and populates gold-level tables. The microbatches are triggered every 10 minutes. A data analys
+  a) A refresh schedule with an always-on SQL Warehouse (formerly known as SQL Endpoint)
+  b) A refresh schedule with an interval of 10 minutes or less
+  c) A refresh schedule with stakeholders included as subscribers
+  d) A refresh schedule with a Structured Streaming cluster
+CURRENT_EXPL: To meet the stakeholder requirement of seeing new data within 10 minutes, the dashboard must be scheduled to refresh at an interval matching or exceeding that frequency (10 minutes or less).
+---END---
+
+Q7 [db-da-102] type:single_choice
+PROMPT: A data analyst is curating a Genie space for the marketing team. To ensure accurate and context-aware responses, the analyst includes curated Unity Catalog tables and sample questions. Which additiona
+  a) Disable the use of domain instructions to prevent bias in AI-generated answers.
+  b) Enable automatic query generation so users receive instant responses without review.
+  c) Allow users to edit the underlying datasets to improve Genie responses.
+  d) Mark commonly used queries as Trusted Assets after verifying their correctness.
+CURRENT_EXPL: ✅ CORRECT (B): Marking verified queries as Trusted Assets signals to both Genie and users that these queries are "gold standard" — pre-validated for correctness. Genie prioritizes Trusted Assets when 
+---END---
+
+Q8 [db-da-125] type:single_choice
+PROMPT: You want to restrict access to specific rows in the `employees` table so that analysts can only see employees from their own country. To which object do you apply the Row Filter function in Unity Cata
+  a) To the Dashboard.
+  b) To the SQL Warehouse.
+  c) To the Table definition.
+  d) To the User Group settings.
+CURRENT_EXPL: In Unity Catalog, security policies like Row Filters and Column Masks are attached directly to the Table definition. This ensures the security applies universally, regardless of how the table is acces
+---END---
+
+Q9 [db-da-131] type:single_choice
+PROMPT: What access control model in Unity Catalog defines permissions based on tags or attributes assigned to data assets, users, and the environment rather than explicit role grants?
+  a) RBAC (Role-Based Access Control)
+  b) ACL (Access Control Lists)
+  c) ABAC (Attribute-Based Access Control)
+  d) IAM (Identity and Access Management)
+  e) MFA (Multi-Factor Authentication)
+CURRENT_EXPL: ABAC (Attribute-Based Access Control) in Unity Catalog allows defining fine-grained policies based on attributes (tags) applied to data assets and users. It complements the existing privilege model, e
+---END---
+
+Q10 [db-da-135] type:single_choice
+PROMPT: A data analyst needs to ensure that when users query a table containing Social Security Numbers (SSNs), the SSN column displays only the last four digits (e.g., '***-**-1234') without modifying the ac
+  a) Row Filters
+  b) Data Tagging
+  c) Column Masking
+  d) Encryption at Rest
+  e) Access Control Lists
+CURRENT_EXPL: Column Masking in Unity Catalog uses User-Defined Functions (UDFs) to transform sensitive data at read time without modifying the underlying stored data. This allows different users to see masked or u
+---END---
+
+Q11 [db-da-140] type:single_choice
+PROMPT: A data analyst wants to grant read-only access to the sales_data table so a colleague can run SELECT queries but cannot modify the data. Which SQL command accomplishes this?
+  a) GRANT ALL PRIVILEGES ON TABLE sales_data TO `colleague@example.com`;
+  b) GRANT SELECT ON TABLE sales_data TO `colleague@example.com`;
+  c) GRANT MODIFY ON TABLE sales_data TO `colleague@example.com`;
+  d) GRANT CREATE ON TABLE sales_data TO `colleague@example.com`;
+  e) GRANT READ ON TABLE sales_data TO `colleague@example.com`;
+CURRENT_EXPL: GRANT SELECT grants read-only permission, allowing the user to run SELECT queries on the specified table. ALL PRIVILEGES would grant more than needed, and MODIFY would allow data changes. Note that in
+---END---
+
+Q12 [db-da-180] type:single_choice
+PROMPT: A data analyst is preparing a dataset that includes customer information such as email addresses and birthdates. This dataset will be used by multiple teams for generating reports, but some teams shou
+  a) Grant SELECT privileges to all report writers for the required subset of data from the base table.
+  b) Use Dynamic Views with IS_MEMBER() functions to restrict PII columns based on user roles.
+  c) Store the PII data in a shared CSV file on DBFS and apply access control at the folder level.
+  d) Mask PII data by obfuscating it in the source table before conducting analysis.
+CURRENT_EXPL: Dynamic Views with IS_MEMBER() provide role-based column restriction, exposing only non-PII columns to unauthorized users while the underlying table still holds the full PII. This approach provides ce
+---END---
+
+Q13 [db-da-181] type:single_choice
+PROMPT: How are privileges inherited in Unity Catalog across the hierarchy levels of metastore, catalog, schema, and table/view?
+  a) Privileges granted at a higher level (such as a catalog) automatically apply to all child objects (schemas and tables) u
+  b) Privileges are only inherited from the metastore level, and no inheritance occurs between catalogs, schemas, or tables.
+  c) Privileges must be granted individually for each object, regardless of their position in the hierarchy, to ensure secure
+  d) Privileges granted at the schema level have no impact on tables or views in that schema unless directly applied to them.
+CURRENT_EXPL: Privileges are resolved by traversing upward through the Unity Catalog hierarchy: metastore → catalogs → schemas → tables/views. When a privilege is granted at a higher level, it is automatically prop
+---END---
+
+Q14 [db-da-189] type:single_choice
+PROMPT: A company has started using the Databricks Platform and currently has only one workspace. They need to manage data access across different teams and want to ensure proper isolation and security contro
+  a) Create a unique catalog with all schemas inside of it.
+  b) Use Unity Catalog's built-in environment separation features.
+  c) Create a schema and share the schema for production, development, and testing.
+  d) Create a catalog for production, another for development, and another for testing.
+CURRENT_EXPL: Catalogs act as independent namespaces in Unity Catalog, allowing you to assign distinct permission policies, retention settings, and access-control rules to each environment. By provisioning a separa
+---END---
+
+Q15 [db-da-193] type:single_choice
+PROMPT: Where can an admin or Data owner grant database, table, and view permissions to a group?
+  a) Dashboard
+  b) Data
+  c) SQL Warehouses (formerly SQL Endpoints)
+  d) Settings
+CURRENT_EXPL: The Data area of the Databricks UI (found under Data→Databases/Tables/Views) provides a dedicated Permissions pane where an admin or data-owner can directly assign SELECT, INSERT, UPDATE, DROP, etc. t
+---END---
+
+Q16 [db-da-333] type:single_choice
+PROMPT: A data analyst needs to ensure that sales representatives can only see customer records from their assigned region in a shared Unity Catalog table. The table has a `region` column that matches the ana
+  a) Column masking to hide the region column from unauthorized users.
+  b) Row-level security using row filters that dynamically restrict rows based on the querying user's attributes.
+  c) Creating separate tables per region and granting each sales rep access only to their region's table.
+  d) Using a VIEW with a WHERE clause that hardcodes each user's email address.
+  e) Encrypting region data so that only authorized users have the decryption key.
+CURRENT_EXPL: Unity Catalog row filters enable dynamic row-level security: a SQL function evaluates the querying user's identity/attributes and filters rows accordingly. This is transparent to users — they query th
+---END---
+
+Q17 [db-da-334] type:single_choice
+PROMPT: A data analyst discovers that a table containing employee social security numbers (SSN) is accessible to the entire analytics team. The data governance team requires that SSNs be visible only to HR an
+  a) Row-level security to filter out rows containing SSNs for non-HR users.
+  b) Dynamic column masking that applies a masking function to the SSN column based on the querying user's group membership.
+  c) Revoking SELECT permission on the entire table from non-HR users.
+  d) Creating a VIEW that excludes the SSN column and granting non-HR users access only to the view.
+  e) Using Delta Lake encryption to encrypt the SSN column at rest.
+CURRENT_EXPL: Unity Catalog column masking applies a UDF that transforms sensitive column values based on the querying user's identity. HR analysts see real SSNs; others see masked values like XXX-XX-1234. This is 
+---END---
+
+Q18 [db-da-335] type:single_choice
+PROMPT: A data analyst runs `GRANT SELECT ON TABLE finance.transactions TO analyst_team` but members of `analyst_team` still cannot query the table. They receive a permission denied error.
+
+What is the most l
+  a) The SELECT grant is not sufficient; the team also needs INSERT permission to read data.
+  b) The team lacks USAGE permission on the parent catalog and/or schema. Unity Catalog requires USAGE at each level of the h
+  c) GRANT SELECT only works on views, not on tables. The analyst should use GRANT READ instead.
+  d) The SQL Warehouse configuration prevents non-admin users from executing SELECT statements.
+  e) The table must be registered as a Trusted Asset before external users can query it.
+CURRENT_EXPL: Unity Catalog enforces hierarchical permissions. USAGE must be granted at each level: the catalog AND the schema containing the table. Without USAGE on the parent containers, SELECT on the table is un
+---END---
+
+Q19 [db-da-336] type:single_choice
+PROMPT: An organization wants to share a curated dataset with an external partner company that does NOT use Databricks. The dataset contains aggregated market research data in a Delta table.
+
+Which Databricks
+  a) Unity Catalog's GRANT SELECT to external email addresses.
+  b) Delta Sharing, an open protocol that allows sharing live Delta tables with external recipients through share-based acces
+  c) Exporting the data as CSV files and sending them via encrypted email.
+  d) Creating a public S3 bucket with the Parquet files and sharing the URL.
+  e) Partner Connect, which establishes a direct connection between the partner's analytics platform and the Databricks works
+CURRENT_EXPL: Delta Sharing is an open-source protocol for secure data sharing. Recipients access live data without copying it, and they don't need Databricks — any client supporting the Delta Sharing protocol (pan
+---END---
+
+Q20 [db-da-337] type:single_choice
+PROMPT: A compliance officer asks a data analyst to produce an audit report showing all users who accessed the `payroll` table in the last 30 days, including which queries they ran and when.
+
+Which Databricks
+  a) Delta Lake's transaction log, which records every INSERT, UPDATE, and DELETE operation with timestamps.
+  b) Unity Catalog's system audit logs, which track data access events including the querying user, timestamp, query text, an
+  c) The SQL Warehouse query history, which only shows queries from the current session.
+  d) The DESCRIBE HISTORY command, which shows schema changes but not user access patterns.
+  e) Databricks does not provide user-level data access auditing; a third-party tool is required.
+CURRENT_EXPL: Unity Catalog provides immutable system audit logs that capture who accessed what data, when, and how. These logs include user identity, timestamp, query text, and the specific tables/columns accessed
+---END---
+
+Q21 [db-da-338] type:single_choice
+PROMPT: A data analyst has been granted the MODIFY privilege on a table. Another analyst asks: 'Can you also grant me SELECT access to this table?'
+
+Can the first analyst grant SELECT to the second analyst?
+  a) Yes, any user with MODIFY permission can grant any privilege on that object.
+  b) No, only users with the OWNERSHIP privilege or account administrators can grant permissions on data objects in Unity Cat
+  c) Yes, but only if both analysts belong to the same workspace group.
+  d) No, GRANT operations can only be performed through the Catalog Explorer UI, not via SQL.
+  e) Yes, MODIFY implicitly includes the ability to delegate SELECT access.
+CURRENT_EXPL: In Unity Catalog, only the object OWNER or account/metastore administrators can grant privileges. MODIFY allows data changes (INSERT, UPDATE, DELETE) but does NOT include the ability to manage permiss
+---END---
+
+Q22 [db-da-339] type:single_choice
+PROMPT: A data analyst encounters a table with PII data (personal email addresses) that they should not have access to. The analyst has already viewed several rows before realizing the sensitivity.
+
+What is t
+  a) Delete the table to ensure no one else can access the PII data.
+  b) Drop the PII column and continue using the remaining data without notifying anyone.
+  c) Stop accessing the data immediately and notify their supervisor to ensure the data is handled following organizational a
+  d) Export the data to a local file and apply masking manually before continuing analysis.
+  e) Apply column masking on the table themselves to protect other users from the same issue.
+CURRENT_EXPL: The correct protocol for encountering unauthorized PII is: (1) immediately stop accessing the data, (2) do not modify or delete anything, (3) escalate to a supervisor or data governance team. Deleting
+---END---
+
+Q23 [db-da-340] type:single_choice
+PROMPT: A data governance team wants to classify all tables in Unity Catalog by data sensitivity (public, internal, confidential, restricted). They want this classification to be searchable and enforceable.
+
+
+  a) Table comments (COMMENT ON TABLE) that describe the sensitivity level in free text.
+  b) Tags (governed tags) that apply key-value metadata like `sensitivity = 'confidential'` to tables and columns, enabling s
+  c) Table properties (TBLPROPERTIES) that store sensitivity information as Delta configuration.
+  d) Naming conventions that include the sensitivity level in the table name (e.g., `confidential_payroll`).
+  e) Creating separate catalogs for each sensitivity level (catalog_public, catalog_confidential, etc.).
+CURRENT_EXPL: Unity Catalog Governed Tags provide structured, searchable metadata classification. Tags like `sensitivity = 'confidential'` can be applied to tables and columns, searched via Catalog Explorer, and us
+---END---
+
+Q24 [db-da-341] type:single_choice
+PROMPT: A data analyst needs to understand the complete flow of data from a raw Bronze table through Silver transformations to the final Gold dashboard table, to troubleshoot a data quality issue.
+
+Which Unit
+  a) DESCRIBE HISTORY, which shows all operations performed on each individual table.
+  b) Data lineage tracking, which automatically maps table-level and column-level dependencies across the Bronze → Silver → G
+  c) Query Profile, which shows the execution plan of individual queries.
+  d) Delta Lake transaction logs, which record write operations per table.
+  e) Change Data Feed (CDF), which tracks row-level changes in a table.
+CURRENT_EXPL: Unity Catalog automatically captures data lineage — both table-level and column-level — as queries execute. This creates a visual graph showing how data flows from Bronze through Silver to Gold, inclu
+---END---
+

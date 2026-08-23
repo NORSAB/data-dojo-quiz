@@ -1,0 +1,7 @@
+backups/
+backups_archive/
+backup_pre_modular_monolith/
+scratch/
+*.bak
+*.broken_latest
+*.py

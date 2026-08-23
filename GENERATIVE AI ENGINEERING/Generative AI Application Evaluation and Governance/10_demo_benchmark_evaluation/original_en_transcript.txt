@@ -1,0 +1,45 @@
+Stop talking about it, jump to a demo where what I'll do in this demo is I'll show 2 demos. So one is going to be about using a benchmark evaluation where we can use MLFlow to go and measure the performance of two different LLMs against some rouge scores on summarization task that we're going to do and then we're going to compare the two.
+Norman Sabillon 2 minutos 7 segundos
+So we talked about evaluation. We talked about the history of evaluation and different metrics we can use, such as Rouge and Blue and LMs as a judge. Right. Now, if you can, the best thing to do is have a benchmark to do your evaluation against. And that's what we're going to talk about.
+Norman Sabillon 2 minutos 26 segundos
+And then if you don't have that, we'll do a demo where you talk to LMs as a judge next. So benchmark evaluation in this demo, we'll be focusing especially using a benchmark to compare our model's performance against. Now in this case, we're going to be doing specifically summarization. So at the end of this demo, we'll talk about how to obtain a benchmark data set.
+Norman Sabillon 2 minutos 47 segundos
+For task specific LM evaluation, which is really common with a lot of LMs today, with a lot of common benchmarks out there. It's the same strategy. We're going to be doing particularly just one task here, which is summarization. Then we're going to evaluate the L of performance using task specific metrics. We're going to be using MFlow to calculate the rouge scores.
+Norman Sabillon 3 minutos 7 segundos
+And then we're going to compare that performance on two LMs using a benchmark set. But go and do that, getting started, run the requirements in the classroom setup again. And then we're going to set up the model that we're going to use. We're going to compare two different models in this. Databrick says DVRX and Llama 270B check. What we're going to do is we'll load the two models in.
+Norman Sabillon 3 minutos 26 segundos
+So that's what we're doing here. We're going to pull in the data bricks model serving and the workspace client. And then we're going to define the first model here as a function, queries summary system, the message. Oh, here you can see the system prompt and then the user input. And then here is
+Norman Sabillon 3 minutos 45 segundos
+It's sent to the endpoint. So this is Lama Two 70B, and then here's our second one, which is our challenger model, and in this case, similar prompt as we have for the first one, except the difference here is we're going to be talking to DBR. So you can see here we have a challenger, and then we have the non-challenger. So very common is the challenger.
+Norman Sabillon 4 minutos 6 segundos
+champion test. That's what we're doing here. All right, so we have our models. Let's see a quick test to make sure they work.
+Norman Sabillon 4 minutos 12 segundos
+This is the best frozen pizza I've ever had. Running that against that end point looks like it works. Running against this one point looks like it works. Awesome. So at this point we have our models and these are the two models that we're going to be using to compare against our benchmark. So the next thing that we want to do is we want to pull in our benchmark.
+Norman Sabillon 4 minutos 31 segundos
+The benchmark we're going to be using is a generic benchmark for new summarization. We can go and take a look at the data set here or the paper here. So this is a paper for it if you want to go take a look. But this data set has a whole bunch of records in it and it's basically news articles and it has a ground truth summary written by authors. So the authors actually wrote the summaries for the article.
+Norman Sabillon 7 minutos 53 segundos
+So pretty cool. All right. So we did one run. Now we only did this run against one model, which is the Llama 7DB model that we just did. Let's go and take a look at it more into those results and see what good looks like. So we look at the results, we can take a look. So here you can see with a.4 score, this is our input.
+Norman Sabillon 8 minutos 14 segundos
+And this is our output. You can see quite good, actually. Baltimore's there, planning a need for change. And you can see that ends up pretty good. So we have there. And when we're looking at rouge force, typically zero is matching and one is perfect match. So typically, if you're hitting anywhere in 30 to...
+Norman Sabillon 8 minutos 32 segundos
+about 30% or 40% and you're actually really close. But something you look at, I'll recommend that everyone go in and actually take a look at these scores and play deeper into all of that. That's there we can look at. But really, what we're here for is to compare the performance between models. It's great to go and look at a single model and be able to evaluate its results and look at all the individual
+Norman Sabillon 8 minutos 54 segundos
+sample outputs, but really what we're trying to do here is compare two different models. So let's do the same thing again. Let's go and load up our challenger model. So here's our code to do in duration for it, and we're going to go and do the same thing. So we're going to have MLFlow go through, use the challenger, and it's going to go and do the same thing. Generate predictions for 50 rows and then compare it and then calculate the text summarization.
+Norman Sabillon 9 minutos 16 segundos
+metrics. So it goes through and does that and then it has our run and then here you can see the run for that model run.
+Norman Sabillon 9 minutos 24 segundos
+You can see our outputs. You can see our scores. It looks a little higher than our previous example. So that's pretty good to see here.
+Norman Sabillon 9 minutos 32 segundos
+We can look at artifacts.
+Norman Sabillon 9 minutos 35 segundos
+And we can see the table. So we can see here the table for the outputs and the scores just like the other run. But let's actually go and compare the two. So let's go down. We can see the metrics. Let's go and compare the two. So one of the cool things in MLFlow, the new UI inside of DataBricks, is the ability to chart these results as well as.
+Norman Sabillon 9 minutos 55 segundos
+Show the evaluations. I'm going to go pull up the runs here. I'm going to go and hide that one. One thing that we can do is we can see all the runs with this experiment. I've rammed this demo multiple times. Let's just highlight two of them and you can see here the scores. We can here quickly look at the Rouge 1 scores, Rouge 2 scores, Rouge L sum, and we can quickly compare between Challenger model and...
+Norman Sabillon 10 minutos 17 segundos
+the old model. I believe the brown here is the new one and the green one is the older one. And you can see here there is a slight improvement on some of those scores that we have. Another cool view that we can show is not only can we see scores and look at them, but we can also go and compare visually. So with the new evaluations preview.
+Norman Sabillon 10 minutos 36 segundos
+I can pull that up and I can actually look at the outputs. Let me go and hide one that we just ran. You can actually look at the outputs. So here you can see the inputs, the outputs, and we can see really quickly those. So here if we want to actually put the summary, so here's the gold standard and we compare directly to the generations. That's also very useful because sometimes the numbers are the numbers, but I like to jump in and actually take a look.
+Norman Sabillon 10 minutos 57 segundos
+At what we actually got, so pretty.
+Norman Sabillon 11 minutos 2 segundos
+So that wraps things up with benchmark evaluation, powerful and great, especially we do have a ground truth, but what happens if we don't? So that's what I'm going to show in the next demo with LLMs as a judge is what is it we don't, how do we deal with that?

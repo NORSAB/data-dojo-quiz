@@ -1,0 +1,79 @@
+Welcome to the Databricks Academy. This is a demonstration on building single agents with LangChain. I'm Jade Lauzen. I'm a technical instructor for Databricks, and I'll walk you through this today. So this demonstration is exactly what the title says. We're actually going to create an AI agent.
+Norman Reynaldo Sabillon Castro 0 minutos 37 segundos
+And the tools we're going to give it are actually Unity Catalog.
+Norman Reynaldo Sabillon Castro 0 minutos 42 segundos
+Functions, but we're going to use the lang chain framework to pull those together.
+Norman Reynaldo Sabillon Castro 0 minutos 48 segundos
+An AI agent in a simple format is a brain with access to tools that it can decide to use and use them in an order, use some, use all. So that's what we're looking to put together. Now in order to do that, that brain needs to be defined.
+Norman Reynaldo Sabillon Castro 1 minuto 8 segundos
+And it needs to know about the tools that it has access to and actually have access to those tools. So we need a framework to help us with that. So we're going to look at the tools, the models, and the framework. Understand the process that goes into Unity Catalog Functions. So we're going to actually use the UC Function Toolkit.
+Norman Reynaldo Sabillon Castro 1 minuto 29 segundos
+to help with that communication, abstract some of the complexities that come with pulling those together. And then we're going to configure and execute the LangChain agent.
+Norman Reynaldo Sabillon Castro 1 minuto 38 segundos
+And we're going to take a short glance at the trace summary. So we're going to actually be leveraging ML Flow to be able to see what the agent is doing. Not A detailed look at it, but just give ourselves a nice glance. Now, before we can do any of that, we have to set up our environment.
+Norman Reynaldo Sabillon Castro 1 minuto 58 segundos
+In other words, we need to run compute or start our compute in order to be able to run some code. So I'm going to come up here to the upper right-hand corner where it says Serverless. Look at that dropdown. Choose this. Now it is the default type, so I don't actually have to click any of that. And if I just come down to a code cell and hit run,
+Norman Reynaldo Sabillon Castro 2 minutos 18 segundos
+It will actually default to that. But it's good to be explicit in case that changes at any point in time. Now that environment, the serverless environment, is serverless version 4. You can see that here. And it's also here. There's my base environment that we're looking to use. So that's the environment.
+Norman Reynaldo Sabillon Castro 2 minutos 38 segundos
+Now, once we pick the compute, we're going to set up our environment, because that's really what this section is: set up everything, all the prerequisites, and we may need to install certain dependencies in order to work with this. We're going to actually be leveraging LangChain Databricks, so that is a library that helps us talk.
+Norman Reynaldo Sabillon Castro 11 minutos 4 segundos
+So we're building those out as the different configurations. That's where those came from. So when we set up our agent, we know what we want it to be configured as.
+Norman Reynaldo Sabillon Castro 11 minutos 17 segundos
+We're also going to import a number of things, including Chat Databricks; this lets us chat with the model serving endpoints. We're going to bring in ML Flow, which is all about management and flexibility in machine learning and AI, and a couple of things with LangChain. We're going to actually create a tool calling Agent, and we're going to add...
+Norman Reynaldo Sabillon Castro 11 minutos 35 segundos
+a prompt template and we're going to run or execute our agent. So that's what we're pulling in here.
+Norman Reynaldo Sabillon Castro 11 minutos 42 segundos
+So now, in order to chat with Databricks, you need a configuration, and that's where the LLM endpoint and temperature come into play. So we're going to say, look, we're going to talk to a model serving endpoint, and that model serving endpoint was GPT-120. And if we go over to model serving, and I come down here and let me open that.
+Norman Reynaldo Sabillon Castro 12 minutos 3 segundos
+We can see here, we've got a large range of options and this just chose this one here. So this is saying, hey, here's my model and we're going to set our temperature. So we're going to be chatting with Databricks model serving from LangChain framework and that was what would that happen. And we're also going to build a template. So we're not
+Norman Reynaldo Sabillon Castro 12 minutos 25 segundos
+not just going to pass in our question. We're going to pass in our question along with a system prompt. So what are we passing in? This is my chat prompt template. We're going to pass in that system prompt, which says, hey, go use tools, please. Thank you. We're going to pass in the chat history so it's more conversational. It allows for continuity within your conversation.
+Norman Reynaldo Sabillon Castro 12 minutos 48 segundos
+the input, so what's the current question, a query that's passing in, and then here's your scratch pad. So this allows the agent to reason through, to make plans, to be able to see what's going on and keep track of the process. So let's define that.
+Norman Reynaldo Sabillon Castro 13 minutos 2 segundos
+And I actually have to define that as well. Let me run both of those. And that import of ML flow, right, that management and flexibility that it brings into our machine learning, our AI, it also helps with evaluation. We're going to turn on auto log. So it's going to automatically log, gather certain information.
+Norman Reynaldo Sabillon Castro 13 minutos 22 segundos
+that we're going to be able to see the results of soon. So that takes off a lot of the potentially manual heavy lifting of debugging, tracing, monitoring, all of those different pieces. We're going to think that when we get down to that point. All right, so now we've kind of configured our brain and the message we're passing into the brain.
+Norman Reynaldo Sabillon Castro 13 minutos 42 segundos
+So we've got the message we're passing in, that's your template. We've got the brain itself, that was the LLM, which had Databricks, and we have the tools. So let's pull that all together. And those are actually the three pieces that we're going to use with the LangChain create tool calling agent function. So there's my configuration.
+Norman Reynaldo Sabillon Castro 14 minutos 1 segundo
+That was chat Databricks pointing to that LLM. We've got the tools that we defined earlier, that was those two functions. And then we have the prompt payload.
+Norman Reynaldo Sabillon Castro 14 minutos 10 segundos
+So that function is saying, okay, I needed that information. So once we've added those in, let's go in and try to execute it. So we're going to use the agent executor. So we want the agent config, the tools. We are giving a little bit extra here with verbose. We want to be able to see what it's doing. That can help a lot with debugging and understanding. So then once we've got that defined,
+Norman Reynaldo Sabillon Castro 14 minutos 31 segundos
+we can actually run the dot and vote. And this is going to get the average price permission.
+Norman Reynaldo Sabillon Castro 14 minutos 37 segundos
+and tell you the number of properties that there are in the shared room. So currently, we can see lots of additional information, right? That verbose brings up here. Now this isn't the easiest thing to read right now, so I'm going to come down here to the command palette and we're going to choose dark theme.
+Norman Reynaldo Sabillon Castro 14 minutos 54 segundos
+Okay, so entering new agent chain, we said, oh, look, we need the average neighborhood price. We're going to pass in mission. We want the count by room. So this is a shared room because as part of the question, that was asked. So now we have the two functions.
+Norman Reynaldo Sabillon Castro 15 minutos 14 segundos
+We know what we're going to be leveraging for that. And we come down. There's some reasoning and there's some summary here. I got to scroll down a little bit farther. There we go. We can see all of that. And we see things like the average price, number of listings, gives us that. So that's the thought process, right? It's being verbose. It's got its nice scratch pad.
+Norman Reynaldo Sabillon Castro 15 minutos 34 segundos
+we're able to see that. And then MLFlow's contribution to this, one of them, is the MLFlow trace. So here's your trace. This is all the steps that it took, sub-steps. Things are nested so that you do have a hierarchy. Now if I go over here to the summary, this might be a little bit easier if you don't want that detailed view.
+Norman Reynaldo Sabillon Castro 15 minutos 56 segundos
+of everything that happened. What would we do? We passed in the question, get the shared room permission, and then here's the steps. Chat Databricks was called, so it called the brain, and the brain said, hey, let's execute this function. This function was returned, and the brain's like, okay, I know that. I still need more, though. I still also need the count by room type, so it executed the second function.
+Norman Reynaldo Sabillon Castro 16 minutos 18 segundos
+And then that came back to Chat Databricks. Now that LLM said, okay, I think I have enough information to answer the question. So the output.
+Norman Reynaldo Sabillon Castro 16 minutos 27 segundos
+was we have the price.
+Norman Reynaldo Sabillon Castro 16 minutos 30 segundos
+We have the count.
+Norman Reynaldo Sabillon Castro 16 minutos 32 segundos
+So, now we can go in and answer.
+Norman Reynaldo Sabillon Castro 16 minutos 36 segundos
+So that's the summary of steps. Like I said, there's a detail where we can look at each one and see things like the inputs and outputs. So if I come down here, this is a function. I can see the input. We passed in mission and we got back about $230, the average price in the mission neighborhood. You could see attributes.
+Norman Reynaldo Sabillon Castro 16 minutos 54 segundos
+So things like color, if I do chat data bricks, under the attributes, you'll see things like the model and the temperature that were designated. And if there was any kind of error, you'd see them here in the events. You also see things like chunks, tokens that got passed in. So you have that breakdown. You can see the timeline, so how long each one took if you wanted to be able to find a bottleneck.
+Norman Reynaldo Sabillon Castro 17 minutos 15 segundos
+You can do that. You can filter if you only care about tools that are being executed.
+Norman Reynaldo Sabillon Castro 17 minutos 22 segundos
+You can see there's your tools.
+Norman Reynaldo Sabillon Castro 17 minutos 25 segundos
+So you can go in and use this trace to really debug and understand what's going on.
+Norman Reynaldo Sabillon Castro 17 minutos 32 segundos
+So that gives you the chance to have an analysis summary for a high level, and then you can get more and more detailed with it as we continue through it. Now that agent's response, right, it came back with an answer. So here is that final answer that we got for that. And we've got the average price, the number of listings per rooms.
+Norman Reynaldo Sabillon Castro 17 minutos 51 segundos
+and they came directly from the Airbnb data set. We were able to parse out our answer. So in the end, what did we do? We built out an agent. We defined the tools, we configured the LLM, so the brain, and we used LangChain as the framework
+Norman Reynaldo Sabillon Castro 18 minutos 9 segundos
+to build that tool calling agent. And then we asked a question, or a question. You can of course ask more questions as you continue on doing this on your own. All right, so this gives us the end of building a single agent with LaneChain.

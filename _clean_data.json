@@ -1,0 +1,1686 @@
+{
+  "pdf": [
+    {
+      "num": 1,
+      "prompt": ""
+    },
+    {
+      "num": 2,
+      "prompt": "E.SQL Editor page Answer: E Explanation: The correct answer is"
+    },
+    {
+      "num": 3,
+      "prompt": "platforms offer richer interactive visualizations, more sophisticated data modeling, advanced reporting features, and seamless integration with diverse data sources beyond just the Databricks environment. Databricks SQL excels at enabling data analysts and scientists to quickly query, explore, and v"
+    },
+    {
+      "num": 4,
+      "prompt": "provisioning and permissioning, allowing Fivetran to access the Databricks data using standard SQL commands. Options A and E are incorrect because Workflows are typically used for orchestrating Databricks jobs, not directly connecting external tools like Fivetran for data ingestion. Options B and C "
+    },
+    {
+      "num": 5,
+      "prompt": "Databricks Documentation: This is the official resource for understanding the Databricks platform and its services. You can explore the Databricks SQL documentation to understand its capabilities and how different roles might use it. https://docs.databricks.com/ Databricks Lakehouse Platform: Unders"
+    },
+    {
+      "num": 6,
+      "prompt": ""
+    },
+    {
+      "num": 7,
+      "prompt": "demanding refresh intervals. Therefore, the most important caution the data analyst should share is that the necessary infrastructure to support the near real-time dashboard refresh will likely incur significant costs. Further Research: Databricks Structured Streaming: https://spark.apache.org/docs/"
+    },
+    {
+      "num": 8,
+      "prompt": ""
+    },
+    {
+      "num": 9,
+      "prompt": "A.Separate endpoints for each section B.Separate queries for each section C.Markdown-based text boxes D.Direct text written into the dashboard in editing mode E.Separate color palettes for each section Answer: C Explanation: The correct answer is C: Markdown-based text boxes."
+    },
+    {
+      "num": 10,
+      "prompt": "E.Databricks SQL Answer: E Explanation: Databricks SQL is the correct answer because it directly addresses all the requirements outlined in the scenario. Firstly, it's designed explicitly for SQL queries, making it ideal for analysts needing to quickly create and execute them on data within the Lake"
+    },
+    {
+      "num": 11,
+      "prompt": "Managed Tables: Databricks manages both the data and the metadata. If you DROP TABLE for a managed table, Databricks removes both the metadata from the metastore and the underlying data files from the storage location Databricks controls (usually DBFS root). External Tables: Only the metadata is man"
+    },
+    {
+      "num": 12,
+      "prompt": "Since this is an external aka unmanaged table, dropping the table only deletes the metadata. The data itself is untouched. This is assuming that \"table\" is missing from \"drop table\" due to a transcription error. Now, if the question is written on the test as it is here, then the answer would be B, s"
+    },
+    {
+      "num": 13,
+      "prompt": "2. California Consumer Privacy Act (CCPA): https://oag.ca.gov/privacy/ccpa 3. Personal Information Protection and Electronic Documents Act (PIPEDA): https://www.priv.gc.ca/en/privacy-topics/privacy-laws-in-canada/the-personal-information- protection-and-electronic-documents-act-pipeda/ Delta Lake st"
+    },
+    {
+      "num": 14,
+      "prompt": ""
+    },
+    {
+      "num": 15,
+      "prompt": "Answer: A Explanation: The correct answer,"
+    },
+    {
+      "num": 16,
+      "prompt": "Data Explorer reveals crucial metadata information like column names, data types, table schemas, table statistics, and associated comments. This feature helps data analysts quickly understand the organization and quality of the available data. Furthermore, Data Explorer provides the ability to previ"
+    },
+    {
+      "num": 17,
+      "prompt": "A data analyst created and is the owner of the managed table my_ table. They now want to change ownership of the table to a single other user using Data Explorer. Which of the following approaches can the analyst use to complete the task? A.Edit the Owner field in the table page by removing their ow"
+    },
+    {
+      "num": 18,
+      "prompt": ""
+    },
+    {
+      "num": 19,
+      "prompt": "The correct command to remove a managed table and its associated data files in Databricks, while preserving other tables in the database, is DROP TABLE database_name.table_name;. Here's why: DROP TABLE is the standard SQL command specifically designed to remove a table from a database. When used wit"
+    },
+    {
+      "num": 20,
+      "prompt": ""
+    },
+    {
+      "num": 21,
+      "prompt": "new_suppliers to suppliers, not the other way around. Option E is incorrect; data is appended, not overwritten. The original content of suppliers remains. Refer to the Databricks documentation for more information about the INSERT INTO command and how it works in Spark SQL: Databricks SQL Reference "
+    },
+    {
+      "num": 22,
+      "prompt": ""
+    },
+    {
+      "num": 23,
+      "prompt": ""
+    },
+    {
+      "num": 24,
+      "prompt": ""
+    },
+    {
+      "num": 25,
+      "prompt": "Which of the following queries will accomplish this task?"
+    },
+    {
+      "num": 26,
+      "prompt": "Consider the following two statements: Statement 1: Statement 2: Which of the following describes how the result sets will differ for each statement when they are run in Databricks SQL? A.The first statement will return all data from the customers table and matching data from the orders table. The s"
+    },
+    {
+      "num": 27,
+      "prompt": ""
+    },
+    {
+      "num": 28,
+      "prompt": "B.SELECT price - FROM customer_summary C.SELECT function(price(customer_spend, customer_units)) AS customer_price FROM customer_summary D.SELECT double(price(customer_spend, customer_units)) AS customer_price FROM customer_summary E.SELECT price(customer_spend, customer_units) AS customer_price FROM"
+    },
+    {
+      "num": 29,
+      "prompt": "If there is a mistake in the query, which of the following describes the mistake? A.The query is using count(*), which will count all the customers in the customers table, no matter the region. B.The query is missing a GROUP BY region clause. C.The query is using ORDER BY, which is not allowed in an"
+    },
+    {
+      "num": 30,
+      "prompt": ""
+    },
+    {
+      "num": 31,
+      "prompt": "creates a stable and widely accepted foundation. Option E is incorrect because compatibility with Spark's interpreters is primarily based on Databricks' implementation, not solely on the SQL dialect being ANSI compliant. In summary, the primary advantage of Databricks SQL's ANSI SQL compliance lies "
+    },
+    {
+      "num": 32,
+      "prompt": ""
+    },
+    {
+      "num": 33,
+      "prompt": "Which of the following statements about a refresh schedule is incorrect? A.A query can be refreshed anywhere from 1 minute to 2 weeks. B.Refresh schedules can be configured in the Query Editor. C.A query being refreshed on a schedule does not use a SQL Warehouse (formerly known as SQL Endpoint). D.A"
+    },
+    {
+      "num": 34,
+      "prompt": "Explanation: The default visualization selection in Databricks SQL's visualization editor is designed to assist users in quickly displaying their data in a meaningful way. This behavior is based on the schema and data types within the result set. Databricks automatically analyzes the output and sugg"
+    },
+    {
+      "num": 35,
+      "prompt": "Add each visualization separately to the same dashboard. This approach saves effort and keeps the dashboard efficient by using one query source for multiple visualizations. A data analyst has been asked to provide a list of options on how to share a dashboard with a client. It is a security requirem"
+    },
+    {
+      "num": 36,
+      "prompt": ""
+    },
+    {
+      "num": 37,
+      "prompt": "Heatmaps, Choropleth maps, Word Clouds, and Pivot Tables are not designed for visualizing flows. Heatmaps show the concentration of data points using color intensity, typically for things like correlations in datasets. Choropleth maps display statistical data over geographical regions. Word clouds r"
+    },
+    {
+      "num": 38,
+      "prompt": ""
+    },
+    {
+      "num": 39,
+      "prompt": "Answer: D Explanation: The correct answer is D: Queries that use query parameters cannot be used with Alerts. Databricks Alerts are designed to monitor the output of a static query, triggering notifications when specific conditions are met. The core principle behind this functionality is that the qu"
+    },
+    {
+      "num": 40,
+      "prompt": "position. Changing colors (C) is a fundamental aspect of visualization, allowing users to highlight specific data points or categories and improve overall visual communication. Tooltips (E) are also customizable to provide users with additional information when hovering over data points. In contrast"
+    },
+    {
+      "num": 41,
+      "prompt": "operation. Therefore, this project is most appropriate for Databricks SQL. Authoritative links: Databricks SQL: https://www.databricks.com/product/databricks-sql Delta Live Tables: https://www.databricks.com/product/delta-live-tables Databricks Workflows: https://www.databricks.com/product/data-engi"
+    },
+    {
+      "num": 42,
+      "prompt": ""
+    },
+    {
+      "num": 43,
+      "prompt": "Answer: A Explanation: The correct answer is A: \"A branch of statistics that uses summary statistics to quantitatively describe and summarize data.\" Here's why: Descriptive statistics focuses on summarizing and presenting data in a meaningful way. It uses measures like mean, median, mode, standard d"
+    },
+    {
+      "num": 44,
+      "prompt": "the mean away from the center of the distribution. The median, on the other hand, is the middle value when the data is sorted. It's resistant to the influence of outliers because it only considers the relative ordering of the data, not the magnitude of the extreme values. Therefore, when extreme out"
+    },
+    {
+      "num": 45,
+      "prompt": "Last-mile dashboarding (Option C) refers to the final stage of data visualization and presentation in a dashboard. It's about how the data is displayed, not how it's enhanced or modified. Last-mile ETL (Option D) refers to the final transformations and loading processes to make the data usable for a"
+    },
+    {
+      "num": 46,
+      "prompt": ""
+    },
+    {
+      "num": 47,
+      "prompt": "Which example of data projects represents a common analytics application to be completed in Databricks SQL? A.Augmenting gold-layer tables with additional external information B.Automating complex notebook-based workflows with multiple tasks C.Testing the quality of data as it is imported from a sou"
+    },
+    {
+      "num": 48,
+      "prompt": ""
+    },
+    {
+      "num": 49,
+      "prompt": "Which statement will produce this output?"
+    },
+    {
+      "num": 50,
+      "prompt": ""
+    },
+    {
+      "num": 51,
+      "prompt": "Workflows. A data scientist has asked a data analyst to create histograms for every continuous variable in a data set. The data analyst needs to identify which columns are continuous in the data set. What describes a continuous variable? A.A quantitative variable that never stops changing B.A quanti"
+    },
+    {
+      "num": 52,
+      "prompt": ""
+    },
+    {
+      "num": 53,
+      "prompt": ""
+    },
+    {
+      "num": 54,
+      "prompt": ""
+    },
+    {
+      "num": 55,
+      "prompt": "Which query did the analyst execute in order to get this result?"
+    },
+    {
+      "num": 56,
+      "prompt": "untouched, for both tables the metadata was the same. D.The data in both tables were left untouched. Answer: B Explanation: B.The data in the managed table were deleted, and the data in the unmanaged (external) table were left untouched. Managed Tables: When a managed table is dropped (DROP TABLE), "
+    },
+    {
+      "num": 57,
+      "prompt": ""
+    },
+    {
+      "num": 58,
+      "prompt": "Explanation:"
+    },
+    {
+      "num": 59,
+      "prompt": ""
+    },
+    {
+      "num": 60,
+      "prompt": "Which SQL standards does Databricks SQL use as its default SQL dialect? A.Databricks SQL B.Spark SQL C.ANSI D.Delta SQL Answer: C Explanation:"
+    },
+    {
+      "num": 61,
+      "prompt": ""
+    },
+    {
+      "num": 62,
+      "prompt": ""
+    },
+    {
+      "num": 63,
+      "prompt": ""
+    },
+    {
+      "num": 64,
+      "prompt": ""
+    },
+    {
+      "num": 65,
+      "prompt": "D.The dashboard owner must also be the owner of the queries, data visualizations, and counters. Answer: A Explanation:"
+    },
+    {
+      "num": 66,
+      "prompt": "Existing rows with the same supplier_id are not inserted again What does Partner Connect do when connecting Power BI and Tableau? A.Creates a Personal Access Token, downloads and installs an ODBC driver, and downloads a configuration file for connection by Power BI or Tableau to a SQL Warehouse (for"
+    },
+    {
+      "num": 67,
+      "prompt": ""
+    },
+    {
+      "num": 68,
+      "prompt": "C.products[0] D.products[1] Answer: C Explanation:"
+    },
+    {
+      "num": 69,
+      "prompt": ""
+    },
+    {
+      "num": 70,
+      "prompt": ""
+    },
+    {
+      "num": 71,
+      "prompt": ""
+    },
+    {
+      "num": 72,
+      "prompt": "useful when the required transformation or calculation isn't available through standard SQL functions. By creating a UDF, the analyst can simplify complex queries, improve readability, and ensure consistent application of the logic across different queries or projects. While UDFs can be used for sim"
+    },
+    {
+      "num": 73,
+      "prompt": ""
+    },
+    {
+      "num": 74,
+      "prompt": "A data analyst has two data sources that are providing similar but complementary information. The analyst wants to combine these sources of data into a single, comprehensive dataset for ongoing use for their team in a variety of different projects. Which terms is used to describe this type of work? "
+    },
+    {
+      "num": 75,
+      "prompt": ""
+    },
+    {
+      "num": 76,
+      "prompt": ""
+    },
+    {
+      "num": 77,
+      "prompt": "B.Stop working with the data and proceed with the project using other data. C.Stop working with the data and notify their supervisor to ensure the data is handled following organizational and legal best practices. D.Drop the column containing PII data and continue with the project without notifying "
+    },
+    {
+      "num": 78,
+      "prompt": ""
+    },
+    {
+      "num": 79,
+      "prompt": "B.The Visualization Editor C.The Query Editor D.The Dashboard Editor Answer: C Explanation:"
+    },
+    {
+      "num": 80,
+      "prompt": ""
+    },
+    {
+      "num": 81,
+      "prompt": "Answer: C Explanation:"
+    },
+    {
+      "num": 82,
+      "prompt": ""
+    },
+    {
+      "num": 83,
+      "prompt": "Combine multiple queries: You can add the results of several different queries as individual visualizations (charts, tables, etc.) to a single dashboard. Provide a single view: Stakeholders can see all the key trends and metrics together on one page. Enable sharing: Dashboards can be easily shared w"
+    },
+    {
+      "num": 84,
+      "prompt": ""
+    },
+    {
+      "num": 85,
+      "prompt": "Business analysts are primarily responsible for running ad-hoc queries, creating reports, and building dashboards to answer business questions. Their primary tool is SQL, and Databricks SQL's features—such as SQL warehouses, the query editor, and built-in dashboards—are specifically tailored to thei"
+    },
+    {
+      "num": 86,
+      "prompt": "Where can an admin or Data owner grant database, table, and view permissions to a group?"
+    },
+    {
+      "num": 87,
+      "prompt": ""
+    },
+    {
+      "num": 88,
+      "prompt": "Answer: A Explanation: Correct option: A – Medallion Architecture The scenario describes a lakehouse environment where incoming data is landed in a raw (bronze) zone and then passed through curated zones (silver, gold) to progressively enrich, cleanse, and structure the data. This incremental progre"
+    },
+    {
+      "num": 89,
+      "prompt": "There is no standard logs column or SELECT logs syntax for Delta tables in Databricks SQL. Logs are not exposed as a queryable column; auditing requires accessing the transaction history via DESCRIBE HISTORY. B – SHOW TRANSACTIONS table_name SHOW TRANSACTIONS is not a supported Databricks SQL comman"
+    },
+    {
+      "num": 90,
+      "prompt": "B – Grant MANAGE DATABASE access on the containing catalog MANAGE DATABASE is an administrative privilege that lets a user create, alter, or drop databases. It is unnecessary for simple read access and would give the analyst more authority than required. C – Grant MANAGE TABLE access MANAGE TABLE is"
+    },
+    {
+      "num": 91,
+      "prompt": "Databricks SQL Alerts overview – How alerts are evaluated: https://docs.databricks.com/sql/monitoring/alerts.html#how-alerts-work A data analyst wants to compare the contents of a Delta table as they existed last week to the current state in order to track changes in sales records. Which Delta Lake "
+    },
+    {
+      "num": 92,
+      "prompt": ""
+    },
+    {
+      "num": 93,
+      "prompt": "A data analyst wants to generate insights from large, complex datasets. The analyst needs to quickly understand the meaning of various data columns, ask questions in natural language, and receive AI-driven recommendations for optimizing data queries and workflows. Which Databricks component is prima"
+    },
+    {
+      "num": 94,
+      "prompt": ""
+    },
+    {
+      "num": 95,
+      "prompt": "single-statement command that programmatically marks the table as certified and makes the tag searchable across the organization. Why the other options are unsuitable Option A – SET TAGS (‘system.Certified’) is syntactically incomplete; tags must be defined as key-value pairs, not just a key name. O"
+    },
+    {
+      "num": 96,
+      "prompt": "before any spill could be recorded. It is useful for diagnosing heavy-spill scenarios after the abort, not for pinpointing the abort cause. Therefore, inspecting Memory peak per operator directly highlights the resource-overuse culprit and supports targeted optimizations. References Databricks SQL Q"
+    },
+    {
+      "num": 97,
+      "prompt": ""
+    },
+    {
+      "num": 98,
+      "prompt": "A BI analyst is building an analytical data model in Databricks using Delta Lake tables. The source system contains transactional sales data that changes frequently. The analyst chooses to apply the Data Vault 2.0 methodology to manage historical changes while ensuring scalability and auditability a"
+    },
+    {
+      "num": 99,
+      "prompt": "Unity Catalog allows tags to be queried directly in the workspace search bar using the tag: prefix followed by the tag key name. The correct syntax is tag:confidential, which returns all objects (tables, views, etc.) that have a tag with the key confidential, regardless of the tag’s value. Option A "
+    },
+    {
+      "num": 100,
+      "prompt": "A data analyst team is building reliable, production-grade data pipelines on Databricks. They require a solution that allows them to define data transformations declaratively, automatically enforce data quality expectations, and handle errors without manual intervention. Which Databricks capability "
+    },
+    {
+      "num": 101,
+      "prompt": ""
+    },
+    {
+      "num": 102,
+      "prompt": ""
+    },
+    {
+      "num": 103,
+      "prompt": ""
+    },
+    {
+      "num": 104,
+      "prompt": "Warehouse."
+    },
+    {
+      "num": 105,
+      "prompt": ""
+    },
+    {
+      "num": 106,
+      "prompt": "Explanation: Creating a managed table (CREATE TABLE catalog.schema.table_name) places the data under Unity Catalog’s governance, automatically registers it in the metastore, and allows Unity Catalog to manage storage, retention, and access control. Managed tables support Predictive Optimization and "
+    },
+    {
+      "num": 107,
+      "prompt": "add overhead. Why the other options are unsuitable: A – Query result caching is most effective for deterministic queries; non-deterministic functions (e.g., NOW(), RAND()) break cache hits, so the statement mischaracterises the limitation. B – Delta Cache does not support CSV or JSON; it is designed"
+    },
+    {
+      "num": 108,
+      "prompt": "are logged centrally, enabling end-to-end audit trails that meet governance and regulatory needs. No workspace-wide exposure: Only the permitted recipients receive the share; the analyst does not need to add external emails to the workspace itself, avoiding unnecessary privilege elevation. Why the o"
+    },
+    {
+      "num": 109,
+      "prompt": "Direct integration: Databricks dashboards allow you to add a Visualization by clicking “Add Visualization,” selecting a gauge (or any chart type), and pointing it to an existing or new query that returns the required metric. Live, query-driven data: The gauge is bound to a query that computes on-tim"
+    },
+    {
+      "num": 110,
+      "prompt": "The pre-computed result can be cached across multiple scheduled runs, ensuring consistent performance and minimal compute cost. Why the other options are less suitable"
+    },
+    {
+      "num": 111,
+      "prompt": ""
+    },
+    {
+      "num": 112,
+      "prompt": "Join Types and Using Clause – Databricks Documentation: https://docs.databricks.com/sql/language- manual/sql-ref/sql-query/select.html#joins A data analyst is reviewing a Genie space used by operations managers and notices that multiple responses have been flagged as inaccurate. Which action should "
+    },
+    {
+      "num": 113,
+      "prompt": ""
+    },
+    {
+      "num": 114,
+      "prompt": ""
+    },
+    {
+      "num": 115,
+      "prompt": "reference point that other team members can copy or schedule without re-authoring. This reduces duplicated effort and builds confidence in the AI-generated answers. Governance & Quality Control: The verification step ensures that only queries meeting data-quality and compliance standards are promote"
+    },
+    {
+      "num": 116,
+      "prompt": "Why the other options are unsuitable Option B – Places WHERE COUNT(*) > 10 before GROUP BY; this is illegal because WHERE executes before aggregation. Option C – Attempts to filter with WHERE after the HAVING clause and mixes clause order incorrectly (HAVING must come after GROUP BY). Option D – Use"
+    },
+    {
+      "num": 117,
+      "prompt": "governance benefit highlighted in option"
+    },
+    {
+      "num": 118,
+      "prompt": "includes valid positive numbers (1, ‑1 would be removed but also 1, ‑1, 15 would be removed if its absolute value happened to be 1, etc.), leading to over-filtering and loss of valid data. Option C – Employs HAVING without a GROUP BY. HAVING is meant for filtering on aggregate results; using it here"
+    },
+    {
+      "num": 119,
+      "prompt": "D – Add variables in a Python notebook cell: This mixes notebook code with SQL execution and does not provide the same instant, UI-driven parameter entry that the SQL editor offers; it also forces the analyst to switch contexts. References Databricks SQL Parameterized Queries: https://docs.databrick"
+    },
+    {
+      "num": 120,
+      "prompt": "Databricks SQL – Overview and Architecture: https://docs.databricks.com/sql/index.html Photon Engine – Performance Optimizations: https://www.databricks.com/solutions/photon Prepared for Databricks Certified Data Analyst Associate exam preparation. A data analyst is setting up a Genie space in Datab"
+    },
+    {
+      "num": 121,
+      "prompt": "needed. 4. Once satisfied, proceed to Configure > Settings to set the description field, where the refined guidance will be reflected in user interactions. References Databricks Genie – Configuring Context Working with Sample Questions in a Genie Space A data analyst has noticed that a key dashboard"
+    },
+    {
+      "num": 122,
+      "prompt": "A BI analyst has created a Genie space containing customer sales data and needs to share it with external stakeholders who are not workspace members. The stakeholders require the ability to ask questions about the data but should not have access to the underlying Databricks workspace or compute reso"
+    },
+    {
+      "num": 123,
+      "prompt": ""
+    },
+    {
+      "num": 124,
+      "prompt": "How are primary and foreign keys used to enable efficient joining between these tables?"
+    },
+    {
+      "num": 125,
+      "prompt": ""
+    },
+    {
+      "num": 126,
+      "prompt": "Answer: B – Use Auto Loader to incrementally ingest data from S3. Key technical fit Auto Loader (available in Databricks Structured Streaming) natively reads newly added files from S3, tracks progress via checkpointing, and automatically handles schema evolution without manual intervention. It provi"
+    },
+    {
+      "num": 127,
+      "prompt": "Explanation: Correct option: C – APPROX_COUNT_DISTINCT employs the HyperLogLog++ algorithm, which computes a fast approximate count of distinct values while allowing the user to tune the trade-off between accuracy and performance (default relative standard error ≈ 5 %). This makes it ideal for billi"
+    },
+    {
+      "num": 128,
+      "prompt": "can also achieve high compression depending on file format and settings. Option C – Automatic backups: Neither LCAs nor partitioning automatically create backup copies. Backup responsibilities remain with the storage layer or external orchestration, so this is not a differentiator. Option D – Data-t"
+    },
+    {
+      "num": 129,
+      "prompt": "C – Adding more columns Expanding the available set of columns increases surface area but also introduces noise. Without accompanying semantic definitions, extra columns can confuse Genie, leading to over-generation or selection of incorrect columns, rather than clearer intent. E – Example queries S"
+    },
+    {
+      "num": 130,
+      "prompt": "workspace, including the ability to modify or delete dashboards. This over-privileges external parties and violates the “no edit permissions” rule. Option C – Assign to All users group and CAN EDIT – Membership in the All workspace users group still requires a valid Databricks identity, and granting"
+    },
+    {
+      "num": 131,
+      "prompt": "Option A (external data warehouse) – Replicating all source data is unnecessary; Unity Catalog already manages data within Databricks. Maintaining a separate warehouse adds operational overhead and does not address the core need for prompt-level guidance. Option B (standalone chatbot app) – The Geni"
+    },
+    {
+      "num": 132,
+      "prompt": "C – “Create a schema and share the schema for production, development, and testing.” Sharing a single schema across environments violates isolation principles. Teams could inadvertently modify production data or expose sensitive production tables to non-prod workloads, leading to security and compli"
+    },
+    {
+      "num": 133,
+      "prompt": "1. Execute the SQL query with %sql. 2. If using %sql alone, the result appears as a table cell. 3. Click the + button in that cell and select Line chart; alternatively, run display(df) in a %python cell to auto-render a line chart. 4. The chart appears inline, can be edited, and stays part of the no"
+    },
+    {
+      "num": 134,
+      "prompt": "References Lakehouse Federation – External Catalogs: https://learn.databricks.com/data-data- engineering/federation/external-catalogs Unity Catalog – Governing Federated Data: https://learn.databricks.com/data-data-engineering/unity- catalog/federated-data-management A data analyst is enabling analy"
+    },
+    {
+      "num": 135,
+      "prompt": "Unity Catalog DDL: CREATE TABLE … USING PARQUET LOCATION A data analyst is migrating data lakehouse workloads to Databricks. The analyst manages a large table with thousands of columns and several billion rows. The analyst is concerned about scan performance, query speed, and handling the overhead o"
+    },
+    {
+      "num": 136,
+      "prompt": ""
+    },
+    {
+      "num": 137,
+      "prompt": ""
+    },
+    {
+      "num": 138,
+      "prompt": "Explanation: Technical Justification Option C – Use the dashboard’s built-in scheduling option to set an automatic refresh at regular intervals Databricks dashboards support scheduled data refreshes that can be configured to run every few minutes, hourly, or at any custom cadence. The schedule is pe"
+    },
+    {
+      "num": 139,
+      "prompt": "schema evolution; additional scripting is needed."
+    },
+    {
+      "num": 140,
+      "prompt": ""
+    },
+    {
+      "num": 141,
+      "prompt": "Why it’s wrong: ROW_NUMBER() is a ranking function. It assigns a sequence (1, 2, 3...) to rows. It does not perform any mathematical addition (SUM), nor does it combine multiple rows into one. You would still see every individual sale record. Option C: SELECT ..., SUM(sale_amount) OVER (ORDER BY pro"
+    },
+    {
+      "num": 142,
+      "prompt": "Option D: Spark naturally parallelizes queries across a cluster. Photon optimizes how that work is executed internally on the nodes. It does not automatically manage queries across \"multiple clusters\" simultaneously— that is usually a function of load balancing or serverless SQL. A data analyst is s"
+    },
+    {
+      "num": 143,
+      "prompt": "A data analyst team is building reliable, production-grade data pipelines on Databricks. They require a solution that allows them to define data transformations declaratively, automatically enforce data quality expectations, and handle errors without manual intervention.Which Databricks capability a"
+    },
+    {
+      "num": 144,
+      "prompt": ""
+    },
+    {
+      "num": 145,
+      "prompt": "Answer: A Explanation: ✅"
+    },
+    {
+      "num": 146,
+      "prompt": "accuracy and freshness are critical. ❌"
+    },
+    {
+      "num": 147,
+      "prompt": "as “online sales by region” or “top SKUs per channel”) to the underlying schema. This significantly improves Genie’s ability to interpret intent and generate relevant queries. ❌"
+    },
+    {
+      "num": 148,
+      "prompt": "While some SQL dialects allow limited use of IN with arrays, this syntax is not supported in Spark SQL / Databricks SQL for array membership checks. The correct approach is to use array_contains. A data analyst needs to programmatically mark the sales_data table in Unity Catalog as deprecated so tha"
+    },
+    {
+      "num": 149,
+      "prompt": ""
+    },
+    {
+      "num": 150,
+      "prompt": ""
+    },
+    {
+      "num": 151,
+      "prompt": "sacrificing security or governance standards. ❌"
+    },
+    {
+      "num": 152,
+      "prompt": "in this scenario, the status would not be OK. A data analyst wants to generate insights from large, complex datasets. The analyst needs to quickly understand the meaning of various data columns, ask questions in natural language, and receive AI-driven recommendations for optimizing data queries and "
+    },
+    {
+      "num": 153,
+      "prompt": ""
+    },
+    {
+      "num": 154,
+      "prompt": ""
+    },
+    {
+      "num": 155,
+      "prompt": "trends over time here. Therefore, it is not useful for diagnosing slow queries."
+    },
+    {
+      "num": 156,
+      "prompt": "A data analyst is curating a Genie space for the marketing team to explore campaign performance data. To ensure accurate and context-aware responses, the analyst includes curated Unity Catalog tables, writes clear domain instructions, and adds sample questions.Which additional step can the analyst t"
+    },
+    {
+      "num": 157,
+      "prompt": ""
+    },
+    {
+      "num": 158,
+      "prompt": "Option A, confidential:true ❌, is incorrect because the Databricks search bar does not evaluate tags using boolean expressions. Even if a tag value is set to true, the search interface does not support logical conditions or key-value boolean syntax, so this search text will not return tagged tables."
+    },
+    {
+      "num": 159,
+      "prompt": "A data analyst needs to improve the performance of a daily sales report that aggregates data from a large transactions table. The report is run multiple times a day, but the underlying data only changes once daily. Which approach should the analyst use to improve performance while minimizing redunda"
+    },
+    {
+      "num": 160,
+      "prompt": ""
+    },
+    {
+      "num": 161,
+      "prompt": "Option A, Save the query as a table, export it to Excel, and use Excel's charting tools ❌, is incorrect because it requires leaving Databricks and performing unnecessary data export steps, which defeats the purpose of interactive analysis in a notebook. Option B, Wrap the SQL query in a Python plotl"
+    },
+    {
+      "num": 162,
+      "prompt": "A data analyst team is working with large datasets stored as Delta tables (Parquet format) in Databricks on Azure Data Lake. The teams want to speed up query performance and reduce repeated computation by leveraging caching. However, they notice that sometimes caching does not improve performance or"
+    },
+    {
+      "num": 163,
+      "prompt": ""
+    },
+    {
+      "num": 164,
+      "prompt": ""
+    },
+    {
+      "num": 165,
+      "prompt": "\u0003 Option C (Correct) Databricks Assistant can analyze the error, suggest solutions, and provide corrected code directly in the SQL Editor. Databricks Assistant is integrated into the Databricks SQL Editor and can interpret SQL errors, explain what went wrong, and recommend fixes. It can even generat"
+    },
+    {
+      "num": 166,
+      "prompt": "and cannot be accessed using a standard SELECT statement. \u0004 Option C (Incorrect) Execute a VACUUM table_name statement VACUUM is used to remove old, unused files to reclaim storage space. It does not display or audit the history of operations. \u0004 Option D (Incorrect) Use the SHOW TRANSACTIONS table_n"
+    },
+    {
+      "num": 167,
+      "prompt": "data files. If those files were deleted by VACUUM after 7 days, the query cannot succeed. \u0004 Option D (Incorrect) The time travel query will succeed because Delta Lake automatically backs up data for compliance purposes. Delta Lake does not automatically back up data beyond retention settings. Once d"
+    },
+    {
+      "num": 168,
+      "prompt": "A data analyst needs to create a table in Unity Catalog for a production analytics workload. The table will be frequently queried and needs automatic performance optimization. The data should be governed by Unity Catalog with lifecycle management.Which approach should the data analyst use?"
+    },
+    {
+      "num": 169,
+      "prompt": "A data analyst is monitoring delivery delays in real time using a Databricks dashboard shared with the operations team. After a meeting, the manager asks to add a new widget that graphically displays, with a gauge, the percentage of on-time shipments compared to the total. The data analyst needs to "
+    },
+    {
+      "num": 170,
+      "prompt": "after review. Enlarged Explanation: Cloning a dashboard is useful for major redesigns or experimentation, but it is unnecessary for adding a single widget. This approach introduces extra steps, delays delivery, and risks confusion from multiple dashboard versions. A data analyst needs to programmati"
+    },
+    {
+      "num": 171,
+      "prompt": "Enlarged Explanation: Adding a comment only provides descriptive metadata and does not mark the table as certified. Comments do not enable certification badges or trusted-asset discovery in Unity Catalog. A data engineer is ingesting large volumes of semi-structured log data stored in an S3 bucket i"
+    },
+    {
+      "num": 172,
+      "prompt": "Use Delta Sharing to share data with Databricks from external systems. Enlarged Explanation: Delta Sharing is designed for secure data sharing across organizations or platforms, not for ingesting raw, continuously arriving log data from S3. A data analyst is building a parameterized SQL query in Dat"
+    },
+    {
+      "num": 173,
+      "prompt": "Hard-code the region and year values directly into the SQL query and rerun it for each test. Enlarged Explanation: Hard-coding values makes testing slower and error-prone and defeats the purpose of parameterization. It also reduces query reusability for dashboards. A data analyst discovers that a gr"
+    },
+    {
+      "num": 174,
+      "prompt": "USE would result in a syntax error. A data analyst is preparing a sales performance presentation using Databricks notebooks. They have just loaded a Spark DataFrame with daily transaction data and wish to present a line chart showing total sales over time. However, when creating the visualization, t"
+    },
+    {
+      "num": 175,
+      "prompt": ""
+    },
+    {
+      "num": 176,
+      "prompt": "A data analyst is designing a Databricks SQL dashboard with interactive filtering via parameters.Which two parameter types are supported in Databricks SQL?1AC76FF52FF8D5126ABD3C34EFC4998Choose 2 answers"
+    },
+    {
+      "num": 177,
+      "prompt": "Incorrect. Adding irrelevant tables and columns can confuse Genie, reduce response accuracy, and lead to misleading answers."
+    },
+    {
+      "num": 178,
+      "prompt": "A data analyst team has built a real-time AI/BI dashboard in Databricks to monitor supply chain performance. They want to allow s business users and groups to collaborate on the dashboard, but only a few users should be able to make changes while the rest have vieve access. The lead data analyst is "
+    },
+    {
+      "num": 179,
+      "prompt": ""
+    },
+    {
+      "num": 180,
+      "prompt": ""
+    }
+  ],
+  "bank": [
+    {
+      "id": "db-da-1",
+      "prompt": "Which of the following layers of the medallion architecture is most commonly used by data analysts?",
+      "domain": "Understanding of Databricks Data Intelligence Platform"
+    },
+    {
+      "id": "db-da-2",
+      "prompt": "A data analyst has recently joined a new team that uses Databricks SQL, but the analyst has never used Databricks before. The analyst wants to know where in Databricks SQL they can write and execute SQL queries.\n\nOn which of the following pages can the analyst write and execute SQL queries?",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-3",
+      "prompt": "Which of the following describes how Databricks SQL should be used in relation to other business intelligence (BI) tools like Tableau, Power BI, and Looker?",
+      "domain": "Understanding of Databricks Data Intelligence Platform"
+    },
+    {
+      "id": "db-da-4",
+      "prompt": "Which of the following approaches can be used to connect Databricks to Fivetran for data ingestion?",
+      "domain": "Importing Data"
+    },
+    {
+      "id": "db-da-5",
+      "prompt": "Data professionals with varying titles use the Databricks SQL service as the primary touchpoint with the Databricks Lakehouse Platform. However, some users will use other services like Databricks Machine Learning or Databricks Data Science and Engineering.\n\nWhich of the following roles uses Databric",
+      "domain": "Understanding of Databricks Data Intelligence Platform"
+    },
+    {
+      "id": "db-da-6",
+      "prompt": "A data analyst has set up a SQL query to run every four hours on a SQL endpoint, but the SQL endpoint is taking too long to start up with each run.\n\nWhich of the following changes can the data analyst make to reduce the start-up time for the endpoint while managing costs?",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-7",
+      "prompt": "A data engineering team has created a Structured Streaming pipeline that processes data in micro-batches and populates gold-level tables every minute. A data analyst has created a dashboard based on this data. Stakeholders want the dashboard updated within one minute or less of new data becoming ava",
+      "domain": "Creating Dashboards and Visualizations"
+    },
+    {
+      "id": "db-da-8",
+      "prompt": "Which of the following approaches can be used to ingest data directly from cloud-based object storage?",
+      "domain": "Importing Data"
+    },
+    {
+      "id": "db-da-9",
+      "prompt": "A data analyst wants to create a dashboard with three main sections: Development, Testing, and Production, and wants to clearly designate the sections using text.\n\nWhich of the following tools can the data analyst use to designate these sections using text?",
+      "domain": "Creating Dashboards and Visualizations"
+    },
+    {
+      "id": "db-da-10",
+      "prompt": "A data analyst needs to use the Databricks Lakehouse Platform to quickly create SQL queries and data visualizations. The solution must support serverless compute and visualizations within a dashboard.\n\nWhich service meets all these requirements?",
+      "domain": "Understanding of Databricks Data Intelligence Platform"
+    },
+    {
+      "id": "db-da-11",
+      "prompt": "A data analyst is attempting to drop a table my_table...",
+      "domain": "Managing Data"
+    },
+    {
+      "id": "db-da-12",
+      "prompt": "After running `DESCRIBE EXTENDED accounts.customers;`, the Type is listed as `EXTERNAL`...",
+      "domain": "Managing Data"
+    },
+    {
+      "id": "db-da-13",
+      "prompt": "Which of the following should data analysts consider when working with personally identifiable information (PII) data?",
+      "domain": "Securing Data"
+    },
+    {
+      "id": "db-da-14",
+      "prompt": "Delta Lake stores table data as a series of data files. Which of the following is stored alongside data files when using Delta Lake?",
+      "domain": "Understanding of Databricks Data Intelligence Platform"
+    },
+    {
+      "id": "db-da-15",
+      "prompt": "Which of the following is an advantage of using a Delta Lake-based data lakehouse over common data lake solutions?",
+      "domain": "Understanding of Databricks Data Intelligence Platform"
+    },
+    {
+      "id": "db-da-16",
+      "prompt": "Which of the following benefits of using Databricks SQL is provided by Data Explorer?",
+      "domain": "Understanding of Databricks Data Intelligence Platform"
+    },
+    {
+      "id": "db-da-17",
+      "prompt": "The stakeholders.customers table has 15 columns and 3,000 rows...",
+      "domain": "Securing Data"
+    },
+    {
+      "id": "db-da-18",
+      "prompt": "A data analyst created and is the owner of the managed table my_ table. They now want to change ownership of the table to a single other user using Data Explorer.\nWhich of the following approaches can the analyst use to complete the task?",
+      "domain": "Managing Data"
+    },
+    {
+      "id": "db-da-19",
+      "prompt": "A data analyst has a managed table `table_name` in database `database_name`. They would now like to remove the table from the database and all of the data files associated with the table. The rest of the tables in the database must continue to exist.\\n\\nWhich of the following commands can the analys",
+      "domain": "Managing Data"
+    },
+    {
+      "id": "db-da-20",
+      "prompt": "A data analyst runs the following command:\\n\\n```sql\\nSELECT age, country\\nFROM my_table\\nWHERE age >= 75 AND country = 'canada';\\n```\\n\\nWhich of the following tables represents the output of the above command?",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-21",
+      "prompt": "A data analyst runs the following command:\n\n```sql\nINSERT INTO stakeholders.suppliers TABLE stakeholders.new_suppliers;\n```\n\nWhat is the result of running this command?",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-22",
+      "prompt": "A data engineer is working with a nested array column products...",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-23",
+      "prompt": "A data analysis team is working with the table_bronze SQL table as a source for one of its most complex projects. A stakeholder of the project notices that some of the downstream data is duplicative. The analysis team identifies table_bronze as the source of the duplication.\nWhich of the following q",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-24",
+      "prompt": "A business analyst has been asked to create a data entity/object called sales_by_employee. It should always stay up-to-date when new data are added to the sales table. The new entity should have the columns sales_person, which will be the name of the employee from the employees table, and sales, whi",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-25",
+      "prompt": "A data analyst has been asked to use the below table sales_table...",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-26",
+      "prompt": "In which of the following situations should a data analyst use higher-order functions?",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-27",
+      "prompt": "Consider two statements using LEFT SEMI JOIN and LEFT ANTI JOIN...",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-28",
+      "prompt": "A data analyst has created a UDF... Which code block applies this function?",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-29",
+      "prompt": "A data analyst has written a query to count customers per region...",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-30",
+      "prompt": "A data analyst is processing a complex aggregation... Which query produced the result?",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-31",
+      "prompt": "Which of the following is a benefit of Databricks SQL using ANSI SQL as its standard SQL dialect?",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-32",
+      "prompt": "How can a data analyst determine if query results were pulled from the cache?",
+      "domain": "Analyzing Queries"
+    },
+    {
+      "id": "db-da-33",
+      "prompt": "Which of the following statements about a refresh schedule is **incorrect**?",
+      "domain": "Creating Dashboards and Visualizations"
+    },
+    {
+      "id": "db-da-34",
+      "prompt": "A data analyst creates a Databricks SQL Query where the result set has the following schema: region STRING number_of_customer INT\nWhen the analyst clicks on the \"Add visualization\" button on the SQL Editor page, which of the following types of visualizations will be selected by default?",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-35",
+      "prompt": "A data analyst has created a Query in Databricks SQL, and now they want to create two data visualizations from that Query and add both of those data visualizations to the same Databricks SQL Dashboard.\nWhich of the following steps will they need to take when creating and adding both data visualizati",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-36",
+      "prompt": "A data analyst has been asked to provide a list of options on how to share a dashboard with a client. It is a security requirement that the client does not gain access to any other information, resources, or artifacts in the database.\nWhich of the following approaches cannot be used to share the das",
+      "domain": "Creating Dashboards and Visualizations"
+    },
+    {
+      "id": "db-da-37",
+      "prompt": "A data analyst has been asked to produce a visualization that shows the flow of users through a website. Which of the following is used for visualizing this type of flow?",
+      "domain": "Creating Dashboards and Visualizations"
+    },
+    {
+      "id": "db-da-38",
+      "prompt": "An analyst writes a query that contains a query parameter. They then add an area chart visualization to the query. While adding the area chart visualization to a dashboard, the analyst chooses \"Dashboard Parameter\" for the query parameter associated with the area chart.\n\nWhich of the following state",
+      "domain": "Creating Dashboards and Visualizations"
+    },
+    {
+      "id": "db-da-39",
+      "prompt": "A data analyst has been asked to configure an alert for a query that returns the income in the `accounts_receivable` table for a date range. The date range is configurable using a Date query parameter. The Alert does not work.\n\nWhich of the following describes why the Alert does not work?",
+      "domain": "Creating Dashboards and Visualizations"
+    },
+    {
+      "id": "db-da-40",
+      "prompt": "Which of the following statements about adding visual appeal to visualizations in the Visualization Editor is incorrect?",
+      "domain": "Creating Dashboards and Visualizations"
+    },
+    {
+      "id": "db-da-41",
+      "prompt": "A data team has been given a series of projects by a consultant that need to be implemented in the Databricks Lakehouse Platform. Which of the following projects should be completed in Databricks SQL?",
+      "domain": "Securing Data"
+    },
+    {
+      "id": "db-da-42",
+      "prompt": "A data organization has a team of engineers developing data pipelines following the medallion architecture using Delta Live Tables. While the data analysis team working on a project is using gold-layer tables from these pipelines, they need to perform some additional processing of these tables prior",
+      "domain": "Creating Dashboards and Visualizations"
+    },
+    {
+      "id": "db-da-43",
+      "prompt": "Which of the following statements describes descriptive statistics?",
+      "domain": "Creating Dashboards and Visualizations"
+    },
+    {
+      "id": "db-da-44",
+      "prompt": "In which of the following situations will the mean value and median value of variable be meaningfully different?",
+      "domain": "Creating Dashboards and Visualizations"
+    },
+    {
+      "id": "db-da-45",
+      "prompt": "A data analyst is working with gold-layer tables to complete an ad-hoc project. A stakeholder has provided the analyst with an additional dataset that can be used to augment the gold-layer tables already in use.\n\nWhich of the following terms is used to describe this data augmentation?",
+      "domain": "Creating Dashboards and Visualizations"
+    },
+    {
+      "id": "db-da-46",
+      "prompt": "A data analyst needs to query the data in `my_table`. They want to return the values in columns `user_id` and `email_address` where records fit the following filter criteria: `age` is greater than 25 and `country` is Canada. The analyst does not want to return values from any other columns.\n\nWhich c",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-47",
+      "prompt": "Which example of data projects represents a common analytics application to be completed in Databricks SQL?",
+      "domain": "Securing Data"
+    },
+    {
+      "id": "db-da-48",
+      "prompt": "What is a benefit of using Databricks SQL for business intelligence (BI) analytics projects instead of using third-party BI tools?",
+      "domain": "Creating Dashboards and Visualizations"
+    },
+    {
+      "id": "db-da-49",
+      "prompt": "A data analyst wants the following output...",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-50",
+      "prompt": "What is an advantage of using a Delta Lake-based data lakehouse over classic enterprise data warehouse solutions?",
+      "domain": "Understanding of Databricks Data Intelligence Platform"
+    },
+    {
+      "id": "db-da-51",
+      "prompt": "Query History provides Databricks SQL users with a lot of benefits. A data analyst has been asked to share all of these benefits with their team as part of a training exercise. One of the benefit statements the analyst provided to their team is incorrect.\n\nWhich statement about Query History is inco",
+      "domain": "Analyzing Queries"
+    },
+    {
+      "id": "db-da-52",
+      "prompt": "A data scientist has asked a data analyst to create histograms for every continuous variable in a data set. What describes a continuous variable?",
+      "domain": "Creating Dashboards and Visualizations"
+    },
+    {
+      "id": "db-da-53",
+      "prompt": "A data analyst has been asked to use the below table sales_table to rank products within region by the sales. Which query will accomplish this task?",
+      "domain": "Creating Dashboards and Visualizations"
+    },
+    {
+      "id": "db-da-54",
+      "prompt": "A database was created in Databricks SQL using the following statement...",
+      "domain": "Managing Data"
+    },
+    {
+      "id": "db-da-55",
+      "prompt": "A data analyst is processing a complex aggregation on a table with zero null values...",
+      "domain": "Creating Dashboards and Visualizations"
+    },
+    {
+      "id": "db-da-56",
+      "prompt": "A managed table and an unmanaged (external) table were both created in Databricks SQL, and data were ingested into each table. Later, both tables were dropped. What is the status of data for each of those tables?",
+      "domain": "Managing Data"
+    },
+    {
+      "id": "db-da-57",
+      "prompt": "Which statement about subqueries is correct?",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-58",
+      "prompt": "Which location can be used to determine the owner of a managed table?",
+      "domain": "Managing Data"
+    },
+    {
+      "id": "db-da-59",
+      "prompt": "Which statement about visualizations is true?",
+      "domain": "Data Modeling with Databricks SQL"
+    },
+    {
+      "id": "db-da-60",
+      "prompt": "What describes the variance of a set of values?",
+      "domain": "Data Modeling with Databricks SQL"
+    },
+    {
+      "id": "db-da-61",
+      "prompt": "Which SQL standards does Databricks SQL use as its default SQL dialect?",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-62",
+      "prompt": "A data analyst is working in an organization that utilizes a multi-hop, medallion architecture. They have been tasked with creating a new Gold table from an existing Silver table.\n\nWhich query is performing a hop from a Silver table to a Gold table?",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-63",
+      "prompt": "What is used as a compute resource for Databricks SQL?",
+      "domain": "Understanding of Databricks Data Intelligence Platform"
+    },
+    {
+      "id": "db-da-64",
+      "prompt": "A data analyst has opened up the SQL Editor page and written a new SQL statement. The data analyst now wants to save that statement to easily refer back to it later to add it to a dashboard. The results of the SQL statement must be able to be displayed as a counter, table, or a data visualization.\n\n",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-65",
+      "prompt": "A data analyst wants to create a Databricks SQL dashboard with multiple data visualizations and multiple counters. What must be completed before adding the data visualizations and counters to the dashboard?",
+      "domain": "Creating Dashboards and Visualizations"
+    },
+    {
+      "id": "db-da-66",
+      "prompt": "An analyst has been asked to combine the data in two tables: suppliers and new_suppliers. It's possible that some of the supplier_id values match in both tables, meaning that those particular suppliers have already been added to the suppliers table. If that is the case, the data should be unchanged.",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-67",
+      "prompt": "What does Partner Connect do when connecting Power BI and Tableau?",
+      "domain": "Importing Data"
+    },
+    {
+      "id": "db-da-68",
+      "prompt": "A data analyst is working with a nested array column products... The analyst wants to return the first item...",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-69",
+      "prompt": "A dashboard contains a bar chart visualization. The bar chart has a Date widget parameter associated with it.\n\nWhich statement about the Date widget parameter is true?",
+      "domain": "Creating Dashboards and Visualizations"
+    },
+    {
+      "id": "db-da-70",
+      "prompt": "A data analyst needs to share a Databricks SQL dashboard with stakeholders who do not have Databricks accounts. The stakeholders need to be notified every time the dashboard is refreshed. Which approach minimizes effort?",
+      "domain": "Creating Dashboards and Visualizations"
+    },
+    {
+      "id": "db-da-71",
+      "prompt": "What describes Partner Connect in Databricks?",
+      "domain": "Importing Data"
+    },
+    {
+      "id": "db-da-72",
+      "prompt": "In which scenario should a data analyst create and use a user-defined function (UDF)?",
+      "domain": "Analyzing Queries"
+    },
+    {
+      "id": "db-da-73",
+      "prompt": "A data analyst has produced a visualization. A stakeholder has viewed the visualization and is complaining that the visualization is difficult to interpret. After looking at the visualization, the analyst determines that the scale of the y-axis must be changed. Where are the controls for changing th",
+      "domain": "Creating Dashboards and Visualizations"
+    },
+    {
+      "id": "db-da-74",
+      "prompt": "Which example of data projects represents a common analytics application to be completed in Databricks SQL?",
+      "domain": "Creating Dashboards and Visualizations"
+    },
+    {
+      "id": "db-da-75",
+      "prompt": "A data analyst has two data sources that are providing similar but complementary information. The analyst wants to combine these sources of data into a single, comprehensive dataset for ongoing use for their team in a variety of different projects. Which terms is used to describe this type of work?",
+      "domain": "Securing Data"
+    },
+    {
+      "id": "db-da-76",
+      "prompt": "A data analyst has been asked to determine which customers have placed an order in the past year and which customers have not placed an order in the past year. This can be determined with one statement by joining the `customers` table (which is unique by customer ID) and the `orders` table. Which ty",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-77",
+      "prompt": "A data analyst has come across a column in a table that contains personally identifiable information (PII). The data analyst should not have access to this type of PII data. How should the data analyst proceed?",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-78",
+      "prompt": "A data engineering team has created a Structured Streaming pipeline that processes data in micro-batches and populates gold-level tables. The microbatches are triggered every 10 minutes. A data analyst has created a dashboard based on this gold-level data. The project stakeholders want to see the re",
+      "domain": "Securing Data"
+    },
+    {
+      "id": "db-da-79",
+      "prompt": "Where in the Databricks SQL workspace can a data analyst configure a refresh schedule for a query when the query is not attached to a dashboard or alert?",
+      "domain": "Analyzing Queries"
+    },
+    {
+      "id": "db-da-80",
+      "prompt": "A stakeholder has provided a data analyst with a lookup dataset in the form of a 50-row CSV file. The data analyst needs to upload this dataset for use as a table in Databricks SQL. Which approach should the data analyst use to quickly upload the file into a table for use in Databricks SQL?",
+      "domain": "Importing Data"
+    },
+    {
+      "id": "db-da-81",
+      "prompt": "Which open-source project helps to enable the data lakehouse by adding organization, reliability, performance, and data governance to data lake architectures?",
+      "domain": "Understanding of Databricks Data Intelligence Platform"
+    },
+    {
+      "id": "db-da-82",
+      "prompt": "Which data visualization use cases is best completed using Databricks SQL relative to other visualization tools?",
+      "domain": "Creating Dashboards and Visualizations"
+    },
+    {
+      "id": "db-da-83",
+      "prompt": "A data analyst has written and saved a series of queries that reveal trends that need to be monitored by several stakeholders. Which tool should the data analyst use to share the results of all of the queries to be viewed at once?",
+      "domain": "Creating Dashboards and Visualizations"
+    },
+    {
+      "id": "db-da-84",
+      "prompt": "A data analyst needs to create an empty managed table `table_name` in database `database_name` with a specific schema. The table needs to be recreated and empty, regardless of whether or not the table already exists. Which command can the analyst use to complete the task?",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-85",
+      "prompt": "Data professionals with varying responsibilities use the Databricks Lakehouse Platform. Which role in the Databricks Lakehouse Platform use Databricks SQL as their primary service?",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-86",
+      "prompt": "A data analyst tries to calculate daily sales but gets multiple rows... Which corrected query produces exactly one row per product per day?",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-87",
+      "prompt": "A data analyst is migrating data lakehouse workloads to Databricks. The analyst manages a large table with thousands of columns and several billion rows. The analyst is concerned about scan performance, query speed, and handling the overhead of processing such a large volume of data.\n\nIn which two w",
+      "domain": "Analyzing Queries"
+    },
+    {
+      "id": "db-da-88",
+      "prompt": "A data analyst is setting up a Genie space in Databricks. Which sequence should the analyst use for defining reasonable sample questions to help guide user interactions and improve Genie's accuracy?",
+      "domain": "Developing AI/BI Genie spaces"
+    },
+    {
+      "id": "db-da-89",
+      "prompt": "A data analyst team is building reliable, production-grade data pipelines on Databricks. They require a solution that allows them to define data transformations declaratively, automatically enforce data quality expectations, and handle errors without manual intervention. Which Databricks capability ",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-90",
+      "prompt": "A data analyst is evaluating options to optimize query performance on a large table with frequently changing query filters. The analyst is considering using Liquid Clustering versus traditional Hive-style partitioning. What is the primary advantage of Liquid Clustering over traditional partitioning ",
+      "domain": "Analyzing Queries"
+    },
+    {
+      "id": "db-da-91",
+      "prompt": "A data analyst uses Databricks to create a dashboard that monitors daily sales volumes and store performance. To ensure that area managers always see up-to-date data without having to manually intervene, the data analyst wants to automate the dashboard data refresh. Which process should the data ana",
+      "domain": "Creating Dashboards and Visualizations"
+    },
+    {
+      "id": "db-da-92",
+      "prompt": "A data analyst is configuring a Genie space to support natural language questions about product sales, including fields like `region_code`, `sku`, and `channel_type`. The analyst notices that Genie often generates ambiguous or incorrect queries due to unclear column meanings.\n\nWhich two actions will",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-93",
+      "prompt": "A data analyst filters rows where the `tags` array includes the value 'sql'... How should the analyst query to filter for rows where the `tags` array contains 'sql'?",
+      "domain": "Managing Data"
+    },
+    {
+      "id": "db-da-94",
+      "prompt": "A data analyst needs to programmatically mark the `sales_data` table in Unity Catalog as deprecated so that users across their organization can clearly see that it is no longer recommended for use. Which SQL command should they use?",
+      "domain": "Developing AI/BI Genie spaces"
+    },
+    {
+      "id": "db-da-95",
+      "prompt": "A data analyst is setting up a new AI/BI Genie space in Databricks to support natural language querying and ensure high-quality, governed responses. Which component is essential for configuring an effective Genie space that returns accurate and useful results?",
+      "domain": "Managing Data"
+    },
+    {
+      "id": "db-da-96",
+      "prompt": "A data analyst wants to implement a use case that requires managing both structured and unstructured data. How will Unity Catalog help in this scenario?",
+      "domain": "Managing Data"
+    },
+    {
+      "id": "db-da-97",
+      "prompt": "A data analyst is reviewing the status of alerts in the Databricks SQL Alerts listing page. One alert was recently executed, and the monitored value met the defined condition and exceeded the threshold. Which status should appear for this alert in the listing?",
+      "domain": "Understanding of Databricks Data Intelligence Platform"
+    },
+    {
+      "id": "db-da-98",
+      "prompt": "A data analyst wants to generate insights from large, complex datasets. The analyst needs to quickly understand the meaning of various data columns, ask questions in natural language, and receive AI-driven recommendations for optimizing data queries and workflows. Which Databricks component is prima",
+      "domain": "Understanding of Databricks Data Intelligence Platform"
+    },
+    {
+      "id": "db-da-99",
+      "prompt": "A data analyst needs to quickly estimate unique user sessions... What is the primary advantage of using APPROX_COUNT_DISTINCT instead of COUNT_DISTINCT?",
+      "domain": "Analyzing Queries"
+    },
+    {
+      "id": "db-da-100",
+      "prompt": "A data analyst has noticed that a key dashboard is loading slowly and suspects a specific SQL query may be causing performance issues. To diagnose the root cause, the analyst wants to review query execution characteristics such as execution time, data scanned, and rows processed over time. How shoul",
+      "domain": "Analyzing Queries"
+    },
+    {
+      "id": "db-da-101",
+      "prompt": "A data analyst needs to automate scheduled ETL jobs that ingest and transform data from multiple sources. The analyst wants to use multiple programming languages for flexibility and ensure that the pipeline can automatically handle schema changes as new data arrives. Which approach in Databricks sho",
+      "domain": "Developing AI/BI Genie spaces"
+    },
+    {
+      "id": "db-da-102",
+      "prompt": "A data analyst is curating a Genie space for the marketing team. To ensure accurate and context-aware responses, the analyst includes curated Unity Catalog tables and sample questions. Which additional step can the analyst take to maximize trust and reuse of frequently asked queries?",
+      "domain": "Securing Data"
+    },
+    {
+      "id": "db-da-103",
+      "prompt": "A data analyst is using Databricks Unity Catalog. The datasets are tagged by sensitivity, and confidential data is marked with the tag key `confidential`. The data analyst needs to quickly find all tables tagged as confidential in the Databricks workspace search bar. Which search key text should the",
+      "domain": "Analyzing Queries"
+    },
+    {
+      "id": "db-da-104",
+      "prompt": "A data analyst is troubleshooting a query in Databricks SQL that fails when processing large datasets. Logs indicate the job aborts due to resource constraint errors. Which Query Profile metric should the analyst use to identify the operator causing resource overuse?",
+      "domain": "Analyzing Queries"
+    },
+    {
+      "id": "db-da-105",
+      "prompt": "A data analyst needs to improve the performance of a daily sales report that aggregates data from a large transactions table. The report is run multiple times a day, but the underlying data only changes once daily. Which approach should the analyst use?",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-106",
+      "prompt": "A data analyst is working interactively in a Databricks notebook. The analyst executes a SQL query using `%sql` and wants to turn the result into a line chart showing weekly user counts over time. Which step allows the analyst to create the chart directly in the notebook?",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-107",
+      "prompt": "Despite having `SELECT` permission on tables and `USAGE` on schemas, a data analyst is unable to access objects. Which action enables the data analyst to access the objects?",
+      "domain": "Analyzing Queries"
+    },
+    {
+      "id": "db-da-108",
+      "prompt": "A data analyst team wants to understand the best practices and limitations of caching in Databricks. What is the limitation when using caching to reduce development time and query latency?",
+      "domain": "Analyzing Queries"
+    },
+    {
+      "id": "db-da-109",
+      "prompt": "A data analyst is setting up an AI/BI Genie space. They notice that Genie is struggling to correctly join tables because the relationship between `orders.cust_id` and `customers.id` is not explicitly defined in the metadata. Which Unity Catalog feature should the analyst use to fix this and improve ",
+      "domain": "Developing AI/BI Genie spaces"
+    },
+    {
+      "id": "db-da-110",
+      "prompt": "You are querying a shared table provided by a partner via Delta Sharing. You want to understand who pays for the compute costs when you execute a `SELECT` query against this shared table.",
+      "domain": "Data Modeling with Databricks SQL"
+    },
+    {
+      "id": "db-da-111",
+      "prompt": "An analyst needs to ingest a large volume of JSON files from cloud storage into a Delta table using Databricks SQL. The schema of these JSON files evolves frequently (new columns are added). Which SQL function should be used to ingest these files while automatically handling schema evolution?",
+      "domain": "Importing Data"
+    },
+    {
+      "id": "db-da-112",
+      "prompt": "You have a table `events` that uses Liquid Clustering. Over time, you notice query performance degrading slightly as new data is added. What command should you schedule to run periodically to maintain optimal layout?",
+      "domain": "Analyzing Queries"
+    },
+    {
+      "id": "db-da-113",
+      "prompt": "A data analyst creates a Materialized View (MV) to speed up a complex dashboard query. However, the refresh of the MV fails. Upon investigation, they realize they are using a Standard SQL Warehouse. Why did the refresh fail?",
+      "domain": "Data Modeling with Databricks SQL"
+    },
+    {
+      "id": "db-da-114",
+      "prompt": "You are browsing the Databricks Marketplace to find a weather dataset to enrich your sales analysis. Once you 'install' a data product from the Marketplace, how does it appear in your workspace?",
+      "domain": "Importing Data"
+    },
+    {
+      "id": "db-da-115",
+      "prompt": "An analyst wants to filter a high-cardinality column `session_id` in a 5TB table. They originally used Hive-style partitioning on `session_id`, but this caused performance issues. They switched to Liquid Clustering. What was the specific performance issue caused by partitioning on a high-cardinality",
+      "domain": "Analyzing Queries"
+    },
+    {
+      "id": "db-da-116",
+      "prompt": "You want to share a dashboard with a stakeholder who does NOT have a Databricks account. You want them to receive an updated PDF of the dashboard every Monday morning. Which feature allows this?",
+      "domain": "Creating Dashboards and Visualizations"
+    },
+    {
+      "id": "db-da-117",
+      "prompt": "When defining 'Trusted Assets' in an AI/BI Genie space, what is the primary benefit?",
+      "domain": "Developing AI/BI Genie spaces"
+    },
+    {
+      "id": "db-da-118",
+      "prompt": "An analyst runs `DELETE FROM my_table WHERE id = 1`. They want to confirm that the data is physically removed from storage immediately to comply with a GDPR 'Right to be Forgotten' request. Is the DELETE command sufficient?",
+      "domain": "Analyzing Queries"
+    },
+    {
+      "id": "db-da-119",
+      "prompt": "How do you define Liquid Clustering on a Delta table when creating it using SQL?",
+      "domain": "Analyzing Queries"
+    },
+    {
+      "id": "db-da-120",
+      "prompt": "In Unity Catalog, you define a Primary Key and a Foreign Key relationship between two tables. You then attempt to insert an order with a `customer_id` that does not exist in the `customers` table. What happens?",
+      "domain": "Data Modeling with Databricks SQL"
+    },
+    {
+      "id": "db-da-121",
+      "prompt": "You are analyzing query performance using System Tables. You want to query the billing usage data programmatically. Which specific table should you query?",
+      "domain": "Analyzing Queries"
+    },
+    {
+      "id": "db-da-122",
+      "prompt": "In AI/BI Genie, what is the purpose of 'Draft Mode' vs 'Released Mode' (Publishing) for a space?",
+      "domain": "Developing AI/BI Genie spaces"
+    },
+    {
+      "id": "db-da-123",
+      "prompt": "A data analyst has added a query parameter named `date_param` to a SQL query powering a dashboard widget. However, when they change the value of the parameter widget at the top of the dashboard, the visualization does not update. What step did the analyst likely miss?",
+      "domain": "Creating Dashboards and Visualizations"
+    },
+    {
+      "id": "db-da-124",
+      "prompt": "An analyst needs to import a CSV file via `COPY INTO`, but the schema of the CSV might contain new columns in the future. They want these new columns to be automatically added to the target Delta table. Which option enables this?",
+      "domain": "Importing Data"
+    },
+    {
+      "id": "db-da-125",
+      "prompt": "You want to restrict access to specific rows in the `employees` table so that analysts can only see employees from their own country. To which object do you apply the Row Filter function in Unity Catalog?",
+      "domain": "Securing Data"
+    },
+    {
+      "id": "db-da-126",
+      "prompt": "An analyst needs to query a collection of PDF documents and images stored in cloud storage to perform analysis using AI functions. They want to manage access to these files using Unity Catalog governance. Which object should they create?",
+      "domain": "Managing Data"
+    },
+    {
+      "id": "db-da-127",
+      "prompt": "A team of data analysts wants to follow software engineering best practices for their SQL queries. They need to version control their queries, track changes over time, and collaborate using branches. Which Databricks feature enables this for SQL files?",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-128",
+      "prompt": "A critical table was accidentally deleted yesterday. You need to find out exactly *who* ran the `DROP TABLE` command and *when*. Which system table should you query?",
+      "domain": "Managing Data"
+    },
+    {
+      "id": "db-da-129",
+      "prompt": "You are calculating the average sales amount using `AVG(sales_amount)`. The column contains some `NULL` values. How does the `AVG` function handle these nulls in Databricks SQL?",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-130",
+      "prompt": "In a Databricks Dashboard, you have a dataset with thousands of rows. You add a Bar Chart and a Table widget. You want to configure the dashboard so that when a user clicks on a specific bar in the chart, the Table widget automatically filters to show only the records related to that bar. What featu",
+      "domain": "Creating Dashboards and Visualizations"
+    },
+    {
+      "id": "db-da-131",
+      "prompt": "What access control model in Unity Catalog defines permissions based on tags or attributes assigned to data assets, users, and the environment rather than explicit role grants?",
+      "domain": "Securing Data"
+    },
+    {
+      "id": "db-da-132",
+      "prompt": "A data analyst needs to query data stored in an external PostgreSQL database directly from Databricks SQL without moving or copying the data. Which Databricks feature allows the analyst to create a federated catalog that points to the external database?",
+      "domain": "Managing Data"
+    },
+    {
+      "id": "db-da-133",
+      "prompt": "A data analyst accidentally ran an UPDATE statement that corrupted data in a Delta table. They need to restore the table to its state as of version 5. Which command restores the table?",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-134",
+      "prompt": "In the context of data modeling for analytics, which of the following correctly describes a Star Schema?",
+      "domain": "Data Modeling with Databricks SQL"
+    },
+    {
+      "id": "db-da-135",
+      "prompt": "A data analyst needs to ensure that when users query a table containing Social Security Numbers (SSNs), the SSN column displays only the last four digits (e.g., '***-**-1234') without modifying the actual stored data. Which Unity Catalog feature should the analyst use?",
+      "domain": "Securing Data"
+    },
+    {
+      "id": "db-da-136",
+      "prompt": "A stakeholder has provided a data analyst with a single 20-row CSV file that needs to be quickly loaded into a Delta table for ad-hoc analysis. The analyst does not have access to cloud object storage. Which Databricks SQL feature allows the analyst to ingest this small file directly through the use",
+      "domain": "Importing Data"
+    },
+    {
+      "id": "db-da-137",
+      "prompt": "A data analyst is building a line chart in a Databricks SQL dashboard to visualize monthly revenue over two years. The analyst wants to overlay a visual indicator that helps identify anomalies and overall direction in the data. Which chart feature should the analyst enable?",
+      "domain": "Creating Dashboards and Visualizations"
+    },
+    {
+      "id": "db-da-138",
+      "prompt": "Which Unity Catalog feature automatically tracks the origin, transformations, and downstream consumers of a dataset at both the table and column level?",
+      "domain": "Managing Data"
+    },
+    {
+      "id": "db-da-139",
+      "prompt": "In Unity Catalog, data assets are organized using a three-level namespace. Which of the following correctly represents this hierarchy?",
+      "domain": "Managing Data"
+    },
+    {
+      "id": "db-da-140",
+      "prompt": "A data analyst wants to grant read-only access to the sales_data table so a colleague can run SELECT queries but cannot modify the data. Which SQL command accomplishes this?",
+      "domain": "Securing Data"
+    },
+    {
+      "id": "db-da-141",
+      "prompt": "Which of the following best describes the relationship between Databricks SQL and the overall Databricks Data Intelligence Platform?",
+      "domain": "Understanding of Databricks Data Intelligence Platform"
+    },
+    {
+      "id": "db-da-142",
+      "prompt": "Which of the following best describes the architecture of a Data Lakehouse?",
+      "domain": "Understanding of Databricks Data Intelligence Platform"
+    },
+    {
+      "id": "db-da-143",
+      "prompt": "A data analyst needs to create a full, independent backup of a production Delta table, including all data files and transaction history, so changes to the backup do not affect the original table. Which command should the analyst use?",
+      "domain": "Managing Data"
+    },
+    {
+      "id": "db-da-144",
+      "prompt": "A data analyst wants to quickly create a lightweight copy of a large Delta table for read-only testing without duplicating all the data files. Which cloning method is most appropriate?",
+      "domain": "Managing Data"
+    },
+    {
+      "id": "db-da-145",
+      "prompt": "What does Predictive Optimization do for Unity Catalog managed tables?",
+      "domain": "Analyzing Queries"
+    },
+    {
+      "id": "db-da-146",
+      "prompt": "A data analyst runs VACUUM on a Delta table with the default retention period. What is the default retention threshold, and what happens to files older than this threshold that are no longer referenced by the transaction log?",
+      "domain": "Managing Data"
+    },
+    {
+      "id": "db-da-147",
+      "prompt": "A data analyst wants to embed a published Databricks AI/BI dashboard into their company's internal web portal so employees can view it without navigating to Databricks. Which method should the analyst use?",
+      "domain": "Creating Dashboards and Visualizations"
+    },
+    {
+      "id": "db-da-148",
+      "prompt": "A data analyst has created a dashboard and wants stakeholders to automatically receive a PDF snapshot of the dashboard via email every Monday morning. Which Databricks feature supports this?",
+      "domain": "Creating Dashboards and Visualizations"
+    },
+    {
+      "id": "db-da-149",
+      "prompt": "What are Unity Catalog Volumes used for?",
+      "domain": "Managing Data"
+    },
+    {
+      "id": "db-da-150",
+      "prompt": "When curating an AI/BI Genie space for optimal accuracy, a data analyst is deciding how many tables to include. What is the recommended best practice?",
+      "domain": "Developing, Sharing, and Maintaining AI/BI Genie spaces"
+    },
+    {
+      "id": "db-da-151",
+      "prompt": "A streaming table in Databricks SQL needs to reprocess all data from its source because its definition was changed. Which refresh mode should the analyst use?",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-152",
+      "prompt": "A data analyst needs to process Change Data Capture (CDC) records from a source system into a Delta table, handling inserts, updates, and deletes automatically while managing out-of-order records. Which Databricks SQL feature simplifies this?",
+      "domain": "Importing Data"
+    },
+    {
+      "id": "db-da-153",
+      "prompt": "A data analyst has created a Materialized View in Databricks SQL to speed up a frequently used dashboard query. How are the refresh operations for this Materialized View managed?",
+      "domain": "Analyzing Queries"
+    },
+    {
+      "id": "db-da-154",
+      "prompt": "A data analyst creates a regular (non-temporary) VIEW in Databricks SQL using CREATE VIEW. After logging out and logging back in, what is the status of the view?",
+      "domain": "Data Modeling with Databricks SQL"
+    },
+    {
+      "id": "db-da-155",
+      "prompt": "A data analyst notices that a SQL warehouse is experiencing high query queuing during peak hours. The warehouse is configured with a minimum of 1 cluster and maximum of 1 cluster. What change should the analyst recommend to reduce queuing?",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-156",
+      "prompt": "In Unity Catalog, a data analyst defines a PRIMARY KEY on the orders table and a FOREIGN KEY on order_items referencing orders. The analyst then tries to insert a row into order_items with an order_id that does not exist in orders. What happens?",
+      "domain": "Data Modeling with Databricks SQL"
+    },
+    {
+      "id": "db-da-157",
+      "prompt": "A data analyst has two result sets from different queries. They want to combine the results, keeping only distinct rows and removing duplicates. Which SQL set operation should they use?",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-158",
+      "prompt": "A data analyst runs the following query:\n\nSELECT employee_id, salary,\n  LAG(salary) OVER (ORDER BY hire_date) AS prev_salary\nFROM employees;\n\nWhat does the `prev_salary` column contain for the FIRST row (earliest hire_date)?",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-159",
+      "prompt": "A data analyst writes the following query to categorize customers:\n\nSELECT customer_id, total_purchases,\n  CASE\n    WHEN total_purchases >= 1000 THEN 'Platinum'\n    WHEN total_purchases >= 500 THEN 'Gold'\n    WHEN total_purchases >= 100 THEN 'Silver'\n    ELSE 'Bronze'\n  END AS tier\nFROM customers;\n\n",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-160",
+      "prompt": "A data analyst has the following data in the `orders` table:\n\n| order_id | discount |\n|----------|----------|\n| 1        | 10       |\n| 2        | NULL     |\n| 3        | 25       |\n| 4        | NULL     |\n\nThe analyst runs:\nSELECT order_id, COALESCE(discount, 0) AS final_discount FROM orders;\n\nWhat",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-161",
+      "prompt": "A data analyst wants to aggregate daily sales into monthly totals. Which query correctly truncates dates to the month level and sums the revenue?\n\n(A) SELECT DATE_TRUNC('MONTH', sale_date) AS month, SUM(revenue) FROM sales GROUP BY month;\n(B) SELECT MONTH(sale_date) AS month, SUM(revenue) FROM sales",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-162",
+      "prompt": "A data analyst runs a LEFT JOIN:\n\nSELECT c.customer_name, o.order_id, o.amount\nFROM customers c\nLEFT JOIN orders o ON c.customer_id = o.customer_id;\n\nCustomer 'Alice' exists in the customers table but has NO rows in orders. What appears in the result for Alice?",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-163",
+      "prompt": "A data analyst has a `sales` table with columns: product, quarter, revenue. The analyst wants to transform the data so each quarter becomes its own column. Which query achieves this?\n\n(A) SELECT * FROM sales PIVOT (SUM(revenue) FOR quarter IN ('Q1', 'Q2', 'Q3', 'Q4'));\n(B) SELECT product, Q1, Q2, Q3",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-164",
+      "prompt": "A data analyst has a table `orders` with a column `items` of type ARRAY<STRING>:\n\n| order_id | items                     |\n|----------|---------------------------|\n| 1        | ['laptop', 'mouse']       |\n| 2        | ['keyboard']              |\n| 3        | ['monitor', 'cable', 'hub']|\n\nThe analyst",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-165",
+      "prompt": "A data analyst runs the following query to rank employees by salary within each department:\n\nSELECT employee_id, department, salary,\n  DENSE_RANK() OVER (PARTITION BY department ORDER BY salary DESC) AS rank\nFROM employees;\n\nDepartment 'Engineering' has salaries: 100000, 90000, 90000, 80000. What ra",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-166",
+      "prompt": "A data analyst writes the following query:\n\nSELECT department, COUNT(*) AS emp_count\nFROM employees\nWHERE emp_count > 5\nGROUP BY department;\n\nThe query fails. What is the error and how should it be fixed?",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-167",
+      "prompt": "A data analyst writes a CTE to find the top salesperson per region:\n\nWITH ranked AS (\n  SELECT region, salesperson, total_sales,\n    ROW_NUMBER() OVER (PARTITION BY region ORDER BY total_sales DESC) AS rn\n  FROM sales_summary\n)\nSELECT region, salesperson, total_sales\nFROM ranked\nWHERE rn = 1;\n\nWhat ",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-168",
+      "prompt": "A data analyst needs to find all customers who placed an order in 2024 but NOT in 2025. Which query correctly solves this?\n\n(A) SELECT customer_id FROM orders WHERE YEAR(order_date) = 2024\n    EXCEPT\n    SELECT customer_id FROM orders WHERE YEAR(order_date) = 2025;\n\n(B) SELECT customer_id FROM order",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-169",
+      "prompt": "A data analyst needs to calculate each employee's salary as a percentage of the department total. Which query is correct?\n\nSELECT employee_id, department, salary,\n  ROUND(salary * 100.0 / SUM(salary) OVER (PARTITION BY department), 2) AS pct_of_dept\nFROM employees;",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-170",
+      "prompt": "A data analyst runs:\n\nSELECT customer_id, order_date, amount,\n  LEAD(order_date) OVER (PARTITION BY customer_id ORDER BY order_date) AS next_order_date\nFROM orders;\n\nWhat does `next_order_date` contain for the LAST order of each customer?",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-171",
+      "prompt": "A data analyst writes:\n\nMERGE INTO target t\nUSING source s\nON t.id = s.id\nWHEN MATCHED THEN UPDATE SET t.name = s.name, t.updated_at = CURRENT_TIMESTAMP()\nWHEN NOT MATCHED THEN INSERT (id, name, updated_at) VALUES (s.id, s.name, CURRENT_TIMESTAMP());\n\nIf a row with id = 5 exists in BOTH target and s",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-172",
+      "prompt": "A data analyst runs:\n\nSELECT order_id, order_date,\n  DATEDIFF(CURRENT_DATE(), order_date) AS days_since_order\nFROM orders\nWHERE DATEDIFF(CURRENT_DATE(), order_date) > 30;\n\nAssuming today is 2026-03-26 and one row has order_date = '2026-03-01', what is `days_since_order` for that row?",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-173",
+      "prompt": "A data analyst runs:\n\nSELECT\n  UPPER(TRIM('  Hello World  ')) AS result;\n\nWhat is the value of `result`?",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-174",
+      "prompt": "A data analyst runs:\n\nSELECT department, employee_id, salary,\n  FIRST_VALUE(employee_id) OVER (\n    PARTITION BY department ORDER BY salary DESC\n  ) AS top_earner\nFROM employees;\n\nWhat does the `top_earner` column contain?",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-175",
+      "prompt": "A data analyst runs:\n\nSELECT product_id, quantity, unit_price,\n  CASE\n    WHEN quantity > 100 THEN unit_price * 0.80\n    WHEN quantity > 50 THEN unit_price * 0.90\n    ELSE unit_price\n  END AS discounted_price\nFROM order_items;\n\nA row has quantity = 120 and unit_price = 50. What is `discounted_price`",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-176",
+      "prompt": "A data architect has informed a data analyst team that its organization will now use a data design pattern that will logically organize data in a lakehouse, with the goal of incrementally and progressively improving the structure and quality of data as it flows through each layer of the architecture",
+      "domain": "Understanding of Databricks Data Intelligence Platform"
+    },
+    {
+      "id": "db-da-177",
+      "prompt": "A data analyst wants to compare the contents of a Delta table as they existed last week to the current state in order to track changes in sales records.\n\nWhich Delta Lake feature enables this comparison?",
+      "domain": "Managing Data"
+    },
+    {
+      "id": "db-da-178",
+      "prompt": "A BI analyst is building an analytical data model in Databricks using Delta Lake tables. The source system contains transactional sales data that changes frequently. The analyst chooses to apply the Data Vault 2.0 methodology to manage historical changes while ensuring scalability and auditability a",
+      "domain": "Data Modeling with Databricks SQL"
+    },
+    {
+      "id": "db-da-179",
+      "prompt": "How are analytical models mapped to the Gold layer in the Delta Lake medallion architecture on Databricks?",
+      "domain": "Understanding of Databricks Data Intelligence Platform"
+    },
+    {
+      "id": "db-da-180",
+      "prompt": "A data analyst is preparing a dataset that includes customer information such as email addresses and birthdates. This dataset will be used by multiple teams for generating reports, but some teams should not have permissions to access sensitive data. The analyst must ensure the data is stored securel",
+      "domain": "Securing Data"
+    },
+    {
+      "id": "db-da-181",
+      "prompt": "How are privileges inherited in Unity Catalog across the hierarchy levels of metastore, catalog, schema, and table/view?",
+      "domain": "Securing Data"
+    },
+    {
+      "id": "db-da-182",
+      "prompt": "A data analyst needs to join two tables, orders and customers, using both customer_id and region_id as join keys. The goal is to return only rows where both values match in the two tables.\n\nWhich SQL query correctly performs this join?",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-183",
+      "prompt": "A data analyst wants to identify product categories that meet two criteria:\n\n1. Each category contains more than 10 products.\n2. The average price of products in the category is greater than $50.\n\nWhich SQL statement applies aggregate functions to return only the categories that meet these requireme",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-184",
+      "prompt": "What is the primary role of a SQL Warehouse in Databricks?",
+      "domain": "Understanding of Databricks Data Intelligence Platform"
+    },
+    {
+      "id": "db-da-185",
+      "prompt": "A BI analyst has created a Genie space containing customer sales data and needs to share it with external stakeholders who are not workspace members. The stakeholders require the ability to ask questions about the data but should not have access to the underlying Databricks workspace or compute reso",
+      "domain": "Developing AI/BI Genie spaces"
+    },
+    {
+      "id": "db-da-186",
+      "prompt": "A company uses a star schema to analyze sales data. The sales fact table records transactions, and dimension tables include products, stores, and dates.\n\nHow are primary and foreign keys used to enable efficient joining between these tables?",
+      "domain": "Data Modeling with Databricks SQL"
+    },
+    {
+      "id": "db-da-187",
+      "prompt": "A BI analyst is designing a Databricks SQL dashboard that tracks monthly revenue for three product categories across two years. Leadership wants a chart that makes it straightforward to compare each category's trend over time and quickly spot seasonal patterns or declines without relying on addition",
+      "domain": "Creating Dashboards and Visualizations"
+    },
+    {
+      "id": "db-da-188",
+      "prompt": "A data analyst is preparing a quarterly analytics dashboard in Databricks and needs to share it with external stakeholders who are not members of the Databricks workspace. The stakeholders should be able to view the dashboard securely without being granted workspace access or edit permissions.\n\nWhic",
+      "domain": "Creating Dashboards and Visualizations"
+    },
+    {
+      "id": "db-da-189",
+      "prompt": "A company has started using the Databricks Platform and currently has only one workspace. They need to manage data access across different teams and want to ensure proper isolation and security controls.\n\nGiven this setup, which approach should be used?",
+      "domain": "Securing Data"
+    },
+    {
+      "id": "db-da-190",
+      "prompt": "A data analyst is enabling analytics on raw Parquet files stored in an external Amazon S3 bucket. The files must be queried directly using Databricks SQL without duplicating the data. The analyst also wants to register the table with Unity Catalog to enforce data governance policies such as access c",
+      "domain": "Executing queries using Databricks SQL"
+    },
+    {
+      "id": "db-da-191",
+      "prompt": "An analyst needs external datasets and analytics assets to enrich their lakehouse reporting. The organization uses Databricks with Unity Catalog enabled and wants fast, governed access to third-party data without complex ETL or replication.\n\nWhat is the benefit of using Databricks Marketplace in thi",
+      "domain": "Understanding of Databricks Data Intelligence Platform"
+    },
+    {
+      "id": "db-da-192",
+      "prompt": "A data analyst is working with the following table my_table:\n\ncustomer_name    | dollars_spent\nHex Sprockets    | [125.34, 100.15, 9003.99]\nDented Fenders   | [16.99, 200.85, 33.49, 88.17]\n\nThe analyst now wants to divide each value in the dollars_spent array by 100 to get the spend in terms of hund",
+      "domain": "Executing queries using Databricks SQL"
+    }
+  ]
+}

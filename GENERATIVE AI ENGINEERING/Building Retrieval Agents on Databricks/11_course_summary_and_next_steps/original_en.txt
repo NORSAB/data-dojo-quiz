@@ -1,0 +1,22 @@
+# Course Summary and Next Steps
+
+## Building Retrieval Agents On Databricks
+
+Congratulations!
+
+You completed the **Building Retrieval Agents on Databricks** course!
+
+By now, you should be able to:
+
+- Explain prompt engineering, context engineering, and RAG concepts for agentic systems.
+- Ingest, parse, transform, and chunk unstructured documents for LLM applications.
+- Build and optimize embedding, retrieval, and vector search pipelines.
+- Track and log retrieval agents using Databricks and MLflow.
+- Design and improve knowledge assistant agents using Agent Bricks.
+
+## Evaluate this Course
+
+Evaluate this course by taking a brief [one-minute survey](https://databricks.sjc1.qualtrics.com/jfe/form/SV_6zMiXNxAfa7IQjY?course_id=2706&course_title=Building%20Retrieval%20Agents%20on%20Databricks).
+
+Your feedback is valuable and helps us improve our courses.
+

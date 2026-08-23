@@ -1,0 +1,29 @@
+maybe you couldn't parse one section or there was like a problem while reading the document, then you are going to see the details here.
+And this is the section, the document section, how it's parsed, so you can see that there is document, and in this document object there are elements, and these elements are all elements that are in this document, so it's going to be, for example, coordinate of this box, which is...
+or your robotics and description is null and the type is section header. So AI parse document is not just parsing the text, it also understands the context and it defines whether this object is as a header, page footer, or it is a text, is it a caption, figure.
+All those kind of things are defined for you, and this is important when you to provide a richer context for the documents.
+Then we can list the documents using SQL list and the path. So it's just to list the files that are parsed. And you can see that here there is a parsed image folder. So a new folder created in the same path that we passed to ARParse.
+And this is going to have all parsed images. So each page is going to be converted to also an image.
+Yeah, this is the same here. You can see that all parsed documents are created here. So each page is created as an image here. So you should have the same number of images as number of pages here.
+This was how AI Parse document can be used with Python. There's also SQL support for that too. You can use SQL. For SQL, it is kind of the same format, it's just in the Databricks SQL format. So you are using AI Parse document, then yeah, the only difference is this mapping format.
+And that's it. Then you are reading files as binary file and you're passing this to that select statement.
+Yeah, it's going to be the same output. So I'm going to skip this section. I showed this one just to make sure that you know there is a Python way of doing that and also SQL way of doing that. So all AI function in Databricks has support for both Python and SQL.
+Then let's look at the metadata that is extracted. So the AI parse is going to return a document object. And this document object that can be pages, page number, text, table, images, and also some metadata.
+And here, we showed how you can select using the select statement to extract those objects. So here, for example, we are selecting the parts content document pages, then we are selecting elements, then
+Error status, corrupted data, and metadata, and you will see that each of these is created in a new column. So, if you scroll back here, yeah, there is no error, there is no corrupted data, and for metadata, this is the metadata section, and these are the elements.
+This is the pages and this is the path. So elements again, it is just extracted. So this way we are extracting by document. We are going to look into how to view.
+This element extracted elements on the document, and to inspect that to see if that is done correctly.
+Here we have a DocumentRenderer helper class. So this is not something that is shipped with AI parseDocument function. So this is just a class that we created and it is reading these JSON objects and displays them on the result that is.
+parsed. I'm going to just show how it looks like. So here, this function creates this nice visual output. Here you can see that we have document summary. I'm just parsing, just selecting one of these documents, so not all of them. And here you can see that there are three pages in this document.
+There are only two elements, and here are the element colors and resolution, everything, and here is how it is parsed, so you can see that this is a page header, then there is a section header, text, text, these are all correct.
+Then there is a figure and then capture action. You can see that.
+Same for the second page.
+and then third page.
+So this is important because it is not just extracting plain text, but it's also understanding each section and annotating that. So in this example, we had a figure here and it is annotating that this is a figure and this is a caption for that.
+So, imagine if you are going to use this one as part of your retrieval agent, and you want to, let's say, generate an output for a question, and you can say that this is explained in page two and figure on the left, for example.
+Because we know also the coordinates of the image, and we know that this image is on page X, we can give a reference to that specific page and generate an answer that is letting user know where they can look at it. So this is why it is important.
+All right, so that's it. That's how we used AI parse document to extract the content of the document. Now we need to store this text to a delta table and use that later in other demos. So in the next demo, for example, we are gonna
+Use how to clean the extracted data, how to divide it into chunks, and then those chunks are gonna be used for vector search to store in vector format and search based on that. So, we are just here defining the output table and...
+writing as delta, that's it, nothing too complicated.
+So, to wrap up in this demo, we showed how to use AI parse document, both in Python and in SQL, to parse documents. We show different metadata fields that are extracted, and then, as an optional section, we visualize.
+this output and show how you can inspect and see if the parsing is done correctly. So that's it for this demo and thanks for watching.

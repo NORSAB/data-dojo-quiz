@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propuesta de Capacitación Interactiva — Databricks Data Analyst Certification</title>
+    <!-- Importar tipografía moderna -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Estilos y Tokens de Diseño de Alta Gama */
+        :root {
+            --bg-base: #070a13;
+            --bg-surface: #0f1424;
+            --bg-card: rgba(18, 24, 47, 0.75);
+            --border-color: rgba(255, 255, 255, 0.07);
+            
+            --color-primary: #3b82f6;
+            --color-primary-rgb: 59, 130, 246;
+            --color-success: #10b981;
+            --color-warning: #f59e0b;
+            --color-danger: #ef4444;
+            
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --text-dark: #1f2937;
+            
+            --font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow-premium: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Reset Global */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            font-family: var(--font-family);
+            line-height: 1.6;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        /* Estructura del Contenedor Principal */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Cabecera / Hero */
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 40px 0;
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .tagline {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--color-primary);
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            line-height: 1.2;
+            color: #ffffff;
+            margin-bottom: 16px;
+            letter-spacing: -1px;
+        }
+
+        .lead {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Grid Principal: Sliders de Brecha y Temario */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        @media (min-width: 900px) {
+            .dashboard-grid {
+                grid-template-columns: 400px 1fr;
+            }
+        }
+
+        /* Tarjeta General Premium (Glassmorphism) */
+        .glass-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow-premium);
+            backdrop-filter: blur(8px);
+            transition: var(--transition-smooth);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(255, 255, 255, 0.12);
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 12px;
+        }
+
+        /* Panel de Control de Brecha Dinámica */
+        .gap-container {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .slider-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .slider-label-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .domain-name {
+            color: var(--text-main);
+        }
+
+        .domain-val {
+            color: var(--color-primary);
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            outline: none;
+            transition: var(--transition-smooth);
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--color-primary);
+            cursor: pointer;
+            border: 2px solid var(--bg-surface);
+            transition: var(--transition-smooth);
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            background: #ffffff;
+        }
+
+        /* Panel de Estado / Recomendador Dinámico */
+        .status-box {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 20px;
+            border: 1px dashed var(--border-color);
+        }
+
+        .status-score {
+            font-size: 1.8rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+
+        .status-score span {
+            font-size: 1rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .status-text {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        /* Sección de 24 Clases */
+        .classes-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 680px;
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+
+        /* Scrollbar Personalizado */
+        .classes-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        .classes-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 3px;
+        }
+        .classes-container::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+        .classes-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        /* Fila de Clase Individual */
+        .class-row {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 14px 18px;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0; /* Evitar que Flexbox encoja las filas y corte el texto */
+            min-height: 54px; /* Asegurar altura mínima para contener el texto */
+        }
+
+        .class-row::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--color-primary);
+            opacity: 0.4;
+            transition: var(--transition-smooth);
+        }
+
+        .class-row:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: translateX(3px);
+        }
+
+        .class-row:hover::before {
+            opacity: 1;
+        }
+
+        .class-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 24px;
+        }
+
+        .class-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .class-number {
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--color-primary);
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
+            line-height: 1.2;
+            display: inline-block;
+        }
+
+        .class-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #ffffff;
+            line-height: 1.4;
+        }
+
+        .class-badge {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+            transition: var(--transition-smooth);
+            line-height: 1.2;
+            display: inline-block;
+        }
+
+        .class-badge.critical-badge {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--color-danger);
+        }
+
+        .class-badge.medium-badge {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--color-warning);
+        }
+
+        .class-badge.strong-badge {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--color-success);
+        }
+
+        .class-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            margin-top: 0;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            border-top: 1px solid transparent;
+            padding-top: 0;
+            line-height: 1.4;
+        }
+
+        .class-row.active {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        .class-row.active .class-body {
+            max-height: 300px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top-color: var(--border-color);
+        }       }
+
+        .class-detail-item {
+            margin-bottom: 8px;
+        }
+
+        .class-detail-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .class-detail-label {
+            font-weight: 600;
+            color: var(--text-main);
+            margin-right: 4px;
+        }
+
+        /* Sección de Visualización de Laboratorios */
+        .labs-section {
+            margin-bottom: 50px;
+        }
+
+        .tabs-header {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+
+        .tab-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 10px 18px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-family: var(--font-family);
+            font-size: 0.85rem;
+            font-weight: 600;
+            white-space: nowrap;
+            transition: var(--transition-smooth);
+        }
+
+        .tab-btn:hover {
+            color: #ffffff;
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .tab-btn.active {
+            background: var(--color-primary);
+            color: #ffffff;
+            border-color: var(--color-primary);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .lab-content {
+            display: none;
+        }
+
+        .lab-content.active {
+            display: block;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .lab-metadata {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
+            font-size: 0.85rem;
+        }
+
+        .lab-meta-tag {
+            background: rgba(255, 255, 255, 0.04);
+            padding: 4px 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+        }
+
+        .lab-meta-tag span {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        /* Consola de Código SQL Premium */
+        .code-console {
+            background: #090c15;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.85rem;
+            color: #e5e7eb;
+            overflow-x: auto;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .code-console::before {
+            content: "SQL CONSOLE";
+            position: absolute;
+            top: 6px;
+            right: 12px;
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.2);
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        /* Resaltado de sintaxis simplificado */
+        .sql-keyword { color: #f472b6; font-weight: bold; }
+        .sql-comment { color: #6b7280; font-style: italic; }
+        .sql-string { color: #34d399; }
+        .sql-function { color: #60a5fa; }
+
+        /* Sección de Mini-Simulador de Muestra */
+        .simulator-section {
+            margin-bottom: 50px;
+        }
+
+        .quiz-card {
+            background: rgba(255, 255, 255, 0.015);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .quiz-question {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 15px;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .quiz-option {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            padding: 12px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: var(--transition-smooth);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .quiz-option:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .quiz-option.correct {
+            background: rgba(16, 185, 129, 0.12);
+            border-color: var(--color-success);
+            color: #34d399;
+            font-weight: 600;
+        }
+
+        .quiz-option.incorrect {
+            background: rgba(239, 68, 68, 0.12);
+            border-color: var(--color-danger);
+            color: #f87171;
+        }
+
+        .quiz-explanation {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 3px solid var(--color-primary);
+            border-radius: 0 8px 8px 0;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: none;
+        }
+
+        /* Botón de Impresión Flotante */
+        .print-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--color-primary);
+            color: #ffffff;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 30px;
+            font-family: var(--font-family);
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 100;
+            transition: var(--transition-smooth);
+        }
+
+        .print-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 24px rgba(59, 130, 246, 0.5);
+            background: #2563eb;
+        }
+
+        /* Estilos de Impresión (@media print) */
+        @media print {
+            body {
+                background: #ffffff !important;
+                color: #000000 !important;
+                font-size: 10pt;
+            }
+
+            .container {
+                max-width: 100% !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+
+            /* Ocultar elementos interactivos en impresión */
+            .print-btn,
+            .gap-panel,
+            .tabs-header,
+            .simulator-section,
+            .classes-container::-webkit-scrollbar,
+            .class-row::before,
+            header::after {
+                display: none !important;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr !important;
+            }
+
+            .glass-card {
+                background: #ffffff !important;
+                border: none !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+                margin-bottom: 30px;
+            }
+
+            .classes-container {
+                max-height: none !important;
+                overflow: visible !important;
+            }
+
+            .class-row {
+                background: #ffffff !important;
+                border: none !important;
+                border-bottom: 1px solid #e5e7eb !important;
+                padding: 10px 0 !important;
+                page-break-inside: avoid;
+            }
+
+            .class-body {
+                max-height: none !important;
+                display: block !important;
+                margin-top: 5px !important;
+                color: #374151 !important;
+            }
+
+            .class-badge {
+                border: 1px solid #ccc !important;
+                background: transparent !important;
+                color: #000000 !important;
+            }
+
+            .code-console {
+                background: #f9fafb !important;
+                color: #000000 !important;
+                border: 1px solid #d1d5db !important;
+                font-size: 8pt !important;
+                white-space: pre-wrap !important;
+                page-break-inside: avoid;
+            }
+
+            .sql-keyword { color: #000000 !important; font-weight: bold; }
+            .sql-comment { color: #555555 !important; }
+            .sql-string { color: #111111 !important; }
+
+            .tab-btn {
+                display: none !important;
+            }
+
+            .lab-content {
+                display: block !important;
+                page-break-inside: avoid;
+                margin-bottom: 40px;
+            }
+
+            h1, h2, h3, .section-title {
+                color: #000000 !important;
+                page-break-after: avoid;
+            }
+
+            header {
+                border-bottom: 2px solid #000000 !important;
+                margin-bottom: 40px !important;
+                padding-bottom: 20px !important;
+            }
+
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="print-btn" onclick="window.print()">
+        <!-- Icono de Impresora SVG -->
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+            <rect x="6" y="14" width="12" height="8"></rect>
+        </svg>
+        Imprimir Propuesta en PDF
+    </button>
+
+    <div class="container">
+        <!-- Cabecera / Portada -->
+        <header>
+            <div class="tagline">Propuesta de Capacitación Técnica</div>
+            <h1>Certificación Databricks Data Analyst</h1>
+            <p class="lead">Plan docente adaptado y optimizado dinámicamente según la matriz de brechas de conocimiento del equipo técnico.</p>
+        </header>
+
+        <!-- Grid Principal Dashboard -->
+        <div class="dashboard-grid">
+            
+            <!-- Panel Izquierdo: Analizador de Brechas Dinámico -->
+            <div class="glass-card gap-panel">
+                <div class="section-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
+                    Nivel del Equipo
+                </div>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 20px;">
+                    Ajusta el nivel estimado del equipo en cada dominio para adaptar la carga horaria recomendada automáticamente.
+                </p>
+                
+                <div class="gap-container">
+                    <!-- Slider 1 -->
+                    <div class="slider-group">
+                        <div class="slider-label-row">
+                            <span class="domain-name">D1. Plataforma (80%)</span>
+                            <span class="domain-val" id="val-d1">80%</span>
+                        </div>
+                        <input type="range" id="slide-d1" min="10" max="100" value="80" oninput="updateScore()">
+                    </div>
+                    
+                    <!-- Slider 2 -->
+                    <div class="slider-group">
+                        <div class="slider-label-row">
+                            <span class="domain-name">D2. Gestión Delta (66%)</span>
+                            <span class="domain-val" id="val-d2">66%</span>
+                        </div>
+                        <input type="range" id="slide-d2" min="10" max="100" value="66" oninput="updateScore()">
+                    </div>
+                    
+                    <!-- Slider 3 -->
+                    <div class="slider-group">
+                        <div class="slider-label-row">
+                            <span class="domain-name">D3. Ingesta Cloud (68%)</span>
+                            <span class="domain-val" id="val-d3">68%</span>
+                        </div>
+                        <input type="range" id="slide-d3" min="10" max="100" value="68" oninput="updateScore()">
+                    </div>
+                    
+                    <!-- Slider 4 -->
+                    <div class="slider-group">
+                        <div class="slider-label-row">
+                            <span class="domain-name">D4. SQL y Warehouses (77%)</span>
+                            <span class="domain-val" id="val-d4">77%</span>
+                        </div>
+                        <input type="range" id="slide-d4" min="10" max="100" value="77" oninput="updateScore()">
+                    </div>
+                    
+                    <!-- Slider 5 -->
+                    <div class="slider-group">
+                        <div class="slider-label-row">
+                            <span class="domain-name">D5. Optimización (71%)</span>
+                            <span class="domain-val" id="val-d5">71%</span>
+                        </div>
+                        <input type="range" id="slide-d5" min="10" max="100" value="71" oninput="updateScore()">
+                    </div>
+                    
+                    <!-- Slider 6 -->
+                    <div class="slider-group">
+                        <div class="slider-label-row">
+                            <span class="domain-name">D6. Dashboards (57%)</span>
+                            <span class="domain-val" id="val-d6">57%</span>
+                        </div>
+                        <input type="range" id="slide-d6" min="10" max="100" value="57" oninput="updateScore()">
+                    </div>
+                    
+                    <!-- Slider 7 -->
+                    <div class="slider-group">
+                        <div class="slider-label-row">
+                            <span class="domain-name">D7. AI/BI Genie (60%)</span>
+                            <span class="domain-val" id="val-d7">60%</span>
+                        </div>
+                        <input type="range" id="slide-d7" min="10" max="100" value="60" oninput="updateScore()">
+                    </div>
+                    
+                    <!-- Slider 8 -->
+                    <div class="slider-group">
+                        <div class="slider-label-row">
+                            <span class="domain-name">D8. Modelado (66%)</span>
+                            <span class="domain-val" id="val-d8">66%</span>
+                        </div>
+                        <input type="range" id="slide-d8" min="10" max="100" value="66" oninput="updateScore()">
+                    </div>
+                    
+                    <!-- Slider 9 -->
+                    <div class="slider-group">
+                        <div class="slider-label-row">
+                            <span class="domain-name">D9. Gobernanza (75%)</span>
+                            <span class="domain-val" id="val-d9">75%</span>
+                        </div>
+                        <input type="range" id="slide-d9" min="10" max="100" value="75" oninput="updateScore()">
+                    </div>
+                </div>
+                
+                <!-- Puntuación Global Calculada -->
+                <div class="status-box">
+                    <div class="status-score" id="global-score">69<span>/100</span></div>
+                    <div class="status-text" id="status-status">El equipo requiere refuerzo crítico en desarrollo avanzado e IA.</div>
+                </div>
+            </div>
+            
+            <!-- Panel Derecho: Cronograma de 24 Clases -->
+            <div class="glass-card">
+                <div class="section-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    Cronograma de Clases Ajustado (24 Horas)
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">
+                    Haz clic sobre cualquier clase para ver los laboratorios prácticos asociados y las preguntas específicas del simulador de examen.
+                </p>
+                
+                <div class="classes-container" id="classes-list">
+                    <!-- Se carga dinámicamente mediante JS -->
+                </div>
+            </div>
+        </div>
+        
+        <div class="page-break"></div>
+
+        <!-- Sección de Laboratorios Detallada -->
+        <div class="labs-section">
+            <h2 class="section-title" style="font-size: 1.5rem; margin-bottom: 25px;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                </svg>
+                Guía de Laboratorios Prácticos Desarrollados
+            </h2>
+            
+            <div class="tabs-header">
+                <button class="tab-btn active" onclick="switchLab(1)">Lab 1: Ingesta Incremental</button>
+                <button class="tab-btn" onclick="switchLab(2)">Lab 2: Capa Silver</button>
+                <button class="tab-btn" onclick="switchLab(3)">Lab 3: Star Schema Gold</button>
+                <button class="tab-btn" onclick="switchLab(4)">Lab 4: Enmascaramiento PII</button>
+                <button class="tab-btn" onclick="switchLab(5)">Lab 5: Optimización Delta</button>
+            </div>
+            
+            <!-- Contenidos de los Labs -->
+            <div class="glass-card">
+                
+                <!-- Lab 1 -->
+                <div id="lab-1" class="lab-content active">
+                    <div class="lab-metadata">
+                        <div class="lab-meta-tag">Tema: <span>Ingesta e Idempotencia</span></div>
+                        <div class="lab-meta-tag">Comando Principal: <span>COPY INTO</span></div>
+                        <div class="lab-meta-tag">Entorno: <span>Databricks Free & Paid</span></div>
+                    </div>
+                    <p style="margin-bottom: 15px;">
+                        Aprende a realizar ingestas seguras y recurrentes desde almacenamiento en la nube sin duplicación de registros, explotando la idempotencia nativa de Databricks.
+                    </p>
+                    
+                    <div class="code-console">
+<span class="sql-comment">-- 1. Crear tabla destino vacía en el metastore</span>
+<span class="sql-keyword">CREATE OR REPLACE TABLE</span> trips_bronze (
+    vendor_id <span class="sql-keyword">INT</span>,
+    pickup_datetime <span class="sql-keyword">TIMESTAMP</span>,
+    dropoff_datetime <span class="sql-keyword">TIMESTAMP</span>,
+    passenger_count <span class="sql-keyword">INT</span>,
+    trip_distance <span class="sql-keyword">DOUBLE</span>,
+    fare_amount <span class="sql-keyword">DOUBLE</span>,
+    input_file_name <span class="sql-keyword">STRING</span>
+);
+
+<span class="sql-comment">-- 2. Ejecutar ingesta de archivos. El comando salta registros ya cargados.</span>
+<span class="sql-keyword">COPY INTO</span> trips_bronze
+<span class="sql-keyword">FROM</span> <span class="sql-string">'dbfs:/databricks-datasets/nyctaxi/tripdata/yellow/'</span>
+<span class="sql-keyword">FILEFORMAT</span> = CSV
+<span class="sql-keyword">PATTERN</span> = <span class="sql-string">'yellow_tripdata_2019-01.csv.gz'</span>
+<span class="sql-keyword">FORMAT_OPTIONS</span> (<span class="sql-string">'header'</span> = <span class="sql-string">'true'</span>, <span class="sql-string">'inferSchema'</span> = <span class="sql-string">'true'</span>)
+<span class="sql-keyword">COPY_OPTIONS</span> (<span class="sql-string">'force'</span> = <span class="sql-string">'true'</span>);
+                    </div>
+                </div>
+                
+                <!-- Lab 2 -->
+                <div id="lab-2" class="lab-content">
+                    <div class="lab-metadata">
+                        <div class="lab-meta-tag">Tema: <span>Calidad y Deduplicación</span></div>
+                        <div class="lab-meta-tag">Cláusula Clave: <span>QUALIFY</span></div>
+                        <div class="lab-meta-tag">Entorno: <span>Databricks Free (Community)</span></div>
+                    </div>
+                    <p style="margin-bottom: 15px;">
+                        Generación de la vista Silver de los datos. Limpieza de registros nulos y deduplicación en una sola sentencia mediante la ventana `QUALIFY`.
+                    </p>
+                    
+                    <div class="code-console">
+<span class="sql-comment">-- Generar tabla limpia Silver</span>
+<span class="sql-keyword">CREATE OR REPLACE TABLE</span> trips_silver <span class="sql-keyword">AS</span>
+<span class="sql-keyword">SELECT</span> 
+    vendor_id, pickup_datetime, dropoff_datetime,
+    passenger_count, trip_distance, fare_amount,
+    <span class="sql-function">current_timestamp</span>() <span class="sql-keyword">as</span> ingestion_time
+<span class="sql-keyword">FROM</span> trips_bronze
+<span class="sql-keyword">WHERE</span> passenger_count &gt; 0 <span class="sql-keyword">AND</span> trip_distance &gt; 0.0
+<span class="sql-keyword">QUALIFY</span> <span class="sql-function">ROW_NUMBER</span>() <span class="sql-keyword">OVER</span> (
+    <span class="sql-keyword">PARTITION BY</span> vendor_id, pickup_datetime 
+    <span class="sql-keyword">ORDER BY</span> pickup_datetime <span class="sql-keyword">DESC</span>
+) = 1;
+                    </div>
+                </div>
+                
+                <!-- Lab 3 -->
+                <div id="lab-3" class="lab-content">
+                    <div class="lab-metadata">
+                        <div class="lab-meta-tag">Tema: <span>Modelado Dimensional</span></div>
+                        <div class="lab-meta-tag">Capa: <span>Gold Layer</span></div>
+                        <div class="lab-meta-tag">Estructura: <span>Star Schema</span></div>
+                    </div>
+                    <p style="margin-bottom: 15px;">
+                        Diseño del esquema de estrella analítico. Creamos tablas de dimensiones para los clientes/proveedores y una tabla de hechos agregada por día.
+                    </p>
+                    
+                    <div class="code-console">
+<span class="sql-comment">-- Crear tabla de hechos de ventas diaria (Capa Gold)</span>
+<span class="sql-keyword">CREATE OR REPLACE TABLE</span> fact_daily_trips <span class="sql-keyword">AS</span>
+<span class="sql-keyword">SELECT</span> 
+    <span class="sql-function">CAST</span>(<span class="sql-function">date_format</span>(pickup_datetime, <span class="sql-string">'yyyyMMdd'</span>) <span class="sql-keyword">AS INT</span>) <span class="sql-keyword">as</span> date_key,
+    vendor_id <span class="sql-keyword">as</span> vendor_key,
+    <span class="sql-function">count</span>(1) <span class="sql-keyword">as</span> total_trips,
+    <span class="sql-function">sum</span>(passenger_count) <span class="sql-keyword">as</span> total_passengers,
+    <span class="sql-function">sum</span>(fare_amount) <span class="sql-keyword">as</span> total_revenue
+<span class="sql-keyword">FROM</span> trips_silver
+<span class="sql-keyword">GROUP BY</span> 1, 2;
+                    </div>
+                </div>
+                
+                <!-- Lab 4 -->
+                <div id="lab-4" class="lab-content">
+                    <div class="lab-metadata">
+                        <div class="lab-meta-tag">Tema: <span>Privacidad y PII</span></div>
+                        <div class="lab-meta-tag">Lógica: <span>Column Masking Dinámico</span></div>
+                        <div class="lab-meta-tag">Entorno: <span>Unity Catalog Emulado</span></div>
+                    </div>
+                    <p style="margin-bottom: 15px;">
+                        Asegura la protección de datos personales. Emula la funcionalidad de enmascaramiento dinámico ocultando el ingreso económico para usuarios sin privilegios administrativos.
+                    </p>
+                    
+                    <div class="code-console">
+<span class="sql-comment">-- Crear vista de seguridad dinámica</span>
+<span class="sql-keyword">CREATE OR REPLACE VIEW</span> secure_fact_daily_trips <span class="sql-keyword">AS</span>
+<span class="sql-keyword">SELECT</span> 
+    date_key, vendor_key, total_trips,
+    <span class="sql-keyword">CASE</span> 
+        <span class="sql-keyword">WHEN</span> <span class="sql-function">current_user</span>() <span class="sql-keyword">IN</span> (<span class="sql-keyword">SELECT</span> username <span class="sql-keyword">FROM</span> user_roles <span class="sql-keyword">WHERE</span> role = <span class="sql-string">'admin'</span>) 
+        <span class="sql-keyword">THEN</span> total_revenue 
+        <span class="sql-keyword">ELSE</span> 0.0 
+    <span class="sql-keyword">END AS</span> total_revenue
+<span class="sql-keyword">FROM</span> fact_daily_trips;
+                    </div>
+                </div>
+                
+                <!-- Lab 5 -->
+                <div id="lab-5" class="lab-content">
+                    <div class="lab-metadata">
+                        <div class="lab-meta-tag">Tema: <span>Mantenimiento Delta</span></div>
+                        <div class="lab-meta-tag">Comandos: <span>OPTIMIZE & VACUUM</span></div>
+                        <div class="lab-meta-tag">Riesgo: <span>Colisión con Time Travel</span></div>
+                    </div>
+                    <p style="margin-bottom: 15px;">
+                        Compacta los archivos pequeños de almacenamiento físico para acelerar lecturas, y limpia el disco mediante purgas periódicas.
+                    </p>
+                    
+                    <div class="code-console">
+<span class="sql-comment">-- 1. Compactar y organizar datos físicamente</span>
+<span class="sql-keyword">OPTIMIZE</span> fact_daily_trips
+<span class="sql-keyword">ZORDER BY</span> (date_key);
+
+<span class="sql-comment">-- 2. Limpieza física del disco (cuidado: rompe Time Travel pasado)</span>
+<span class="sql-keyword">VACUUM</span> fact_daily_trips <span class="sql-keyword">RETAIN</span> 7 <span class="sql-keyword">DAYS</span>;
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="page-break"></div>
+
+        <!-- Sección de Simulador de Muestra -->
+        <div class="simulator-section">
+            <h2 class="section-title" style="font-size: 1.5rem; margin-bottom: 25px;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+                Dinámica de Muestra del Simulador
+            </h2>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 30px;">
+                Prueba cómo resolvemos reactivos de examen complejos y de alta frecuencia. Haz clic en las opciones para validar tu razonamiento.
+            </p>
+            
+            <!-- Pregunta 1 -->
+            <div class="quiz-card">
+                <div class="quiz-question">
+                    1. ¿Qué sucede con los datos físicos en disco cuando se ejecuta la sentencia DROP TABLE sobre una tabla externa en Databricks?
+                </div>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="checkAnswer(this, false, 1)">
+                        <span>a) Se eliminan tanto los metadatos como los archivos de datos físicos en el storage.</span>
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false, 1)">
+                        <span>b) Los archivos físicos permanecen pero cambian de formato a Parquet estándar sin Delta.</span>
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, true, 1)">
+                        <span>c) Solo se eliminan los metadatos del metastore; los archivos físicos en el cloud storage quedan intactos.</span>
+                    </div>
+                </div>
+                <div class="quiz-explanation" id="exp-1">
+                    <b>Respuesta Correcta: C.</b> Al ser una tabla externa (unmanaged), Databricks no posee la propiedad del directorio físico. Al ejecutar DROP TABLE, solo remueve la definición lógica de la tabla en el catálogo (metaservicio), pero el almacenamiento en S3/ADLS/GCS permanece intacto. <i>(Dominio 2: Managing Data - Brecha común del equipo)</i>.
+                </div>
+            </div>
+            
+            <!-- Pregunta 2 -->
+            <div class="quiz-card">
+                <div class="quiz-question">
+                    2. Un analista ejecuta un comando VACUUM sobre la tabla de ventas con una retención de 0 horas para liberar espacio. ¿Qué sucede al intentar realizar Time Travel?
+                </div>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="checkAnswer(this, true, 2)">
+                        <span>a) La consulta de Time Travel fallará porque los archivos históricos requeridos fueron eliminados físicamente del disco.</span>
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false, 2)">
+                        <span>b) La consulta funciona de forma normal porque Delta Log reconstruye los datos utilizando las confirmaciones JSON.</span>
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false, 2)">
+                        <span>c) La consulta arroja resultados vacíos porque VACUUM desactiva permanentemente el versionado.</span>
+                    </div>
+                </div>
+                <div class="quiz-explanation" id="exp-2">
+                    <b>Respuesta Correcta: A.</b> VACUUM borra los archivos físicos que ya no pertenecen al estado actual de la tabla. Al limpiar con retención cero, elimina físicamente todas las versiones anteriores. Aunque el Delta Log retenga los metadatos de las transacciones, la lectura fallará al intentar abrir los archivos eliminados. <i>(Dominio 5: Analyzing Queries - Optimización)</i>.
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Datos de las 24 clases ajustadas pedagógicamente
+        const CLASES = [
+            { id: 1, dom: "D1", title: "Inducción y Metodología de Descarte", target: "Entrenar la lógica de razonamiento rápido y descarte de distractores teóricos del simulador.", lab: "Análisis de estructura de reactivos.", q: "db-da-1, db-da-2" },
+            { id: 2, dom: "D1", title: "Arquitectura del Lakehouse y Datos", target: "Identificar la separación de Control Plane y Data Plane. Ubicación del almacenamiento físico.", lab: "Recorrido de Catalog Explorer.", q: "db-da-3, db-da-5" },
+            
+            { id: 3, dom: "D4", title: "SQL de Examen I: Joins y Combinaciones", target: "Dominar joins estándar, llaves compuestas e implicaciones de registros nulos y duplicados.", lab: "Práctica de Joins sobre samples.tpcds.", q: "db-da-8, db-da-10" },
+            { id: 4, dom: "D4", title: "SQL de Examen II: Agregaciones de Datos", target: "Comprender la sintaxis y orden lógico del agrupamiento (GROUP BY, HAVING) y alias.", lab: "Consultas de facturación diaria.", q: "db-da-20, db-da-21" },
+            { id: 5, dom: "D4", title: "CTAS y Vistas Temporales", target: "Aprender el ciclo de vida de tablas creadas por CTAS y vistas de sesión.", lab: "Creación de vistas dinámicas locales.", q: "db-da-17" },
+            
+            { id: 6, dom: "D2", title: "Delta Log y Transacciones ACID", target: "Comprender la física detrás del Delta Log (_delta_log/) y su soporte a escrituras concurrentes.", lab: "Inspección de archivos JSON en DBFS.", q: "db-da-14, db-da-15" },
+            { id: 7, dom: "D2", title: "Managed vs External Tables", target: "Aprender el comportamiento del comando DROP TABLE en tablas administradas frente a externas.", lab: "Lab 2: Eliminar y restaurar referencias.", q: "db-da-11, db-da-12" },
+            { id: 8, dom: "D3", title: "Ingesta Idempotente con COPY INTO", target: "Ingestar datos de forma incremental controlando la duplicación (idempotencia).", lab: "Lab 1: Carga y auditoría de COPY INTO.", q: "db-da-4, db-da-24" },
+            { id: 9, dom: "D3", title: "Ingesta en Streaming con Auto Loader", target: "Dominar cloudFiles, evolución automática de esquemas y control de datos rotos.", lab: "Uso de rescuedDataColumn en ingesta.", q: "db-da-25" },
+            { id: 10, dom: "D2", title: "Time Travel y RESTORE Delta", target: "Auditar tablas Delta mediante consultas históricas y restauración de versiones.", lab: "Restore de tablas corruptas en Silver.", q: "db-da-28" },
+            { id: 11, dom: "D5", title: "Optimización Física y Clustering", target: "Aprender a compactar archivos con OPTIMIZE y ordenar con Z-ORDER o Liquid Clustering.", lab: "Lab 5: Ordenación de tablas analíticas.", q: "db-da-32" },
+            
+            { id: 12, dom: "D5", title: "Diagnóstico con Query Profile y History", target: "Analizar planes visuales para identificar Spill to Disk y Full Table Scans.", lab: "Optimización de consultas lentas.", q: "db-da-35" },
+            { id: 13, dom: "D5", title: "VACUUM y Pérdida de Historial", target: "Comprender la limpieza con VACUUM y por qué rompe la capacidad de Time Travel.", lab: "Simulación de error de lectura de versión.", q: "db-da-29" },
+            
+            { id: 14, dom: "D9", title: "Gobernanza con Unity Catalog", target: "Dominar el namespace de tres niveles y el linaje de datos a nivel de columna.", lab: "Rastreo de origen de datos en Explorer.", q: "db-da-16, db-da-18" },
+            { id: 15, dom: "D9", title: "Seguridad Dinámica I: Row Filters", target: "Crear filtros de fila basados en el usuario del sistema current_user().", lab: "Lab 4: Vista segura por región.", q: "db-da-19" },
+            { id: 16, dom: "D9", title: "Seguridad Dinámica II: Column Masks", target: "Enmascarar datos sensibles (PII) según roles del usuario con is_member().", lab: "Ocultamiento de datos confidenciales.", q: "db-da-22" },
+            { id: 17, dom: "D9", title: "Permisos y Traspasos de Propiedad", target: "Gestión de privilegios GRANT/REVOKE y transferencia de propiedad de activos.", lab: "Permisos sobre tablas administradas.", q: "db-da-23" },
+            
+            { id: 18, dom: "D6", title: "Dashboards AI/BI I: Diseño de Lienzo", target: "Estructurar lienzos, visualizaciones recomendadas y uso de textos Markdown.", lab: "Maquetación de dashboard ejecutivo.", q: "db-da-7, db-da-9" },
+            { id: 19, dom: "D6", title: "Dashboards AI/BI II: Parametrización", target: "Configurar parámetros dinámicos de consulta y optimización con Batch Updates.", lab: "Dashboard interactivo de viajes.", q: "db-da-26" },
+            { id: 20, dom: "D6", title: "Monitoreo y Alertas de SQL", target: "Configurar notificaciones automáticas por umbrales y lógica de evaluación por defecto.", lab: "Alerta sobre fallo de ingesta.", q: "db-da-30" },
+            
+            { id: 21, dom: "D7", title: "AI/BI Genie I: Espacios Semánticos", target: "Configurar espacios conversacionales y definir instrucciones de dominio (instrucciones).", lab: "Ejemplo de Genie Space.", q: "db-da-33" },
+            { id: 22, dom: "D7", title: "AI/BI Genie II: Trusted Assets", target: "Curar intenciones del usuario mediante la creación de Trusted Assets para evitar alucinaciones.", lab: "Creación de Trusted Assets en SQL.", q: "db-da-34" },
+            
+            { id: 23, dom: "D8", title: "Modelado Analítico en Capa Gold", target: "Modelar esquemas en estrella y el papel de las constraints informativas.", lab: "Lab 3: Generación de Hechos y Dim.", q: "db-da-31" },
+            { id: 24, dom: "D8", title: "Simulacro Blueprint de Certificación", target: "Examen de 45 preguntas cronometradas (90 min) bajo condiciones oficiales.", lab: "Retroalimentación grupal.", q: "Bloque final del simulador" }
+        ];
+
+        // Mapear Dominios a Sliders de la UI
+        const DOMINIOS_MAP = {
+            "D1": { name: "Plataforma Databricks", slider: "slide-d1", valLabel: "val-d1" },
+            "D2": { name: "Gestión de Datos (Delta)", slider: "slide-d2", valLabel: "val-d2" },
+            "D3": { name: "Importación de Datos", slider: "slide-d3", valLabel: "val-d3" },
+            "D4": { name: "SQL y Warehouses", slider: "slide-d4", valLabel: "val-d4" },
+            "D5": { name: "Análisis de Queries", slider: "slide-d5", valLabel: "val-d5" },
+            "D6": { name: "Dashboards", slider: "slide-d6", valLabel: "val-d6" },
+            "D7": { name: "AI/BI Genie Spaces", slider: "slide-d7", valLabel: "val-d7" },
+            "D8": { name: "Modelado de Datos", slider: "slide-d8", valLabel: "val-d8" },
+            "D9": { name: "Seguridad de Datos", slider: "slide-d9", valLabel: "val-d9" }
+        };
+
+        // Renderizar las clases en la UI
+        function renderClasses() {
+            const listEl = document.getElementById("classes-list");
+            listEl.innerHTML = "";
+            
+            CLASES.forEach(c => {
+                const mapInfo = DOMINIOS_MAP[c.dom];
+                const sliderVal = parseInt(document.getElementById(mapInfo.slider).value);
+                
+                // Definir badge de nivel según el slider
+                let badgeClass = "strong-badge";
+                let badgeText = "Estable";
+                if (sliderVal < 65) {
+                    badgeClass = "critical-badge";
+                    badgeText = "Refuerzo Crítico";
+                } else if (sliderVal < 75) {
+                    badgeClass = "medium-badge";
+                    badgeText = "Refuerzo Medio";
+                }
+                
+                const row = document.createElement("div");
+                row.className = "class-row";
+                row.onclick = () => row.classList.toggle("active");
+                row.innerHTML = `
+                    <div class="class-header-row">
+                        <div class="class-meta">
+                            <span class="class-number">Clase ${c.id}</span>
+                            <span class="class-title">${c.title}</span>
+                        </div>
+                        <span class="class-badge ${badgeClass}">${badgeText}</span>
+                    </div>
+                    <div class="class-body">
+                        <div class="class-detail-item">
+                            <span class="class-detail-label">Objetivo Didáctico:</span> ${c.target}
+                        </div>
+                        <div class="class-detail-item">
+                            <span class="class-detail-label">Práctica Guiada:</span> ${c.lab}
+                        </div>
+                        <div class="class-detail-item">
+                            <span class="class-detail-label">Preguntas Asociadas:</span> <code>${c.q}</code>
+                        </div>
+                    </div>
+                `;
+                listEl.appendChild(row);
+            });
+        }
+
+        // Actualizar valores numéricos e indicador de score global
+        function updateScore() {
+            let total = 0;
+            let count = 0;
+            
+            // Actualizar etiquetas
+            for (const dom in DOMINIOS_MAP) {
+                const slider = document.getElementById(DOMINIOS_MAP[dom].slider);
+                const label = document.getElementById(DOMINIOS_MAP[dom].valLabel);
+                label.innerText = slider.value + "%";
+                total += parseInt(slider.value);
+                count++;
+            }
+            
+            const score = Math.round(total / count);
+            document.getElementById("global-score").innerHTML = `${score}<span>/100</span>`;
+            
+            // Texto de diagnóstico
+            const textEl = document.getElementById("status-status");
+            if (score < 65) {
+                textEl.innerText = "Estado Crítico: El equipo requiere un plan docente enfocado a fondo en modelado, Genie y Delta.";
+                textEl.style.color = "var(--color-danger)";
+            } else if (score < 75) {
+                textEl.innerText = "Estado Moderado: Recomendamos enfocar el 80% de las horas en dominios avanzados.";
+                textEl.style.color = "var(--color-warning)";
+            } else {
+                textEl.innerText = "Estado Óptimo: El equipo posee bases muy sólidas. Se puede acelerar a simulacros avanzados.";
+                textEl.style.color = "var(--color-success)";
+            }
+            
+            // Re-renderizar para ajustar badges de criticidad
+            renderClasses();
+        }
+
+        // Navegación de pestañas de Laboratorios
+        function switchLab(labId) {
+            // Desactivar botones
+            const btns = document.querySelectorAll(".tab-btn");
+            btns.forEach(btn => btn.classList.remove("active"));
+            
+            // Activar botón seleccionado
+            event.target.classList.add("active");
+            
+            // Ocultar contenidos
+            const contents = document.querySelectorAll(".lab-content");
+            contents.forEach(content => content.classList.remove("active"));
+            
+            // Mostrar seleccionado
+            document.getElementById(`lab-${labId}`).classList.add("active");
+        }
+
+        // Lógica interactiva de las preguntas del simulador
+        function checkAnswer(element, isCorrect, questionId) {
+            const card = element.parentElement;
+            const options = card.querySelectorAll(".quiz-option");
+            
+            // Limpiar clases previas
+            options.forEach(opt => {
+                opt.classList.remove("correct");
+                opt.classList.remove("incorrect");
+            });
+            
+            // Añadir feedback
+            if (isCorrect) {
+                element.classList.add("correct");
+            } else {
+                element.classList.add("incorrect");
+            }
+            
+            // Mostrar explicación
+            document.getElementById(`exp-${questionId}`).style.display = "block";
+        }
+
+        // Carga Inicial
+        window.onload = () => {
+            updateScore();
+        };
+    </script>
+</body>
+</html>
