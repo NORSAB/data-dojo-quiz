@@ -180,3 +180,13 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
 - Confirmó que `main` estaba sincronizada con `origin/main` antes de crear el commit, evitando sobrescribir cambios remotos.
 - Publicó en `origin/main` el commit `788c366` (`feat: add study center and streamline visual system`), que contiene el Centro de estudio, la paleta reducida, las correcciones estructurales, los validadores y la documentación de auditoría. Este push activa automáticamente los despliegues configurados de Vercel y GitHub Pages.
 - Conservó fuera del commit los artefactos locales previos `.genai_translation_work/`, `__pycache__/` y `translation_cache_genai.json`.
+
+### 2026-08-23 21:29 CST — Codex (GPT-5)
+- Ajustó el Centro de estudio para que los dominios y temas de todos los cursos inicien contraídos; eliminó la apertura automática del primer tema.
+- Amplió Databricks Generative AI Engineer con cinco áreas internas pertinentes: Estudiar, Términos EN/ES, Escenarios EN/ES, Flashcards y Logros. No copió Comandos SQL porque no corresponde al temario GenAI.
+- Creó `study_databricks_genai_resources.js`, que deriva de las 383 parejas EN/ES validadas un banco equilibrado de **96 flashcards**, **65 términos/competencias** y **24 escenarios de decisión**, todos bilingües y distribuidos entre los 6 dominios.
+- Integró los nuevos recursos en el visor de estudio, el acceso rápido de flashcards, `index.html`, el service worker y el validador automático. Actualizó la PWA a `BUILD_TIMESTAMP = 20260823d` y `simulador-v19`.
+- Publicó el commit `59f0c28` (`feat: expand GenAI bilingual study resources`) en `origin/main`.
+- Verificó visualmente Vercel: cinco pestañas visibles; 6/6 secciones de estudio contraídas; 65/65 términos contraídos; 24/24 escenarios contraídos; flashcard 1/96 con bloques English y Español; consola sin errores ni advertencias.
+- Confirmó por HTTP que Vercel y GitHub Pages sirven `study_databricks_genai_resources.js` y el build PWA `20260823d`.
+- Conservó fuera del commit los artefactos locales previos `.genai_translation_work/`, `__pycache__/` y `translation_cache_genai.json`.
