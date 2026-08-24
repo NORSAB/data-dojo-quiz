@@ -419,9 +419,10 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        // Default Category Selection — pick the first visible category
+        // Default Category Selection — prefer databricks if visible, else pick first visible
+        const databricksVisible = providerData.find(p => p.id === 'databricks' && !hiddenCategories.includes(p.id));
         const firstVisible = providerData.find(p => !hiddenCategories.includes(p.id));
-        selectCategory(firstVisible ? firstVisible.id : 'microsoft');
+        selectCategory(databricksVisible ? 'databricks' : (firstVisible ? firstVisible.id : 'databricks'));
         
         // Render Initial History
         renderHistory();
@@ -1324,6 +1325,7 @@ const badgesConfig = [
     const provider = providerData.find((p) => p.id === providerId);
     courseSectionTitle.textContent = `Cursos de ${provider.name}`;
     renderCourses(provider.courses);
+    renderStudyHub();
     renderHistory(); // Update history view (shows all when category changes)
 
     // Hide all per-course feature panels first
@@ -1413,12 +1415,12 @@ const badgesConfig = [
     });
   }
 
-  // Codex (GPT-5) | 2026-08-23 20:35 CST | Catálogo único para descubrir todos los módulos de estudio disponibles.
+  // Codex (GPT-5) | 2026-08-23 20:35 CST | Catálogo para descubrir los módulos de estudio de la categoría activa.
   function getStudyCourseCatalog() {
     const courseById = new Map();
     providerData.forEach((provider) => {
       provider.courses.forEach((course) => {
-        courseById.set(course.id, { ...course, providerName: provider.name });
+        courseById.set(course.id, { ...course, providerName: provider.name, providerId: provider.id });
       });
     });
 
@@ -1429,6 +1431,7 @@ const badgesConfig = [
           id: courseId,
           name: courseId.replace(/-/g, " "),
           providerName: "The Data Dojo",
+          providerId: null,
         };
         return {
           ...course,
@@ -1439,6 +1442,17 @@ const badgesConfig = [
           ),
           featured: courseId === "databricks-genai-engineer",
         };
+      })
+      .filter((course) => {
+        // 1. Exclude if provider is in hiddenCategories
+        if (course.providerId && hiddenCategories.includes(course.providerId)) {
+          return false;
+        }
+        // 2. Only show study modules for the currently active category
+        if (currentProviderId && course.providerId) {
+          return course.providerId === currentProviderId;
+        }
+        return true;
       })
       .sort((a, b) => Number(b.featured) - Number(a.featured) || a.name.localeCompare(b.name, "es"));
   }
