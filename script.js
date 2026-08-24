@@ -3299,9 +3299,14 @@ function renderReview(questions, finalPct, passed) {
           .unir-tab.active .unir-tab-count { background: rgba(255,255,255,0.18); }
 
           /* Personajes panel styles */
-          .unir-persona-category { margin-bottom: 16px; }
-          .unir-persona-cat-header { display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: #1f2937; border-radius: 14px; color: #f3f4f6; font-weight: 700; font-size: 0.9rem; margin-bottom: 8px; }
+          .unir-persona-category { margin-bottom: 10px; }
+          .unir-persona-cat-header { width: 100%; display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: #1f2937; border: 0; border-radius: 14px; color: #f3f4f6; font-family: inherit; font-weight: 700; font-size: 0.9rem; text-align: left; cursor: pointer; }
           .unir-persona-cat-header svg { flex-shrink: 0; color: #f3f4f6; }
+          .unir-persona-cat-header:hover { background: #111827; }
+          .unir-category-chevron { display: inline-flex; transition: transform 0.2s ease; transform: rotate(-90deg); }
+          .unir-persona-cat-header[aria-expanded="true"] .unir-category-chevron { transform: rotate(0deg); }
+          .unir-category-body { margin-top: 8px; }
+          .unir-category-body[hidden] { display: none; }
           .unir-persona-card { background: var(--bg-card, #fff); border: 1px solid var(--border-color, #e5e7eb); border-radius: 12px; overflow: hidden; margin-bottom: 6px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); transition: all 0.2s; }
           .unir-persona-header { padding: 10px 16px; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: all 0.15s; user-select: none; }
           .unir-persona-header:hover { background: var(--study-accent-soft); }
@@ -3563,6 +3568,41 @@ function renderReview(questions, finalPct, passed) {
         if (tab === 'patterns') renderGenAIPatterns();
       };
 
+      // Codex (GPT-5) | 2026-08-23 21:55 CST | Controla el nivel intermedio para que cada subsección de estudio inicie contraída.
+      function setStudyCategoryExpansion(panel, expanded) {
+        if (!panel) return;
+        panel.querySelectorAll('.unir-category-toggle').forEach(toggle => {
+          const body = document.getElementById(toggle.getAttribute('aria-controls'));
+          toggle.setAttribute('aria-expanded', String(expanded));
+          if (body) body.hidden = !expanded;
+        });
+      }
+
+      function bindStudyCategoryToggles(panel) {
+        if (!panel) return;
+        panel.querySelectorAll('.unir-category-toggle').forEach(toggle => {
+          toggle.addEventListener('click', () => {
+            const expanded = toggle.getAttribute('aria-expanded') !== 'true';
+            const body = document.getElementById(toggle.getAttribute('aria-controls'));
+            toggle.setAttribute('aria-expanded', String(expanded));
+            if (body) body.hidden = !expanded;
+          });
+        });
+      }
+
+      window._unirSetStudyCategoryExpansion = function(panelId, expanded) {
+        setStudyCategoryExpansion(document.getElementById(panelId), expanded);
+      };
+
+      window._unirCollapseStudyPanel = function(panelId) {
+        const panel = document.getElementById(panelId);
+        if (!panel) return;
+        setStudyCategoryExpansion(panel, false);
+        panel.querySelectorAll('.unir-persona-body').forEach(body => body.classList.remove('open'));
+        panel.querySelectorAll('.unir-persona-header').forEach(header => header.classList.remove('open'));
+        panel.querySelectorAll('details[open]').forEach(details => details.removeAttribute('open'));
+      };
+
       // --- PERSONAJES PANEL RENDERER ---
       function renderPersonajes() {
         const panel = document.getElementById('unir-panel-personajes');
@@ -3624,6 +3664,7 @@ function renderReview(questions, finalPct, passed) {
         // Expand All with XP tracking
         window._unirExpandAllPersonas = function() {
           let newCount = 0;
+          setStudyCategoryExpansion(panel, true);
           window.personajesUnirViz.forEach((cat, ci) => {
             cat.personas.forEach((p, pi) => {
               const key = `${ci}-${pi}`;
@@ -3661,8 +3702,10 @@ function renderReview(questions, finalPct, passed) {
         };
 
         window.personajesUnirViz.forEach((cat, ci) => {
+          const categoryId = `persona-category-${ci}`;
           html += `<div class="unir-persona-category">`;
-          html += `<div class="unir-persona-cat-header">${personaIcon(cat.icon, 20)} ${cat.category} <span style="margin-left:auto;font-size:0.72rem;opacity:0.7;">${cat.personas.length} personajes</span></div>`;
+          html += `<button type="button" class="unir-persona-cat-header unir-category-toggle" aria-expanded="false" aria-controls="${categoryId}">${personaIcon(cat.icon, 20)} <span>${cat.category}</span><span style="margin-left:auto;font-size:0.72rem;opacity:0.7;">${cat.personas.length} personajes</span><span class="unir-category-chevron">${personaIcon(SVG.chevronDown, 16)}</span></button>`;
+          html += `<div class="unir-category-body" id="${categoryId}" hidden>`;
 
           cat.personas.forEach((p, pi) => {
             const uid = `persona-${ci}-${pi}`;
@@ -3685,16 +3728,17 @@ function renderReview(questions, finalPct, passed) {
             html += `</div>`;
           });
 
-          html += `</div>`;
+          html += `</div></div>`;
         });
 
         // Expand all / collapse all buttons
         html += `<div style="display:flex;gap:8px;justify-content:center;margin-top:16px;">
           <button onclick="window._unirExpandAllPersonas()" style="padding:6px 16px;border-radius:20px;border:1px solid var(--primary-color);color:var(--primary-color);background:var(--primary-light);cursor:pointer;font-size:0.8rem;font-weight:600;transition:all 0.2s;">Expandir Todos</button>
-          <button onclick="document.querySelectorAll('.unir-persona-body').forEach(b=>b.classList.remove('open'));document.querySelectorAll('.unir-persona-header').forEach(h=>h.classList.remove('open'));" style="padding:6px 16px;border-radius:20px;border:1px solid var(--border-color,#e5e7eb);color:var(--text-muted,#64748b);background:var(--bg-card,#fff);cursor:pointer;font-size:0.8rem;font-weight:600;transition:all 0.2s;">Colapsar Todos</button>
+          <button onclick="window._unirCollapseStudyPanel('unir-panel-personajes')" style="padding:6px 16px;border-radius:20px;border:1px solid var(--border-color,#e5e7eb);color:var(--text-muted,#64748b);background:var(--bg-card,#fff);cursor:pointer;font-size:0.8rem;font-weight:600;transition:all 0.2s;">Contraer Todos</button>
         </div>`;
 
         panel.innerHTML = html;
+        bindStudyCategoryToggles(panel);
       }
 
       // --- CONCEPTOS CLAVE PANEL RENDERER (Databricks) ---
@@ -3754,6 +3798,7 @@ function renderReview(questions, finalPct, passed) {
         // Expand All Conceptos
         window._unirExpandAllConceptos = function() {
           let newCount = 0;
+          setStudyCategoryExpansion(panel, true);
           conceptos.forEach((cat, ci) => {
             cat.conceptos.forEach((c, pi) => {
               const key = `${ci}-${pi}`;
@@ -3790,8 +3835,10 @@ function renderReview(questions, finalPct, passed) {
         };
 
         conceptos.forEach((cat, ci) => {
+          const categoryId = `concepto-category-${ci}`;
           html += `<div class="unir-persona-category">`;
-          html += `<div class="unir-persona-cat-header" style="background:#1f2937;">${cIcon(cat.icon, 20, '#3157d5')} ${cat.category} <span style="margin-left:auto;font-size:0.72rem;opacity:0.7;">${cat.conceptos.length} conceptos</span></div>`;
+          html += `<button type="button" class="unir-persona-cat-header unir-category-toggle" aria-expanded="false" aria-controls="${categoryId}">${cIcon(cat.icon, 20)} <span>${cat.category}</span><span style="margin-left:auto;font-size:0.72rem;opacity:0.7;">${cat.conceptos.length} conceptos</span><span class="unir-category-chevron">${cIcon(SVG.chevronDown, 16)}</span></button>`;
+          html += `<div class="unir-category-body" id="${categoryId}" hidden>`;
 
           cat.conceptos.forEach((c, pi) => {
             const uid = `concepto-${ci}-${pi}`;
@@ -3814,16 +3861,17 @@ function renderReview(questions, finalPct, passed) {
             html += `</div>`;
           });
 
-          html += `</div>`;
+          html += `</div></div>`;
         });
 
         // Expand all / collapse all buttons
         html += `<div style="display:flex;gap:8px;justify-content:center;margin-top:16px;">
           <button onclick="window._unirExpandAllConceptos()" style="padding:6px 16px;border-radius:20px;border:1px solid var(--primary-color);color:var(--primary-color);background:var(--primary-light);cursor:pointer;font-size:0.8rem;font-weight:600;transition:all 0.2s;">Expandir Todos</button>
-          <button onclick="document.querySelectorAll('#unir-panel-conceptos .unir-persona-body').forEach(b=>b.classList.remove('open'));document.querySelectorAll('#unir-panel-conceptos .unir-persona-header').forEach(h=>h.classList.remove('open'));" style="padding:6px 16px;border-radius:20px;border:1px solid var(--border-color,#e5e7eb);color:var(--text-muted,#64748b);background:var(--bg-card,#fff);cursor:pointer;font-size:0.8rem;font-weight:600;transition:all 0.2s;">Colapsar Todos</button>
+          <button onclick="window._unirCollapseStudyPanel('unir-panel-conceptos')" style="padding:6px 16px;border-radius:20px;border:1px solid var(--border-color,#e5e7eb);color:var(--text-muted,#64748b);background:var(--bg-card,#fff);cursor:pointer;font-size:0.8rem;font-weight:600;transition:all 0.2s;">Contraer Todos</button>
         </div>`;
 
         panel.innerHTML = html;
+        bindStudyCategoryToggles(panel);
       }
 
       // Codex (GPT-5) | 2026-08-23 21:19 CST | Presenta escenarios GenAI bilingües con elementos details cerrados por defecto.
@@ -3840,9 +3888,11 @@ function renderReview(questions, finalPct, passed) {
             <button type="button" id="genai-patterns-collapse" class="btn btn-secondary btn-sm" style="margin-top:12px;">Contraer todo / Collapse all</button>
           </div>`;
 
-        genAIPatterns.forEach(group => {
+        genAIPatterns.forEach((group, groupIndex) => {
+          const categoryId = `pattern-category-${groupIndex}`;
           html += `<section class="unir-persona-category">`;
-          html += `<div class="unir-persona-cat-header">${svgIcon(SVG.shield, 18)} ${group.category}<span style="margin-left:auto;font-size:0.72rem;opacity:0.7;">${group.items.length}</span></div>`;
+          html += `<button type="button" class="unir-persona-cat-header unir-category-toggle" aria-expanded="false" aria-controls="${categoryId}">${svgIcon(SVG.shield, 18)} <span>${group.category}</span><span style="margin-left:auto;font-size:0.72rem;opacity:0.7;">${group.items.length}</span><span class="unir-category-chevron">${svgIcon(SVG.chevronDown, 16)}</span></button>`;
+          html += `<div class="unir-category-body" id="${categoryId}" hidden>`;
           group.items.forEach(item => {
             html += `
               <details class="unir-persona-card genai-pattern-card">
@@ -3853,12 +3903,13 @@ function renderReview(questions, finalPct, passed) {
                 </div>
               </details>`;
           });
-          html += `</section>`;
+          html += `</div></section>`;
         });
 
         panel.innerHTML = html;
+        bindStudyCategoryToggles(panel);
         document.getElementById('genai-patterns-collapse')?.addEventListener('click', () => {
-          panel.querySelectorAll('details[open]').forEach(details => details.removeAttribute('open'));
+          window._unirCollapseStudyPanel('unir-panel-patterns');
         });
       }
 
@@ -3894,7 +3945,10 @@ function renderReview(questions, finalPct, passed) {
           }
         };
         window.comandosSqlDatabricks.forEach((cat, ci) => {
-          html += `<div class="unir-persona-cat-header" style="background:#1f2937;">${cIcon(cat.icon,20,'#3157d5')} ${cat.category} <span style="margin-left:auto;font-size:0.72rem;opacity:0.7;">${cat.comandos.length}</span></div>`;
+          const categoryId = `command-category-${ci}`;
+          html += `<section class="unir-persona-category">`;
+          html += `<button type="button" class="unir-persona-cat-header unir-category-toggle" aria-expanded="false" aria-controls="${categoryId}">${cIcon(cat.icon,20)} <span>${cat.category}</span><span style="margin-left:auto;font-size:0.72rem;opacity:0.7;">${cat.comandos.length}</span><span class="unir-category-chevron">${cIcon(SVG.chevronDown,16)}</span></button>`;
+          html += `<div class="unir-category-body" id="${categoryId}" hidden>`;
           cat.comandos.forEach((cmd, pi) => {
             const key = `cmd-${ci}-${pi}`, sk = key.replace(/[^a-z0-9]/gi,''), isR = mastery.comandosViewed.includes(key);
             html += `<div class="unir-persona-card" style="border-left:3px solid ${isR?'var(--success-color)':'var(--primary-color)'};">
@@ -3924,11 +3978,13 @@ function renderReview(questions, finalPct, passed) {
             });
             html += `</div></div></div>`;
           });
+          html += `</div></section>`;
         });
         html += `<div style="display:flex;gap:8px;justify-content:center;margin-top:16px;">
-          <button onclick="document.querySelectorAll('#unir-panel-comandos .unir-persona-body').forEach(b=>b.classList.add('open'));document.querySelectorAll('#unir-panel-comandos .unir-persona-header').forEach(h=>h.classList.add('open'));" style="padding:6px 16px;border-radius:20px;border:1px solid var(--primary-color);color:var(--primary-color);background:var(--primary-light);cursor:pointer;font-size:0.8rem;font-weight:600;">Expandir</button>
-          <button onclick="document.querySelectorAll('#unir-panel-comandos .unir-persona-body').forEach(b=>b.classList.remove('open'));document.querySelectorAll('#unir-panel-comandos .unir-persona-header').forEach(h=>h.classList.remove('open'));" style="padding:6px 16px;border-radius:20px;border:1px solid var(--border-color,#e5e7eb);color:var(--text-muted,#64748b);background:var(--bg-card,#fff);cursor:pointer;font-size:0.8rem;font-weight:600;">Colapsar</button></div>`;
+          <button onclick="window._unirSetStudyCategoryExpansion('unir-panel-comandos',true);document.querySelectorAll('#unir-panel-comandos .unir-persona-body').forEach(b=>b.classList.add('open'));document.querySelectorAll('#unir-panel-comandos .unir-persona-header').forEach(h=>h.classList.add('open'));" style="padding:6px 16px;border-radius:20px;border:1px solid var(--primary-color);color:var(--primary-color);background:var(--primary-light);cursor:pointer;font-size:0.8rem;font-weight:600;">Expandir</button>
+          <button onclick="window._unirCollapseStudyPanel('unir-panel-comandos')" style="padding:6px 16px;border-radius:20px;border:1px solid var(--border-color,#e5e7eb);color:var(--text-muted,#64748b);background:var(--bg-card,#fff);cursor:pointer;font-size:0.8rem;font-weight:600;">Contraer</button></div>`;
         panel.innerHTML = html;
+        bindStudyCategoryToggles(panel);
       }
 
       // Render TOC as dropdown section cards

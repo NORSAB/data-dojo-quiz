@@ -1,6 +1,6 @@
 /**
- * Codex (GPT-5) | 2026-08-23 20:35 CST
- * Valida banco EN/ES, módulo de estudio y compatibilidad del payload Supabase.
+ * Codex (GPT-5) | 2026-08-23 21:55 CST
+ * Valida banco EN/ES, módulo de estudio, subsecciones contraídas y compatibilidad del payload Supabase.
  */
 const assert = require('assert');
 const fs = require('fs');
@@ -189,6 +189,10 @@ async function main() {
   assert(workerSource.includes("'./study_databricks_genai_resources.js'"), 'Falta cachear los recursos GenAI en sw.js');
   assert(appSource.includes("body.setAttribute('hidden', ''); // Start collapsed"), 'Las secciones deben crearse contraídas');
   assert(!appSource.includes('firstItemButton.click()'), 'El primer tema no debe abrirse automáticamente');
+  assert((appSource.match(/class="unir-persona-cat-header unir-category-toggle" aria-expanded="false"/g) || []).length >= 4, 'Las categorías internas deben declararse contraídas');
+  assert((appSource.match(/class="unir-category-body" id="\$\{categoryId\}" hidden/g) || []).length >= 4, 'El contenido de cada categoría interna debe iniciar oculto');
+  assert(appSource.includes('function bindStudyCategoryToggles(panel)'), 'Falta enlazar el control de subsecciones internas');
+  assert(appSource.includes("setStudyCategoryExpansion(panel, false);"), 'Contraer todo debe cerrar también las subsecciones internas');
 
   await validateSupabaseCompatibility();
 
