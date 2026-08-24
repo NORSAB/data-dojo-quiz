@@ -1,20 +1,43 @@
 /**
- * Translate Toggle for Databricks Questions
+ * Translate Toggle for Bilingual Courses
  * ==========================================
  * Adds a EN/ES toggle button that translates questions in-place
  * WITHOUT resetting the exam, timer, or current question.
- * 
- * Strategy: 
- *   - To translate EN→ES: Replace DOM text with translations from databricksTranslations
+ *
+ * Strategy:
+ *   - To translate EN→ES:
+ *       - courseId === 'databricks-da' (legacy): DOM text from window.databricksTranslations
+ *       - any other course: look up the Spanish twin question in window.questionsData
+ *         (same courseId, id === `${originalId}-es`) — the same convention used by
+ *         translate_genai_questions.py and the courseConfig[courseId].lang filter.
  *   - To restore ES→EN: Re-render from the original JS data objects (q.prompt, q.options[].text)
- *   - NO MutationObserver — zero race conditions
- * 
- * Only applies to courseId === 'databricks-da'
+ *   - NO MutationObserver on the toggle logic itself — zero race conditions
+ *
+ * The button only appears once Spanish content actually exists for the active course
+ * (legacy databricksTranslations, or at least one lang:'es' question sharing its courseId).
+ * A course with only English questions (e.g. GenAI before translate_genai_questions.py
+ * has been run) simply won't show the button yet — no code change needed once the
+ * Spanish bank is added, it activates automatically.
  */
 (function() {
     'use strict';
 
     let currentLang = 'en';
+
+    /** Does the currently active course have Spanish content to toggle to? */
+    function hasSpanishSupport(courseId) {
+        if (!courseId) return false;
+        if (courseId === 'databricks-da') return !!window.databricksTranslations;
+        return !!(window.questionsData && window.questionsData.some(
+            (q) => q.courseId === courseId && q.lang === 'es'
+        ));
+    }
+
+    /** Generic lookup: the Spanish twin of a question lives under id `${id}-es`. */
+    function findEsTwin(q) {
+        if (!q || !window.questionsData) return null;
+        return window.questionsData.find((x) => x.id === `${q.id}-es`) || null;
+    }
 
     function init() {
         if (document.getElementById('translate-toggle-btn')) return;
@@ -27,7 +50,7 @@
             }
         });
         observer.observe(document.body, { childList: true, subtree: true, attributes: true });
-        
+
         const quizUI = document.getElementById('quiz-ui');
         if (quizUI && !quizUI.classList.contains('hidden')) {
             injectButton();
@@ -36,7 +59,8 @@
 
     function injectButton() {
         if (document.getElementById('translate-toggle-btn')) return;
-        
+        if (!hasSpanishSupport(typeof currentCourseId !== 'undefined' ? currentCourseId : null)) return;
+
         const finishBtn = document.getElementById('finish-btn-top');
         if (!finishBtn) return;
 
@@ -90,8 +114,11 @@
     }
 
     function toggleTranslation() {
-        if (typeof currentCourseId !== 'undefined' && currentCourseId !== 'databricks-da') return;
-        if (!window.databricksTranslations) { console.error('Translations not loaded!'); return; }
+        const courseId = typeof currentCourseId !== 'undefined' ? currentCourseId : null;
+        if (!hasSpanishSupport(courseId)) {
+            console.warn('Translate toggle: no Spanish content available yet for', courseId);
+            return;
+        }
 
         const btn = document.getElementById('translate-toggle-btn');
         const label = document.getElementById('translate-label');
@@ -195,16 +222,37 @@
         }
     }
 
-    /** Apply Spanish translation to the current question */
+    /** Apply Spanish translation to the current question (dispatches by course). */
     function applySpanish() {
         if (typeof currentQuizQuestions === 'undefined' || typeof currentQuestionIndex === 'undefined') return;
 
         const q = currentQuizQuestions[currentQuestionIndex];
         if (!q) return;
 
-        const t = window.databricksTranslations[q.id];
+        const courseId = typeof currentCourseId !== 'undefined' ? currentCourseId : null;
+        const t = courseId === 'databricks-da'
+            ? (window.databricksTranslations && window.databricksTranslations[q.id])
+            : buildTranslationFromTwin(q);
         if (!t) return;
 
+        renderTranslation(q, t);
+    }
+
+    /** Generic path: normalize the Spanish twin question into the same {prompt_es, options_es, explanation_es} shape. */
+    function buildTranslationFromTwin(q) {
+        const twin = findEsTwin(q);
+        if (!twin) return null;
+        const options_es = {};
+        (twin.options || []).forEach((opt) => { options_es[opt.id] = opt.text; });
+        return {
+            prompt_es: twin.prompt,
+            options_es,
+            explanation_es: twin.explanation,
+        };
+    }
+
+    /** Render a normalized {prompt_es, options_es, explanation_es} translation into the current question DOM. */
+    function renderTranslation(q, t) {
         const questionText = document.getElementById('question-text');
         const optionsList = document.getElementById('options-list');
         const feedbackExplanation = document.getElementById('feedback-explanation');

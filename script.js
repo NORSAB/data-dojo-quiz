@@ -3117,8 +3117,17 @@ function renderReview(questions, finalPct, passed) {
         checkAchievements();
       }
 
-      // Flashcard data (from course content)
-      const flashcards = courseId === 'unir-herramientas-viz' ? (window.unirHerrFlashcards || []) : (courseId === 'unah-tesis' ? (window.unahTesisFlashcards || []) : (isDatabricksCourse ? (window.databricksDAFlashcards || []) : (window.unirVizFlashcards || [])));
+      // Flashcard data (from course content) — explicit per-course map, empty
+      // array (not another course's cards) for any course without its own bank.
+      const STUDY_FLASHCARD_SOURCES = {
+        'unir-herramientas-viz': () => window.unirHerrFlashcards,
+        'unah-tesis': () => window.unahTesisFlashcards,
+        'unir-viz-interactiva': () => window.unirVizFlashcards,
+        'databricks-da': () => window.databricksDAFlashcards,
+        'databricks-fundamentals': () => window.databricksDAFlashcards,
+        'dp-600': () => window.databricksDAFlashcards,
+      };
+      const flashcards = (STUDY_FLASHCARD_SOURCES[courseId] && STUDY_FLASHCARD_SOURCES[courseId]()) || [];
 
       // SVG icon paths (no emojis anywhere)
       const SVG = {
