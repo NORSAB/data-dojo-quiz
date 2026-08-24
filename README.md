@@ -79,6 +79,12 @@ DATA DOJO ECOSYSTEM
 
 ## 📋 Registro Histórico de Versiones y Mejoras (Changelog)
 
+### `v20260824g` — 24 de Agosto de 2026
+- **Buscador Global de Preguntas y Conceptos (Ctrl+K Finder):** Modal de búsqueda rápida en tiempo real sobre los 1,744 reactivos de todas las certificaciones, con resaltado dinámico de texto, filtrado por curso y botón de práctica directa (*"Practicar con estos resultados"*).
+- **Pantalla Interactiva de Revisión Pre-Entrega (Pearson VUE style):** Reemplazo del modal de confirmación por una grilla completa con KPIs en vivo de preguntas *Respondidas*, *Sin Responder* y *Marcadas para Revisión*, pestañas de filtrado rápido y navegación por salto directo al hacer clic en el número de pregunta.
+- **Motor de Lectura por Voz (TTS Engine):** Integración de `SpeechSynthesis` con botones de audio en las explicaciones de respuestas (`checkAnswer`) y en el frente y reverso de las Flashcards de estudio.
+- **Validador Automatizado de Integridad (`tools/validate_bank.js`):** Script CLI en Node.js que valida 100% de los esquemas de preguntas, duplicados de IDs, consistencia de opciones y cobertura de explicaciones en todos los bancos de datos (1,744 preguntas validadas con 0 errores).
+
 ### `v20260824f` — 24 de Agosto de 2026
 - **Biblioteca de Funciones AI SQL (`comandos_sql_genai.js`):** Integración de funciones de Unity Catalog (`ai_query`, `ai_gen`, `ai_summarize`, `ai_classify`, `ai_translate`, `ai_extract`, `ai_similarity`, `vector_search`) con sintaxis SQL y desglose línea por línea.
 - **Cheat-Sheet "D0. 10 Reglas de Oro y Matriz de Decisión":** Añadidas matrices comparativas oficiales para preguntas situacionales de examen.

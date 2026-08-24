@@ -23,6 +23,25 @@ document.addEventListener("DOMContentLoaded", () => {
     return `<pre style="margin:0;">${html}</pre>`;
   };
 
+  // --- Global Text-to-Speech (TTS) Engine ---
+  window.speakText = function(text, lang) {
+    if (!('speechSynthesis' in window)) {
+      return;
+    }
+    if (window.speechSynthesis.speaking) {
+      window.speechSynthesis.cancel();
+      return;
+    }
+    const cleanText = (text || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+    if (!cleanText) return;
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+    const targetLang = (lang === 'es' || /[\u00e1\u00e9\u00ed\u00f3\u00fa\u00f1]/i.test(cleanText)) ? 'es-ES' : 'en-US';
+    utterance.lang = targetLang;
+    utterance.rate = 1.0;
+    utterance.pitch = 1.0;
+    window.speechSynthesis.speak(utterance);
+  };
+
   // Configure marked globally for syntax highlighting SQL blocks
   if (window.marked) {
     const renderer = {
@@ -2596,6 +2615,13 @@ const badgesConfig = [
         docDiv.innerHTML = `<a href="${q.docLink}" target="_blank" class="btn btn-sm btn-outline" style="text-decoration:none;"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" style="vertical-align:middle;margin-right:4px;"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg> Read Documentation / Reference</a>`;
         document.getElementById("feedback-explanation").appendChild(docDiv);
     }
+
+    // TTS Audio button for explanation
+    const ttsDiv = document.createElement("div");
+    ttsDiv.style.marginTop = "0.6rem";
+    ttsDiv.innerHTML = `<button type="button" class="btn btn-sm btn-outline" style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:14px;font-size:0.75rem;cursor:pointer;"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg> <span>${lang === 'es' ? 'Escuchar Explicación' : 'Listen Explanation'}</span></button>`;
+    ttsDiv.querySelector("button").onclick = () => window.speakText(q.explanation, lang);
+    document.getElementById("feedback-explanation").appendChild(ttsDiv);
     
     document.getElementById("latex-source").textContent = q.latex || "";
   }
@@ -2680,39 +2706,126 @@ const badgesConfig = [
     }
   }
 
-  function tryFinishQuiz() {
-    console.log("tryFinishQuiz triggered");
+  let currentReviewFilter = 'all';
+
+  function openExamReviewModal() {
     const total = currentQuizQuestions.length;
-    // Count questions that have ANY selection
     const answeredCount = Object.values(userAnswers).filter(a => a.selected && a.selected.length > 0).length;
     const unansweredCount = total - answeredCount;
     const flaggedCount = flaggedQuestions.size;
     
-    console.log(`Total: ${total}, With Selection: ${answeredCount}, Flagged: ${flaggedCount}`);
+    // Populate KPIs
+    const kpiAns = document.getElementById("review-kpi-answered");
+    const kpiUnans = document.getElementById("review-kpi-unanswered");
+    const kpiFlag = document.getElementById("review-kpi-flagged");
+    if (kpiAns) kpiAns.textContent = answeredCount;
+    if (kpiUnans) kpiUnans.textContent = unansweredCount;
+    if (kpiFlag) kpiFlag.textContent = flaggedCount;
+
+    const lang = getActiveLanguage();
+    const msgEl = document.getElementById("confirm-msg");
+    if (msgEl) {
+      if (unansweredCount === 0 && flaggedCount === 0) {
+        msgEl.innerHTML = lang === 'es' 
+          ? '¡Excelente! Has respondido todas las preguntas. Puedes revisar el grid o entregar el examen.' 
+          : 'Great job! You have answered all questions. You can review or submit the exam.';
+      } else {
+        const pendingStr = unansweredCount > 0 
+          ? (lang === 'es' ? ' <span style="color:var(--danger-color);font-weight:600;">' + unansweredCount + ' pendientes</span>.' : ' <span style="color:var(--danger-color);font-weight:600;">' + unansweredCount + ' pending</span>.')
+          : '';
+        const flagStr = flaggedCount > 0
+          ? (lang === 'es' ? ' <span style="color:#d97706;font-weight:600;">' + flaggedCount + ' marcadas para revisión</span>.' : ' <span style="color:#d97706;font-weight:600;">' + flaggedCount + ' flagged</span>.')
+          : '';
+        msgEl.innerHTML = lang === 'es'
+          ? 'Tienes <strong>' + answeredCount + '/' + total + '</strong> respondidas.' + pendingStr + flagStr
+          : 'You have <strong>' + answeredCount + '/' + total + '</strong> answered.' + pendingStr + flagStr;
+      }
+    }
+
+    renderReviewGrid(currentReviewFilter);
+
+    if (confirmModal) confirmModal.classList.remove("hidden");
+
+    if (confirmContinueBtn) confirmContinueBtn.onclick = () => {
+      if (confirmModal) confirmModal.classList.add("hidden");
+    };
+    if (confirmFinishBtn) confirmFinishBtn.onclick = () => {
+      if (confirmModal) confirmModal.classList.add("hidden");
+      finishQuiz();
+    };
+  }
+
+  function renderReviewGrid(filter) {
+    const grid = document.getElementById("review-question-grid");
+    if (!grid) return;
+    grid.innerHTML = "";
+    
+    currentQuizQuestions.forEach((_, idx) => {
+      const ans = userAnswers[idx];
+      const isAnswered = ans && ans.selected && ans.selected.length > 0;
+      const isFlagged = flaggedQuestions.has(idx);
+
+      if (filter === 'unanswered' && isAnswered) return;
+      if (filter === 'flagged' && !isFlagged) return;
+
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.style.cssText = `
+        padding: 8px 4px;
+        border-radius: 6px;
+        font-weight: 700;
+        font-size: 0.85rem;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2px;
+        transition: all 0.15s ease;
+        ${isAnswered ? 'background: rgba(40, 167, 69, 0.12); color: var(--success-color); border: 1px solid var(--success-color);' : 'background: rgba(220, 53, 69, 0.08); color: var(--danger-color); border: 1px dashed var(--danger-color);'}
+        ${idx === currentQuestionIndex ? 'box-shadow: 0 0 0 2px var(--primary-color);' : ''}
+      `;
+
+      let flagIndicator = isFlagged ? '<span style="font-size:0.65rem;color:#d97706;">★</span>' : '';
+      btn.innerHTML = `<span>${idx + 1}</span>${flagIndicator}`;
+      btn.title = `Pregunta ${idx + 1}: ${isAnswered ? 'Respondida' : 'Sin responder'}${isFlagged ? ' (Marcada)' : ''}`;
+      
+      btn.onclick = () => {
+        if (confirmModal) confirmModal.classList.add("hidden");
+        loadQuestion(idx);
+      };
+
+      grid.appendChild(btn);
+    });
+
+    if (grid.children.length === 0) {
+      grid.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: 1.5rem; font-size: 0.85rem;">No hay preguntas en esta categoría.</div>`;
+    }
+  }
+
+  window._filterReviewGrid = function(filter) {
+    currentReviewFilter = filter;
+    const allBtn = document.getElementById("filter-review-all");
+    const unansBtn = document.getElementById("filter-review-unanswered");
+    const flagBtn = document.getElementById("filter-review-flagged");
+    if (allBtn) allBtn.className = `btn btn-sm ${filter === 'all' ? 'btn-primary' : 'btn-outline'} review-filter-btn`;
+    if (unansBtn) unansBtn.className = `btn btn-sm ${filter === 'unanswered' ? 'btn-primary' : 'btn-outline'} review-filter-btn`;
+    if (flagBtn) flagBtn.className = `btn btn-sm ${filter === 'flagged' ? 'btn-primary' : 'btn-outline'} review-filter-btn`;
+    renderReviewGrid(filter);
+  };
+
+  function tryFinishQuiz() {
+    console.log("tryFinishQuiz triggered -> opening review screen");
+    const total = currentQuizQuestions.length;
+    const answeredCount = Object.values(userAnswers).filter(a => a.selected && a.selected.length > 0).length;
+    const unansweredCount = total - answeredCount;
+    const flaggedCount = flaggedQuestions.size;
 
     if (unansweredCount > 0 || flaggedCount > 0) {
-       // Show Custom Modal with detailed breakdown
-       const msgEl = document.getElementById("confirm-msg");
-       const lang = getActiveLanguage();
-       if (msgEl) {
-         if (lang === 'es') {
-           msgEl.innerHTML = `Tienes <strong>${answeredCount}/${total}</strong> preguntas respondidas.<br>${unansweredCount > 0 ? `Quedan <strong style="color:var(--danger-color);">${unansweredCount}</strong> sin responder.<br>` : ''}${flaggedCount > 0 ? `Tienes <strong style="color:#d97706;">${flaggedCount}</strong> marcadas para revisión.<br>` : ''}¿Deseas finalizar el examen ahora?`;
-         } else {
-           msgEl.innerHTML = `You have <strong>${answeredCount}/${total}</strong> questions answered.<br>${unansweredCount > 0 ? `<strong style="color:var(--danger-color);">${unansweredCount}</strong> left unanswered.<br>` : ''}${flaggedCount > 0 ? `<strong style="color:#d97706;">${flaggedCount}</strong> flagged for review.<br>` : ''}Do you want to finish the exam now?`;
-         }
-       }
-       if (confirmModal) confirmModal.classList.remove("hidden");
-       
-       if (confirmContinueBtn) confirmContinueBtn.onclick = () => {
-           if (confirmModal) confirmModal.classList.add("hidden");
-       };
-       if (confirmFinishBtn) confirmFinishBtn.onclick = () => {
-           if (confirmModal) confirmModal.classList.add("hidden");
-           finishQuiz();
-       };
+       openExamReviewModal();
     } else {
-        // All answered, finish directly
-        finishQuiz();
+       // All answered, show modal to confirm final submission or submit
+       openExamReviewModal();
     }
   }
 
@@ -4403,11 +4516,21 @@ function renderReview(questions, finalPct, passed) {
             <div class="unir-fc-card" id="unir-fc-card" onclick="this.classList.toggle('flipped')">
               <div class="unir-fc-inner">
                 <div class="unir-fc-face unir-fc-front">
-                  <div id="unir-fc-tema" style="text-transform:uppercase;font-size:0.78rem;letter-spacing:1px;opacity:0.7;margin-bottom:16px;"></div>
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+                    <div id="unir-fc-tema" style="text-transform:uppercase;font-size:0.78rem;letter-spacing:1px;opacity:0.7;"></div>
+                    <button type="button" class="unir-fc-speak-btn" onclick="window._unirSpeakCurrentFC('front', event)" title="Escuchar en audio" style="background:rgba(255,255,255,0.15);border:none;border-radius:50%;width:30px;height:30px;color:#fff;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;">
+                      <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+                    </button>
+                  </div>
                   <div id="unir-fc-question" style="font-size:1.35rem;font-weight:700;text-align:center;line-height:1.5;"></div>
                   <div style="margin-top:24px;font-size:0.8rem;opacity:0.5;display:flex;align-items:center;gap:6px;">${svgIcon(SVG.flip, 14, 'rgba(255,255,255,0.5)')} Clic para voltear</div>
                 </div>
                 <div class="unir-fc-face unir-fc-back">
+                  <div style="display:flex;justify-content:flex-end;margin-bottom:12px;">
+                    <button type="button" class="unir-fc-speak-btn" onclick="window._unirSpeakCurrentFC('back', event)" title="Escuchar respuesta" style="background:rgba(255,255,255,0.15);border:none;border-radius:50%;width:30px;height:30px;color:#fff;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;">
+                      <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+                    </button>
+                  </div>
                   <div id="unir-fc-answer" style="font-size:1.05rem;line-height:1.7;text-align:left;"></div>
                 </div>
               </div>
@@ -4424,8 +4547,16 @@ function renderReview(questions, finalPct, passed) {
             </div>
           </div>
         `;
-        loadFC();
       }
+
+      window._unirSpeakCurrentFC = function(side, e) {
+        if (e && e.stopPropagation) e.stopPropagation();
+        if (!fcFiltered || fcFiltered.length === 0) return;
+        const fc = fcFiltered[fcIdx];
+        if (!fc) return;
+        const text = side === 'front' ? (fc.front || fc.pregunta) : (fc.back || fc.respuesta);
+        window.speakText(text, getActiveLanguage());
+      };
 
       function loadFC() {
         if (fcFiltered.length === 0) return;
@@ -4524,7 +4655,7 @@ function renderReview(questions, finalPct, passed) {
     // Fallback for other courses (Old Logic)
     if (!window.studyData || !window.studyData[courseId]) return;
 
-    const data = window.studyData[courseId];
+    const fallbackData = window.studyData[courseId];
     const conf = courseConfig[courseId] || {};
 
     // Hide Menu, Show Study
@@ -4538,7 +4669,7 @@ function renderReview(questions, finalPct, passed) {
     const tocContainer = document.getElementById("study-toc");
     tocContainer.innerHTML = "";
 
-    data.forEach((section, docIdx) => {
+    fallbackData.forEach((section, docIdx) => {
       const h4 = document.createElement("h4");
       h4.textContent = section.title;
       tocContainer.appendChild(h4);
@@ -4554,7 +4685,7 @@ function renderReview(questions, finalPct, passed) {
     });
 
     // Show first item by default
-    if (data.length > 0 && data[0].items.length > 0) {
+    if (fallbackData.length > 0 && fallbackData[0].items.length > 0) {
       const firstLi = tocContainer.querySelector("li");
       if (firstLi) firstLi.click();
     } else {
@@ -5531,12 +5662,180 @@ window.returnToMenu = function() {
     
     // Refresh History Header
     if(typeof renderHistoryList === 'function') renderHistoryList();
-};
+  };
+
+  // ===========================================================================
+  // GLOBAL SEARCH & CONCEPT FINDER (Ctrl+K)
+  // ===========================================================================
+  function initGlobalSearch() {
+    const launcherBtn = document.getElementById("global-search-launcher-btn");
+    const modal = document.getElementById("global-search-modal");
+    const input = document.getElementById("global-search-input");
+    const filterSelect = document.getElementById("global-search-course-filter");
+    const countEl = document.getElementById("global-search-count");
+    const resultsContainer = document.getElementById("global-search-results");
+    const practiceBtn = document.getElementById("global-search-practice-btn");
+    const practiceCount = document.getElementById("global-search-practice-count");
+
+    if (!modal || !input) return;
+
+    let currentMatches = [];
+
+    function openSearchModal() {
+      modal.classList.remove("hidden");
+      input.value = "";
+      input.focus();
+      renderSearchResults([]);
+    }
+
+    function closeSearchModal() {
+      modal.classList.add("hidden");
+    }
+
+    if (launcherBtn) launcherBtn.onclick = openSearchModal;
+    window.openGlobalSearch = openSearchModal;
+    window.closeGlobalSearch = closeSearchModal;
+
+    // Helper to gather all questions across known course globals
+    function getAllQuestions() {
+      const all = Array.isArray(window.questionsData) ? window.questionsData : [];
+      const seen = new Set();
+      return all.filter(q => {
+        if (!q) return false;
+        const key = `${q.courseId || ''}:${q.lang || ''}:${q.id || ''}`;
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+    }
+
+    function performSearch() {
+      const q = (input.value || "").trim().toLowerCase();
+      const courseFilter = filterSelect ? filterSelect.value : "all";
+
+      if (q.length < 2) {
+        if (countEl) countEl.textContent = "Escribe al menos 2 caracteres";
+        if (practiceBtn) practiceBtn.style.display = "none";
+        resultsContainer.innerHTML = `<div style="text-align: center; padding: 2rem; color: var(--text-muted); font-size: 0.9rem;">Busca preguntas y términos en todos los bancos de certificación.</div>`;
+        currentMatches = [];
+        return;
+      }
+
+      const all = getAllQuestions();
+      const filtered = all.filter(item => {
+        if (courseFilter !== "all" && item.courseId !== courseFilter) return false;
+        const text = `${item.prompt || ''} ${item.domain || ''} ${item.subdomain || ''} ${item.explanation || ''} ${(item.options || []).map(o => o.text).join(' ')}`.toLowerCase();
+        return text.includes(q);
+      });
+
+      currentMatches = filtered;
+
+      if (countEl) countEl.textContent = `${filtered.length} resultado${filtered.length === 1 ? '' : 's'} encontrado${filtered.length === 1 ? '' : 's'}`;
+      if (practiceBtn && practiceCount) {
+        if (filtered.length > 0) {
+          practiceBtn.style.display = "inline-flex";
+          practiceCount.textContent = filtered.length;
+          practiceBtn.onclick = () => {
+            closeSearchModal();
+            startCustomQuizSession(currentMatches);
+          };
+        } else {
+          practiceBtn.style.display = "none";
+        }
+      }
+
+      renderSearchResults(filtered, q);
+    }
+
+    function renderSearchResults(items, query) {
+      if (!items || items.length === 0) {
+        if (query && query.length >= 2) {
+          resultsContainer.innerHTML = `<div style="text-align: center; padding: 2rem; color: var(--text-muted); font-size: 0.9rem;">No se encontraron preguntas con el término <strong>"${query}"</strong>.</div>`;
+        }
+        return;
+      }
+
+      let html = "";
+      items.slice(0, 50).forEach((item) => {
+        const promptSnippet = (item.prompt || "").replace(/<[^>]*>/g, '');
+        const domainLabel = item.domain || item.courseId || "General";
+        
+        // Highlight query in text
+        const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+        const highlightedPrompt = promptSnippet.length > 180 ? promptSnippet.substring(0, 180) + '...' : promptSnippet;
+        const finalPrompt = highlightedPrompt.replace(regex, '<mark style="background:rgba(255,212,59,0.35);color:inherit;padding:1px 4px;border-radius:3px;">$1</mark>');
+
+        html += `
+          <div class="search-result-card" style="padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-card); display: flex; flex-direction: column; gap: 6px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+              <span style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: var(--primary-color); background: var(--primary-light, rgba(49,87,213,0.1)); padding: 2px 8px; border-radius: 10px;">
+                ${item.courseId || 'Certificación'}
+              </span>
+              <span style="font-size: 0.72rem; color: var(--text-muted);">${domainLabel}</span>
+            </div>
+            <div style="font-size: 0.9rem; font-weight: 600; color: var(--text-color); line-height: 1.4;">
+              ${finalPrompt}
+            </div>
+            <div style="display: flex; justify-content: flex-end; margin-top: 4px;">
+              <button type="button" class="btn btn-sm btn-outline" style="font-size: 0.75rem; padding: 3px 8px; border-radius: 6px;" onclick="window._startSingleQuestionPractice('${item.id}')">
+                Practicar esta pregunta &rarr;
+              </button>
+            </div>
+          </div>
+        `;
+      });
+
+      if (items.length > 50) {
+        html += `<div style="text-align: center; padding: 8px; color: var(--text-muted); font-size: 0.8rem;">Mostrando las primeras 50 de ${items.length} preguntas.</div>`;
+      }
+
+      resultsContainer.innerHTML = html;
+    }
+
+    let debounceTimer = null;
+    input.addEventListener("input", () => {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(performSearch, 180);
+    });
+
+    if (filterSelect) {
+      filterSelect.addEventListener("change", performSearch);
+    }
+
+    window._startSingleQuestionPractice = function(qId) {
+      const q = getAllQuestions().find(x => x.id === qId);
+      if (q) {
+        closeSearchModal();
+        startCustomQuizSession([q]);
+      }
+    };
+  }
+
+  function startCustomQuizSession(questionsList) {
+    if (!questionsList || questionsList.length === 0) return;
+    currentQuizQuestions = JSON.parse(JSON.stringify(questionsList));
+    currentQuestionIndex = 0;
+    userAnswers = {};
+    score = 0;
+    totalSeconds = 0;
+    flaggedQuestions.clear();
+
+    if (startScreen) startScreen.classList.add("hidden");
+    if (resultsScreen) resultsScreen.classList.add("hidden");
+    if (studyScreen) studyScreen.classList.add("hidden");
+    if (quizUI) quizUI.classList.remove("hidden");
+    if (timerDisplay) timerDisplay.classList.remove("hidden");
+
+    loadQuestion(0);
+    renderQuestionMap();
+    startTimer();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initGlobalSearch();
+  });
 
 window.renderBadges = function() {
-    // Simple implementation to show the Level Up modal as a 'Badges' view for now
-    // or a custom alert if no dedicated badge screen exists yet.
-    
     const xp = (window.HeroManager && window.HeroManager.data) ? window.HeroManager.data.stats.xp : 0;
     const belt = (window.HeroManager) ? window.HeroManager.getBeltInfo(xp) : { name: 'Desconocido', icon: '?' };
     
@@ -5546,15 +5845,12 @@ window.renderBadges = function() {
           'Sigue estudiando para desbloquear más insignias!');
 };
 
-
 /* --- APP STARTUP LOGIC --- */
 window.openOnboarding = function() {
     const ob = document.getElementById('onboarding-screen');
     const start = document.getElementById('start-screen');
     if(ob) ob.classList.remove('hidden');
     if(start) start.classList.add('hidden');
-    
-    // Initialize paths
     if(typeof renderOnboardingPaths === 'function') renderOnboardingPaths();
 };
 
@@ -5566,8 +5862,6 @@ window.closeOnboarding = function() {
         start.classList.remove('hidden');
         start.classList.add('vertical-layout');
     }
-    
-    // Trigger Hero Update on entry
     if(window.HeroManager) window.HeroManager.updateDashboard();
 };
 
@@ -5576,10 +5870,8 @@ document.addEventListener('DOMContentLoaded', () => {
    const skipBtn = document.getElementById('skip-onboarding-btn');
    if(skipBtn) skipBtn.onclick = window.closeOnboarding;
    
-   // ALWAYS show the Dojo welcome screen on app load
    window.openOnboarding();
    
-   // Still load Hero data in background if profile exists
    const p = localStorage.getItem('userProfile');
    if(p && p !== '{}') {
        setTimeout(() => {
@@ -5588,12 +5880,33 @@ document.addEventListener('DOMContentLoaded', () => {
    }
 });
 
-
-
 /* =============================================================================
    POWER-USER GLOBAL KEYBOARD SHORTCUTS
    ============================================================================= */
 document.addEventListener('keydown', (e) => {
+  // Global shortcut: Ctrl+K or Cmd+K to open Search
+  if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K')) {
+    e.preventDefault();
+    if (typeof window.openGlobalSearch === 'function') {
+      window.openGlobalSearch();
+    }
+    return;
+  }
+
+  // Global shortcut: ESC closes open modals
+  if (e.key === 'Escape') {
+    const searchModal = document.getElementById('global-search-modal');
+    if (searchModal && !searchModal.classList.contains('hidden')) {
+      searchModal.classList.add('hidden');
+      return;
+    }
+    const confirmModal = document.getElementById('confirm-modal');
+    if (confirmModal && !confirmModal.classList.contains('hidden')) {
+      confirmModal.classList.add('hidden');
+      return;
+    }
+  }
+
   const targetTag = e.target && e.target.tagName ? e.target.tagName.toUpperCase() : '';
   if (targetTag === 'INPUT' || targetTag === 'TEXTAREA' || targetTag === 'SELECT' || (e.target && e.target.isContentEditable)) {
     return;
