@@ -2,13 +2,14 @@
 // Codex (GPT-5) | 2026-08-23 21:32 CST | Publica la unificación de paleta y el control previo al despliegue.
 // Codex (GPT-5) | 2026-08-23 21:49 CST | Ajusta contraste oscuro tras el QA visual de producción.
 // Codex (GPT-5) | 2026-08-23 21:55 CST | Fuerza la actualización del estado contraído en todas las subsecciones de estudio.
-const BUILD_TIMESTAMP = '20260823g';
-const CACHE_NAME = `simulador-v22-${BUILD_TIMESTAMP}`;
+// Codex (GPT-5) | 2026-08-23 22:00 CST | Versiona también script.js tras detectar caché HTTP anterior en GitHub Pages.
+const BUILD_TIMESTAMP = '20260823h';
+const CACHE_NAME = `simulador-v23-${BUILD_TIMESTAMP}`;
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './styles.css',
-  './script.js',
+  './styles.css?v=20260823h',
+  './script.js?v=20260823h',
   './features.js',
   './hero_data.js',
   './auto_restore_data.js',

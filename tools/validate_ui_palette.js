@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* Codex (GPT-5) | 2026-08-23 21:32 CST | Bloquea despliegues visuales que rompan la paleta principal. */
+/* Codex (GPT-5) | 2026-08-23 22:00 CST | Bloquea paletas fuera de norma y recursos estáticos con versiones de caché incoherentes. */
 
 const fs = require('fs');
 const path = require('path');
@@ -71,9 +71,13 @@ assert(translate.includes('background: var(--primary-color, #3157d5);'), 'Select
 
 const buildMatch = serviceWorker.match(/BUILD_TIMESTAMP\s*=\s*['"]([^'"]+)['"]/);
 const cssVersionMatch = index.match(/styles\.css\?v=([^"']+)/);
-assert(buildMatch && cssVersionMatch, 'PWA: no se pudo leer BUILD_TIMESTAMP o styles.css?v.');
-if (buildMatch && cssVersionMatch) {
+const scriptVersionMatch = index.match(/script\.js\?v=([^"']+)/);
+assert(buildMatch && cssVersionMatch && scriptVersionMatch, 'PWA: no se pudo leer BUILD_TIMESTAMP, styles.css?v o script.js?v.');
+if (buildMatch && cssVersionMatch && scriptVersionMatch) {
   assert(buildMatch[1] === cssVersionMatch[1], `PWA: BUILD_TIMESTAMP ${buildMatch[1]} y styles.css?v=${cssVersionMatch[1]} no coinciden.`);
+  assert(buildMatch[1] === scriptVersionMatch[1], `PWA: BUILD_TIMESTAMP ${buildMatch[1]} y script.js?v=${scriptVersionMatch[1]} no coinciden.`);
+  assert(serviceWorker.includes(`'./styles.css?v=${buildMatch[1]}'`), 'PWA: el CSS versionado no está precargado en el service worker.');
+  assert(serviceWorker.includes(`'./script.js?v=${buildMatch[1]}'`), 'PWA: el JavaScript versionado no está precargado en el service worker.');
 }
 
 if (failures.length > 0) {
