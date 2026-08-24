@@ -3599,7 +3599,7 @@ function renderReview(questions, finalPct, passed) {
             <div class="unir-search-container">
               <div class="unir-search-box">
                 <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--text-muted, #64748b); flex-shrink:0;"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-                <input type="text" id="unir-study-search" class="unir-search-input" placeholder="${localizedMarkup('Search concepts, topics, rules...', 'Buscar conceptos, temas, reglas...')}">
+                <input type="text" id="unir-study-search" class="unir-search-input" placeholder="${getActiveLanguage() === 'en' ? 'Search concepts, topics, rules...' : 'Buscar conceptos, temas, reglas...'}">
                 <button type="button" id="unir-study-search-clear" class="unir-search-clear" style="display:none;" title="Limpiar búsqueda">
                   <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
                 </button>
