@@ -1276,16 +1276,38 @@
             </label>
           </div>
 
+          <!-- Multi-Domain Checkboxes Filter -->
           <div class="form-group" style="margin-top: 1rem">
-            <label>Filtrar por Dominio (Opcional):</label>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <label style="font-weight: 700; margin: 0;">Filtrar por Dominios / Áreas:</label>
+              <button type="button" id="config-domain-toggle-all" style="background: none; border: none; color: var(--primary-color); font-size: 0.8rem; cursor: pointer; text-decoration: underline; font-weight: 600;">Desmarcar todos</button>
+            </div>
             <select
               id="config-domain-select"
               class="form-control"
-              style="width: 100%; padding: 0.5rem"
+              style="display: none;"
             >
               <option value="">-- Todos los Dominios --</option>
             </select>
+            <div id="config-domain-checkboxes" style="display: flex; flex-direction: column; gap: 6px; max-height: 150px; overflow-y: auto; padding: 10px; border: 1.5px solid var(--border-color); border-radius: 10px; background: var(--bg-surface);">
+              <!-- Dynamically populated by JS -->
+            </div>
           </div>
+
+          <!-- Modo Contrarreloj (Time-Attack 60s) -->
+          <div class="form-group" style="margin-top: 1rem; display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: rgba(79, 110, 247, 0.08); border: 1.5px solid rgba(79, 110, 247, 0.25); border-radius: 10px;">
+            <div>
+              <span style="font-weight: 700; color: var(--primary-color); display: flex; align-items: center; gap: 6px;">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                Modo Contrarreloj (Time-Attack)
+              </span>
+              <small style="color: var(--text-muted); display: block; margin-top: 2px;">60 segundos por pregunta para entrenar agilidad mental</small>
+            </div>
+            <label style="display: flex; align-items: center; cursor: pointer; margin: 0;">
+              <input type="checkbox" id="config-time-attack" style="width: 20px; height: 20px; cursor: pointer;" />
+            </label>
+          </div>
+
           <div class="form-group" style="margin-top: 1rem">
             <label style="display: block; margin-bottom: 5px"
               >Orden de Preguntas:</label
@@ -1369,6 +1391,11 @@
                 border-top: 1px solid var(--border-color);
               "
             />
+
+            <!-- Time Attack Countdown Progress Bar -->
+            <div id="time-attack-bar-container" class="hidden" style="width: 100%; height: 8px; background: var(--bg-surface, #f1f5f9); border-radius: 99px; overflow: hidden; margin-bottom: 1rem; border: 1px solid var(--border-color);">
+              <div id="time-attack-bar-fill" style="width: 100%; height: 100%; background: var(--primary-color, #4f6ef7); transition: width 1s linear, background-color 0.3s ease; border-radius: 99px;"></div>
+            </div>
 
             <div
               id="scenario-block"
@@ -1615,9 +1642,15 @@
           <!-- Injected via JS -->
         </div>
 
-        <button id="restart-btn" class="btn btn-primary mt-4">
-          Al Menú Principal
-        </button>
+        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 1.5rem;">
+          <button id="print-scorecard-btn" class="btn btn-outline" onclick="window.printReadinessReport()" type="button">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 6px;"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+            Imprimir / Ficha PDF
+          </button>
+          <button id="restart-btn" class="btn btn-primary">
+            Al Menú Principal
+          </button>
+        </div>
       </div>
     </div>
 
@@ -2061,14 +2094,14 @@
     <script src="flashcards_unah_tesis.js"></script>
     <!-- Auto Restore Master Data -->
     <script src="auto_restore_data.js"></script>
-    <script src="app_i18n.js?v=20260824d"></script>
-    <script src="script.js?v=20260824d"></script>
-    <script src="features.js?v=20260824d"></script>
+    <script src="app_i18n.js?v=20260824e"></script>
+    <script src="script.js?v=20260824e"></script>
+    <script src="features.js?v=20260824e"></script>
     <!-- Supabase Cloud Backup -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-sync.js"></script>
     <!-- Databricks Spanish Translation Toggle -->
     <script src="translations_databricks_es.js"></script>
-    <script src="translate_toggle.js?v=20260824d"></script>
+    <script src="translate_toggle.js?v=20260824e"></script>
   </body>
 </html>

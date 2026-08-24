@@ -49,7 +49,7 @@ function getCanonicalQuestionId(questionId) {
 }
 
 // =============================================
-// F1: WEAKNESS REVIEW MODE
+// F1: SMART ERROR REVIEW MODE (Repaso Inteligente de Fallos)
 // =============================================
 function updateWeaknessPanel(courseId) {
     const panel = document.getElementById('weakness-shortcut');
@@ -57,6 +57,7 @@ function updateWeaknessPanel(courseId) {
 
     const cid = courseId || window.currentCourseId;
     const history = JSON.parse(localStorage.getItem('quizHistory') || '[]');
+    const allQuestions = (typeof getLocalizedCourseQuestions === 'function' ? getLocalizedCourseQuestions(cid) : (window.questionsData || [])).filter(q => !q.courseId || q.courseId === cid);
 
     // Collect ALL unique missed IDs for this course
     const allMissedIds = new Set();
@@ -93,10 +94,10 @@ function updateWeaknessPanel(courseId) {
     // Domain breakdown chips
     const domainsContainer = document.getElementById('weakness-domains');
     const domainCounts = {};
-    const allQuestions = window.questionsData || [];
 
     stillWeak.forEach(qId => {
-        const q = allQuestions.find(qq => qq.id === qId);
+        const canonical = typeof getCanonicalQuestionId === 'function' ? getCanonicalQuestionId(qId) : qId;
+        const q = allQuestions.find(qq => qq.id === qId || (typeof getCanonicalQuestionId === 'function' && getCanonicalQuestionId(qq.id) === canonical));
         if (q) {
             const domain = q.domain || 'General';
             domainCounts[domain] = (domainCounts[domain] || 0) + 1;
@@ -118,12 +119,19 @@ function updateWeaknessPanel(courseId) {
     const startBtn = document.getElementById('start-weakness-btn');
     if (startBtn) {
         startBtn.onclick = () => {
-            const weakQuestions = allQuestions.filter(q => stillWeak.has(q.id));
+            const weakQuestions = allQuestions.filter(q => {
+                const canonical = typeof getCanonicalQuestionId === 'function' ? getCanonicalQuestionId(q.id) : q.id;
+                return stillWeak.has(q.id) || stillWeak.has(canonical);
+            });
             if (weakQuestions.length === 0) { alert('No hay preguntas de repaso disponibles.'); return; }
-            launchDirectQuiz(weakQuestions, 'weakness');
+            launchDirectQuiz(weakQuestions, 'smart_error_review');
         };
     }
 }
+
+window.printReadinessReport = function() {
+    window.print();
+};
 
 
 // =============================================

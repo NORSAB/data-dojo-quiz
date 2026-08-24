@@ -4535,3 +4535,78 @@ html, body {
   font-weight: 700;
 }
 
+/* Time Attack Progress Animation */
+#time-attack-bar-fill {
+  transition: width 1s linear, background-color 0.3s ease;
+}
+
+/* =============================================================================
+   PRINTABLE SCORECARD & READINESS REPORT (PDF / PRINT)
+   ============================================================================= */
+@media print {
+  /* Hide interface elements not relevant for the printed report */
+  .main-nav,
+  .theme-toggle,
+  .zen-mode-toggle,
+  #theme-toggle,
+  #zen-toggle,
+  .modal-overlay,
+  .sidebar,
+  .dojo-wisdom-section,
+  #flag-question-btn,
+  .quiz-top-actions,
+  .keyboard-shortcuts-pill,
+  #start-real-exam-btn,
+  #start-flashcards-btn,
+  #study-hub,
+  .course-selection-area,
+  .category-pill,
+  .admin-btn,
+  .profile-btn,
+  #print-scorecard-btn,
+  #restart-btn {
+    display: none !important;
+  }
+
+  body, html {
+    background: #ffffff !important;
+    color: #111827 !important;
+    font-size: 11pt !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .app-container, .container {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 10px !important;
+  }
+
+  .card, #results-screen, .dashboard-container {
+    box-shadow: none !important;
+    border: 1.5px solid #d1d5db !important;
+    background: #ffffff !important;
+    color: #111827 !important;
+    page-break-inside: avoid;
+    padding: 20px !important;
+  }
+
+  #results-screen {
+    display: block !important;
+  }
+
+  /* Printable Header Banner */
+  body::before {
+    content: "DATA DOJO — INFORME DE PREPARACIÓN DE CERTIFICACIÓN";
+    display: block;
+    font-size: 14pt;
+    font-weight: 800;
+    text-align: center;
+    color: #1e293b;
+    border-bottom: 2px solid #0f172a;
+    padding-bottom: 8px;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+  }
+}
+

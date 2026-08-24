@@ -1693,76 +1693,90 @@ const badgesConfig = [
     }
 
     // Prepare Pool and Show Config 
-    // MODIFIED: Do NOT shuffle yet. We shuffle on start if requested.
     pendingQuestionsPool = [...filtered];
 
-    // --- Domain Filter Logic ---
-    const domainSelect = document.getElementById("config-domain-select");
-    const uniqueDomains = [...new Set(filtered.map(q => q.domain).filter(Boolean))].sort();
-    
-    domainSelect.innerHTML = '<option value="">-- Todos los Dominios --</option>';
-    uniqueDomains.forEach(d => {
-        const option = document.createElement("option");
-        option.value = d;
-        option.textContent = d;
-        domainSelect.appendChild(option);
+    // --- Multi-Domain Filter Logic ---
+    const domainCheckboxesContainer = document.getElementById("config-domain-checkboxes");
+    const domainToggleAllBtn = document.getElementById("config-domain-toggle-all");
+    const domainCounts = {};
+    filtered.forEach(q => {
+        const d = q.domain || 'General';
+        domainCounts[d] = (domainCounts[d] || 0) + 1;
     });
+    const uniqueDomains = Object.keys(domainCounts).sort();
+
+    if (domainCheckboxesContainer) {
+        domainCheckboxesContainer.innerHTML = "";
+        uniqueDomains.forEach(d => {
+            const count = domainCounts[d];
+            const label = document.createElement("label");
+            label.style.cssText = "display: flex; align-items: center; gap: 8px; font-size: 0.88rem; cursor: pointer; user-select: none; color: var(--text-color); margin: 0;";
+            label.innerHTML = `
+              <input type="checkbox" class="config-domain-cb" value="${d.replace(/"/g, '&quot;')}" checked style="width: 16px; height: 16px; cursor: pointer;" />
+              <span style="flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${d}</span>
+              <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); background: var(--bg-card); padding: 2px 6px; border-radius: 6px; border: 1px solid var(--border-color);">${count}</span>
+            `;
+            domainCheckboxesContainer.appendChild(label);
+        });
+    }
+
+    let allDomainsSelected = true;
+    if (domainToggleAllBtn) {
+        domainToggleAllBtn.textContent = "Desmarcar todos";
+        domainToggleAllBtn.onclick = (e) => {
+            e.preventDefault();
+            const cbs = document.querySelectorAll(".config-domain-cb");
+            allDomainsSelected = !allDomainsSelected;
+            cbs.forEach(cb => cb.checked = allDomainsSelected);
+            domainToggleAllBtn.textContent = allDomainsSelected ? "Desmarcar todos" : "Seleccionar todos";
+            updateSliderRange();
+        };
+    }
 
     // --- Search Filter Logic ---
     const searchInput = document.getElementById("config-search");
-    
-    // Reset inputs on open
-    domainSelect.value = "";
     if (searchInput) searchInput.value = ""; 
     
     // Reset pool on open
     let currentPool = [...pendingQuestionsPool];
 
-    // DEFINING HELPERS FIRST
-    // Removed Range Helpers 
-    
-    // START COURSE HELPERS
-    // Range Inputs
     // Range Inputs
     const rangeStart = document.getElementById("config-range-start");
     const rangeEnd = document.getElementById("config-range-end");
     const globalTotalDisplay = document.getElementById("global-total-display");
 
     function updateSliderRange() {
-        const selectedDomain = domainSelect.value;
+        const checkedDomains = Array.from(document.querySelectorAll(".config-domain-cb:checked")).map(cb => cb.value);
         const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : "";
         
         let filtered = [...pendingQuestionsPool];
 
         // 0. GLOBAL RANGE FILTER (Primary)
-        // User wants to limit the bank "from 46 to 90"
         const totalBank = pendingQuestionsPool.length;
         if(globalTotalDisplay) globalTotalDisplay.textContent = totalBank;
 
-        // Init inputs default once if empty
         if(rangeStart && !rangeStart.value) rangeStart.value = 1;
         if(rangeEnd && !rangeEnd.value) rangeEnd.value = totalBank;
         
         const rStart = parseInt(rangeStart ? rangeStart.value : 1) || 1;
         const rEnd = parseInt(rangeEnd ? rangeEnd.value : totalBank) || totalBank;
         
-        // Slice by Index (1-based input -> 0-based index)
         const sIndex = Math.max(0, rStart - 1);
         const eIndex = Math.min(totalBank, rEnd);
         
         if (sIndex < eIndex) {
              filtered = filtered.slice(sIndex, eIndex);
         } else if (sIndex === eIndex && sIndex < totalBank) {
-             // Single question case
              filtered = [filtered[sIndex]];
         } else {
-             // Invalid range or out of bounds
              filtered = []; 
         }
 
-        // 1. Domain Filter
-        if (selectedDomain) {
-            filtered = filtered.filter(q => q.domain === selectedDomain);
+        // 1. Multi-Domain Filter
+        if (checkedDomains.length > 0 && checkedDomains.length < uniqueDomains.length) {
+            filtered = filtered.filter(q => checkedDomains.includes(q.domain || 'General'));
+        } else if (checkedDomains.length === 0 && uniqueDomains.length > 0) {
+            filtered = []; // None selected
         }
         
         // 2. Keyword Filter
@@ -1780,12 +1794,10 @@ const badgesConfig = [
         // Update Slider to reflect available count from the sliced pool
         configTotalQuestions.textContent = currentPool.length;
         configSlider.max = Math.max(1, currentPool.length);
-        // Default to max 45 or full length if smaller
         const currentVal = parseInt(configSlider.value) || 10;
         if (currentVal > currentPool.length) {
-             configSlider.value = currentPool.length;
+             configSlider.value = Math.max(1, currentPool.length);
         }
-        // Force at least 1 if pool exists
         if (currentPool.length > 0 && configSlider.value == 0) configSlider.value = 1;
 
         configCountDisplay.textContent = configSlider.value;
@@ -1807,23 +1819,12 @@ const badgesConfig = [
     
     updateSliderRange();
 
-    domainSelect.onchange = updateSliderRange;
+    if (domainCheckboxesContainer) domainCheckboxesContainer.onchange = updateSliderRange;
     if (searchInput) searchInput.oninput = updateSliderRange;
-    if (rangeStart) rangeStart.onchange = updateSliderRange; // Use onchange for numbers to avoid excessive recalc
+    if (rangeStart) rangeStart.onchange = updateSliderRange;
     if (rangeEnd) rangeEnd.onchange = updateSliderRange;
-    if (rangeStart) rangeStart.oninput = updateSliderRange; // Also oninput for realtime
+    if (rangeStart) rangeStart.oninput = updateSliderRange;
     if (rangeEnd) rangeEnd.oninput = updateSliderRange;
-
-
-
-
-    
-
-
-
-
-    domainSelect.onchange = () => { updateSliderRange(); updateRangeStats(); };
-    if (searchInput) searchInput.oninput = () => { updateSliderRange(); updateRangeStats(); };
 
     configModal.classList.remove("hidden");
     
@@ -1852,32 +1853,26 @@ const badgesConfig = [
             weaknessCheckbox.disabled = false;
             weaknessLabel.textContent = `Repasar Fallos (${validMissedQuestions.length} preguntas)`;
             
-            // Listener to override pool
             weaknessCheckbox.onclick = () => {
                 const isWeakness = weaknessCheckbox.checked;
                 if (isWeakness) {
                     currentPool = validMissedQuestions;
-                    // Disable filters when inside weakness mode (or combine?)
-                    // For logic simplicity, Weakness Mode overrides filters
-                    if (domainSelect) domainSelect.disabled = true;
+                    if (domainCheckboxesContainer) domainCheckboxesContainer.style.opacity = "0.5";
                     if (searchInput) searchInput.disabled = true;
                 } else {
-                    // Restore original filtered pool
-                    if (domainSelect) domainSelect.disabled = false;
+                    if (domainCheckboxesContainer) domainCheckboxesContainer.style.opacity = "1";
                     if (searchInput) searchInput.disabled = false;
-                    updateSliderRange(); // Re-run filter logic
-                    return; // updateSliderRange sets currentPool
+                    updateSliderRange();
+                    return;
                 }
                 
-                // Update slider for weakness pool manually here
                 configTotalQuestions.textContent = currentPool.length;
                 configSlider.max = Math.max(1, currentPool.length);
                 configSlider.value = Math.min(45, currentPool.length);
                 configCountDisplay.textContent = configSlider.value;
             };
-            // Reset to unchecked by default
             weaknessCheckbox.checked = false;
-            if (domainSelect) domainSelect.disabled = false;
+            if (domainCheckboxesContainer) domainCheckboxesContainer.style.opacity = "1";
             if (searchInput) searchInput.disabled = false; 
         } else {
             weaknessContainer.classList.add("hidden");
@@ -1885,8 +1880,7 @@ const badgesConfig = [
         }
     }
     
-    
-    // Safer listener handling: Query afresh and use .onclick
+    // Start Quiz Action with Time Attack and Real Exam flags
     const startBtn = document.getElementById("config-start");
     if(startBtn) {
         startBtn.onclick = () => {
@@ -1898,6 +1892,9 @@ const badgesConfig = [
             const realModeCb = document.getElementById("config-real-mode");
             isRealExam = realModeCb ? realModeCb.checked : false; 
             
+            const timeAttackCb = document.getElementById("config-time-attack");
+            window.isTimeAttackMode = timeAttackCb ? timeAttackCb.checked : false;
+
             // CHECK ORDER MODE
             const orderMode = document.querySelector('input[name="order-mode"]:checked')?.value || "random";
             
@@ -2254,6 +2251,53 @@ const badgesConfig = [
         const isAnswered = !!answeredData;
         const isSubmitted = answeredData && answeredData.submitted;
 
+        // --- Time Attack per-question countdown (60s) ---
+        if (window.timeAttackInterval) {
+            clearInterval(window.timeAttackInterval);
+            window.timeAttackInterval = null;
+        }
+        const timeAttackContainer = document.getElementById("time-attack-bar-container");
+        const timeAttackFill = document.getElementById("time-attack-bar-fill");
+        if (window.isTimeAttackMode && !isSubmitted) {
+            if (timeAttackContainer) timeAttackContainer.classList.remove("hidden");
+            let timeLeft = 60;
+            if (timeAttackFill) {
+                timeAttackFill.style.width = "100%";
+                timeAttackFill.style.backgroundColor = "var(--primary-color, #4f6ef7)";
+            }
+            window.timeAttackInterval = setInterval(() => {
+                timeLeft--;
+                const pct = Math.max(0, (timeLeft / 60) * 100);
+                if (timeAttackFill) {
+                    timeAttackFill.style.width = pct + "%";
+                    if (timeLeft <= 10) {
+                        timeAttackFill.style.backgroundColor = "var(--danger-color, #ef4444)";
+                    } else if (timeLeft <= 20) {
+                        timeAttackFill.style.backgroundColor = "var(--warning-color, #f59e0b)";
+                    } else {
+                        timeAttackFill.style.backgroundColor = "var(--primary-color, #4f6ef7)";
+                    }
+                }
+                if (timeLeft <= 0) {
+                    clearInterval(window.timeAttackInterval);
+                    window.timeAttackInterval = null;
+                    if (!userAnswers[currentQuestionIndex] || !userAnswers[currentQuestionIndex].submitted) {
+                        if (!userAnswers[currentQuestionIndex]) {
+                            userAnswers[currentQuestionIndex] = {
+                                selected: [],
+                                isCorrect: false,
+                                submitted: true,
+                                timedOut: true
+                            };
+                        }
+                        checkAnswer();
+                    }
+                }
+            }, 1000);
+        } else {
+            if (timeAttackContainer) timeAttackContainer.classList.add("hidden");
+        }
+
         // SHUFFLE LOGIC (New)
         // Only shuffle for standard choice types if not reviewing
         let optionsToRender = [...q.options];
@@ -2473,21 +2517,34 @@ const badgesConfig = [
   }
 
   function checkAnswer() {
+    if (window.timeAttackInterval) {
+        clearInterval(window.timeAttackInterval);
+        window.timeAttackInterval = null;
+    }
+    const timeAttackContainer = document.getElementById("time-attack-bar-container");
+    if (timeAttackContainer) timeAttackContainer.classList.add("hidden");
+
     // Auto-save for ordering if no interaction/selection yet
     const q = currentQuizQuestions[currentQuestionIndex];
     if (q && q.type === 'ordering' && !userAnswers[currentQuestionIndex]) {
          selectOption(null, 'ordering');
     }
+    // If empty/timed-out, create submission record
+    if (!userAnswers[currentQuestionIndex]) {
+        userAnswers[currentQuestionIndex] = {
+            selected: [],
+            isCorrect: false,
+            submitted: true,
+            timedOut: true
+        };
+    }
+    
     // Mark as submitted and show feedback
     const ans = userAnswers[currentQuestionIndex];
-    if (!ans) return; // Nothing selected
-    
     ans.submitted = true;
     // F12: Record time spent on this question
     if (typeof recordQuestionTime === 'function') recordQuestionTime(currentQuestionIndex);
-    if (ans.isCorrect) score++; // Only increment score on explicit submit? Or recalc at end? 
-    // Actually, score variable is less relevant if we recalc at finish. 
-    // But let's keep it consistent.
+    if (ans.isCorrect) score++;
 
     loadQuestion(currentQuestionIndex);
   }
