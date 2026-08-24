@@ -4443,7 +4443,8 @@ function renderReview(questions, finalPct, passed) {
         }
         if (aEl) aEl.innerHTML = fc.back || fc.respuesta;
         if (countEl) countEl.textContent = `${fcIdx + 1} / ${fcFiltered.length}`;
-        if (studyI18n) studyI18n.apply(panel);
+        const panelEl = document.getElementById('unir-panel-flashcards');
+        if (studyI18n && panelEl) studyI18n.apply(panelEl);
       }
 
       window._unirNextFC = function() {
