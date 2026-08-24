@@ -19,6 +19,143 @@
 
     const genaiDomainSections = [
         // =====================================================
+        // DOMAIN 0: 10 REGLAS DE ORO & MATRIZ DE DECISIÓN (CHEAT-SHEET)
+        // =====================================================
+        {
+            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="#3157d5" style="vertical-align:middle;margin-right:4px"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> D0. 10 Reglas de Oro y Matriz de Decisión (Cheat-Sheet)',
+            items: [
+                {
+                    title: "0.1 Matriz de Decisión: Prompting vs RAG vs Fine-Tuning vs Pre-training",
+                    content: `
+                        ${langSection('en', `
+                            ${styleBox('blue', 'Core Architecture Decision Rule')}
+                                The exam frequently asks you to select the lowest cost, lowest complexity approach that satisfies business requirements.
+                            </div>
+                            <table class="table table-bordered">
+                                <tr class="table-header"><th>Approach</th><th>When to Choose</th><th>Cost / Complexity</th><th>Primary Advantage</th></tr>
+                                <tr><td><strong>Prompt Engineering</strong></td><td>General tasks, strict formatting, reasoning without external data</td><td>Lowest</td><td>Instant iteration, zero training cost</td></tr>
+                                <tr><td><strong>RAG (Retrieval-Augmented)</strong></td><td>Frequent factual updates, private enterprise docs, hallucination control, auditability</td><td>Medium</td><td>Grounded in verified context, real-time data access</td></tr>
+                                <tr><td><strong>Fine-Tuning</strong></td><td>Specialized style, niche domain terminology, latency/cost reduction (distilling to 7B/8B model)</td><td>High</td><td>Internalizes tone/syntax without repeating long system prompts</td></tr>
+                                <tr><td><strong>Continued Pre-training</strong></td><td>Radically new language/domain vocabulary from scratch</td><td>Highest</td><td>Fundamental model weight adaptation</td></tr>
+                            </table>
+                            ${styleBox('yellow', 'Exam Golden Rule')}
+                                If the company needs <em>frequently updated facts with verifiable sources</em>, the answer is <strong>RAG</strong>, NEVER Fine-Tuning. Fine-Tuning changes behavior and style, NOT dynamic factual memory.
+                            </div>
+                        `)}
+                        ${langSection('es', `
+                            ${styleBox('blue', 'Regla de Decisión de Arquitectura Principal')}
+                                El examen pregunta constantemente cuál es el enfoque de menor costo y complejidad que satisface los requerimientos del negocio.
+                            </div>
+                            <table class="table table-bordered">
+                                <tr class="table-header"><th>Enfoque</th><th>Cuándo Elegirlo</th><th>Costo / Complejidad</th><th>Ventaja Principal</th></tr>
+                                <tr><td><strong>Prompt Engineering</strong></td><td>Tareas generales, formato estricto, razonamiento sin datos externos</td><td>Mínimo</td><td>Iteración instantánea, costo cero de entrenamiento</td></tr>
+                                <tr><td><strong>RAG (Recuperación Aumentada)</strong></td><td>Datos que cambian frecuentemente, documentos privados de empresa, control de alucinaciones, auditabilidad</td><td>Medio</td><td>Fundamentado en contexto verificado, acceso en tiempo real</td></tr>
+                                <tr><td><strong>Fine-Tuning</strong></td><td>Estilo especializado, terminología de nicho, reducción de latencia/costo (destilar a modelo 7B/8B)</td><td>Alto</td><td>Internaliza tono/sintaxis sin repetir prompts de sistema largos</td></tr>
+                                <tr><td><strong>Pre-entrenamiento Continuo</strong></td><td>Vocabulario o idioma radicalmente nuevo desde cero</td><td>Máximo</td><td>Adaptación fundamental de pesos del modelo</td></tr>
+                            </table>
+                            ${styleBox('yellow', 'Regla de Oro de Examen')}
+                                Si la empresa necesita <em>hechos actualizados frecuentemente con fuentes verificables</em>, la respuesta es <strong>RAG</strong>, NUNCA Fine-Tuning. El Fine-Tuning cambia comportamiento y estilo, NO memoria factual dinámica.
+                            </div>
+                        `)}
+                    `
+                },
+                {
+                    title: "0.2 Matriz de Model Serving: Pay-per-token vs Provisioned Throughput",
+                    content: `
+                        ${langSection('en', `
+                            <table class="table table-bordered">
+                                <tr class="table-header"><th>Serving Mode</th><th>Workload Characteristics</th><th>Key Feature</th><th>Exam Trigger Keyword</th></tr>
+                                <tr><td><strong>Pay-per-token (Foundation Model APIs)</strong></td><td>Variable, spiky, or low-volume traffic; prototyping</td><td>Zero infrastructure management; scales to zero</td><td><em>"Unpredictable traffic", "Lowest idle cost"</em></td></tr>
+                                <tr><td><strong>Provisioned Throughput</strong></td><td>High, predictable, mission-critical production volume</td><td>Guaranteed concurrency (DBUs per hour); strict latency SLA; custom fine-tuned models</td><td><em>"Guaranteed throughput", "Strict SLA", "Custom model"</em></td></tr>
+                                <tr><td><strong>External Models (OpenAI / Anthropic)</strong></td><td>Accessing 3rd-party models via Databricks Model Serving</td><td>Managed with Unity Catalog Connections and Databricks Secrets</td><td><em>"Centralized governance for external APIs"</em></td></tr>
+                            </table>
+                        `)}
+                        ${langSection('es', `
+                            <table class="table table-bordered">
+                                <tr class="table-header"><th>Modo de Serving</th><th>Características de la Carga</th><th>Característica Clave</th><th>Palabras Clave en el Examen</th></tr>
+                                <tr><td><strong>Pay-per-token (Foundation Model APIs)</strong></td><td>Tráfico variable, con picos o bajo volumen; prototipos</td><td>Cero gestión de infraestructura; escala a cero</td><td><em>"Tráfico impredecible", "Menor costo en reposo"</em></td></tr>
+                                <tr><td><strong>Provisioned Throughput</strong></td><td>Volumen de producción alto, predecible y crítico</td><td>Concurrencia garantizada (DBUs/hora); SLA de latencia estricto; modelos propios</td><td><em>"Throughput garantizado", "SLA estricto", "Modelo personalizado"</em></td></tr>
+                                <tr><td><strong>Modelos Externos (OpenAI / Anthropic)</strong></td><td>Consumo de modelos de terceros vía Databricks Model Serving</td><td>Gobernados con Unity Catalog Connections y Databricks Secrets</td><td><em>"Gobernanza centralizada para APIs externas"</em></td></tr>
+                            </table>
+                        `)}
+                    `
+                },
+                {
+                    title: "0.3 Matriz de Mosaic AI Vector Search: Delta Sync vs Direct Access",
+                    content: `
+                        ${langSection('en', `
+                            <table class="table table-bordered">
+                                <tr class="table-header"><th>Index Type</th><th>Embedding Generation</th><th>Underlying Data Source</th><th>Best For</th></tr>
+                                <tr><td><strong>Delta Sync (Managed Embeddings)</strong></td><td>Databricks computes embeddings automatically on Delta table updates</td><td>Source Delta table in Unity Catalog</td><td><strong>Recommended default</strong> — zero custom embedding pipeline code</td></tr>
+                                <tr><td><strong>Delta Sync (Self-Managed Embeddings)</strong></td><td>User computes embedding vectors and writes them to Delta column</td><td>Source Delta table with pre-computed vector array</td><td>Custom or proprietary embedding models not in Databricks catalog</td></tr>
+                                <tr><td><strong>Direct Vector Access Index</strong></td><td>User sends vector directly via REST API</td><td>No Delta table binding</td><td>External microservices writing vectors directly</td></tr>
+                            </table>
+                            ${styleBox('blue', 'Continuous vs Triggered Sync')}
+                                <ul>
+                                    <li><strong>Continuous:</strong> Pipeline streams Delta changes with sub-second/seconds latency (higher cost).</li>
+                                    <li><strong>Triggered:</strong> Updates on-demand or on a cron schedule (cost-effective for batch updates).</li>
+                                </ul>
+                        `)}
+                        ${langSection('es', `
+                            <table class="table table-bordered">
+                                <tr class="table-header"><th>Tipo de Índice</th><th>Generación de Embeddings</th><th>Fuente de Datos</th><th>Ideal Para</th></tr>
+                                <tr><td><strong>Delta Sync (Managed Embeddings)</strong></td><td>Databricks calcula los embeddings automáticamente al actualizar la tabla Delta</td><td>Tabla Delta origen en Unity Catalog</td><td><strong>Opción recomendada por defecto</strong> — cero código de pipeline</td></tr>
+                                <tr><td><strong>Delta Sync (Self-Managed Embeddings)</strong></td><td>El usuario genera los vectores y los guarda en una columna de la tabla Delta</td><td>Tabla Delta origen con columna de vectores pre-calculados</td><td>Modelos de embeddings propietarios o externos no soportados</td></tr>
+                                <tr><td><strong>Direct Vector Access Index</strong></td><td>El usuario envía el vector directamente vía API REST</td><td>Sin tabla Delta vinculada</td><td>Microservicios externos que escriben vectores directamente</td></tr>
+                            </table>
+                            ${styleBox('blue', 'Sincronización Continuous vs Triggered')}
+                                <ul>
+                                    <li><strong>Continuous:</strong> Sincroniza cambios de Delta en streaming con latencia de segundos (mayor costo de cómputo).</li>
+                                    <li><strong>Triggered:</strong> Sincroniza bajo demanda o con cron programado (óptimo en costo para actualizaciones por lotes).</li>
+                                </ul>
+                        `)}
+                    `
+                },
+                {
+                    title: "0.4 Matriz de Empaquetado MLflow & Despliegue de Agentes",
+                    content: `
+                        ${langSection('en', `
+                            <table class="table table-bordered">
+                                <tr class="table-header"><th>MLflow Flavor</th><th>Use Case</th><th>Advantages</th></tr>
+                                <tr><td><code>mlflow.pyfunc</code></td><td>Custom multi-step logic, custom agents, hybrid retrieval, complex pre/post-processing</td><td>Maximum flexibility; deployable to any Databricks Serving endpoint</td></tr>
+                                <tr><td><code>mlflow.langchain</code></td><td>Standard LangChain chains, LCEL expressions, LangGraph</td><td>Automatic tracing integration, structured parameter logging</td></tr>
+                                <tr><td><code>mlflow.transformers</code></td><td>HuggingFace native pipelines</td><td>Optimized GPU batch inference</td></tr>
+                            </table>
+                        `)}
+                        ${langSection('es', `
+                            <table class="table table-bordered">
+                                <tr class="table-header"><th>Flavor de MLflow</th><th>Caso de Uso</th><th>Ventajas</th></tr>
+                                <tr><td><code>mlflow.pyfunc</code></td><td>Lógica personalizada de múltiples pasos, agentes propios, retrieval híbrido, pre/post-procesamiento</td><td>Máxima flexibilidad; desplegable a cualquier endpoint de Serving</td></tr>
+                                <tr><td><code>mlflow.langchain</code></td><td>Cadenas estándar de LangChain, expresiones LCEL, LangGraph</td><td>Integración automática de MLflow Tracing, registro de parámetros</td></tr>
+                                <tr><td><code>mlflow.transformers</code></td><td>Pipelines nativos de HuggingFace</td><td>Inferencia por lotes optimizada en GPU</td></tr>
+                            </table>
+                        `)}
+                    `
+                },
+                {
+                    title: "0.5 Matriz de Evaluación: Triada RAG & MLflow Tracing",
+                    content: `
+                        ${langSection('en', `
+                            <table class="table table-bordered">
+                                <tr class="table-header"><th>Metric</th><th>Target Component</th><th>Question it Answers</th><th>Failure Mode</th></tr>
+                                <tr><td><strong>Context Relevance</strong></td><td>Retriever</td><td>Did we retrieve chunks that actually contain the answer?</td><td>Noise in prompt; unnecessary token costs</td></tr>
+                                <tr><td><strong>Groundedness (Faithfulness)</strong></td><td>Generator (LLM)</td><td>Is the answer strictly supported by the retrieved context?</td><td>Hallucination; invented facts</td></tr>
+                                <tr><td><strong>Answer Relevance</strong></td><td>Generator (LLM)</td><td>Does the output directly answer the user's specific prompt?</td><td>Vagueness; answering an unrelated question</td></tr>
+                            </table>
+                        `)}
+                        ${langSection('es', `
+                            <table class="table table-bordered">
+                                <tr class="table-header"><th>Métrica</th><th>Componente Evaluado</th><th>Pregunta que Responde</th><th>Modo de Falla Detectado</th></tr>
+                                <tr><td><strong>Context Relevance</strong></td><td>Retriever</td><td>¿Los fragmentos recuperados contienen realmente la respuesta?</td><td>Ruido en el prompt; consumo innecesario de tokens</td></tr>
+                                <tr><td><strong>Groundedness (Faithfulness)</strong></td><td>Generador (LLM)</td><td>¿La respuesta está estrictamente respaldada por el contexto recuperado?</td><td>Alucinación; datos inventados</td></tr>
+                                <tr><td><strong>Answer Relevance</strong></td><td>Generador (LLM)</td><td>¿La respuesta contesta directamente lo que el usuario preguntó?</td><td>Vaguedad; responder algo no solicitado</td></tr>
+                            </table>
+                        `)}
+                    `
+                }
+            ]
+        },
+        // =====================================================
         // DOMAIN 1: DESIGN APPLICATIONS
         // =====================================================
         {

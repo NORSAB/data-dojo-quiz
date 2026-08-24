@@ -875,8 +875,8 @@ function saveExamResult(score, total, passed, missedIds = [], questionIds = [], 
       // Read conceptosViewed count from all Databricks mastery stores
       try {
           let totalConceptosRead = 0;
-          ['databricks-da', 'databricks-fundamentals'].forEach(cid => {
-              const m = JSON.parse(localStorage.getItem('mastery_' + cid) || '{}');
+          ['databricks_da_mastery', 'databricks_fund_mastery', 'databricks_genai_mastery', 'dp600_mastery'].forEach(mk => {
+              const m = JSON.parse(localStorage.getItem(mk) || '{}');
               if (m.conceptosViewed && Array.isArray(m.conceptosViewed)) {
                   totalConceptosRead += m.conceptosViewed.length;
               }
@@ -890,7 +890,7 @@ function saveExamResult(score, total, passed, missedIds = [], questionIds = [], 
       // --- SYNC COMANDOS SQL FROM DOJO MASTERY ---
       try {
           let totalCmdRead = 0;
-          ['databricks_da_mastery', 'databricks_fund_mastery', 'dp600_mastery'].forEach(mk => {
+          ['databricks_da_mastery', 'databricks_fund_mastery', 'databricks_genai_mastery', 'dp600_mastery'].forEach(mk => {
               const m = JSON.parse(localStorage.getItem(mk) || '{}');
               if (m.comandosViewed && Array.isArray(m.comandosViewed)) {
                   totalCmdRead += m.comandosViewed.length;
@@ -970,13 +970,14 @@ function calculateXP(stats) {
     // Consistency
     xp += (stats.maxCorrectStreak || 0) * 5;    // 5 XP per max streak point
 
-    // Study Mode XP (ALL course modules)
+    // Study Mode XP (ALL course modules including GenAI)
     try {
         const masteryKeys = [
             'unir_viz_mastery',
             'unir_herr_mastery',
             'databricks_da_mastery',
             'databricks_fund_mastery',
+            'databricks_genai_mastery',
             'dp600_mastery',
             'unah_tesis_mastery'
         ];
@@ -3271,7 +3272,9 @@ function renderReview(questions, finalPct, passed) {
         ? (window.conceptosDatabricksGenAI || [])
         : (isDatabricksCourse ? (window.conceptosDatabricks || []) : []);
       const genAIPatterns = isGenAICourse ? (window.databricksGenAIPatterns || []) : [];
-      const comandosSql = !isGenAICourse && isDatabricksCourse ? (window.comandosSqlDatabricks || []) : [];
+      const comandosSql = isGenAICourse
+        ? (window.comandosSqlDatabricksGenAI || [])
+        : (!isGenAICourse && isDatabricksCourse ? (window.comandosSqlDatabricks || []) : []);
       const hasConceptos = conceptos.length > 0;
       const hasGenAIPatterns = genAIPatterns.length > 0;
       const hasComandosSQL = comandosSql.length > 0;
@@ -3638,7 +3641,7 @@ function renderReview(questions, finalPct, passed) {
               ${svgIcon('M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5', 15)} ${isGenAICourse ? localizedMarkup('Terms', 'Términos') : localizedMarkup('Key Concepts', 'Conceptos Clave')} <span class="unir-tab-count">${conceptos.reduce((a,c) => a + c.conceptos.length, 0)}</span>
             </button>` : ''}
             ${hasComandosSQL ? `<button type="button" class="unir-tab" id="unir-tab-comandos" role="tab" aria-selected="false" aria-controls="unir-panel-comandos" tabindex="-1" onclick="window._unirSwitchTab('comandos')">
-              ${svgIcon('M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z', 15)} ${localizedMarkup('SQL Commands', 'Comandos SQL')} <span class="unir-tab-count">${window.comandosSqlDatabricks.reduce((a,c) => a + c.comandos.length, 0)}</span>
+              ${svgIcon('M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z', 15)} ${isGenAICourse ? localizedMarkup('AI Functions', 'Funciones AI') : localizedMarkup('SQL Commands', 'Comandos SQL')} <span class="unir-tab-count">${comandosSql.reduce((a,c) => a + c.comandos.length, 0)}</span>
             </button>` : ''}
             ${hasGenAIPatterns ? `<button type="button" class="unir-tab" id="unir-tab-patterns" role="tab" aria-selected="false" aria-controls="unir-panel-patterns" tabindex="-1" onclick="window._unirSwitchTab('patterns')">
               ${svgIcon('M9 18h6M10 22h4M12 2a7 7 0 00-4 12.74V16h8v-1.26A7 7 0 0012 2z', 15)} ${localizedMarkup('Scenarios', 'Escenarios')} <span class="unir-tab-count">${genAIPatterns.reduce((a,c) => a + c.items.length, 0)}</span>
@@ -4061,17 +4064,18 @@ function renderReview(questions, finalPct, passed) {
         });
       }
 
-      // --- COMANDOS SQL PANEL RENDERER ---
+      // --- COMANDOS SQL / FUNCIONES AI PANEL RENDERER ---
       function renderComandosSQL() {
         const panel = document.getElementById('unir-panel-comandos');
-        if (!panel || !window.comandosSqlDatabricks) return;
+        const list = comandosSql;
+        if (!panel || !list || list.length === 0) return;
         if (panel.dataset.rendered) return;
         panel.dataset.rendered = '1';
         const cIcon = (path, sz=18, fill='currentColor') => `<svg viewBox="0 0 24 24" width="${sz}" height="${sz}" fill="${fill}"><path d="${path}"/></svg>`;
-        const totalComandos = window.comandosSqlDatabricks.reduce((a,c) => a + c.comandos.length, 0);
+        const totalComandos = list.reduce((a,c) => a + c.comandos.length, 0);
         let html = `<div style="text-align:center;margin-bottom:18px;">
-          <h2 style="margin:0 0 4px;font-size:1.3rem;color:var(--text-color,#1e293b);">Comandos SQL para el Examen</h2>
-          <p style="margin:0;color:var(--text-muted,#64748b);font-size:0.85rem;">Ejemplos explicados l&iacute;nea por l&iacute;nea</p>
+          <h2 style="margin:0 0 4px;font-size:1.3rem;color:var(--text-color,#1e293b);">${isGenAICourse ? localizedMarkup('Databricks GenAI & AI Functions', 'Funciones de IA & SQL GenAI') : localizedMarkup('SQL Commands for Exam', 'Comandos SQL para el Examen')}</h2>
+          <p style="margin:0;color:var(--text-muted,#64748b);font-size:0.85rem;">${isGenAICourse ? localizedMarkup('Unity Catalog AI functions explained line-by-line. Everything starts collapsed.', 'Funciones de IA de Unity Catalog explicadas línea por línea. Todo inicia contraído.') : localizedMarkup('Commands with line-by-line explanations', 'Ejemplos explicados línea por línea')}</p>
           <div id="unir-cmd-progress" style="margin-top:8px;font-size:0.8rem;color:var(--primary-color,#3157d5);font-weight:600;">${cIcon(SVG.star, 14)} ${mastery.comandosViewed.length}/${totalComandos} le&iacute;dos &mdash; +8 XP c/u</div>
         </div>`;
         window._cmdRead = function(key) {
@@ -4083,7 +4087,7 @@ function renderReview(questions, finalPct, passed) {
             if(b){b.style.background='var(--success-color)';b.textContent='✓';}
           }
         };
-        window.comandosSqlDatabricks.forEach((cat, ci) => {
+        list.forEach((cat, ci) => {
           const categoryId = `command-category-${ci}`;
           html += `<section class="unir-persona-category">`;
           html += `<button type="button" class="unir-persona-cat-header unir-category-toggle" aria-expanded="false" aria-controls="${categoryId}">${cIcon(cat.icon,20)} <span>${cat.category}</span><span style="margin-left:auto;font-size:0.72rem;opacity:0.7;">${cat.comandos.length}</span><span class="unir-category-chevron">${cIcon(SVG.chevronDown,16)}</span></button>`;
