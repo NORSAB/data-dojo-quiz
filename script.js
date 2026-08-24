@@ -2619,9 +2619,37 @@ const badgesConfig = [
     // TTS Audio button for explanation
     const ttsDiv = document.createElement("div");
     ttsDiv.style.marginTop = "0.6rem";
-    ttsDiv.innerHTML = `<button type="button" class="btn btn-sm btn-outline" style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:14px;font-size:0.75rem;cursor:pointer;"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg> <span>${lang === 'es' ? 'Escuchar Explicación' : 'Listen Explanation'}</span></button>`;
+    ttsDiv.style.display = "flex";
+    ttsDiv.style.flexWrap = "wrap";
+    ttsDiv.style.gap = "8px";
+    ttsDiv.style.alignItems = "center";
+    
+    ttsDiv.innerHTML = `
+      <button type="button" class="btn btn-sm btn-outline" style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:14px;font-size:0.75rem;cursor:pointer;"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg> <span>${lang === 'es' ? 'Escuchar Explicación' : 'Listen Explanation'}</span></button>
+      <button type="button" class="btn btn-sm btn-outline" onclick="window.AICoach ? window.AICoach.toggleBreakdown(${currentQuestionIndex}) : null" style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:14px;font-size:0.75rem;cursor:pointer;border-color:#3157d5;color:#3157d5;">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+        <span>🤖 ${lang === 'es' ? 'Desglose AI Coach' : 'AI Coach Breakdown'}</span>
+      </button>
+    `;
     ttsDiv.querySelector("button").onclick = () => window.speakText(q.explanation, lang);
     document.getElementById("feedback-explanation").appendChild(ttsDiv);
+
+    // AI Coach Expandable Breakdown Box
+    const coachBox = document.createElement("div");
+    coachBox.id = `ai-coach-breakdown-${currentQuestionIndex}`;
+    coachBox.style.cssText = "display:none;margin-top:10px;padding:14px 16px;background:rgba(49,87,213,0.06);border:1.5px solid rgba(49,87,213,0.25);border-radius:14px;font-size:0.85rem;line-height:1.6;color:var(--text-color);";
+    
+    const coachData = window.AICoach ? window.AICoach.generateBreakdown(q) : null;
+    coachBox.innerHTML = `
+      <div style="font-weight:700;color:#3157d5;margin-bottom:8px;display:flex;align-items:center;gap:6px;">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+        ${lang === 'es' ? 'Desglose Situacional de Examen Oficial' : 'Official Exam Situational Breakdown'}
+      </div>
+      <div style="margin-bottom:6px;"><strong>🎯 ${lang === 'es' ? 'Clave de Certificación' : 'Exam Key'}:</strong> ${coachData ? coachData.examKey : ''}</div>
+      <div style="margin-bottom:6px;"><strong>⚠️ ${lang === 'es' ? 'Trampa Frecuente' : 'Common Pitfall'}:</strong> ${coachData ? coachData.pitfalls : ''}</div>
+      <div><strong>💡 ${lang === 'es' ? 'Regla Mnemotécnica' : 'Rule of Thumb'}:</strong> ${coachData ? coachData.ruleOfThumb : ''}</div>
+    `;
+    document.getElementById("feedback-explanation").appendChild(coachBox);
     
     document.getElementById("latex-source").textContent = q.latex || "";
   }
@@ -3762,6 +3790,9 @@ function renderReview(questions, finalPct, passed) {
             ${hasFlashcards ? `<button type="button" class="unir-tab" id="unir-tab-flashcards" role="tab" aria-selected="false" aria-controls="unir-panel-flashcards" tabindex="-1" onclick="window._unirSwitchTab('flashcards')">
               ${svgIcon(SVG.flip, 15)} Flashcards <span class="unir-tab-count">${flashcards.length}</span>
             </button>` : ''}
+            <button type="button" class="unir-tab" id="unir-tab-sql-sandbox" role="tab" aria-selected="false" aria-controls="unir-panel-sql-sandbox" tabindex="-1" onclick="window._unirSwitchTab('sql-sandbox')">
+              ${svgIcon('M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z', 15)} ${localizedMarkup('SQL Sandbox', 'Sandbox SQL')}
+            </button>
             <button type="button" class="unir-tab" id="unir-tab-achievements" role="tab" aria-selected="false" aria-controls="unir-panel-achievements" tabindex="-1" onclick="window._unirSwitchTab('achievements')">
               ${svgIcon(SVG.trophy, 15)} ${localizedMarkup('Achievements', 'Logros')}
             </button>
@@ -3796,6 +3827,9 @@ function renderReview(questions, finalPct, passed) {
           <!-- PANEL: Flashcards -->
           ${hasFlashcards ? '<div class="unir-panel" id="unir-panel-flashcards" role="tabpanel" aria-labelledby="unir-tab-flashcards" hidden></div>' : ''}
 
+          <!-- PANEL: SQL Sandbox -->
+          <div class="unir-panel" id="unir-panel-sql-sandbox" role="tabpanel" aria-labelledby="unir-tab-sql-sandbox" hidden></div>
+
           <!-- PANEL: Achievements -->
           <div class="unir-panel" id="unir-panel-achievements" role="tabpanel" aria-labelledby="unir-tab-achievements" hidden></div>
         </div>
@@ -3811,6 +3845,7 @@ function renderReview(questions, finalPct, passed) {
       if (hasComandosSQL) allTabs.push('comandos');
       if (hasGenAIPatterns) allTabs.push('patterns');
       if (hasFlashcards) allTabs.push('flashcards');
+      allTabs.push('sql-sandbox');
       allTabs.push('achievements');
       window._unirSwitchTab = function(tab) {
         allTabs.forEach(t => {
@@ -3825,6 +3860,7 @@ function renderReview(questions, finalPct, passed) {
           if (panel) { if (t === tab) panel.removeAttribute('hidden'); else panel.setAttribute('hidden', ''); }
         });
         if (tab === 'flashcards') renderFlashcardMode();
+        if (tab === 'sql-sandbox' && window.SQLSandbox) window.SQLSandbox.render(document.getElementById('unir-panel-sql-sandbox'));
         if (tab === 'achievements') renderAchievements();
         if (tab === 'personajes') renderPersonajes();
         if (tab === 'conceptos') renderConceptos();
@@ -4495,6 +4531,8 @@ function renderReview(questions, finalPct, passed) {
       // Codex (GPT-5) | 2026-08-23 21:19 CST | El Centro de estudio abre con todos los dominios y temas contraídos.
       let fcFiltered = [...flashcards];
 
+      let isSRSEnabled = false;
+
       function renderFlashcardMode() {
         const panel = document.getElementById('unir-panel-flashcards');
         if (!panel) return;
@@ -4502,10 +4540,29 @@ function renderReview(questions, finalPct, passed) {
           panel.innerHTML = '<div style="text-align:center;color:var(--text-muted,#64748b);">No hay flashcards disponibles.</div>';
           return;
         }
-        fcFiltered = [...flashcards];
+        fcFiltered = isSRSEnabled && window.SRSManager ? window.SRSManager.getDueCards(flashcards) : [...flashcards];
+        if (fcFiltered.length === 0) fcFiltered = [...flashcards];
         fcIdx = 0;
+
+        const srsStats = window.SRSManager ? window.SRSManager.getStats(flashcards) : { due: 0, learned: 0 };
+
         panel.innerHTML = `
           <div class="unir-fc-wrap">
+            <!-- SRS & Podcast Mode Toolbar -->
+            <div style="margin-bottom:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center;">
+              <div id="unir-srs-status-pill" style="font-size:0.82rem;background:rgba(49,87,213,0.08);border:1px solid #3157d5;padding:5px 14px;border-radius:16px;color:var(--text-color);font-weight:600;display:flex;align-items:center;gap:6px;">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="#3157d5"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                <span>Repaso SRS: <strong>${srsStats.due}</strong> pendientes hoy</span>
+              </div>
+              <button type="button" class="btn btn-sm ${isSRSEnabled ? 'btn-primary' : 'btn-outline'}" onclick="window._unirToggleSRS()" style="border-radius:16px;font-size:0.82rem;padding:5px 14px;cursor:pointer;">
+                🧠 ${isSRSEnabled ? 'Modo Repaso Hoy (Activo)' : 'Filtrar Repaso Hoy (SRS)'}
+              </button>
+              <button type="button" class="btn btn-sm btn-primary" onclick="window.PodcastMode.start(fcFiltered, fcIdx)" style="border-radius:16px;font-size:0.82rem;padding:5px 16px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M12 1a9 9 0 00-9 9v7c0 1.66 1.34 3 3 3h3v-8H5v-2a7 7 0 0114 0v2h-4v8h3c1.66 0 3-1.34 3-3v-7a9 9 0 00-9-9z"/></svg>
+                🎧 Iniciar Modo Podcast
+              </button>
+            </div>
+
             <div style="margin-bottom:16px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center;">
               <select id="unir-fc-filter" onchange="window._unirFilterFC()" style="padding:7px 14px;border-radius:20px;border:1px solid var(--border-color,#e5e7eb);font-size:0.85rem;background:var(--bg-card,#fff);color:var(--text-color,#333);">
                 <option value="all">Todos los temas</option>
@@ -4513,6 +4570,7 @@ function renderReview(questions, finalPct, passed) {
               </select>
               <button class="unir-fc-btn" onclick="window._unirShuffleFC()" title="Aleatorio" style="width:36px;height:36px;">${svgIcon(SVG.shuffle, 16)}</button>
             </div>
+
             <div class="unir-fc-card" id="unir-fc-card" onclick="this.classList.toggle('flipped')">
               <div class="unir-fc-inner">
                 <div class="unir-fc-face unir-fc-front">
@@ -4541,13 +4599,19 @@ function renderReview(questions, finalPct, passed) {
               <button class="unir-fc-btn primary" onclick="window._unirNextFC()">&#8250;</button>
             </div>
             <div class="unir-fc-actions">
-              <button class="unir-fc-diff-btn easy" onclick="window._unirRateFC('easy')">${svgIcon(SVG.thumbUp, 13)} Fácil</button>
-              <button class="unir-fc-diff-btn medium" onclick="window._unirRateFC('medium')">${svgIcon(SVG.star, 13)} Regular</button>
-              <button class="unir-fc-diff-btn hard" onclick="window._unirRateFC('hard')">${svgIcon(SVG.thumbDown, 13)} Difícil</button>
+              <button class="unir-fc-diff-btn easy" onclick="window._unirRateFC('easy')">${svgIcon(SVG.thumbUp, 13)} Fácil (+6d)</button>
+              <button class="unir-fc-diff-btn medium" onclick="window._unirRateFC('medium')">${svgIcon(SVG.star, 13)} Regular (+3d)</button>
+              <button class="unir-fc-diff-btn hard" onclick="window._unirRateFC('hard')">${svgIcon(SVG.thumbDown, 13)} Difícil (+1d)</button>
             </div>
           </div>
         `;
+        loadFC();
       }
+
+      window._unirToggleSRS = function() {
+        isSRSEnabled = !isSRSEnabled;
+        renderFlashcardMode();
+      };
 
       window._unirSpeakCurrentFC = function(side, e) {
         if (e && e.stopPropagation) e.stopPropagation();
@@ -4559,7 +4623,7 @@ function renderReview(questions, finalPct, passed) {
       };
 
       function loadFC() {
-        if (fcFiltered.length === 0) return;
+        if (!fcFiltered || fcFiltered.length === 0) return;
         const fc = fcFiltered[fcIdx];
         const card = document.getElementById('unir-fc-card');
         if (card) card.classList.remove('flipped');
@@ -4603,6 +4667,9 @@ function renderReview(questions, finalPct, passed) {
         const xpMap = { easy: 1, medium: 3, hard: 5 };
         addXP(xpMap[difficulty] || 1);
         syncToGlobal('flashcard');
+        if (window.SRSManager && fcFiltered[fcIdx]) {
+          window.SRSManager.processReview(fcFiltered[fcIdx], difficulty);
+        }
         if (fcIdx < fcFiltered.length - 1) { fcIdx++; loadFC(); }
       };
 

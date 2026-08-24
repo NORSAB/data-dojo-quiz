@@ -8,7 +8,7 @@
 
 | Entorno | URL de Acceso | Estado |
 | :--- | :--- | :--- |
-| **Producción (Vercel)** | [https://data-dojo-quiz.vercel.app](https://data-dojo-quiz.vercel.app) | **Activo (`v20260824g`)** |
+| **Producción (Vercel)** | [https://data-dojo-quiz.vercel.app](https://data-dojo-quiz.vercel.app) | **Activo (`v20260824h`)** |
 | **GitHub Pages** | [https://norsab.github.io/data-dojo-quiz/](https://norsab.github.io/data-dojo-quiz/) | **Sincronizado** |
 | **Repositorio GitHub** | [https://github.com/NORSAB/data-dojo-quiz](https://github.com/NORSAB/data-dojo-quiz.git) | Rama `main` |
 | **Red Local Unificada** | `http://localhost:5176` o `http://datadojo.local:5176` | Puerto `5176` |
@@ -85,6 +85,16 @@ DATA DOJO ECOSYSTEM (1,744 Preguntas | 167 Temas de Estudio)
 
 > **Nota para Agentes de IA (Claude, Codex, Antigravity, Gemini):**
 > Este registro debe actualizarse obligatoriamente en cada modificación, indicando la versión (`BUILD_TIMESTAMP`), autor del cambio, fecha/hora exacta en hora local (CST / UTC-6) y desglose técnico de archivos modificados.
+
+### `v20260824h` — 24 de Agosto de 2026 | 14:32 CST
+- **Autor / Agente:** Antigravity (Google DeepMind)
+- **Archivos Modificados:** `features.js`, `script.js`, `index.html`, `sw.js`, `README.md`.
+- **Mejoras Implementadas (Uso 100% Personal y Local):**
+  1. **🧠 Repetición Espaciada SM-2 en Flashcards (`F21 - SRSManager`):** Algoritmo SuperMemo-2 (`easeFactor`, `interval`, `dueDate`) que ajusta la curva de olvido según la dificultad seleccionada (*Fácil +6d*, *Regular +3d*, *Difícil +1d*) con filtro inteligente de tarjetas programadas para hoy.
+  2. **🎧 Modo Podcast / Audio Manos Libres (`F22 - PodcastMode`):** Reproductor continuo automatizado con lectura TTS de pregunta, pausa configurable para pensar (3s/5s/8s con contador animado), lectura de respuesta y avance automático en bucle.
+  3. **🧪 Mini Sandbox SQL & Lakehouse Playground (`F23 - SQLSandbox`):** Tab interactiva en el Centro de Estudio con catálogo de tablas en memoria (`bronze_raw_events`, `silver_customers`, `silver_orders`, `gold_monthly_sales`, `genai_vector_chunks`), presets de consultas, soporte de funciones AI simuladas (`ai_classify`), medición de tiempo de ejecución (ms) y exportación a CSV.
+  4. **🤖 Asistente Tutor AI Coach en Feedback (`F24 - AICoach`):** Desglose pedagógico contextual en cada pregunta con *Clave de Certificación*, *Desglose de Trampas Oficiales* y *Regla Mnemotécnica Rápida*.
+  5. **Actualización de Service Worker y Caché PWA:** Bump determinista a `BUILD_TIMESTAMP = '20260824h'` en `sw.js` e `index.html`.
 
 ### `v20260824g` — 24 de Agosto de 2026 | 14:27 CST
 - **Autor / Agente:** Antigravity (Google DeepMind)

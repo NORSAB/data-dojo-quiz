@@ -2473,3 +2473,641 @@ function renderStudyCoach(courseId) {
         detailEl.textContent = readiness.detail;
     }
 }
+
+// ===========================================================================
+// F21: SPACED REPETITION SYSTEM (SM-2 SRS ALGORITHM FOR FLASHCARDS)
+// ===========================================================================
+window.SRSManager = {
+    STORAGE_KEY: 'data_dojo_srs_state',
+
+    getState() {
+        try {
+            return JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '{}');
+        } catch (e) {
+            return {};
+        }
+    },
+
+    saveState(state) {
+        try {
+            localStorage.setItem(this.STORAGE_KEY, JSON.stringify(state));
+        } catch (e) {
+            console.error('Error saving SRS state:', e);
+        }
+    },
+
+    getCardKey(card) {
+        if (!card) return 'unknown';
+        const str = (card.tema || '') + '::' + (card.front || card.pregunta || '').slice(0, 40);
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+            hash = ((hash << 5) - hash) + str.charCodeAt(i);
+            hash |= 0;
+        }
+        return 'card_' + Math.abs(hash);
+    },
+
+    processReview(card, rating) {
+        // rating: 'hard' (grade 1), 'medium' (grade 3), 'easy' (grade 5)
+        const key = this.getCardKey(card);
+        const state = this.getState();
+        let cardState = state[key] || {
+            repetitions: 0,
+            interval: 1,
+            easeFactor: 2.5,
+            dueDate: Date.now(),
+            history: []
+        };
+
+        const grade = rating === 'easy' ? 5 : (rating === 'medium' ? 3 : 1);
+
+        if (grade >= 3) {
+            if (cardState.repetitions === 0) {
+                cardState.interval = 1;
+            } else if (cardState.repetitions === 1) {
+                cardState.interval = 6;
+            } else {
+                cardState.interval = Math.round(cardState.interval * cardState.easeFactor);
+            }
+            cardState.repetitions += 1;
+        } else {
+            cardState.repetitions = 0;
+            cardState.interval = 1;
+        }
+
+        // SM-2 Ease Factor calculation
+        cardState.easeFactor = Math.max(1.3, cardState.easeFactor + (0.1 - (5 - grade) * (0.08 + (5 - grade) * 0.02)));
+        cardState.dueDate = Date.now() + (cardState.interval * 24 * 60 * 60 * 1000);
+        cardState.lastReviewed = Date.now();
+        cardState.history.push({ date: Date.now(), grade, interval: cardState.interval });
+
+        state[key] = cardState;
+        this.saveState(state);
+        return cardState;
+    },
+
+    getDueCards(cards) {
+        if (!Array.isArray(cards)) return [];
+        const state = this.getState();
+        const now = Date.now();
+        return cards.filter(card => {
+            const key = this.getCardKey(card);
+            const cardState = state[key];
+            if (!cardState) return true; // Unreviewed cards are due
+            return cardState.dueDate <= now;
+        });
+    },
+
+    getStats(cards) {
+        if (!Array.isArray(cards)) return { total: 0, due: 0, learned: 0 };
+        const state = this.getState();
+        const now = Date.now();
+        let due = 0;
+        let learned = 0;
+
+        cards.forEach(card => {
+            const key = this.getCardKey(card);
+            const cardState = state[key];
+            if (!cardState || cardState.dueDate <= now) {
+                due++;
+            } else if (cardState.repetitions >= 3) {
+                learned++;
+            }
+        });
+
+        return { total: cards.length, due, learned };
+    }
+};
+
+// ===========================================================================
+// F22: AUDIO PODCAST / HANDS-FREE COMMUTE MODE
+// ===========================================================================
+window.PodcastMode = {
+    isPlaying: false,
+    timer: null,
+    cards: [],
+    currentIndex: 0,
+    pauseSeconds: 5,
+    speed: 1.0,
+    side: 'front', // 'front' | 'think' | 'back'
+
+    start(cards, startIndex = 0) {
+        if (!Array.isArray(cards) || cards.length === 0) return;
+        this.cards = cards;
+        this.currentIndex = startIndex >= 0 && startIndex < cards.length ? startIndex : 0;
+        this.isPlaying = true;
+        this.renderOverlay();
+        this.playCurrentCard();
+    },
+
+    pause() {
+        this.isPlaying = false;
+        if (this.timer) clearTimeout(this.timer);
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        this.updateUI();
+    },
+
+    resume() {
+        if (this.cards.length === 0) return;
+        this.isPlaying = true;
+        this.playCurrentCard();
+    },
+
+    stop() {
+        this.pause();
+        const overlay = document.getElementById('podcast-player-overlay');
+        if (overlay) overlay.remove();
+    },
+
+    next() {
+        if (this.timer) clearTimeout(this.timer);
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        this.currentIndex = (this.currentIndex + 1) % this.cards.length;
+        if (this.isPlaying) {
+            this.playCurrentCard();
+        } else {
+            this.updateUI();
+        }
+    },
+
+    prev() {
+        if (this.timer) clearTimeout(this.timer);
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        this.currentIndex = (this.currentIndex - 1 + this.cards.length) % this.cards.length;
+        if (this.isPlaying) {
+            this.playCurrentCard();
+        } else {
+            this.updateUI();
+        }
+    },
+
+    playCurrentCard() {
+        if (!this.isPlaying) return;
+        const card = this.cards[this.currentIndex];
+        if (!card) {
+            this.stop();
+            return;
+        }
+
+        const lang = typeof getActiveLanguage === 'function' ? getActiveLanguage() : 'es';
+        const questionText = card.front || card.pregunta || card.prompt || '';
+        const answerText = card.back || card.respuesta || card.explanation || '';
+
+        this.side = 'front';
+        this.updateUI();
+
+        // 1. Speak Question
+        window.speakText(questionText, lang, () => {
+            if (!this.isPlaying) return;
+            this.side = 'think';
+            this.updateUI();
+
+            // 2. Countdown Think Pause
+            let remaining = this.pauseSeconds;
+            const step = () => {
+                if (!this.isPlaying) return;
+                const timerEl = document.getElementById('podcast-countdown');
+                if (timerEl) timerEl.textContent = `${remaining}s`;
+                if (remaining > 0) {
+                    remaining--;
+                    this.timer = setTimeout(step, 1000);
+                } else {
+                    // 3. Speak Answer
+                    this.side = 'back';
+                    this.updateUI();
+                    window.speakText(answerText, lang, () => {
+                        if (!this.isPlaying) return;
+                        // 4. Brief pause before next card
+                        this.timer = setTimeout(() => {
+                            this.currentIndex = (this.currentIndex + 1) % this.cards.length;
+                            this.playCurrentCard();
+                        }, 2200);
+                    });
+                }
+            };
+            step();
+        });
+    },
+
+    renderOverlay() {
+        let overlay = document.getElementById('podcast-player-overlay');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.id = 'podcast-player-overlay';
+            overlay.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);width:92%;max-width:760px;background:var(--bg-card,#1e293b);border:1.5px solid #3157d5;border-radius:24px;box-shadow:0 16px 48px rgba(0,0,0,0.35);z-index:10050;padding:18px 24px;color:var(--text-color,#fff);font-family:Inter,sans-serif;animation:slideUp 0.3s ease;';
+            document.body.appendChild(overlay);
+        }
+        this.updateUI();
+    },
+
+    updateUI() {
+        const overlay = document.getElementById('podcast-player-overlay');
+        if (!overlay || this.cards.length === 0) return;
+        const card = this.cards[this.currentIndex];
+        const cardTitle = card.tema || 'Flashcard';
+        const cardText = this.side === 'back' ? (card.back || card.respuesta) : (card.front || card.pregunta);
+
+        overlay.innerHTML = `
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                <div style="display:flex;align-items:center;gap:10px;">
+                    <span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:#3157d5;color:#fff;">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 1a9 9 0 00-9 9v7c0 1.66 1.34 3 3 3h3v-8H5v-2a7 7 0 0114 0v2h-4v8h3c1.66 0 3-1.34 3-3v-7a9 9 0 00-9-9z"/></svg>
+                    </span>
+                    <span style="font-weight:700;font-size:0.95rem;color:#3157d5;">MODO PODCAST / MANOS LIBRES</span>
+                    <span style="font-size:0.8rem;background:rgba(49,87,213,0.15);padding:2px 8px;border-radius:10px;font-weight:600;">${this.currentIndex + 1} / ${this.cards.length}</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                    <span id="podcast-status-badge" style="font-size:0.78rem;padding:3px 10px;border-radius:12px;font-weight:700;${this.side === 'front' ? 'background:#3b82f6;color:#fff;' : (this.side === 'think' ? 'background:#eab308;color:#000;' : 'background:#22c55e;color:#fff;')}">
+                        ${this.side === 'front' ? '🎙️ Pregunta' : (this.side === 'think' ? '⏳ Pensando...' : '🔊 Respuesta')}
+                    </span>
+                    <button type="button" onclick="window.PodcastMode.stop()" style="background:transparent;border:none;color:var(--text-muted,#94a3b8);cursor:pointer;padding:4px;" title="Cerrar">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <div style="font-size:0.85rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted,#94a3b8);margin-bottom:4px;">${cardTitle}</div>
+            <div style="font-size:1.05rem;line-height:1.5;max-height:80px;overflow-y:auto;margin-bottom:14px;color:var(--text-color,#f1f5f9);">
+                ${cardText}
+            </div>
+
+            <div style="display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid rgba(255,255,255,0.1);">
+                <div style="display:flex;align-items:center;gap:6px;font-size:0.8rem;">
+                    <span>Pausa:</span>
+                    <select onchange="window.PodcastMode.pauseSeconds = parseInt(this.value)" style="padding:3px 8px;border-radius:10px;background:rgba(255,255,255,0.1);color:inherit;border:1px solid rgba(255,255,255,0.2);font-size:0.8rem;">
+                        <option value="3" ${this.pauseSeconds === 3 ? 'selected' : ''}>3s</option>
+                        <option value="5" ${this.pauseSeconds === 5 ? 'selected' : ''}>5s</option>
+                        <option value="8" ${this.pauseSeconds === 8 ? 'selected' : ''}>8s</option>
+                    </select>
+                </div>
+
+                <div style="display:flex;align-items:center;gap:12px;">
+                    <button type="button" onclick="window.PodcastMode.prev()" class="btn-icon-modern" style="width:36px;height:36px;border-radius:50%;" title="Anterior">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+                    </button>
+
+                    <button type="button" onclick="${this.isPlaying ? 'window.PodcastMode.pause()' : 'window.PodcastMode.resume()'}" style="width:46px;height:46px;border-radius:50%;background:#3157d5;color:#fff;border:none;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 14px rgba(49,87,213,0.4);" title="${this.isPlaying ? 'Pausar' : 'Reanudar'}">
+                        ${this.isPlaying 
+                            ? '<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>'
+                            : '<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>'
+                        }
+                    </button>
+
+                    <button type="button" onclick="window.PodcastMode.next()" class="btn-icon-modern" style="width:36px;height:36px;border-radius:50%;" title="Siguiente">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+                    </button>
+                </div>
+
+                <div id="podcast-countdown" style="font-weight:800;font-size:1.1rem;color:#eab308;min-width:32px;text-align:right;">
+                    ${this.side === 'think' ? this.pauseSeconds + 's' : ''}
+                </div>
+            </div>
+        `;
+    }
+};
+
+// ===========================================================================
+// F23: INTERACTIVE CLIENT-SIDE SQL SANDBOX & QUERY RUNNER
+// ===========================================================================
+window.SQLSandbox = {
+    tables: {
+        bronze_raw_events: [
+            { event_id: 'evt_101', user_id: 'usr_801', event_type: 'page_view', payload_size_kb: 4.2, ingestion_time: '2026-08-24 10:15:00' },
+            { event_id: 'evt_102', user_id: 'usr_802', event_type: 'cart_add', payload_size_kb: 8.7, ingestion_time: '2026-08-24 10:15:22' },
+            { event_id: 'evt_103', user_id: 'usr_801', event_type: 'checkout_click', payload_size_kb: 12.1, ingestion_time: '2026-08-24 10:16:05' },
+            { event_id: 'evt_104', user_id: 'usr_803', event_type: 'page_view', payload_size_kb: 3.9, ingestion_time: '2026-08-24 10:17:40' },
+            { event_id: 'evt_105', user_id: 'usr_804', event_type: 'search_query', payload_size_kb: 6.5, ingestion_time: '2026-08-24 10:18:11' }
+        ],
+        silver_customers: [
+            { customer_id: 'c_01', full_name: 'Elena Rostova', email: 'elena@bi-lab.org', segment: 'Enterprise', country: 'Honduras', credit_score: 785 },
+            { customer_id: 'c_02', full_name: 'Marcus Vance', email: 'marcus@dataflow.io', segment: 'Growth', country: 'Costa Rica', credit_score: 720 },
+            { customer_id: 'c_03', full_name: 'Sofia Chen', email: 'sofia@lakehouse.ai', segment: 'Enterprise', country: 'Guatemala', credit_score: 810 },
+            { customer_id: 'c_04', full_name: 'Diego Morales', email: 'diego@unir-viz.es', segment: 'Standard', country: 'Panama', credit_score: 690 },
+            { customer_id: 'c_05', full_name: 'Lucia Mendez', email: 'lucia@genai-hub.com', segment: 'Growth', country: 'El Salvador', credit_score: 745 }
+        ],
+        silver_orders: [
+            { order_id: 'ord_501', customer_id: 'c_01', amount_usd: 1450.00, order_date: '2026-08-20', status: 'Delivered', category: 'Analytics Pro' },
+            { order_id: 'ord_502', customer_id: 'c_02', amount_usd: 850.50, order_date: '2026-08-21', status: 'Delivered', category: 'Compute Cluster' },
+            { order_id: 'ord_503', customer_id: 'c_03', amount_usd: 3200.00, order_date: '2026-08-22', status: 'Delivered', category: 'GenAI Endpoint' },
+            { order_id: 'ord_504', customer_id: 'c_01', amount_usd: 950.00, order_date: '2026-08-23', status: 'Processing', category: 'Unity Catalog Addon' },
+            { order_id: 'ord_505', customer_id: 'c_04', amount_usd: 420.00, order_date: '2026-08-24', status: 'Delivered', category: 'Analytics Pro' }
+        ],
+        gold_monthly_sales: [
+            { month: '2026-06', category: 'GenAI Endpoint', total_sales_usd: 125000, total_orders: 45, avg_order_val: 2777.78 },
+            { month: '2026-07', category: 'GenAI Endpoint', total_sales_usd: 184000, total_orders: 62, avg_order_val: 2967.74 },
+            { month: '2026-08', category: 'GenAI Endpoint', total_sales_usd: 215000, total_orders: 78, avg_order_val: 2756.41 },
+            { month: '2026-08', category: 'Analytics Pro', total_sales_usd: 98000, total_orders: 85, avg_order_val: 1152.94 }
+        ],
+        genai_vector_chunks: [
+            { chunk_id: 'chk_001', doc_title: 'Databricks Mosaic Vector Search', tokens: 256, similarity_score: 0.94, text_snippet: 'Delta Sync Index automatically synchronizes embeddings when the source Delta table updates.' },
+            { chunk_id: 'chk_002', doc_title: 'Model Serving Pay-per-Token', tokens: 198, similarity_score: 0.88, text_snippet: 'Pay-per-token pricing is ideal for spiky workloads and quick agent prototyping without reserved compute.' },
+            { chunk_id: 'chk_003', doc_title: 'Unity Catalog AI Functions', tokens: 312, similarity_score: 0.82, text_snippet: 'ai_query and ai_classify allow SQL analysts to invoke LLMs directly inside batch queries.' }
+        ]
+    },
+
+    presets: [
+        {
+            title: '1. Clientes Silver con Filtro (WHERE + ORDER BY)',
+            sql: 'SELECT customer_id, full_name, segment, country, credit_score\nFROM silver_customers\nWHERE credit_score >= 720\nORDER BY credit_score DESC;'
+        },
+        {
+            title: '2. Total de Ventas por Categoría (GROUP BY + SUM)',
+            sql: 'SELECT category, COUNT(*) AS order_count, SUM(amount_usd) AS total_revenue_usd, AVG(amount_usd) AS avg_ticket\nFROM silver_orders\nGROUP BY category\nORDER BY total_revenue_usd DESC;'
+        },
+        {
+            title: '3. Clasificación con Función AI (ai_classify simulado)',
+            sql: 'SELECT full_name, segment, credit_score, ai_classify(segment, ARRAY("VIP", "Standard")) AS tier_evaluation\nFROM silver_customers;'
+        },
+        {
+            title: '4. Chunks de Vector Search Relevantes (Similarity >= 0.85)',
+            sql: 'SELECT chunk_id, doc_title, similarity_score, text_snippet\nFROM genai_vector_chunks\nWHERE similarity_score >= 0.85\nORDER BY similarity_score DESC;'
+        }
+    ],
+
+    render(container) {
+        if (!container) return;
+        const tablesList = Object.keys(this.tables);
+
+        container.innerHTML = `
+            <div class="sql-sandbox-wrap" style="padding:20px;max-width:1480px;margin:0 auto;font-family:Inter,sans-serif;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:12px;">
+                    <div>
+                        <h2 style="margin:0 0 6px;font-size:1.6rem;font-weight:800;display:flex;align-items:center;gap:10px;">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="#3157d5"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>
+                            Mini SQL Sandbox & Lakehouse Playground
+                        </h2>
+                        <div style="font-size:0.9rem;color:var(--text-muted,#64748b);">Ejecuta consultas SQL en memoria sobre tablas de catálogo Lakehouse (Bronze, Silver, Gold y GenAI).</div>
+                    </div>
+                    <div style="display:flex;gap:8px;align-items:center;">
+                        <select id="sql-sandbox-presets" onchange="window.SQLSandbox.loadPreset(this.value)" style="padding:8px 14px;border-radius:12px;border:1px solid var(--border-color,#e5e7eb);background:var(--bg-card,#fff);color:var(--text-color,#333);font-size:0.85rem;font-weight:600;">
+                            <option value="">-- Cargar Consulta de Ejemplo --</option>
+                            ${this.presets.map((p, idx) => `<option value="${idx}">${p.title}</option>`).join('')}
+                        </select>
+                    </div>
+                </div>
+
+                <div style="display:grid;grid-template-columns:260px 1fr;gap:20px;align-items:start;">
+                    <!-- Sidebar: Tables Explorer -->
+                    <div style="background:var(--bg-card,#fff);border:1px solid var(--border-color,#e5e7eb);border-radius:16px;padding:16px;">
+                        <div style="font-weight:800;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px;color:var(--text-muted,#64748b);display:flex;align-items:center;gap:6px;">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/></svg>
+                            Tablas Disponibles
+                        </div>
+                        <div style="display:flex;flex-direction:column;gap:8px;">
+                            ${tablesList.map(tbl => `
+                                <div style="padding:8px 12px;border-radius:10px;background:rgba(49,87,213,0.06);border:1px solid rgba(49,87,213,0.12);font-family:monospace;font-size:0.82rem;cursor:pointer;" onclick="window.SQLSandbox.insertTable('${tbl}')" title="Clic para consultar">
+                                    <strong>${tbl}</strong>
+                                    <div style="font-size:0.75rem;color:var(--text-muted,#64748b);margin-top:2px;">${this.tables[tbl].length} filas</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Editor and Results Area -->
+                    <div>
+                        <div style="background:#111827;border-radius:16px 16px 0 0;padding:12px 18px;display:flex;justify-content:space-between;align-items:center;border:1px solid #1f2937;">
+                            <span style="color:#94a3b8;font-family:monospace;font-size:0.82rem;">Databricks SQL Warehouse (Serverless)</span>
+                            <div style="display:flex;gap:8px;">
+                                <button type="button" onclick="window.SQLSandbox.clearEditor()" class="btn btn-sm" style="background:rgba(255,255,255,0.1);color:#fff;border:none;padding:4px 10px;border-radius:8px;font-size:0.78rem;cursor:pointer;">Limpiar</button>
+                                <button type="button" onclick="window.SQLSandbox.executeQuery()" class="btn btn-sm btn-primary" style="padding:4px 14px;border-radius:8px;font-weight:700;font-size:0.82rem;display:inline-flex;align-items:center;gap:6px;">
+                                    <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> Ejecutar (Ctrl+Enter)
+                                </button>
+                            </div>
+                        </div>
+                        <textarea id="sql-sandbox-input" style="width:100%;height:140px;padding:16px;background:#1e293b;color:#f8fafc;font-family:'JetBrains Mono',monospace;font-size:0.95rem;border:1px solid #1f2937;border-top:none;outline:none;resize:vertical;line-height:1.5;">${this.presets[0].sql}</textarea>
+
+                        <!-- Results Box -->
+                        <div id="sql-sandbox-results" style="margin-top:16px;background:var(--bg-card,#fff);border:1px solid var(--border-color,#e5e7eb);border-radius:16px;padding:20px;min-height:160px;">
+                            <div style="color:var(--text-muted,#64748b);font-size:0.9rem;text-align:center;padding:2rem;">Haz clic en <strong>Ejecutar</strong> para procesar la consulta SQL.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Keyboard shortcut Ctrl+Enter to execute
+        const textarea = document.getElementById('sql-sandbox-input');
+        if (textarea) {
+            textarea.addEventListener('keydown', (e) => {
+                if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                    e.preventDefault();
+                    this.executeQuery();
+                }
+            });
+        }
+    },
+
+    loadPreset(idx) {
+        if (idx === '') return;
+        const p = this.presets[parseInt(idx)];
+        if (!p) return;
+        const textarea = document.getElementById('sql-sandbox-input');
+        if (textarea) {
+            textarea.value = p.sql;
+            this.executeQuery();
+        }
+    },
+
+    insertTable(tbl) {
+        const textarea = document.getElementById('sql-sandbox-input');
+        if (textarea) {
+            textarea.value = `SELECT *\nFROM ${tbl}\nLIMIT 10;`;
+            this.executeQuery();
+        }
+    },
+
+    clearEditor() {
+        const textarea = document.getElementById('sql-sandbox-input');
+        if (textarea) textarea.value = '';
+    },
+
+    executeQuery() {
+        const textarea = document.getElementById('sql-sandbox-input');
+        const resultsEl = document.getElementById('sql-sandbox-results');
+        if (!textarea || !resultsEl) return;
+
+        const rawSql = textarea.value.trim();
+        if (!rawSql) {
+            resultsEl.innerHTML = '<div style="color:var(--danger-color,#ef4444);">Por favor escribe una consulta SQL.</div>';
+            return;
+        }
+
+        const t0 = performance.now();
+
+        // 1. Detect target table
+        const fromMatch = rawSql.match(/FROM\s+([a-zA-Z0-9_]+)/i);
+        if (!fromMatch) {
+            resultsEl.innerHTML = '<div style="color:var(--danger-color,#ef4444);">Error de sintaxis: Cláusula FROM no encontrada.</div>';
+            return;
+        }
+
+        const tableName = fromMatch[1].toLowerCase();
+        const sourceData = this.tables[tableName];
+
+        if (!sourceData) {
+            resultsEl.innerHTML = `<div style="color:var(--danger-color,#ef4444);">Tabla no encontrada: <code>${tableName}</code>. Tablas válidas: ${Object.keys(this.tables).join(', ')}.</div>`;
+            return;
+        }
+
+        let rows = [...sourceData];
+
+        // 2. WHERE filter simulation
+        const whereMatch = rawSql.match(/WHERE\s+([^GROUP|ORDER|LIMIT|;]+)/i);
+        if (whereMatch) {
+            const cond = whereMatch[1].trim();
+            rows = rows.filter(r => {
+                try {
+                    if (cond.includes('>=')) {
+                        const [col, val] = cond.split('>=').map(s => s.trim().replace(/['"]/g, ''));
+                        return Number(r[col]) >= Number(val);
+                    } else if (cond.includes('<=')) {
+                        const [col, val] = cond.split('<=').map(s => s.trim().replace(/['"]/g, ''));
+                        return Number(r[col]) <= Number(val);
+                    } else if (cond.includes('=')) {
+                        const [col, val] = cond.split('=').map(s => s.trim().replace(/['"]/g, ''));
+                        return String(r[col]).toLowerCase() === String(val).toLowerCase();
+                    }
+                    return true;
+                } catch (e) {
+                    return true;
+                }
+            });
+        }
+
+        // 3. GROUP BY simulation
+        const groupMatch = rawSql.match(/GROUP\s+BY\s+([a-zA-Z0-9_]+)/i);
+        if (groupMatch) {
+            const groupCol = groupMatch[1].trim();
+            const groups = {};
+            rows.forEach(r => {
+                const key = r[groupCol] || 'Other';
+                if (!groups[key]) groups[key] = { items: [], count: 0, sumAmount: 0 };
+                groups[key].items.push(r);
+                groups[key].count++;
+                groups[key].sumAmount += Number(r.amount_usd || r.total_sales_usd || 0);
+            });
+
+            rows = Object.keys(groups).map(g => ({
+                [groupCol]: g,
+                order_count: groups[g].count,
+                total_revenue_usd: groups[g].sumAmount.toFixed(2),
+                avg_ticket: (groups[g].sumAmount / groups[g].count).toFixed(2)
+            }));
+        }
+
+        // 4. AI Function simulation (ai_classify)
+        if (rawSql.includes('ai_classify')) {
+            rows = rows.map(r => ({
+                ...r,
+                tier_evaluation: (r.credit_score && r.credit_score >= 750) || r.segment === 'Enterprise' ? 'VIP' : 'Standard'
+            }));
+        }
+
+        // 5. ORDER BY simulation
+        const orderMatch = rawSql.match(/ORDER\s+BY\s+([a-zA-Z0-9_]+)(?:\s+(ASC|DESC))?/i);
+        if (orderMatch) {
+            const orderCol = orderMatch[1].trim();
+            const isDesc = (orderMatch[2] || '').toUpperCase() === 'DESC';
+            rows.sort((a, b) => {
+                const va = a[orderCol];
+                const vb = b[orderCol];
+                if (typeof va === 'number' && typeof vb === 'number') {
+                    return isDesc ? vb - va : va - vb;
+                }
+                return isDesc ? String(vb).localeCompare(String(va)) : String(va).localeCompare(String(vb));
+            });
+        }
+
+        const t1 = performance.now();
+        const execTimeMs = (t1 - t0).toFixed(2);
+
+        if (rows.length === 0) {
+            resultsEl.innerHTML = `
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                    <span style="font-size:0.82rem;color:var(--text-muted,#64748b);">0 filas devueltas (en ${execTimeMs} ms)</span>
+                </div>
+                <div style="text-align:center;padding:1.5rem;color:var(--text-muted,#64748b);">Ninguna fila cumple las condiciones especificadas.</div>
+            `;
+            return;
+        }
+
+        const cols = Object.keys(rows[0]);
+
+        resultsEl.innerHTML = `
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
+                <div style="font-size:0.85rem;color:var(--text-muted,#64748b);display:flex;align-items:center;gap:8px;">
+                    <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#22c55e;"></span>
+                    <span><strong>${rows.length}</strong> fila${rows.length === 1 ? '' : 's'} devuelta${rows.length === 1 ? '' : 's'}</span>
+                    <span>•</span>
+                    <span>Tiempo de ejecución: <strong>${execTimeMs} ms</strong></span>
+                </div>
+                <button type="button" onclick="window.SQLSandbox.exportCSV()" class="btn btn-sm btn-outline" style="padding:3px 10px;border-radius:8px;font-size:0.75rem;cursor:pointer;">
+                    📥 Exportar CSV
+                </button>
+            </div>
+
+            <div style="overflow-x:auto;border:1px solid var(--border-color,#e5e7eb);border-radius:10px;">
+                <table style="width:100%;border-collapse:collapse;font-size:0.88rem;text-align:left;">
+                    <thead>
+                        <tr style="background:var(--study-accent-soft,rgba(49,87,213,0.08));border-bottom:1px solid var(--border-color,#e5e7eb);">
+                            ${cols.map(c => `<th style="padding:10px 14px;font-weight:700;color:var(--primary-color,#3157d5);">${c}</th>`).join('')}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${rows.map(r => `
+                            <tr style="border-bottom:1px solid var(--border-color,#e5e7eb);">
+                                ${cols.map(c => `<td style="padding:10px 14px;font-family:monospace;font-size:0.84rem;">${r[c] !== undefined && r[c] !== null ? r[c] : 'NULL'}</td>`).join('')}
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>
+        `;
+
+        this._lastRows = rows;
+    },
+
+    exportCSV() {
+        if (!this._lastRows || this._lastRows.length === 0) return;
+        const cols = Object.keys(this._lastRows[0]);
+        const csvContent = [
+            cols.join(','),
+            ...this._lastRows.map(r => cols.map(c => `"${String(r[c] || '').replace(/"/g, '""')}"`).join(','))
+        ].join('\n');
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.setAttribute('href', url);
+        link.setAttribute('download', `data_dojo_query_${Date.now()}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+};
+
+// ===========================================================================
+// F24: AI COACH & DEEP EXAM BREAKDOWN GENERATOR
+// ===========================================================================
+window.AICoach = {
+    generateBreakdown(question) {
+        if (!question) return null;
+        const prompt = question.prompt || '';
+        const explanation = question.explanation || '';
+        const domain = question.domain || 'Core Knowledge';
+
+        return {
+            domain,
+            examKey: `Esta pregunta evalúa la capacidad de tomar decisiones arquitectónicas sobre ${domain}. En exámenes oficiales, el criterio prioritario es siempre la gobernanza unificada (Unity Catalog) y la relación costo-rendimiento.`,
+            pitfalls: `Los distractores comunes suelen proponer soluciones que aumentan el costo innecesariamente (ej. aprovisionar clusters dedicados cuando Pay-per-token o Serverless es más eficiente) o configurar permisos legacy fuera de Unity Catalog.`,
+            ruleOfThumb: `Regla de Oro: Si la carga es intermitente o para prototipos → Serverless / Pay-per-token. Si se requiere sincronización automática de embeddings → Vector Search Delta Sync Index.`
+        };
+    },
+
+    toggleBreakdown(index) {
+        const container = document.getElementById(`ai-coach-breakdown-${index}`);
+        if (!container) return;
+        const isHidden = container.style.display === 'none';
+        container.style.display = isHidden ? 'block' : 'none';
+    }
+};
