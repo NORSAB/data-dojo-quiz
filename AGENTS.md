@@ -208,6 +208,18 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
 - La preferencia guardada del navegador integrado bloqueó `127.0.0.1`; no se intentó eludirla. La validación automática se ejecutó antes del push y el pase visual se completó inmediatamente en ambos despliegues públicos antes de cerrar la sesión.
 - Conservó fuera de los commits los artefactos locales previos `.genai_translation_work/`, `__pycache__/` y `translation_cache_genai.json`.
 
+### 2026-08-23 22:38 CST — Codex (GPT-5)
+- Implementó un único selector global persistente **ES/EN** en el encabezado, disponible desde la bienvenida, el menú, modales, Centro de Estudio, examen activo y modo Zen. La preferencia se conserva en `localStorage` con la clave `app_language` y ya no existe una configuración de idioma independiente por curso.
+- Creó `app_i18n.js` como fuente central de traducciones de interfaz y conectó las pantallas generadas dinámicamente mediante `app-language-change`. El cambio ocurre sobre la vista activa: no sale del módulo, no cambia de pestaña, no cierra categorías abiertas, no reinicia el temporizador y conserva la opción seleccionada en una pregunta.
+- Reemplazó el botón de traducción local del examen por un puente bidireccional que usa preguntas gemelas `id` / `id-es` y mantiene la traducción legada de `databricks-da`. Los cursos que solo disponen de contenido en un idioma conservan ese contenido original, mientras toda la interfaz permanece en el idioma global elegido.
+- Unificó el idioma de Estudiar, Términos, Escenarios, Flashcards y Comandos; eliminó los selectores internos que competían con el global. Las subsecciones continúan iniciando contraídas.
+- Corrigió los paneles derivados para que un banco gemelo EN/ES no duplique preguntas ni dominios: GenAI muestra **383 preguntas y 6 dominios por idioma**, no 766 preguntas ni 12 dominios. Los IDs `-es` se normalizan para conservar las estadísticas al alternar idioma.
+- Creó `tools/validate_global_language.js`, amplió `tools/validate_ui_palette.js` y validó: idioma global, 383 EN + 383 ES, 6 dominios, 65 subdominios, 35 temas, 96 flashcards, 65 términos, 24 escenarios, compatibilidad Supabase, 18 colores hex, 0 gradientes, 0 funciones duplicadas y 0 IDs HTML duplicados.
+- Publicó el commit `c8123ec` (`feat: add persistent global language selector`) en `origin/main`, con PWA `BUILD_TIMESTAMP = 20260823i` y caché `simulador-v24`.
+- Verificó mediante clic real **Vercel** y **GitHub Pages**: ambos sirven CSS/JS `20260823i` y cambian la bienvenida ES↔EN. En Vercel verificó además 6 dominios, 383 preguntas, estudio inicialmente contraído, términos inicialmente contraídos y una categoría abierta que permanece abierta y en la misma pestaña al cambiar de idioma.
+- Durante el QA local expiró una sesión aislada de una pregunta y apareció una entrada de prueba `0/1` en el historial local; las demás sesiones se cerraron antes de finalizar y no se alteraron respuestas ni certificaciones.
+- Conservó fuera de los commits los artefactos locales previos `.genai_translation_work/`, `__pycache__/` y `translation_cache_genai.json`.
+
 ### 2026-08-23 22:02 CST — Codex (GPT-5)
 - Corrigió el nivel intermedio que seguía desplegado en el Centro de Estudio: las categorías internas de **Términos/Conceptos, Escenarios, Personajes y Comandos** ahora inician contraídas y muestran únicamente sus encabezados. Al abrir una categoría aparecen sus fichas; cada ficha mantiene su propio segundo nivel cerrado.
 - Agregó controles accesibles con botones, `aria-expanded`, `aria-controls`, contenido `hidden` y un indicador SVG. Actualizó `Expandir Todos` y `Contraer Todos` para sincronizar tanto las categorías como sus fichas, sin introducir colores decorativos nuevos.
@@ -218,3 +230,7 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
 - Verificó mediante clic real en **Vercel** y **GitHub Pages**: ambos sirven CSS y JavaScript `20260823h`; Términos muestra 6 encabezados, 6 cerrados, 0 grupos desplegados y 0 fichas visibles al entrar; Escenarios muestra 6 encabezados cerrados, 0 grupos desplegados y 0 escenarios visibles. También confirmó la apertura de un único dominio, la apertura individual de una ficha, `Contraer Todos` y el estado cerrado en temas claro y oscuro.
 - La apertura funcional del primer término durante el QA registró correctamente **1/65 leído y +5 XP** en el perfil sincronizado; no fue un cambio manual de datos.
 - Conservó fuera de los commits los artefactos locales previos `.genai_translation_work/`, `__pycache__/` y `translation_cache_genai.json`.
+
+### 2026-08-23 22:39 CST — Codex (GPT-5) — Cierre de sesión
+- La entrada detallada de esta sesión es la de **2026-08-23 22:38 CST** inmediatamente anterior en esta bitácora. Esta referencia se agrega al final para restablecer el cierre append-only después de que la inserción automática la ubicara antes de la entrada 22:02, sin borrar ni mover contenido histórico.
+- Estado final confirmado: commit funcional `c8123ec` publicado; Vercel y GitHub Pages sirven `20260823i`; selector global ES/EN y estados contraídos verificados mediante clic real.
