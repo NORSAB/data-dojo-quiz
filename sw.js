@@ -4,15 +4,15 @@
 // Codex (GPT-5) | 2026-08-23 21:55 CST | Fuerza la actualización del estado contraído en todas las subsecciones de estudio.
 // Codex (GPT-5) | 2026-08-23 22:00 CST | Versiona también script.js tras detectar caché HTTP anterior en GitHub Pages.
 // Codex (GPT-5) | 2026-08-23 22:17 CST | Publica el selector global persistente y sus puentes de traducción.
-const BUILD_TIMESTAMP = '20260823i';
-const CACHE_NAME = `simulador-v24-${BUILD_TIMESTAMP}`;
+const BUILD_TIMESTAMP = '20260824a';
+const CACHE_NAME = `simulador-v25-${BUILD_TIMESTAMP}`;
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './styles.css?v=20260823i',
-  './app_i18n.js?v=20260823i',
-  './script.js?v=20260823i',
-  './features.js?v=20260823i',
+  './styles.css?v=20260824a',
+  './app_i18n.js?v=20260824a',
+  './script.js?v=20260824a',
+  './features.js?v=20260824a',
   './hero_data.js',
   './auto_restore_data.js',
   './manifest.json',

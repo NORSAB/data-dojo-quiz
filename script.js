@@ -2096,7 +2096,6 @@ const badgesConfig = [
         return;
     }
     // -----------------------------
-    
         if (q.scenarioText) {
           scenarioBlock.textContent = q.scenarioText;
           scenarioBlock.classList.remove("hidden");
@@ -2298,8 +2297,6 @@ const badgesConfig = [
               correctContainer.style.padding = "10px";
               correctContainer.style.border = "2px solid var(--success-color)";
               correctContainer.style.borderRadius = "8px";
-              correctContainer.style.backgroundColor = "rgba(40, 167, 69, 0.1)";
-
               const header = document.createElement("h5");
               header.textContent = lbls.ans || "Respuesta Correcta:";
               header.style.color = "var(--success-color)";
@@ -2325,34 +2322,47 @@ const badgesConfig = [
               optionsList.appendChild(correctContainer);
           }
         } else {
-          optionsToRender.forEach((opt) => {
-            const el = document.createElement("div");
-            el.className = "option-item";
-            el.dataset.id = opt.id;
-            if (opt.blocks) {
-                 renderBlocks(el, opt.blocks, opt.text);
-            } else if (window.marked) {
-                 el.innerHTML = marked.parse(opt.text, { breaks: true, gfm: true });
-            } else {
-                 el.textContent = opt.text;
-            }
-            // Selection state (visual)
-            if (isAnswered && answeredData.selected && answeredData.selected.includes(opt.id)) {
-                el.classList.add("selected");
-            }
-    
-            if (isSubmitted) {
-              // Show Correct/Incorrect styling immediately if submitted
-              if (q.correctIds.includes(opt.id)) el.classList.add("correct");
-              else if (answeredData.selected && answeredData.selected.includes(opt.id))
-                el.classList.add("incorrect");
-    
-              el.style.pointerEvents = "none";
-            } else {
-              el.onclick = () => selectOption(el, q.type);
-            }
-            optionsList.appendChild(el);
-          });
+           const keyLetters = ["A", "B", "C", "D", "E", "F"];
+           optionsToRender.forEach((opt, optIdx) => {
+             const el = document.createElement("div");
+             el.className = "option-item";
+             el.dataset.id = opt.id;
+             el.dataset.index = optIdx;
+
+             const badge = document.createElement("span");
+             badge.className = "option-key-badge";
+             badge.textContent = keyLetters[optIdx] || (optIdx + 1);
+             el.appendChild(badge);
+
+             const contentWrapper = document.createElement("div");
+             contentWrapper.className = "option-content-wrapper";
+
+             if (opt.blocks) {
+                  renderBlocks(contentWrapper, opt.blocks, opt.text);
+             } else if (window.marked) {
+                  contentWrapper.innerHTML = marked.parse(opt.text, { breaks: true, gfm: true });
+             } else {
+                  contentWrapper.textContent = opt.text;
+             }
+             el.appendChild(contentWrapper);
+
+             // Selection state (visual)
+             if (isAnswered && answeredData.selected && answeredData.selected.includes(opt.id)) {
+                 el.classList.add("selected");
+             }
+     
+             if (isSubmitted) {
+               // Show Correct/Incorrect styling immediately if submitted
+               if (q.correctIds.includes(opt.id)) el.classList.add("correct");
+               else if (answeredData.selected && answeredData.selected.includes(opt.id))
+                 el.classList.add("incorrect");
+     
+               el.style.pointerEvents = "none";
+             } else {
+               el.onclick = () => selectOption(el, q.type);
+             }
+             optionsList.appendChild(el);
+           });
         }
     
         if (window.MathJax) MathJax.typesetPromise([questionText, optionsList]);
@@ -2370,6 +2380,7 @@ const badgesConfig = [
                  checkBtn.classList.remove("hidden");
              }
         }
+        if (typeof updateFlagButtonUI === 'function') updateFlagButtonUI();
         updateQuestionMap();
     } catch (err) {
         console.error("LOAD QUESTION ERROR:", err);
@@ -2377,7 +2388,6 @@ const badgesConfig = [
         const qt = document.getElementById("question-text");
         if (qt) {
              qt.innerHTML = `<div style="color:var(--danger-color, #b42318); font-weight:bold; padding:1rem; border:1px solid var(--danger-color, #b42318);">
-             ERROR LOADING QUESTION:<br>
              ${err.message}
              <br><small>${err.stack}</small>
              </div>`;
@@ -2531,12 +2541,41 @@ const badgesConfig = [
     updateQuestionMap();
   }
 
-  // --- New Modal Elements ---
+  // --- Modal Elements ---
   const confirmModal = document.getElementById("confirm-modal");
   const confirmContinueBtn = document.getElementById("confirm-continue");
   const confirmFinishBtn = document.getElementById("confirm-finish");
   const finishBtnTop = document.getElementById("finish-btn-top");
 
+  // --- Question Flagging (Mark for Review) ---
+  const flaggedQuestions = new Set();
+  window.flaggedQuestions = flaggedQuestions;
+
+  function toggleFlagCurrentQuestion() {
+    if (flaggedQuestions.has(currentQuestionIndex)) {
+      flaggedQuestions.delete(currentQuestionIndex);
+    } else {
+      flaggedQuestions.add(currentQuestionIndex);
+    }
+    updateFlagButtonUI();
+    updateQuestionMap();
+  }
+  window.toggleFlagCurrentQuestion = toggleFlagCurrentQuestion;
+
+  function updateFlagButtonUI() {
+    const flagBtn = document.getElementById("flag-question-btn");
+    if (!flagBtn) return;
+    const isFlagged = flaggedQuestions.has(currentQuestionIndex);
+    const lang = getActiveLanguage();
+    if (isFlagged) {
+      flagBtn.classList.add("flagged");
+      flagBtn.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg> <span>${lang === 'es' ? 'Marcada (F)' : 'Flagged (F)'}</span>`;
+    } else {
+      flagBtn.classList.remove("flagged");
+      flagBtn.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg> <span>${lang === 'es' ? 'Marcar (F)' : 'Flag (F)'}</span>`;
+    }
+  }
+  window.updateFlagButtonUI = updateFlagButtonUI;
 
   function updateQuestionMap() {
     // Reset all specific statuses first, keep base class
@@ -2551,19 +2590,21 @@ const badgesConfig = [
       const node = document.getElementById(`map-node-${idx}`);
       
       if (node && ans && ans.selected && ans.selected.length > 0) {
-          // User requested GREEN for any answered question
           node.classList.add("answered");
       }
     });
 
-    // Current overrides everything with Yellow
+    // Mark flagged nodes
+    flaggedQuestions.forEach((idx) => {
+      const node = document.getElementById(`map-node-${idx}`);
+      if (node) node.classList.add("flagged");
+    });
+
+    // Current overrides everything with Yellow/Active
     const current = document.getElementById(`map-node-${currentQuestionIndex}`);
     if (current) {
-        current.classList.remove("answered"); // Keep distinct? Or combine? User said "Current in Yellow".
-        // If we want to show it IS answered but currently active, we could specific style.
-        // But user request was specific: "amarilla current, verde las que tienen respuesta".
-        // Implicitly, if it is current, it is yellow.
-        current.className = "map-node active";
+        current.classList.remove("answered");
+        current.className = `map-node active${flaggedQuestions.has(currentQuestionIndex) ? ' flagged' : ''}`;
     }
   }
 
@@ -2572,20 +2613,29 @@ const badgesConfig = [
     const total = currentQuizQuestions.length;
     // Count questions that have ANY selection
     const answeredCount = Object.values(userAnswers).filter(a => a.selected && a.selected.length > 0).length;
+    const unansweredCount = total - answeredCount;
+    const flaggedCount = flaggedQuestions.size;
     
-    console.log(`Total: ${total}, With Selection: ${answeredCount}`);
+    console.log(`Total: ${total}, With Selection: ${answeredCount}, Flagged: ${flaggedCount}`);
 
-    if (answeredCount < total) {
-       // Show Custom Modal
-       confirmModal.classList.remove("hidden");
+    if (unansweredCount > 0 || flaggedCount > 0) {
+       // Show Custom Modal with detailed breakdown
+       const msgEl = document.getElementById("confirm-msg");
+       const lang = getActiveLanguage();
+       if (msgEl) {
+         if (lang === 'es') {
+           msgEl.innerHTML = `Tienes <strong>${answeredCount}/${total}</strong> preguntas respondidas.<br>${unansweredCount > 0 ? `Quedan <strong style="color:var(--danger-color);">${unansweredCount}</strong> sin responder.<br>` : ''}${flaggedCount > 0 ? `Tienes <strong style="color:#d97706;">${flaggedCount}</strong> marcadas para revisión.<br>` : ''}¿Deseas finalizar el examen ahora?`;
+         } else {
+           msgEl.innerHTML = `You have <strong>${answeredCount}/${total}</strong> questions answered.<br>${unansweredCount > 0 ? `<strong style="color:var(--danger-color);">${unansweredCount}</strong> left unanswered.<br>` : ''}${flaggedCount > 0 ? `<strong style="color:#d97706;">${flaggedCount}</strong> flagged for review.<br>` : ''}Do you want to finish the exam now?`;
+         }
+       }
+       if (confirmModal) confirmModal.classList.remove("hidden");
        
-       // Setup one-time listeners (or better, persistent ones defined in init, but here is context-safe)
-       // To avoid duplicates, we can define them outside or use 'onclick' here for simplicity in this legacy refactor
-       confirmContinueBtn.onclick = () => {
-           confirmModal.classList.add("hidden");
+       if (confirmContinueBtn) confirmContinueBtn.onclick = () => {
+           if (confirmModal) confirmModal.classList.add("hidden");
        };
-       confirmFinishBtn.onclick = () => {
-           confirmModal.classList.add("hidden");
+       if (confirmFinishBtn) confirmFinishBtn.onclick = () => {
+           if (confirmModal) confirmModal.classList.add("hidden");
            finishQuiz();
        };
     } else {
@@ -3532,6 +3582,16 @@ function renderReview(questions, finalPct, passed) {
 
           <!-- PANEL: Study -->
           <div class="unir-panel" id="unir-panel-study" role="tabpanel" aria-labelledby="unir-tab-study">
+            <div class="unir-search-container">
+              <div class="unir-search-box">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--text-muted, #64748b); flex-shrink:0;"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                <input type="text" id="unir-study-search" class="unir-search-input" placeholder="${localizedMarkup('Search concepts, topics, rules...', 'Buscar conceptos, temas, reglas...')}">
+                <button type="button" id="unir-study-search-clear" class="unir-search-clear" style="display:none;" title="Limpiar búsqueda">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                </button>
+              </div>
+              <div id="unir-study-search-count" class="unir-search-results-count" style="display:none;"></div>
+            </div>
             <div id="unir-toc"></div>
           </div>
 
@@ -4153,10 +4213,98 @@ function renderReview(questions, finalPct, passed) {
         tocEl.appendChild(card);
       });
 
-      // Codex (GPT-5) | 2026-08-23 21:19 CST | El Centro de estudio abre con todos los dominios y temas contraídos.
+      // Real-time Instant Search for Study Mode
+      const searchInput = document.getElementById('unir-study-search');
+      const searchClear = document.getElementById('unir-study-search-clear');
+      const searchCount = document.getElementById('unir-study-search-count');
 
-      // Flashcard mode
-      let fcIdx = 0;
+      if (searchInput) {
+        searchInput.addEventListener('input', () => {
+          const rawQuery = searchInput.value.trim();
+          const query = rawQuery.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+          if (searchClear) searchClear.style.display = rawQuery ? 'flex' : 'none';
+
+          if (!query) {
+            if (searchCount) searchCount.style.display = 'none';
+            // Reset all cards and items
+            tocEl.querySelectorAll('.unir-toc-card').forEach(card => {
+              card.style.display = '';
+              const body = card.querySelector('.unir-toc-body');
+              const header = card.querySelector('.unir-toc-header');
+              const toggle = card.querySelector('.unir-section-toggle');
+              if (body) body.setAttribute('hidden', '');
+              if (header) header.classList.remove('open');
+              if (toggle) toggle.setAttribute('aria-expanded', 'false');
+              card.querySelectorAll('.unir-toc-item').forEach(item => {
+                item.style.display = '';
+                const textEl = item.querySelector('.li-text');
+                if (textEl && textEl.dataset.originalText) {
+                  textEl.innerHTML = textEl.dataset.originalText;
+                }
+              });
+            });
+            return;
+          }
+
+          let totalMatches = 0;
+          tocEl.querySelectorAll('.unir-toc-card').forEach(card => {
+            let cardHasMatch = false;
+            const items = card.querySelectorAll('.unir-toc-item');
+            
+            items.forEach(item => {
+              const textEl = item.querySelector('.li-text');
+              if (!textEl) return;
+              if (!textEl.dataset.originalText) textEl.dataset.originalText = textEl.innerHTML;
+
+              const plainText = textEl.textContent.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+              if (plainText.includes(query)) {
+                item.style.display = '';
+                cardHasMatch = true;
+                totalMatches++;
+                // Highlight keyword
+                try {
+                  const reg = new RegExp(`(${rawQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+                  textEl.innerHTML = textEl.dataset.originalText.replace(reg, '<mark class="search-highlight">$1</mark>');
+                } catch(e) {}
+              } else {
+                item.style.display = 'none';
+                textEl.innerHTML = textEl.dataset.originalText;
+              }
+            });
+
+            if (cardHasMatch) {
+              card.style.display = '';
+              const body = card.querySelector('.unir-toc-body');
+              const header = card.querySelector('.unir-toc-header');
+              const toggle = card.querySelector('.unir-section-toggle');
+              if (body) body.removeAttribute('hidden');
+              if (header) header.classList.add('open');
+              if (toggle) toggle.setAttribute('aria-expanded', 'true');
+            } else {
+              card.style.display = 'none';
+            }
+          });
+
+          if (searchCount) {
+            searchCount.style.display = 'block';
+            const lang = getActiveLanguage();
+            searchCount.textContent = lang === 'es'
+              ? `${totalMatches} tema${totalMatches === 1 ? '' : 's'} encontrado${totalMatches === 1 ? '' : 's'}`
+              : `${totalMatches} topic${totalMatches === 1 ? '' : 's'} found`;
+          }
+        });
+
+        if (searchClear) {
+          searchClear.addEventListener('click', () => {
+            searchInput.value = '';
+            searchInput.dispatchEvent(new Event('input'));
+            searchInput.focus();
+          });
+        }
+      }
+
+      // Codex (GPT-5) | 2026-08-23 21:19 CST | El Centro de estudio abre con todos los dominios y temas contraídos.
       let fcFiltered = [...flashcards];
 
       function renderFlashcardMode() {
@@ -5364,3 +5512,104 @@ document.addEventListener('DOMContentLoaded', () => {
    }
 });
 
+
+
+/* =============================================================================
+   POWER-USER GLOBAL KEYBOARD SHORTCUTS
+   ============================================================================= */
+document.addEventListener('keydown', (e) => {
+  const targetTag = e.target && e.target.tagName ? e.target.tagName.toUpperCase() : '';
+  if (targetTag === 'INPUT' || targetTag === 'TEXTAREA' || targetTag === 'SELECT' || (e.target && e.target.isContentEditable)) {
+    return;
+  }
+
+  // Quiz Mode Active
+  const quizUI = document.getElementById('quiz-ui');
+  if (quizUI && !quizUI.classList.contains('hidden')) {
+    const key = e.key.toUpperCase();
+
+    // 1-5 or A-E to select options
+    const optionItems = Array.from(document.querySelectorAll('#options-list .option-item'));
+    const keyMap = {
+      '1': 0, 'A': 0,
+      '2': 1, 'B': 1,
+      '3': 2, 'C': 2,
+      '4': 3, 'D': 3,
+      '5': 4, 'E': 4,
+      '6': 5
+    };
+
+    if (key in keyMap) {
+      const idx = keyMap[key];
+      if (optionItems[idx]) {
+        e.preventDefault();
+        optionItems[idx].click();
+        return;
+      }
+    }
+
+    // 'F' key toggles Flag for Review
+    if (key === 'F' && !(e.ctrlKey || e.metaKey || e.altKey)) {
+      e.preventDefault();
+      if (typeof window.toggleFlagCurrentQuestion === 'function') {
+        window.toggleFlagCurrentQuestion();
+      }
+      return;
+    }
+
+    // 'Enter' key checks answer or advances to next
+    if (e.key === 'Enter') {
+      const checkBtn = document.getElementById('check-btn');
+      const nextBtn = document.getElementById('next-btn');
+      if (checkBtn && !checkBtn.classList.contains('hidden')) {
+        e.preventDefault();
+        checkBtn.click();
+        return;
+      } else if (nextBtn && !nextBtn.classList.contains('hidden')) {
+        e.preventDefault();
+        nextBtn.click();
+        return;
+      }
+    }
+
+    // Left and Right arrows to navigate
+    if (e.key === 'ArrowLeft') {
+      const prevBtn = document.getElementById('prev-btn');
+      if (prevBtn && !prevBtn.classList.contains('hidden')) {
+        e.preventDefault();
+        prevBtn.click();
+        return;
+      }
+    }
+    if (e.key === 'ArrowRight') {
+      const nextBtn = document.getElementById('next-btn');
+      if (nextBtn && !nextBtn.classList.contains('hidden')) {
+        e.preventDefault();
+        nextBtn.click();
+        return;
+      }
+    }
+  }
+
+  // Flashcards Active
+  const studyScreen = document.getElementById('study-screen');
+  const fcPanel = document.getElementById('unir-panel-flashcards');
+  if (studyScreen && !studyScreen.classList.contains('hidden') && fcPanel && !fcPanel.hasAttribute('hidden')) {
+    if (e.key === ' ' || e.code === 'Space') {
+      e.preventDefault();
+      const fcCard = document.getElementById('unir-fc-card');
+      if (fcCard) fcCard.classList.toggle('flipped');
+      return;
+    }
+    if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      if (typeof window._unirNextFC === 'function') window._unirNextFC();
+      return;
+    }
+    if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      if (typeof window._unirPrevFC === 'function') window._unirPrevFC();
+      return;
+    }
+  }
+});

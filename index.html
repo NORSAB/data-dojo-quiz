@@ -17,7 +17,7 @@
     <title>Quiz Simulator</title>
     <link rel="manifest" href="manifest.json" />
     <meta name="theme-color" content="#3157d5" />
-    <link rel="stylesheet" href="styles.css?v=20260823i" />
+    <link rel="stylesheet" href="styles.css?v=20260824a" />
     <style>
       /* =======================================================================
          TRUE 100% FULL-WIDTH FLUID RESPONSIVE SYSTEM
@@ -1286,7 +1286,6 @@
               <option value="">-- Todos los Dominios --</option>
             </select>
           </div>
-
           <div class="form-group" style="margin-top: 1rem">
             <label style="display: block; margin-bottom: 5px"
               >Orden de Preguntas:</label
@@ -1352,9 +1351,15 @@
               <div class="progress-info">
                 <span id="progress-text">Question 1 of 10</span>
               </div>
-              <button id="finish-btn-top" class="btn btn-danger btn-sm">
-                Finalizar Examen
-              </button>
+              <div class="quiz-top-actions">
+                <button id="flag-question-btn" class="flag-question-btn" type="button" onclick="window.toggleFlagCurrentQuestion()" title="Marcar pregunta para revisión (Atajo: F)">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+                  <span>Marcar (F)</span>
+                </button>
+                <button id="finish-btn-top" class="btn btn-danger btn-sm">
+                  Finalizar Examen
+                </button>
+              </div>
             </div>
 
             <hr
@@ -1415,7 +1420,7 @@
               </div>
             </div>
 
-            <!-- Updated Control Bar Layout -->
+            <!-- Control Bar -->
             <div class="control-bar">
               <button
                 id="prev-btn"
@@ -1425,7 +1430,6 @@
                 Previous
               </button>
               <div style="flex: 1"></div>
-              <!-- Spacer -->
               <button
                 id="check-btn"
                 class="btn btn-primary"
@@ -1434,7 +1438,6 @@
                 Submit Answer
               </button>
               <div style="flex: 1"></div>
-              <!-- Spacer -->
               <button
                 id="next-btn"
                 class="btn btn-secondary"
@@ -1442,6 +1445,12 @@
               >
                 Next
               </button>
+            </div>
+
+            <!-- Keyboard Shortcuts Helper Pill -->
+            <div class="keyboard-shortcuts-pill" style="margin-top: 1rem; justify-content: center;">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M6 8h.001M10 8h.001M14 8h.001M18 8h.001M6 12h.001M10 12h.001M14 12h.001M18 12h.001M7 16h10"/></svg>
+              <span>Atajos: <kbd>1-5</kbd> o <kbd>A-E</kbd> responder · <kbd>Enter</kbd> continuar · <kbd>F</kbd> marcar</span>
             </div>
           </div>
 
@@ -1482,7 +1491,7 @@
                 id="confirm-msg"
                 style="margin-bottom: 2rem; color: var(--secondary-color)"
               >
-                Aún tienes preguntas sin responder. ¿Estás seguro de que quieres
+                Aún tienes preguntas sin responder o marcadas. ¿Estás seguro de que quieres
                 finalizar?
               </p>
               <div style="display: flex; gap: 1rem; justify-content: center">
@@ -1497,7 +1506,6 @@
           </div>
         </div>
 
-        <!-- Right Side: Navigation Map -->
         <aside class="sidebar">
           <h3 id="map-title">Mapa de Preguntas</h3>
           <div class="question-map" id="question-map">
@@ -1995,7 +2003,9 @@
           </button>
         </div>
       </div>
-    </div>    <!-- LESSONS LEARNED MODAL -->
+    </div>
+
+    <!-- LESSONS LEARNED MODAL -->
     <div id="lessons-learned-modal" class="modal-overlay hidden" role="dialog" aria-modal="true">
         <div class="modal-content" style="max-width: 650px; width: 90%; max-height: 85vh; overflow-y: auto; position: relative;">
             <button onclick="document.getElementById('lessons-learned-modal').classList.add('hidden')" style="position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 28px; cursor: pointer; color: var(--text-color);">&times;</button>
@@ -2013,6 +2023,7 @@
         </div>
     </div>
 
+    <script src="marked.min.js"></script>
     <script src="questions.js"></script>
     <script src="questions_databricks.js"></script>
     <script src="questions_mapping_missing.js"></script>
@@ -2050,14 +2061,14 @@
     <script src="flashcards_unah_tesis.js"></script>
     <!-- Auto Restore Master Data -->
     <script src="auto_restore_data.js"></script>
-    <script src="app_i18n.js?v=20260823i"></script>
-    <script src="script.js?v=20260823i"></script>
-    <script src="features.js?v=20260823i"></script>
+    <script src="app_i18n.js?v=20260824a"></script>
+    <script src="script.js?v=20260824a"></script>
+    <script src="features.js?v=20260824a"></script>
     <!-- Supabase Cloud Backup -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-sync.js"></script>
     <!-- Databricks Spanish Translation Toggle -->
     <script src="translations_databricks_es.js"></script>
-    <script src="translate_toggle.js?v=20260823i"></script>
+    <script src="translate_toggle.js?v=20260824a"></script>
   </body>
 </html>

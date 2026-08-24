@@ -4336,3 +4336,201 @@ html, body {
   }
 }
 
+/* =============================================================================
+   KEYBOARD SHORTCUTS & POWER-USER BADGES
+   ============================================================================= */
+.option-item {
+  position: relative;
+  display: flex !important;
+  align-items: center;
+  gap: 12px;
+}
+
+.option-key-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 26px;
+  height: 26px;
+  padding: 0 6px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  font-family: 'JetBrains Mono', monospace, sans-serif;
+  color: var(--primary-color, #4f6ef7);
+  background: rgba(79, 110, 247, 0.1);
+  border: 1px solid rgba(79, 110, 247, 0.25);
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+
+.option-item:hover .option-key-badge,
+.option-item.selected .option-key-badge {
+  background: var(--primary-color, #4f6ef7);
+  color: #ffffff;
+  border-color: var(--primary-color, #4f6ef7);
+}
+
+.option-content-wrapper {
+  flex: 1;
+}
+
+/* =============================================================================
+   EXAM QUESTION FLAGGING (MARK FOR REVIEW)
+   ============================================================================= */
+.quiz-top-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.flag-question-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1px solid var(--border-color, #e2e8f0);
+  background: var(--bg-card, #ffffff);
+  color: var(--text-muted, #64748b);
+  transition: all 0.2s ease;
+}
+
+.flag-question-btn:hover {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: #f59e0b;
+  color: #d97706;
+}
+
+.flag-question-btn.flagged {
+  background: #fef3c7 !important;
+  border-color: #f59e0b !important;
+  color: #b45309 !important;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.25);
+}
+
+[data-theme="dark"] .flag-question-btn.flagged {
+  background: rgba(245, 158, 11, 0.25) !important;
+  border-color: #f59e0b !important;
+  color: #fbbf24 !important;
+}
+
+/* Question Map Node Flag Indicator */
+.question-node.flagged {
+  position: relative;
+  border-color: #f59e0b !important;
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.4) !important;
+}
+
+.question-node.flagged::after {
+  content: '🚩';
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  font-size: 10px;
+  line-height: 1;
+}
+
+/* =============================================================================
+   UNIVERSAL STUDY SEARCH BAR & TOPIC HIGHLIGHTING
+   ============================================================================= */
+.unir-search-container {
+  width: 100%;
+  margin-bottom: 18px;
+}
+
+.unir-search-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  background: var(--bg-card, #ffffff);
+  border: 1.5px solid var(--border-color, #e2e8f0);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+}
+
+.unir-search-box:focus-within {
+  border-color: var(--primary-color, #4f6ef7);
+  box-shadow: 0 0 0 3px rgba(79, 110, 247, 0.15);
+}
+
+.unir-search-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 0.95rem;
+  color: var(--text-color, #1e293b);
+}
+
+.unir-search-clear {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--text-muted, #94a3b8);
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+}
+
+.unir-search-clear:hover {
+  background: rgba(0, 0, 0, 0.06);
+  color: var(--text-color, #1e293b);
+}
+
+.unir-search-results-count {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--primary-color, #4f6ef7);
+  margin-top: 6px;
+  padding: 0 4px;
+}
+
+.search-highlight {
+  background: #fef08a;
+  color: #854d0e;
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-weight: 700;
+}
+
+[data-theme="dark"] .search-highlight {
+  background: rgba(250, 204, 21, 0.3);
+  color: #fde047;
+}
+
+/* Shortcut Helper Pill */
+.keyboard-shortcuts-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  color: var(--text-muted, #64748b);
+  background: rgba(0, 0, 0, 0.04);
+  padding: 4px 10px;
+  border-radius: 20px;
+  margin-top: 8px;
+}
+
+[data-theme="dark"] .keyboard-shortcuts-pill {
+  background: rgba(255, 255, 255, 0.06);
+  color: #94a3b8;
+}
+
+.keyboard-shortcuts-pill kbd {
+  background: var(--bg-card, #ffffff);
+  border: 1px solid var(--border-color, #cbd5e1);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-family: inherit;
+  font-weight: 700;
+}
+
