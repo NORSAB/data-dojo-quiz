@@ -3344,9 +3344,9 @@ function renderReview(questions, finalPct, passed) {
           .unir-section-header .hdr-title { flex: 1; }
           .unir-section-header .hdr-progress { font-size: 0.7rem; font-weight: 600; padding: 2px 8px; border-radius: 10px; background: var(--study-accent-soft); color: var(--study-accent); white-space: nowrap; }
           .unir-section-header .hdr-progress.all-done { background: var(--study-success-soft); color: var(--study-success); }
-          .unir-section-header .hdr-complete-btn { min-height: 36px; font-size: 0.72rem; font-weight: 600; padding: 3px 10px; border-radius: 10px; border: 1px solid var(--study-success); color: var(--study-success); background: var(--study-success-soft); cursor: pointer; white-space: nowrap; transition: all 0.2s; display: flex; align-items: center; gap: 4px; }
-          .unir-section-header .hdr-complete-btn:hover, .unir-section-header .hdr-complete-btn.is-done { background: var(--study-success); color: #fff; border-color: var(--study-success); }
-          .unir-section-header .hdr-complete-btn.is-done { pointer-events: none; }
+          .unir-section-header .hdr-complete-btn { min-height: 36px; font-size: 0.72rem; font-weight: 600; padding: 3px 10px; border-radius: 10px; border: 1px solid var(--study-accent); color: var(--study-accent); background: var(--study-accent-soft); cursor: pointer; white-space: nowrap; transition: all 0.2s; display: flex; align-items: center; gap: 4px; }
+          .unir-section-header .hdr-complete-btn:hover { background: var(--study-accent); color: #fff; border-color: var(--study-accent); }
+          .unir-section-header .hdr-complete-btn.is-done { background: var(--study-success); color: #fff; border-color: var(--study-success); pointer-events: none; }
           .unir-section-items { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--border-color, #e5e7eb); }
           .unir-section-items[hidden] { display: none; }
           .unir-section-body[hidden] { display: none; }
@@ -3464,6 +3464,13 @@ function renderReview(questions, finalPct, passed) {
           .unir-item-content h5 { color: var(--text-color, #1e293b); font-size: 1.05rem; margin: 18px 0 8px; padding-bottom: 4px; border-bottom: 1px solid rgba(49,87,213,0.14); }
           .unir-item-content ul { padding-left: 20px; margin: 8px 0; }
           .unir-item-content li { margin-bottom: 4px; }
+
+          /* Codex (GPT-5) | 2026-08-23 21:49 CST | Conserva contraste en oscuro sin añadir otro acento. */
+          [data-theme="dark"] .unir-section-header { color: #a7b0c0; }
+          [data-theme="dark"] .unir-section-header .hdr-progress { color: #f3f4f6; background: rgba(49,87,213,0.28); }
+          [data-theme="dark"] .unir-section-header .hdr-complete-btn { color: #f3f4f6; border-color: #3157d5; background: rgba(49,87,213,0.18); }
+          [data-theme="dark"] .unir-topic-chip:hover, [data-theme="dark"] .unir-persona-body .p-contribucion strong { color: #f3f4f6; }
+          [data-theme="dark"] #unir-persona-progress, [data-theme="dark"] #unir-concepto-progress, [data-theme="dark"] #unir-cmd-progress { color: #a7b0c0 !important; }
         </style>
 
         <div class="unir-root">
