@@ -354,6 +354,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const questionMap = document.getElementById("question-map");
   const restartBtn = document.getElementById("restart-btn");
   const resultMsg = document.getElementById("result-msg");
+  const studyCenterBtn = document.getElementById("study-center-btn");
+  const studyHub = document.getElementById("study-hub");
+  const studyHubGrid = document.getElementById("study-hub-grid");
+  const studyHubSummary = document.getElementById("study-hub-summary");
 
     /* ===========================================================================
      * INITIALIZATION
@@ -366,6 +370,7 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("System: Initializing Quiz App...");
         loadConfig();
         renderCategories();
+        renderStudyHub();
 
         if (adminBtn) adminBtn.addEventListener("click", openAdmin);
         
@@ -391,6 +396,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Global Event Listeners
         if (themeToggle) themeToggle.addEventListener("click", toggleTheme);
+        if (studyCenterBtn) studyCenterBtn.addEventListener("click", openStudyHub);
         if (checkBtn) checkBtn.addEventListener("click", checkAnswer);
         if (nextBtn) nextBtn.addEventListener("click", () => navigate(1));
         if (prevBtn) prevBtn.addEventListener("click", () => navigate(-1));
@@ -462,7 +468,8 @@ document.addEventListener("DOMContentLoaded", () => {
       }
   }
 
-function finishQuiz(questions) {
+  // Codex (GPT-5) | 2026-08-23 20:35 CST | Conservado como referencia; la implementación activa está más abajo.
+  function finishQuizLegacy(questions) {
     const unansweredCount = questions.filter(q => !userAnswers[q.id]).length;
     if (unansweredCount > 0) {
         if (confirm(`You have unanswered questions (${unansweredCount}). Are you sure you want to finish?`)) {
@@ -1256,21 +1263,12 @@ const badgesConfig = [
 
   // --- Menu Logic ---
   // --- Theme Logic ---
-  const themeColors = {
-      'microsoft': { primary: '#007bff', hover: '#0056b3' }, // Blue
-      'databricks': { primary: '#FF3621', hover: '#D12B1B' }, // Orange
-      'google': { primary: '#EA4335', hover: '#C5221F' }, // Red (to distinguish from MS Blue)
-      'aws': { primary: '#FF9900', hover: '#CC7A00' }, // Orange/Yellow
-      'python': { primary: '#306998', hover: '#26547C' }, // Python Blue
-      'tableau': { primary: '#E97627', hover: '#BA5E1F' }, // Tableau Orange
-      'unir': { primary: '#4f6ef7', hover: '#3b5de7' }, // UNIR Indigo (Data Dojo)
-      'default': { primary: '#007bff', hover: '#0056b3' }
-  };
+  // Codex (GPT-5) | 2026-08-23 20:35 CST | El proveedor conserva su logo, pero la interfaz usa un solo acento.
+  const globalTheme = { primary: '#3157d5', hover: '#2447b8' };
 
-  function setGlobalTheme(providerId) {
-      const theme = themeColors[providerId] || themeColors['default'];
-      document.documentElement.style.setProperty('--primary-color', theme.primary);
-      document.documentElement.style.setProperty('--primary-hover', theme.hover);
+  function setGlobalTheme() {
+      document.documentElement.style.setProperty('--primary-color', globalTheme.primary);
+      document.documentElement.style.setProperty('--primary-hover', globalTheme.hover);
   }
 
   // SVG brand icons for providers
@@ -1397,6 +1395,113 @@ const badgesConfig = [
       }
     });
   }
+
+  // Codex (GPT-5) | 2026-08-23 20:35 CST | Catálogo único para descubrir todos los módulos de estudio disponibles.
+  function getStudyCourseCatalog() {
+    const courseById = new Map();
+    providerData.forEach((provider) => {
+      provider.courses.forEach((course) => {
+        courseById.set(course.id, { ...course, providerName: provider.name });
+      });
+    });
+
+    return Object.entries(window.studyData || {})
+      .filter(([, sections]) => Array.isArray(sections) && sections.length > 0)
+      .map(([courseId, sections]) => {
+        const course = courseById.get(courseId) || {
+          id: courseId,
+          name: courseId.replace(/-/g, " "),
+          providerName: "The Data Dojo",
+        };
+        return {
+          ...course,
+          sections,
+          itemCount: sections.reduce(
+            (total, section) => total + (Array.isArray(section.items) ? section.items.length : 0),
+            0
+          ),
+          featured: courseId === "databricks-genai-engineer",
+        };
+      })
+      .sort((a, b) => Number(b.featured) - Number(a.featured) || a.name.localeCompare(b.name, "es"));
+  }
+
+  function renderStudyHub() {
+    if (!studyHubGrid || !studyHubSummary) return;
+    const catalog = getStudyCourseCatalog();
+    const totalItems = catalog.reduce((total, course) => total + course.itemCount, 0);
+
+    studyHubSummary.textContent = `${catalog.length} cursos · ${totalItems} temas`;
+    studyHubGrid.replaceChildren();
+
+    if (catalog.length === 0) {
+      const empty = document.createElement("p");
+      empty.className = "study-hub-empty";
+      empty.textContent = "Todavía no hay módulos de estudio disponibles.";
+      studyHubGrid.appendChild(empty);
+      return;
+    }
+
+    catalog.forEach((course) => {
+      const card = document.createElement("article");
+      card.className = `study-hub-card${course.featured ? " study-hub-card--featured" : ""}`;
+
+      const top = document.createElement("div");
+      top.className = "study-hub-card-top";
+
+      const icon = document.createElement("span");
+      icon.className = "study-hub-card-icon";
+      icon.setAttribute("aria-hidden", "true");
+      icon.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg>';
+      top.appendChild(icon);
+
+      const provider = document.createElement("span");
+      provider.className = "study-hub-provider";
+      provider.textContent = course.providerName;
+      top.appendChild(provider);
+
+      if (course.featured) {
+        const badge = document.createElement("span");
+        badge.className = "study-hub-badge";
+        badge.textContent = "Bilingüe";
+        top.appendChild(badge);
+      }
+
+      const title = document.createElement("h3");
+      title.textContent = course.name;
+
+      const meta = document.createElement("p");
+      meta.className = "study-hub-meta";
+      meta.textContent = `${course.sections.length} módulos · ${course.itemCount} temas`;
+
+      const action = document.createElement("button");
+      action.type = "button";
+      action.className = "study-hub-action";
+      action.innerHTML = '<span>Abrir módulo</span><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+      action.addEventListener("click", () => window.openStudyMode(course.id));
+
+      card.append(top, title, meta, action);
+      studyHubGrid.appendChild(card);
+    });
+  }
+
+  function openStudyHub() {
+    const onboardingScreen = document.getElementById("onboarding-screen");
+    const studyScreen = document.getElementById("study-screen");
+    if (onboardingScreen) onboardingScreen.classList.add("hidden");
+    if (studyScreen) studyScreen.classList.add("hidden");
+    returnToMenu();
+
+    if (studyHub) {
+      studyHub.tabIndex = -1;
+      requestAnimationFrame(() => {
+        studyHub.scrollIntoView({ behavior: "smooth", block: "start" });
+        studyHub.focus({ preventScroll: true });
+      });
+    }
+  }
+
+  window.openStudyHub = openStudyHub;
 
   // --- Admin Logic ---
   let hiddenCategories = JSON.parse(localStorage.getItem('hiddenCategories') || '[]');
@@ -3092,7 +3197,7 @@ function renderReview(questions, finalPct, passed) {
 
       function showAchievementToast(a) {
         const toast = document.createElement('div');
-        toast.style.cssText = 'position:fixed;top:20px;right:20px;z-index:10000;background:linear-gradient(135deg,#4f6ef7,#7c3aed);color:#fff;padding:16px 24px;border-radius:16px;box-shadow:0 8px 32px rgba(79,110,247,0.4);display:flex;align-items:center;gap:12px;animation:slideInRight 0.5s ease-out;font-family:Inter,sans-serif;';
+        toast.style.cssText = 'position:fixed;top:20px;right:20px;z-index:10000;background:#3157d5;color:#fff;padding:16px 24px;border-radius:16px;box-shadow:0 8px 32px rgba(49,87,213,0.3);display:flex;align-items:center;gap:12px;animation:slideInRight 0.5s ease-out;font-family:Inter,sans-serif;';
         toast.innerHTML = `<svg viewBox="0 0 24 24" width="28" height="28" fill="#fbbf24"><path d="${a.icon}"/></svg><div><div style="font-weight:700;font-size:1rem;display:flex;align-items:center;gap:6px;"><svg viewBox="0 0 24 24" width="18" height="18" fill="#fbbf24"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/></svg> Logro Desbloqueado</div><div style="font-size:0.85rem;opacity:0.9;">${a.name}: ${a.desc}</div></div>`;
         document.body.appendChild(toast);
         setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = 'opacity 0.5s'; setTimeout(() => toast.remove(), 500); }, 3500);
@@ -3128,6 +3233,7 @@ function renderReview(questions, finalPct, passed) {
         'dp-600': () => window.databricksDAFlashcards,
       };
       const flashcards = (STUDY_FLASHCARD_SOURCES[courseId] && STUDY_FLASHCARD_SOURCES[courseId]()) || [];
+      const hasFlashcards = flashcards.length > 0;
 
       // SVG icon paths (no emojis anywhere)
       const SVG = {
@@ -3158,20 +3264,20 @@ function renderReview(questions, finalPct, passed) {
           body.zen-mode .unir-root { padding-top: 56px; }
 
           /* Floating mastery pill */
-          .unir-mastery-pill { max-width: 900px; margin: 20px auto 0; display: flex; align-items: center; gap: 14px; padding: 10px 20px; border-radius: 40px; background: ${isDatabricksCourse ? 'linear-gradient(135deg, #1a1a2e, #16213e)' : 'linear-gradient(135deg, #1e1b4b, #312e81)'}; box-shadow: 0 4px 20px ${isDatabricksCourse ? 'rgba(255,54,33,0.15)' : 'rgba(30,27,75,0.25)'}; }
+          .unir-mastery-pill { max-width: 900px; margin: 20px auto 0; display: flex; align-items: center; gap: 14px; padding: 10px 20px; border-radius: 40px; background: #111827; box-shadow: 0 4px 20px rgba(17,24,39,0.2); }
           .unir-mastery-pill .m-track { flex: 1; height: 6px; background: rgba(255,255,255,0.15); border-radius: 99px; overflow: hidden; }
-          .unir-mastery-pill .m-fill { height: 100%; background: ${isDatabricksCourse ? 'linear-gradient(90deg, #FF3621, #FF6B4A)' : 'linear-gradient(90deg, #818cf8, #a78bfa)'}; border-radius: 99px; transition: width 0.6s ease; }
+          .unir-mastery-pill .m-fill { height: 100%; background: #3157d5; border-radius: 99px; transition: width 0.6s ease; }
           .unir-mastery-pill .m-label { color: #c7d2fe; font-size: 0.78rem; font-weight: 600; white-space: nowrap; display: flex; align-items: center; gap: 4px; }
 
           /* Tab row — centered like category pills */
           .unir-tabs-row { max-width: 900px; margin: 16px auto 0; display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
-          .unir-tab { padding: 8px 20px; cursor: pointer; font-weight: 600; font-size: 0.85rem; color: var(--text-muted, #64748b); border: 1px solid var(--border-color, #e5e7eb); border-radius: 24px; transition: all 0.2s; display: flex; align-items: center; gap: 6px; background: var(--bg-card, #fff); }
+          .unir-tab { min-height: 44px; padding: 8px 20px; cursor: pointer; font-family: inherit; font-weight: 600; font-size: 0.85rem; color: var(--text-muted, #64748b); border: 1px solid var(--border-color, #e5e7eb); border-radius: 24px; transition: all 0.2s; display: flex; align-items: center; gap: 6px; background: var(--bg-card, #fff); }
           .unir-tab:hover { color: #4f6ef7; border-color: #4f6ef7; background: #4f6ef708; }
           .unir-tab.active { color: #fff; border-color: #4f6ef7; background: #4f6ef7; }
 
           /* Personajes panel styles */
           .unir-persona-category { margin-bottom: 16px; }
-          .unir-persona-cat-header { display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: linear-gradient(135deg, #1e1b4b, #312e81); border-radius: 14px; color: #c7d2fe; font-weight: 700; font-size: 0.9rem; margin-bottom: 8px; }
+          .unir-persona-cat-header { display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: #1f2937; border-radius: 14px; color: #f3f4f6; font-weight: 700; font-size: 0.9rem; margin-bottom: 8px; }
           .unir-persona-cat-header svg { flex-shrink: 0; }
           .unir-persona-card { background: var(--bg-card, #fff); border: 1px solid var(--border-color, #e5e7eb); border-radius: 12px; overflow: hidden; margin-bottom: 6px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); transition: all 0.2s; }
           .unir-persona-header { padding: 10px 16px; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: all 0.15s; user-select: none; }
@@ -3189,7 +3295,7 @@ function renderReview(questions, finalPct, passed) {
           .unir-persona-body .p-contribucion strong { color: #4f6ef7; }
           .unir-persona-body .p-dato-examen { background: var(--bg-surface, #f1f5f9); padding: 14px 18px; border-radius: 8px; font-size: 0.82rem; color: var(--text-color); display: flex; align-items: flex-start; gap: 10px; position: relative; border-left: 3px solid var(--border-color, #e5e7eb); }
           .unir-persona-body .p-dato-examen::before { display: none; }
-          .unir-persona-card.is-read { background: linear-gradient(135deg, rgba(16,185,129,0.04), transparent); }
+          .unir-persona-card.is-read { background: rgba(22,121,74,0.05); }
           .unir-persona-body .p-dato-examen svg { flex-shrink: 0; margin-top: 1px; }
           .unir-persona-body .p-tema { font-size: 0.72rem; color: var(--text-muted, #64748b); margin-top: 12px; font-weight: 600; }
 
@@ -3208,23 +3314,25 @@ function renderReview(questions, finalPct, passed) {
           /* Section items list — dropdown cards */
           .unir-section-card { background: var(--bg-card, #fff); border: 1px solid var(--border-color, #e5e7eb); border-radius: 12px; overflow: hidden; margin-bottom: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); transition: all 0.2s; }
           .unir-section-card.completed { border-color: #10b98140; }
-          .unir-section-header { padding: 10px 16px; font-weight: 700; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.5px; color: #4f6ef7; background: var(--bg-card, #fff); cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s; user-select: none; }
+          .unir-section-header { padding: 0 10px 0 0; font-weight: 700; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--primary-color, #3157d5); background: var(--bg-card, #fff); display: flex; align-items: center; gap: 8px; transition: all 0.2s; user-select: none; }
           .unir-section-header:hover { background: #4f6ef708; }
+          .unir-section-toggle { flex: 1; min-width: 0; min-height: 44px; padding: 10px 6px 10px 16px; border: 0; color: inherit; background: transparent; cursor: pointer; display: flex; align-items: center; gap: 8px; text-align: left; font: inherit; text-transform: inherit; letter-spacing: inherit; }
           .unir-section-header .hdr-chevron { transition: transform 0.25s ease; flex-shrink: 0; }
           .unir-section-header.open .hdr-chevron { transform: rotate(180deg); }
           .unir-section-header .hdr-title { flex: 1; }
           .unir-section-header .hdr-progress { font-size: 0.7rem; font-weight: 600; padding: 2px 8px; border-radius: 10px; background: #4f6ef715; color: #4f6ef7; white-space: nowrap; }
           .unir-section-header .hdr-progress.all-done { background: #10b98118; color: #10b981; }
-          .unir-section-header .hdr-complete-btn { font-size: 0.72rem; font-weight: 600; padding: 3px 10px; border-radius: 10px; border: 1px solid #10b98140; color: #10b981; background: #10b98108; cursor: pointer; white-space: nowrap; transition: all 0.2s; display: flex; align-items: center; gap: 4px; }
+          .unir-section-header .hdr-complete-btn { min-height: 36px; font-size: 0.72rem; font-weight: 600; padding: 3px 10px; border-radius: 10px; border: 1px solid #10b98140; color: #10b981; background: #10b98108; cursor: pointer; white-space: nowrap; transition: all 0.2s; display: flex; align-items: center; gap: 4px; }
           .unir-section-header .hdr-complete-btn:hover { background: #10b981; color: #fff; border-color: #10b981; }
           .unir-section-header .hdr-complete-btn.is-done { background: #10b981; color: #fff; border-color: #10b981; pointer-events: none; }
           .unir-section-items { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--border-color, #e5e7eb); }
           .unir-section-items[hidden] { display: none; }
           .unir-section-body[hidden] { display: none; }
-          .unir-section-items li { padding: 10px 18px; cursor: pointer; font-size: 0.9rem; color: var(--text-color, #333); transition: all 0.15s; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--border-color, #e5e7eb08); }
-          .unir-section-items li:last-of-type { border-bottom: none; }
-          .unir-section-items li:hover { background: #4f6ef706; color: #4f6ef7; }
-          .unir-section-items li.active { background: linear-gradient(90deg, #4f6ef70a, transparent); color: #4f6ef7; font-weight: 600; }
+          .unir-section-items > li.unir-topic-item { padding: 0; font-size: 0.9rem; color: var(--text-color, #333); transition: all 0.15s; border-bottom: 1px solid var(--border-color, #e5e7eb08); }
+          .unir-section-items > li.unir-topic-item:last-of-type { border-bottom: none; }
+          .unir-item-button { width: 100%; min-height: 44px; padding: 10px 18px; border: 0; background: transparent; color: inherit; cursor: pointer; font: inherit; text-align: left; display: flex; align-items: center; gap: 10px; }
+          .unir-section-items > li.unir-topic-item:hover { background: #4f6ef706; color: var(--primary-color, #3157d5); }
+          .unir-section-items > li.unir-topic-item.active { background: var(--primary-light, rgba(49,87,213,0.1)); color: var(--primary-color, #3157d5); font-weight: 600; }
           .unir-section-items .li-check { width: 18px; height: 18px; border-radius: 50%; border: 2px solid #d1d5db; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
           .unir-section-items .li-check.done { background: #10b981; border-color: #10b981; }
 
@@ -3240,7 +3348,7 @@ function renderReview(questions, finalPct, passed) {
           .unir-fc-inner { width: 100%; height: 100%; position: relative; transition: transform 0.6s cubic-bezier(.4,0,.2,1); transform-style: preserve-3d; border-radius: 20px; box-shadow: 0 8px 32px rgba(79,110,247,0.12); }
           .unir-fc-card.flipped .unir-fc-inner { transform: rotateY(180deg); }
           .unir-fc-face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 32px; }
-          .unir-fc-front { background: linear-gradient(145deg, #1e1b4b, #312e81); color: #fff; }
+          .unir-fc-front { background: #1f2937; color: #fff; }
           .unir-fc-back { background: var(--bg-card, #fff); color: var(--text-color, #333); transform: rotateY(180deg); border: 1px solid var(--border-color, #e5e7eb); overflow-y: auto; }
           .unir-fc-nav { display: flex; align-items: center; gap: 12px; margin-top: 20px; }
           .unir-fc-btn { width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--border-color, #e5e7eb); background: var(--bg-card, #fff); color: #4f6ef7; font-size: 1.3rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
@@ -3275,7 +3383,7 @@ function renderReview(questions, finalPct, passed) {
             font-weight: 700;
             letter-spacing: 2px;
             color: #f59e0b;
-            background: linear-gradient(90deg, transparent, rgba(245,158,11,0.08) 20%, rgba(245,158,11,0.12) 50%, rgba(245,158,11,0.08) 80%, transparent);
+            background: rgba(154,103,0,0.08);
             border-top: 2px dashed rgba(245,158,11,0.35);
             padding: 6px 0 4px;
           }
@@ -3334,7 +3442,7 @@ function renderReview(questions, finalPct, passed) {
         <div class="unir-root">
           <!-- Floating Mastery Pill -->
           <div class="unir-mastery-pill">
-            <button onclick="window.closeStudyMode()" style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);color:#c7d2fe;border-radius:20px;padding:5px 14px;cursor:pointer;font-size:0.82rem;font-weight:600;display:flex;align-items:center;gap:5px;transition:all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.12)'">${svgIcon(SVG.back, 14, '#c7d2fe')} Volver</button>
+            <button id="unir-study-back" type="button" style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);color:#c7d2fe;border-radius:20px;padding:5px 14px;cursor:pointer;font-size:0.82rem;font-weight:600;display:flex;align-items:center;gap:5px;transition:background 0.2s;">${svgIcon(SVG.back, 14, '#c7d2fe')} Volver</button>
             <div class="m-label">${svgIcon(SVG.star, 13, '#fbbf24')} <span id="unir-xp-display">${mastery.xp} XP</span></div>
             <div class="m-track"><div class="m-fill" id="unir-mastery-bar" style="width:0%"></div></div>
             <span class="m-label" id="unir-mastery-text">0/${totalSections}</span>
@@ -3342,58 +3450,67 @@ function renderReview(questions, finalPct, passed) {
           </div>
 
           <!-- Tab Pills — centered row -->
-          <div class="unir-tabs-row">
-            <div class="unir-tab active" id="unir-tab-study" onclick="window._unirSwitchTab('study')">
+          <div class="unir-tabs-row" role="tablist" aria-label="Opciones del módulo de estudio">
+            <button type="button" class="unir-tab active" id="unir-tab-study" role="tab" aria-selected="true" aria-controls="unir-panel-study" onclick="window._unirSwitchTab('study')">
               ${svgIcon(SVG.eye, 15)} Estudiar
-            </div>
-            ${hasPersonajes ? `<div class="unir-tab" id="unir-tab-personajes" onclick="window._unirSwitchTab('personajes')">
+            </button>
+            ${hasPersonajes ? `<button type="button" class="unir-tab" id="unir-tab-personajes" role="tab" aria-selected="false" aria-controls="unir-panel-personajes" tabindex="-1" onclick="window._unirSwitchTab('personajes')">
               ${svgIcon('M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z', 15)} Personajes <span style="background:rgba(79,110,247,0.15);padding:2px 8px;border-radius:10px;font-size:0.72rem;font-weight:700;">${window.personajesUnirViz.reduce((a,c) => a + c.personas.length, 0)}</span>
-            </div>` : ''}
-            ${hasConceptos ? `<div class="unir-tab" id="unir-tab-conceptos" onclick="window._unirSwitchTab('conceptos')">
+            </button>` : ''}
+            ${hasConceptos ? `<button type="button" class="unir-tab" id="unir-tab-conceptos" role="tab" aria-selected="false" aria-controls="unir-panel-conceptos" tabindex="-1" onclick="window._unirSwitchTab('conceptos')">
               ${svgIcon('M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5', 15)} Conceptos Clave <span style="background:${isDatabricksCourse ? 'rgba(255,54,33,0.15)' : 'rgba(79,110,247,0.15)'};padding:2px 8px;border-radius:10px;font-size:0.72rem;font-weight:700;">${window.conceptosDatabricks.reduce((a,c) => a + c.conceptos.length, 0)}</span>
-            </div>` : ''}
-            ${hasComandosSQL ? `<div class="unir-tab" id="unir-tab-comandos" onclick="window._unirSwitchTab('comandos')">
+            </button>` : ''}
+            ${hasComandosSQL ? `<button type="button" class="unir-tab" id="unir-tab-comandos" role="tab" aria-selected="false" aria-controls="unir-panel-comandos" tabindex="-1" onclick="window._unirSwitchTab('comandos')">
               ${svgIcon('M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z', 15)} Comandos SQL <span style="background:rgba(255,54,33,0.15);padding:2px 8px;border-radius:10px;font-size:0.72rem;font-weight:700;">${window.comandosSqlDatabricks.reduce((a,c) => a + c.comandos.length, 0)}</span>
-            </div>` : ''}
-            <div class="unir-tab" id="unir-tab-flashcards" onclick="window._unirSwitchTab('flashcards')">
+            </button>` : ''}
+            ${hasFlashcards ? `<button type="button" class="unir-tab" id="unir-tab-flashcards" role="tab" aria-selected="false" aria-controls="unir-panel-flashcards" tabindex="-1" onclick="window._unirSwitchTab('flashcards')">
               ${svgIcon(SVG.flip, 15)} Flashcards <span style="background:${isDatabricksCourse ? 'rgba(255,54,33,0.15)' : 'rgba(79,110,247,0.15)'};padding:2px 8px;border-radius:10px;font-size:0.72rem;font-weight:700;">${flashcards.length}</span>
-            </div>
-            <div class="unir-tab" id="unir-tab-achievements" onclick="window._unirSwitchTab('achievements')">
+            </button>` : ''}
+            <button type="button" class="unir-tab" id="unir-tab-achievements" role="tab" aria-selected="false" aria-controls="unir-panel-achievements" tabindex="-1" onclick="window._unirSwitchTab('achievements')">
               ${svgIcon(SVG.trophy, 15)} Logros
-            </div>
+            </button>
           </div>
 
           <!-- PANEL: Study -->
-          <div class="unir-panel" id="unir-panel-study">
+          <div class="unir-panel" id="unir-panel-study" role="tabpanel" aria-labelledby="unir-tab-study">
             <div id="unir-toc"></div>
           </div>
 
           <!-- PANEL: Personajes -->
-          ${hasPersonajes ? '<div class="unir-panel" id="unir-panel-personajes" hidden></div>' : ''}
+          ${hasPersonajes ? '<div class="unir-panel" id="unir-panel-personajes" role="tabpanel" aria-labelledby="unir-tab-personajes" hidden></div>' : ''}
 
           <!-- PANEL: Conceptos Clave (Databricks) -->
-          ${hasConceptos ? '<div class="unir-panel" id="unir-panel-conceptos" hidden></div>' : ''}
+          ${hasConceptos ? '<div class="unir-panel" id="unir-panel-conceptos" role="tabpanel" aria-labelledby="unir-tab-conceptos" hidden></div>' : ''}
 
           <!-- PANEL: Comandos SQL (Databricks) -->
-          ${hasComandosSQL ? '<div class="unir-panel" id="unir-panel-comandos" hidden></div>' : ''}
+          ${hasComandosSQL ? '<div class="unir-panel" id="unir-panel-comandos" role="tabpanel" aria-labelledby="unir-tab-comandos" hidden></div>' : ''}
 
           <!-- PANEL: Flashcards -->
-          <div class="unir-panel" id="unir-panel-flashcards" hidden></div>
+          ${hasFlashcards ? '<div class="unir-panel" id="unir-panel-flashcards" role="tabpanel" aria-labelledby="unir-tab-flashcards" hidden></div>' : ''}
 
           <!-- PANEL: Achievements -->
-          <div class="unir-panel" id="unir-panel-achievements" hidden></div>
+          <div class="unir-panel" id="unir-panel-achievements" role="tabpanel" aria-labelledby="unir-tab-achievements" hidden></div>
         </div>
       `;
 
+      const unifiedStudyBack = document.getElementById('unir-study-back');
+      if (unifiedStudyBack) unifiedStudyBack.addEventListener('click', window.closeStudyMode);
+
       // Tab switching
-      const allTabs = ['study','flashcards','achievements'];
+      const allTabs = ['study','achievements'];
+      if (hasFlashcards) allTabs.splice(1, 0, 'flashcards');
       if (hasPersonajes) allTabs.splice(1, 0, 'personajes');
       if (hasConceptos) allTabs.splice(1, 0, 'conceptos');
       if (hasComandosSQL) allTabs.splice(allTabs.indexOf('flashcards'), 0, 'comandos');
       window._unirSwitchTab = function(tab) {
         allTabs.forEach(t => {
           const tabEl = document.getElementById('unir-tab-' + t);
-          if (tabEl) tabEl.classList.toggle('active', t === tab);
+          if (tabEl) {
+            const isActive = t === tab;
+            tabEl.classList.toggle('active', isActive);
+            tabEl.setAttribute('aria-selected', String(isActive));
+            tabEl.tabIndex = isActive ? 0 : -1;
+          }
           const panel = document.getElementById('unir-panel-' + t);
           if (panel) { if (t === tab) panel.removeAttribute('hidden'); else panel.setAttribute('hidden', ''); }
         });
@@ -3632,7 +3749,7 @@ function renderReview(questions, finalPct, passed) {
 
         window.conceptosDatabricks.forEach((cat, ci) => {
           html += `<div class="unir-persona-category">`;
-          html += `<div class="unir-persona-cat-header" style="background:linear-gradient(135deg, #1a1a2e, #16213e);">${cIcon(cat.icon, 20, '#FF6B4A')} ${cat.category} <span style="margin-left:auto;font-size:0.72rem;opacity:0.7;">${cat.conceptos.length} conceptos</span></div>`;
+          html += `<div class="unir-persona-cat-header" style="background:#1f2937;">${cIcon(cat.icon, 20, '#3157d5')} ${cat.category} <span style="margin-left:auto;font-size:0.72rem;opacity:0.7;">${cat.conceptos.length} conceptos</span></div>`;
 
           cat.conceptos.forEach((c, pi) => {
             const uid = `concepto-${ci}-${pi}`;
@@ -3699,7 +3816,7 @@ function renderReview(questions, finalPct, passed) {
           }
         };
         window.comandosSqlDatabricks.forEach((cat, ci) => {
-          html += `<div class="unir-persona-cat-header" style="background:linear-gradient(135deg,#1a1a2e,#16213e);">${cIcon(cat.icon,20,'#FF6B4A')} ${cat.category} <span style="margin-left:auto;font-size:0.72rem;opacity:0.7;">${cat.comandos.length}</span></div>`;
+          html += `<div class="unir-persona-cat-header" style="background:#1f2937;">${cIcon(cat.icon,20,'#3157d5')} ${cat.category} <span style="margin-left:auto;font-size:0.72rem;opacity:0.7;">${cat.comandos.length}</span></div>`;
           cat.comandos.forEach((cmd, pi) => {
             const key = `cmd-${ci}-${pi}`, sk = key.replace(/[^a-z0-9]/gi,''), isR = mastery.comandosViewed.includes(key);
             html += `<div class="unir-persona-card" style="border-left:3px solid ${isR?'#10b981':'#FF3621'};">
@@ -3783,35 +3900,54 @@ function renderReview(questions, finalPct, passed) {
 
         const header = document.createElement('div');
         header.className = 'unir-section-header';
-        header.innerHTML = `
+
+        const sectionToggle = document.createElement('button');
+        sectionToggle.type = 'button';
+        sectionToggle.className = 'unir-section-toggle';
+        sectionToggle.setAttribute('aria-expanded', 'false');
+        sectionToggle.setAttribute('aria-controls', `unir-section-body-${docIdx}`);
+        sectionToggle.innerHTML = `
           <span class="hdr-chevron">${svgIcon(SVG.chevronDown, 16, '#4f6ef7')}</span>
           <span class="hdr-title">${section.title}</span>
           <span class="hdr-progress ${allDone ? 'all-done' : ''}">${viewedN}/${section.items.length}</span>
-          <button class="hdr-complete-btn ${allDone ? 'is-done' : ''}" data-doc="${docIdx}" data-count="${section.items.length}">
-            ${allDone ? svgIcon(SVG.checkCircle, 12, '#fff') + ' Completo' : svgIcon(SVG.checkCircle, 12, '#10b981') + ' Marcar completo'}
-          </button>
         `;
+
+        const completeBtn = document.createElement('button');
+        completeBtn.type = 'button';
+        completeBtn.className = `hdr-complete-btn ${allDone ? 'is-done' : ''}`;
+        completeBtn.dataset.doc = docIdx;
+        completeBtn.dataset.count = section.items.length;
+        completeBtn.innerHTML = allDone
+          ? `${svgIcon(SVG.checkCircle, 12, '#fff')} Completo`
+          : `${svgIcon(SVG.checkCircle, 12, '#10b981')} Marcar completo`;
+
+        header.append(sectionToggle, completeBtn);
         card.appendChild(header);
 
         // Body wrapper — contains items list + floating content area
         const body = document.createElement('div');
         body.className = 'unir-section-body';
+        body.id = `unir-section-body-${docIdx}`;
         body.setAttribute('hidden', ''); // Start collapsed
 
         const ul = document.createElement('ul');
         ul.className = 'unir-section-items';
-        const contentArea = document.createElement('div');
+        const contentArea = document.createElement('li');
         contentArea.className = 'unir-item-content';
 
         section.items.forEach((item, itemIdx) => {
           const li = document.createElement('li');
+          li.className = 'unir-topic-item';
           const key = `${docIdx}-${itemIdx}`;
           const isViewed = mastery.sectionsViewed.includes(key);
-          li.innerHTML = `<span class="li-check ${isViewed ? 'done' : ''}">${isViewed ? svgIcon(SVG.check, 10, '#fff') : ''}</span> ${item.title}`;
-          li.onclick = (e) => {
+          const itemButton = document.createElement('button');
+          itemButton.type = 'button';
+          itemButton.className = 'unir-item-button';
+          itemButton.innerHTML = `<span class="li-check ${isViewed ? 'done' : ''}">${isViewed ? svgIcon(SVG.check, 10, '#fff') : ''}</span><span>${item.title}</span>`;
+          itemButton.addEventListener('click', (e) => {
             e.stopPropagation();
             // Deactivate all items across all cards
-            tocEl.querySelectorAll('li').forEach(l => l.classList.remove('active'));
+            tocEl.querySelectorAll('.unir-topic-item').forEach(l => l.classList.remove('active'));
             // Clear any other card's content areas
             tocEl.querySelectorAll('.unir-item-content').forEach(a => a.innerHTML = '');
             li.classList.add('active');
@@ -3828,22 +3964,29 @@ function renderReview(questions, finalPct, passed) {
             refreshSectionHeader(card, docIdx, section.items.length);
             updateMasteryUI();
             contentArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-          };
+          });
+          li.appendChild(itemButton);
           ul.appendChild(li);
         });
         body.appendChild(ul);
         card.appendChild(body);
 
         // Toggle dropdown on header click (not on the complete button)
-        header.addEventListener('click', (e) => {
-          if (e.target.closest('.hdr-complete-btn')) return;
+        sectionToggle.addEventListener('click', () => {
           const isOpen = !body.hasAttribute('hidden');
-          if (isOpen) { body.setAttribute('hidden', ''); header.classList.remove('open'); contentArea.innerHTML = ''; }
-          else { body.removeAttribute('hidden'); header.classList.add('open'); }
+          if (isOpen) {
+            body.setAttribute('hidden', '');
+            header.classList.remove('open');
+            sectionToggle.setAttribute('aria-expanded', 'false');
+            contentArea.innerHTML = '';
+          } else {
+            body.removeAttribute('hidden');
+            header.classList.add('open');
+            sectionToggle.setAttribute('aria-expanded', 'true');
+          }
         });
 
         // "Mark complete" button handler
-        const completeBtn = header.querySelector('.hdr-complete-btn');
         completeBtn.addEventListener('click', (e) => {
           e.stopPropagation();
           if (isSectionComplete(docIdx, section.items.length)) return;
@@ -3873,10 +4016,12 @@ function renderReview(questions, finalPct, passed) {
       if (firstCard) {
         const firstBody = firstCard.querySelector('.unir-section-body');
         const firstHdr = firstCard.querySelector('.unir-section-header');
+        const firstToggle = firstCard.querySelector('.unir-section-toggle');
         if (firstBody) firstBody.removeAttribute('hidden');
         if (firstHdr) firstHdr.classList.add('open');
-        const firstLi = firstCard.querySelector('li');
-        if (firstLi) firstLi.click();
+        if (firstToggle) firstToggle.setAttribute('aria-expanded', 'true');
+        const firstItemButton = firstCard.querySelector('.unir-item-button');
+        if (firstItemButton) firstItemButton.click();
       }
 
       // Flashcard mode
@@ -3885,6 +4030,7 @@ function renderReview(questions, finalPct, passed) {
 
       function renderFlashcardMode() {
         const panel = document.getElementById('unir-panel-flashcards');
+        if (!panel) return;
         if (flashcards.length === 0) {
           panel.innerHTML = '<div style="text-align:center;color:var(--text-muted,#64748b);">No hay flashcards disponibles.</div>';
           return;
@@ -4066,12 +4212,8 @@ function renderReview(questions, finalPct, passed) {
     studyScreen.classList.add("hidden");
     startScreen.classList.remove("hidden");
 
-    // Re-apply current provider theme (don't default to blue)
-    if (currentProviderId) {
-        setGlobalTheme(currentProviderId);
-    } else {
-        setGlobalTheme('default');
-    }
+    // Codex (GPT-5) | 2026-08-23 20:35 CST | Restaura el acento global único al salir del estudio.
+    setGlobalTheme();
 
     // Cleanup UNIR study mode keyboard handler
     if (studyScreen._unirKeyHandler) {
@@ -4086,7 +4228,10 @@ function renderReview(questions, finalPct, passed) {
       studyScreen.innerHTML = `
                 <div class="study-layout">
                 <aside class="study-sidebar">
-                    <button class="btn btn-secondary btn-sm" id="study-back-btn" onclick="window.closeStudyMode()" style="margin-bottom:1rem; width:100%;">← Volver al Menú</button>
+                    <button class="btn btn-secondary btn-sm" id="study-back-btn" type="button" style="margin-bottom:1rem; width:100%;">
+                      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                      Volver al menú
+                    </button>
                     <h3 id="study-course-title">Material de Estudio</h3>
                     <div id="study-toc" class="study-toc"></div>
                 </aside>
@@ -4096,6 +4241,7 @@ function renderReview(questions, finalPct, passed) {
                 </main>
                 </div>
              `;
+      bindStudyBackButton();
     }
   };
 
@@ -4111,10 +4257,12 @@ function renderReview(questions, finalPct, passed) {
     document.getElementById("study-item-body").innerHTML = item.content;
   }
 
-  const studyBackBtn = document.getElementById("study-back-btn");
-  if (studyBackBtn) {
-    studyBackBtn.addEventListener("click", window.closeStudyMode);
+  function bindStudyBackButton() {
+    const studyBackBtn = document.getElementById("study-back-btn");
+    if (studyBackBtn) studyBackBtn.onclick = window.closeStudyMode;
   }
+
+  bindStudyBackButton();
 
   // --- Keyboard Shortcuts ---
   document.addEventListener("keydown", (e) => {
@@ -4302,7 +4450,7 @@ function renderReview(questions, finalPct, passed) {
           const avatarColor = belt.color || '#1e293b';
           // Use a visible gradient for very light belt colors (white belt)
           const isLightBelt = belt.color === '#f0f0f0' || belt.color === '#ffffff' || !belt.color;
-          const xpBarColor = isLightBelt ? 'linear-gradient(90deg, #6366f1, #8b5cf6)' : avatarColor;
+          const xpBarColor = isLightBelt ? '#3157d5' : avatarColor;
           const savedPhoto = localStorage.getItem('profilePhoto');
           const avatarContent = savedPhoto 
               ? `<img src="${savedPhoto}" alt="Foto de perfil"/>${initials}` 
@@ -4373,7 +4521,7 @@ function renderReview(questions, finalPct, passed) {
             </div>
             <div style="display:flex;gap:12px;justify-content:center;margin-top:16px;">
                 <button id="crop-cancel" style="padding:8px 24px;border:1px solid var(--border-color,#ddd);border-radius:8px;background:transparent;cursor:pointer;font-size:0.85rem;color:var(--text-color,#333);">Cancelar</button>
-                <button id="crop-save" style="padding:8px 24px;border:none;border-radius:8px;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:white;cursor:pointer;font-size:0.85rem;font-weight:600;">Guardar</button>
+                <button id="crop-save" style="padding:8px 24px;border:none;border-radius:8px;background:#3157d5;color:white;cursor:pointer;font-size:0.85rem;font-weight:600;">Guardar</button>
             </div>
         </div>`;
       

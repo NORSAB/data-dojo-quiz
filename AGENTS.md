@@ -153,3 +153,24 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
 - Reglas de diseño (SVG-only, cero emojis en UI, paleta de colores reducida) documentadas en la sección 5 a partir de instrucción explícita del usuario en este turno.
 
 <!-- Próxima entrada: agregar debajo de esta línea, con fecha y autor (IA + modelo). No borrar nada de arriba. -->
+
+### Regla permanente de autoría y sello temporal — Codex (GPT-5) — 2026-08-23 20:58 CST
+- Desde esta entrada, **todo comentario nuevo de código o documentación y toda nueva entrada de bitácora debe indicar quién lo hizo, la fecha y la hora con zona horaria**. Si el autor es una IA, se agrega también el modelo cuando sea conocido.
+- Formato recomendado para comentarios: `Autor (modelo) | AAAA-MM-DD HH:mm ZONA | motivo del cambio`.
+- Formato recomendado para bitácora: `### AAAA-MM-DD HH:mm ZONA — Autor (modelo)`.
+- Los comentarios históricos anteriores a esta regla no se reescriben de forma retroactiva; se preservan como evidencia del estado en que fueron creados.
+
+### 2026-08-23 20:58 CST — Codex (GPT-5)
+- Implementó un design system más sobrio y uniforme: `styles.css` pasó de **60 a 18 colores hex únicos** y de **39 a 0 gradientes**. También eliminó los gradientes decorativos restantes de `script.js`, `features.js` e `index.html`, manteniendo un acento azul, neutros y colores semánticos.
+- Creó un **Centro de estudio visible** en la pantalla principal y un acceso permanente desde el encabezado. Descubre automáticamente los 7 cursos con `window.studyData`, muestra módulos/temas y destaca el curso GenAI bilingüe.
+- Mejoró la accesibilidad del Study Mode: tabs y temas ahora usan botones nativos, roles ARIA, estado `aria-selected`/`aria-expanded`, objetivos táctiles y navegación por teclado. La pestaña de flashcards se oculta cuando el curso no tiene tarjetas propias.
+- Corrigió dos defectos estructurales: el botón de tema ya no dispara `toggleTheme()` dos veces y las dos declaraciones `finishQuiz` dejaron de competir; la implementación histórica quedó nombrada `finishQuizLegacy` y el flujo activo no cambió.
+- Ajustó `supabase-sync.js` al esquema documentado: eliminó la columna no documentada `theme` del payload (permanece dentro de `full_backup`) y agregó restauración genérica de `course_progress` y `course_mastery` por curso.
+- Creó `tools/validate_genai_integration.js`: verificó **383 EN + 383 ES**, IDs únicos, gemelas `-es`, 6 dominios, 65 subdominios EN con traducción ES única, 6 módulos/35 temas GenAI y compatibilidad de payload/restauración Supabase.
+- Creó `tools/audit_code_structure.js` y el mapa en `graphify-out/`: el grafo focalizado del commit base tiene 135 nodos, 242 relaciones y 19 comunidades; la comprobación posterior reporta 0 funciones duplicadas dentro del mismo archivo y 0 IDs HTML duplicados.
+- Documentó la factibilidad de refactorización incremental en `AUDITORIA_ESTRUCTURAL_2026-08-23.md` y creó `AUDITORIAS_INDICE.md` para localizar las auditorías y planes históricos sin reemplazar este `AGENTS.md`.
+- Actualizó la PWA a `BUILD_TIMESTAMP = 20260823c`, caché `simulador-v18` y versionado `styles.css?v=20260823c`.
+- Verificación ejecutada: `node --check` en los JS principales y herramientas, `git diff --check`, auditoría estructural, validador GenAI/Supabase y prueba HTTP local con respuesta 200 para HTML, CSS, JS, bancos EN/ES, estudio, Supabase y service worker.
+- Pendiente explícito: el QA visual automatizado no pudo ejecutarse porque el navegador integrado tiene una preferencia guardada que bloquea `127.0.0.1`. No se intentó eludir esa restricción; debe hacerse un pase visual manual o habilitarse el acceso local antes de afirmar validación visual completa.
+- Identificó un riesgo crítico no modificado: `supabase-sync.js` usa un `device_id` fijo para permitir sincronización multidispositivo. En un sitio público puede compartir el mismo registro entre navegadores; debe resolverse con Supabase Auth/RLS o un código de vinculación, no con un UUID aleatorio que rompa el objetivo multidispositivo.
+- No se hizo commit ni push en esta sesión. Los artefactos locales previos `.genai_translation_work/`, `__pycache__/` y `translation_cache_genai.json` se conservaron sin cambios.

@@ -102,7 +102,6 @@ const DataSync = {
       dojo_streak: JSON.parse(localStorage.getItem('dojoStreak') || '{}'),
       app_state: JSON.parse(localStorage.getItem('quizAppState') || '{}'),
       full_backup: fullBackup,
-      theme: localStorage.getItem('theme') || 'dark',
       updated_at: new Date().toISOString()
     };
   },
@@ -179,6 +178,13 @@ const DataSync = {
             if (data.quiz_history) localStorage.setItem('quizHistory', JSON.stringify(data.quiz_history));
             if (data.dojo_streak) localStorage.setItem('dojoStreak', JSON.stringify(data.dojo_streak));
             if (data.app_state) localStorage.setItem('quizAppState', JSON.stringify(data.app_state));
+            // Codex (GPT-5) | 2026-08-23 20:35 CST | Recupera también los mapas JSONB genéricos por curso.
+            Object.entries(data.course_progress || {}).forEach(([courseId, progress]) => {
+              localStorage.setItem(`${courseId}_progress`, JSON.stringify(progress));
+            });
+            Object.entries(data.course_mastery || {}).forEach(([courseId, mastery]) => {
+              localStorage.setItem(`${courseId}_mastery`, JSON.stringify(mastery));
+            });
             if (data.theme) localStorage.setItem('theme', data.theme);
           }
 

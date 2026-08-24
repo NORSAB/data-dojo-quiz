@@ -1,6 +1,6 @@
-// M5: Version hash with build timestamp
-const BUILD_TIMESTAMP = '20260823b';
-const CACHE_NAME = `simulador-v17-${BUILD_TIMESTAMP}`;
+// Codex (GPT-5) | 2026-08-23 20:35 CST | Invalida caché por nuevo centro de estudio y design system.
+const BUILD_TIMESTAMP = '20260823c';
+const CACHE_NAME = `simulador-v18-${BUILD_TIMESTAMP}`;
 const ASSETS_TO_CACHE = [
   './',
   './index.html',

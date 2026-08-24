@@ -508,7 +508,7 @@ function renderProgressDashboard(courseId) {
         const certBanner = document.createElement('div');
         certBanner.id = 'official-cert-banner';
         certBanner.className = 'kpi-card';
-        certBanner.style = 'grid-column: 1 / -1; border: 2px solid #fbbf24; background: linear-gradient(45deg, rgba(251,191,36,0.1), rgba(251,191,36,0.02)); flex-direction: row; justify-content: space-between; align-items: center; padding: 15px 20px;';
+        certBanner.style = 'grid-column: 1 / -1; border: 2px solid #9a6700; background: rgba(154,103,0,0.08); flex-direction: row; justify-content: space-between; align-items: center; padding: 15px 20px;';
         certBanner.innerHTML = `
             <div style="display:flex; align-items:center; gap: 15px;">
                 <svg viewBox="0 0 24 24" width="32" height="32" stroke="#fbbf24" stroke-width="2" fill="none"><path d="M12 15l-5-5h3V4h4v6h3l-5 5zm-7 4v-2h14v2H5z"/></svg>
@@ -893,7 +893,7 @@ window.showLevelUpModal = function(newBelt) {
     const toast = document.createElement('div');
     toast.style.cssText = `
         position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-        z-index: 10000; background: linear-gradient(135deg, #1e293b, #334155);
+        z-index: 10000; background: #111827;
         color: #e2e8f0; padding: 16px 28px; border-radius: 16px;
         box-shadow: 0 8px 32px rgba(0,0,0,0.3); display: flex; align-items: center;
         gap: 12px; animation: slideDown 0.4s ease; font-family: var(--font-family, 'Inter', sans-serif);
@@ -1206,7 +1206,7 @@ function launchFlashcardMode(cards, courseId) {
             </div>
             <div id="fc-card" style="
                 width: 100%; max-width: 600px; min-height: 280px;
-                background: ${flipped ? 'linear-gradient(135deg, #1e40af, #3b82f6)' : 'var(--card-bg, #fff)'};
+                background: ${flipped ? '#3157d5' : 'var(--card-bg, #fff)'};
                 color: ${flipped ? '#fff' : 'var(--text-color, #1e293b)'};
                 border-radius: 16px; padding: 32px; cursor: pointer;
                 display: flex; align-items: center; justify-content: center;
@@ -1222,7 +1222,7 @@ function launchFlashcardMode(cards, courseId) {
                     ${idx === 0 ? 'disabled style="opacity:0.3;padding:10px 20px;border-radius:10px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.1);color:white;cursor:not-allowed;font-size:0.9rem;"' : ''}>
                     Anterior
                 </button>
-                <button id="fc-flip" style="padding:10px 24px;border-radius:10px;border:none;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:white;cursor:pointer;font-weight:700;font-size:0.9rem;">
+                <button id="fc-flip" style="padding:10px 24px;border-radius:10px;border:none;background:#3157d5;color:white;cursor:pointer;font-weight:700;font-size:0.9rem;">
                     ${flipped ? 'Ver Pregunta' : 'Ver Respuesta'}
                 </button>
                 <button id="fc-next" style="padding:10px 20px;border-radius:10px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.1);color:white;cursor:pointer;font-size:0.9rem;"
@@ -2047,11 +2047,7 @@ function openStatsPage() {
         const area = `M ${pts[0].x},${th - pad} ${pts.map(p => `L ${p.x},${p.y}`).join(' ')} L ${pts[pts.length-1].x},${th - pad} Z`;
 
         trendSVG = `<svg width="100%" height="${th}" viewBox="0 0 ${tw} ${th}" style="overflow:visible;">
-            <defs><linearGradient id="trend-fill" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="var(--primary-color)" stop-opacity="0.2"/>
-                <stop offset="100%" stop-color="var(--primary-color)" stop-opacity="0.02"/>
-            </linearGradient></defs>
-            <path d="${area}" fill="url(#trend-fill)"/>
+            <path d="${area}" fill="rgba(49,87,213,0.1)"/>
             <line x1="${pad}" y1="${passY}" x2="${tw-pad}" y2="${passY}" stroke="var(--success-color)" stroke-dasharray="4" opacity="0.4"/>
             <text x="${tw-pad+5}" y="${passY+4}" fill="var(--success-color)" font-size="10" opacity="0.6">70%</text>
             <polyline fill="none" stroke="var(--primary-color)" stroke-width="2.5" stroke-linejoin="round" points="${polyline}"/>

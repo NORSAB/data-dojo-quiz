@@ -12,3 +12,7 @@ node_modules/
 *.zip
 *.tar.gz
 *.tmp
+
+# Codex (GPT-5) | 2026-08-23 20:35 CST | Caché y respaldos temporales de Graphify; conserva los artefactos finales.
+graphify-out/cache/
+graphify-out/[0-9][0-9][0-9][0-9]-*/

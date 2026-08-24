@@ -10,14 +10,14 @@
   =============================================================================
 -->
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Quiz Simulator</title>
     <link rel="manifest" href="manifest.json" />
-    <meta name="theme-color" content="#4f6ef7" />
-    <link rel="stylesheet" href="styles.css?v=15" />
+    <meta name="theme-color" content="#3157d5" />
+    <link rel="stylesheet" href="styles.css?v=20260823c" />
     <style>
       /* =======================================================================
          TRUE 100% FULL-WIDTH FLUID RESPONSIVE SYSTEM
@@ -252,6 +252,20 @@
           <span class="icon-label">Stats</span>
         </button>
 
+        <!-- Codex (GPT-5) | 2026-08-23 20:35 CST | Acceso permanente al Centro de estudio. -->
+        <button
+          id="study-center-btn"
+          class="btn-icon-modern"
+          title="Centro de estudio"
+          aria-controls="study-hub"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M2 4.5A2.5 2.5 0 0 1 4.5 2H11v18H4.5A2.5 2.5 0 0 0 2 22V4.5Z" />
+            <path d="M22 4.5A2.5 2.5 0 0 0 19.5 2H13v18h6.5A2.5 2.5 0 0 1 22 22V4.5Z" />
+          </svg>
+          <span class="icon-label">Estudio</span>
+        </button>
+
         <!-- Admin -->
         <button id="admin-btn" class="btn-icon-modern" title="Administración">
           <svg viewBox="0 0 24 24">
@@ -266,7 +280,6 @@
         <button
           id="theme-toggle"
           class="btn-icon-modern"
-          onclick="toggleTheme()"
           title="Cambiar Tema"
         >
           <svg viewBox="0 0 24 24">
@@ -296,7 +309,7 @@
                 cy="60"
                 r="56"
                 fill="none"
-                stroke="url(#emblemGrad)"
+                stroke="#3157d5"
                 stroke-width="2.5"
                 opacity="0.5"
               />
@@ -305,14 +318,14 @@
                 cy="60"
                 r="48"
                 fill="none"
-                stroke="url(#emblemGrad)"
+                stroke="#3157d5"
                 stroke-width="1.5"
                 opacity="0.2"
               />
               <!-- Torii Gate -->
               <g
                 transform="translate(60,56) scale(1.0)"
-                stroke="url(#emblemGrad)"
+                stroke="#3157d5"
                 stroke-width="3.5"
                 fill="none"
                 stroke-linecap="round"
@@ -330,7 +343,7 @@
                 y1="92"
                 x2="74"
                 y2="92"
-                stroke="url(#emblemGrad)"
+                stroke="#3157d5"
                 stroke-width="2"
                 opacity="0.3"
                 stroke-linecap="round"
@@ -340,23 +353,11 @@
                 y1="97"
                 x2="70"
                 y2="97"
-                stroke="url(#emblemGrad)"
+                stroke="#3157d5"
                 stroke-width="1.5"
                 opacity="0.2"
                 stroke-linecap="round"
               />
-              <defs>
-                <linearGradient
-                  id="emblemGrad"
-                  x1="0%"
-                  y1="0%"
-                  x2="100%"
-                  y2="100%"
-                >
-                  <stop offset="0%" stop-color="#4f6ef7" />
-                  <stop offset="100%" stop-color="#7c3aed" />
-                </linearGradient>
-              </defs>
             </svg>
           </div>
 
@@ -374,26 +375,11 @@
             <svg viewBox="0 0 200 8" preserveAspectRatio="none">
               <path
                 d="M0 4 Q30 0, 60 4 T120 4 T180 4 L200 4"
-                stroke="url(#brushGrad)"
+                stroke="#3157d5"
                 stroke-width="2"
                 fill="none"
                 stroke-linecap="round"
               />
-              <defs>
-                <linearGradient
-                  id="brushGrad"
-                  x1="0%"
-                  y1="0%"
-                  x2="100%"
-                  y2="0%"
-                >
-                  <stop offset="0%" stop-color="transparent" />
-                  <stop offset="20%" stop-color="#4f6ef7" />
-                  <stop offset="50%" stop-color="#7c3aed" />
-                  <stop offset="80%" stop-color="#4f6ef7" />
-                  <stop offset="100%" stop-color="transparent" />
-                </linearGradient>
-              </defs>
             </svg>
           </div>
 
@@ -566,6 +552,29 @@
                   </div>
               </div>
           </div>
+
+          <!-- Codex (GPT-5) | 2026-08-23 20:35 CST | Sección visible y centralizada de módulos de estudio. -->
+          <section id="study-hub" class="study-hub" aria-labelledby="study-hub-title">
+            <div class="study-hub-heading">
+              <div class="study-hub-heading-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M2 4.5A2.5 2.5 0 0 1 4.5 2H11v18H4.5A2.5 2.5 0 0 0 2 22V4.5Z" />
+                  <path d="M22 4.5A2.5 2.5 0 0 0 19.5 2H13v18h6.5A2.5 2.5 0 0 1 22 22V4.5Z" />
+                </svg>
+              </div>
+              <div>
+                <p class="study-hub-eyebrow">Rutas de aprendizaje</p>
+                <h2 id="study-hub-title">Centro de estudio</h2>
+                <p class="study-hub-description">
+                  Repasa conceptos por dominio, registra tu avance y vuelve al examen cuando estés listo.
+                </p>
+              </div>
+              <span id="study-hub-summary" class="study-hub-summary" aria-live="polite"></span>
+            </div>
+            <div id="study-hub-grid" class="study-hub-grid">
+              <p class="study-hub-empty">Cargando módulos de estudio...</p>
+            </div>
+          </section>
 
           <div class="menu-header">
             <h2>Seleccionar Categoría</h2>
@@ -1010,7 +1019,10 @@
               class="btn btn-outline btn-sm"
               style="margin-bottom: 1rem"
             >
-              ← Volver al Menú
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M19 12H5M12 19l-7-7 7-7" />
+              </svg>
+              Volver al menú
             </button>
             <h3 id="study-course-title">Estudio</h3>
             <div id="study-toc" class="study-toc">
