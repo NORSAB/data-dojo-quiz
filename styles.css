@@ -233,6 +233,117 @@ header {
   align-items: center;
 }
 
+/* Codex (GPT-5) | 2026-08-23 22:09 CST | Selector global sobrio con el mismo acento principal. */
+.global-language-toggle {
+  min-width: 86px;
+  flex-direction: row;
+  gap: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+}
+
+.global-language-toggle svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.global-language-pair {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.global-language-option {
+  min-width: 24px;
+  padding: 3px 4px;
+  border-radius: 5px;
+  color: rgba(255, 255, 255, 0.58);
+  text-align: center;
+}
+
+.global-language-option.active {
+  background: var(--primary-color);
+  color: white;
+}
+
+.global-language-divider {
+  color: rgba(255, 255, 255, 0.42);
+}
+
+html[data-app-language="es"] .lang-section[data-lang="en"],
+html[data-app-language="es"] .fc-language-block[data-lang="en"],
+html[data-app-language="es"] .cmd-lt[data-lang="en"],
+html[data-app-language="en"] .lang-section[data-lang="es"],
+html[data-app-language="en"] .fc-language-block[data-lang="es"],
+html[data-app-language="en"] .cmd-lt[data-lang="es"] {
+  display: none !important;
+}
+
+html[data-app-language="es"] .lang-section[data-lang="es"],
+html[data-app-language="es"] .fc-language-block[data-lang="es"],
+html[data-app-language="en"] .lang-section[data-lang="en"],
+html[data-app-language="en"] .fc-language-block[data-lang="en"] {
+  display: block !important;
+}
+
+html[data-app-language="es"] .cmd-lt[data-lang="es"],
+html[data-app-language="en"] .cmd-lt[data-lang="en"] {
+  display: revert !important;
+}
+
+html[data-app-language] .lang-section::before {
+  display: none !important;
+}
+
+html[data-app-language] .lang-section[data-lang] {
+  margin-top: 0;
+  padding-top: 16px;
+}
+
+body.zen-mode header {
+  display: flex !important;
+  position: fixed;
+  inset: 8px 8px auto auto;
+  width: auto;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+  pointer-events: none;
+}
+
+body.zen-mode header > .header-title,
+body.zen-mode .header-controls > :not(#global-language-toggle) {
+  display: none !important;
+}
+
+body.zen-mode header .header-controls,
+body.zen-mode #global-language-toggle {
+  display: flex !important;
+  pointer-events: auto;
+}
+
+/* Codex (GPT-5) | 2026-08-23 22:17 CST | Mantiene el idioma accesible también sobre la bienvenida inicial. */
+body:has(#onboarding-screen:not(.hidden)) header {
+  z-index: 10001;
+  background: transparent;
+  box-shadow: none;
+  pointer-events: none;
+}
+
+body:has(#onboarding-screen:not(.hidden)) header > .header-title,
+body:has(#onboarding-screen:not(.hidden)) .header-controls > :not(#global-language-toggle) {
+  display: none !important;
+}
+
+body:has(#onboarding-screen:not(.hidden)) header .header-controls,
+body:has(#onboarding-screen:not(.hidden)) #global-language-toggle {
+  display: flex !important;
+  pointer-events: auto;
+}
+
 /* Modern Header Icon Buttons */
 .btn-icon-modern {
   background: transparent;
@@ -897,6 +1008,12 @@ header {
   .btn-icon-modern {
     min-width: 44px;
     padding: 4px 6px;
+  }
+  .global-language-toggle {
+    min-width: 70px;
+  }
+  .global-language-toggle svg {
+    display: none;
   }
   .icon-label {
     font-size: 0.5rem;

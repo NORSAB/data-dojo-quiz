@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* Codex (GPT-5) | 2026-08-23 22:00 CST | Bloquea paletas fuera de norma y recursos estáticos con versiones de caché incoherentes. */
+/* Codex (GPT-5) | 2026-08-23 22:17 CST | Bloquea paletas fuera de norma y recursos estáticos con versiones de caché incoherentes. */
 
 const fs = require('fs');
 const path = require('path');
@@ -16,6 +16,7 @@ const index = read('index.html');
 const script = read('script.js');
 const features = read('features.js');
 const translate = read('translate_toggle.js');
+const appI18n = read('app_i18n.js');
 const serviceWorker = read('sw.js');
 
 const providerIconsStart = script.indexOf('const providerIcons = {');
@@ -30,6 +31,7 @@ const activeInterface = [
   ['script.js', scriptWithoutBrandLogos],
   ['features.js', features],
   ['translate_toggle.js', translate],
+  ['app_i18n.js', appI18n],
 ];
 
 const forbiddenDecorativeColors = [
@@ -67,17 +69,27 @@ for (const color of forbiddenStudyColors) {
   assert(!studyStyle.toLowerCase().includes(color), `Centro de Estudio: conserva ${color} dentro de su interfaz.`);
 }
 
-assert(translate.includes('background: var(--primary-color, #3157d5);'), 'Selector EN/ES: no hereda el acento principal.');
+assert(styles.includes('.global-language-option.active'), 'Selector global ES/EN: falta el estado visual activo.');
+assert(styles.includes('background: var(--primary-color);'), 'Selector global ES/EN: no hereda el acento principal.');
 
 const buildMatch = serviceWorker.match(/BUILD_TIMESTAMP\s*=\s*['"]([^'"]+)['"]/);
 const cssVersionMatch = index.match(/styles\.css\?v=([^"']+)/);
 const scriptVersionMatch = index.match(/script\.js\?v=([^"']+)/);
-assert(buildMatch && cssVersionMatch && scriptVersionMatch, 'PWA: no se pudo leer BUILD_TIMESTAMP, styles.css?v o script.js?v.');
-if (buildMatch && cssVersionMatch && scriptVersionMatch) {
+const appI18nVersionMatch = index.match(/app_i18n\.js\?v=([^"']+)/);
+const translateVersionMatch = index.match(/translate_toggle\.js\?v=([^"']+)/);
+const featuresVersionMatch = index.match(/features\.js\?v=([^"']+)/);
+assert(buildMatch && cssVersionMatch && scriptVersionMatch && appI18nVersionMatch && translateVersionMatch && featuresVersionMatch, 'PWA: no se pudieron leer las versiones del build, CSS o JavaScript global.');
+if (buildMatch && cssVersionMatch && scriptVersionMatch && appI18nVersionMatch && translateVersionMatch && featuresVersionMatch) {
   assert(buildMatch[1] === cssVersionMatch[1], `PWA: BUILD_TIMESTAMP ${buildMatch[1]} y styles.css?v=${cssVersionMatch[1]} no coinciden.`);
   assert(buildMatch[1] === scriptVersionMatch[1], `PWA: BUILD_TIMESTAMP ${buildMatch[1]} y script.js?v=${scriptVersionMatch[1]} no coinciden.`);
+  assert(buildMatch[1] === appI18nVersionMatch[1], `PWA: BUILD_TIMESTAMP ${buildMatch[1]} y app_i18n.js?v=${appI18nVersionMatch[1]} no coinciden.`);
+  assert(buildMatch[1] === translateVersionMatch[1], `PWA: BUILD_TIMESTAMP ${buildMatch[1]} y translate_toggle.js?v=${translateVersionMatch[1]} no coinciden.`);
+  assert(buildMatch[1] === featuresVersionMatch[1], `PWA: BUILD_TIMESTAMP ${buildMatch[1]} y features.js?v=${featuresVersionMatch[1]} no coinciden.`);
   assert(serviceWorker.includes(`'./styles.css?v=${buildMatch[1]}'`), 'PWA: el CSS versionado no está precargado en el service worker.');
   assert(serviceWorker.includes(`'./script.js?v=${buildMatch[1]}'`), 'PWA: el JavaScript versionado no está precargado en el service worker.');
+  assert(serviceWorker.includes(`'./app_i18n.js?v=${buildMatch[1]}'`), 'PWA: el selector global versionado no está precargado en el service worker.');
+  assert(serviceWorker.includes(`'./translate_toggle.js?v=${buildMatch[1]}'`), 'PWA: el puente de preguntas versionado no está precargado en el service worker.');
+  assert(serviceWorker.includes(`'./features.js?v=${buildMatch[1]}'`), 'PWA: los paneles derivados versionados no están precargados en el service worker.');
 }
 
 if (failures.length > 0) {

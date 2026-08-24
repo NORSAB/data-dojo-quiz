@@ -296,7 +296,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let currentProviderId = null;
   let currentCourseId = null;
-  let currentLanguage = "es";
+  let currentLanguage = window.AppI18n ? window.AppI18n.getLanguage() : "es";
+
+  // Codex (GPT-5) | 2026-08-23 22:09 CST | Fuente única para el idioma activo en navegación, examen y estudio.
+  function getActiveLanguage() {
+    return window.AppI18n ? window.AppI18n.getLanguage() : currentLanguage;
+  }
 
   // Quiz State
   let currentQuizQuestions = [];
@@ -401,6 +406,18 @@ document.addEventListener("DOMContentLoaded", () => {
         if (nextBtn) nextBtn.addEventListener("click", () => navigate(1));
         if (prevBtn) prevBtn.addEventListener("click", () => navigate(-1));
         if (restartBtn) restartBtn.addEventListener("click", returnToMenu);
+        window.addEventListener('app-language-change', (event) => {
+            currentLanguage = event.detail.language;
+            if (configModal && !configModal.classList.contains('hidden') && currentCourseId) {
+                window.startCourse(currentCourseId);
+            } else if (currentCourseId && (!quizUI || quizUI.classList.contains('hidden'))) {
+                if (typeof renderDomainCards === 'function') renderDomainCards(currentCourseId);
+                if (typeof setupRealExamButton === 'function') setupRealExamButton(currentCourseId);
+                if (typeof renderStudyPlan === 'function') renderStudyPlan(currentCourseId);
+                if (typeof setupMarathonButton === 'function') setupMarathonButton(currentCourseId);
+                if (typeof renderStudyCoach === 'function') renderStudyCoach(currentCourseId);
+            }
+        });
 
         // Default Category Selection — pick the first visible category
         const firstVisible = providerData.find(p => !hiddenCategories.includes(p.id));
@@ -1355,7 +1372,7 @@ const badgesConfig = [
                     <h4>${course.name}${isCertified ? ' <span class="cert-badge" title="Certificación obtenida"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span>' : ''}</h4>
                     <p>${
                       isCertified
-                        ? "Certificación obtenida ✓"
+                        ? "Certificación obtenida"
                         : course.status === "active"
                         ? "Banco de preguntas completo"
                         : "No disponible"
@@ -1593,11 +1610,6 @@ const badgesConfig = [
         break;
       }
     }
-    const conf = courseConfig[courseId] || {};
-    const lang = conf.lang || "es";
-    document.querySelector(
-      `input[name="admin-lang"][value="${lang}"]`
-    ).checked = true;
     document.querySelector(
       `input[name="admin-status"][value="${currentStatus}"]`
     ).checked = true;
@@ -1606,14 +1618,10 @@ const badgesConfig = [
   function saveAdminConfig() {
     // TAB 1: Course settings
     const courseId = adminCourseSelect.value;
-    const selectedLang = document.querySelector(
-      'input[name="admin-lang"]:checked'
-    ).value;
     const selectedStatus = document.querySelector(
       'input[name="admin-status"]:checked'
     ).value;
     if (!courseConfig[courseId]) courseConfig[courseId] = {};
-    courseConfig[courseId].lang = selectedLang;
     courseConfig[courseId].status = selectedStatus;
     saveConfig();
 
@@ -1651,17 +1659,17 @@ const badgesConfig = [
   window.startCourse = function (courseId) {
     currentCourseId = courseId;
     renderHistory(); // Filter history for this course immediately
-    const conf = courseConfig[courseId] || {};
-    const lang = conf.lang || "es";
+    const lang = getActiveLanguage();
 
     // Filter questions strictly by courseId and language
     let filtered = questionsData.filter(
       (q) => q.courseId === courseId && q.lang === lang
     );
 
-    if (filtered.length === 0 && lang !== 'en') {
-        console.warn(`No questions found for ${lang}, trying fallback to 'en'`);
-        filtered = questionsData.filter(q => q.courseId === courseId && q.lang === 'en');
+    if (filtered.length === 0) {
+        const fallbackLanguage = lang === 'es' ? 'en' : 'es';
+        console.warn(`No questions found for ${lang}, trying fallback to '${fallbackLanguage}'`);
+        filtered = questionsData.filter(q => q.courseId === courseId && q.lang === fallbackLanguage);
     }
 
     if (filtered.length === 0) {
@@ -1968,8 +1976,7 @@ const badgesConfig = [
         if (typeof startQuestionTimer === 'function') startQuestionTimer();
         currentQuestionIndex = index;
         const q = currentQuizQuestions[index];
-        const conf = courseConfig[currentCourseId] || {};
-        const lang = conf.lang || "es";
+        const lang = getActiveLanguage();
     
         // Label logic
         // Expanded Dictionary
@@ -2477,8 +2484,7 @@ const badgesConfig = [
 
     feedbackArea.classList.remove("hidden");
     feedbackArea.classList.add(isCorrect ? "correct" : "incorrect");
-    const conf = courseConfig[currentCourseId] || {};
-    const lang = conf.lang || "es";
+    const lang = getActiveLanguage();
     const lbls =
       lang === "es"
         ? { cor: "¡Correcto!", inc: "Incorrecto.", ans: "Respuesta Correcta:" }
@@ -2772,8 +2778,7 @@ const badgesConfig = [
 
 
         // Localization for Result Msg
-        const conf = courseConfig[currentCourseId] || {};
-        const lang = conf.lang || "es";
+        const lang = getActiveLanguage();
         const lbls =
         lang === "es"
             ? {
@@ -2888,8 +2893,7 @@ function renderReview(questions, finalPct, passed) {
     if (!reviewContainer) return;
 
     // Localization Labels (Re-derived for context)
-    const conf = courseConfig[currentCourseId] || {};
-    const lang = conf.lang || "es";
+      const lang = getActiveLanguage();
     const lbls = lang === "es"
         ? {
             review_title: "Revisión Detallada de Preguntas",
@@ -3087,6 +3091,18 @@ function renderReview(questions, finalPct, passed) {
 
       const data = window.studyData && window.studyData[courseId];
       if (!data) return;
+
+      const studyI18n = window.AppI18n;
+      const localizedMarkup = (english, spanish, className = '') => studyI18n
+        ? studyI18n.localizedMarkup(english, spanish, className)
+        : spanish;
+      const bilingualParts = (value, order = 'en-es') => studyI18n
+        ? studyI18n.splitBilingual(value, order)
+        : { en: String(value ?? ''), es: String(value ?? '') };
+      const bilingualMarkup = (value, order = 'en-es', className = '') => {
+        const pair = bilingualParts(value, order);
+        return localizedMarkup(pair.en, pair.es, className);
+      };
 
       // XP / Mastery state from localStorage — each course has its own key
       const storageKey = courseId === 'unir-herramientas-viz' ? 'unir_herr_mastery' : (courseId === 'unah-tesis' ? 'unah_tesis_mastery' : (courseId === 'databricks-da' ? 'databricks_da_mastery' : (courseId === 'databricks-fundamentals' ? 'databricks_fund_mastery' : (courseId === 'dp-600' ? 'dp600_mastery' : (courseId === 'databricks-genai-engineer' ? 'databricks_genai_mastery' : 'unir_viz_mastery')))));
@@ -3323,6 +3339,7 @@ function renderReview(questions, finalPct, passed) {
           .unir-persona-body .p-dato-examen { background: var(--bg-surface, #f1f5f9); padding: 14px 18px; border-radius: 8px; font-size: 0.82rem; color: var(--text-color); display: flex; align-items: flex-start; gap: 10px; position: relative; border-left: 3px solid var(--border-color, #e5e7eb); }
           .unir-persona-body .p-dato-examen::before { display: none; }
           .unir-persona-card.is-read { background: rgba(22,121,74,0.05); }
+          .unir-persona-card.is-read .p-name { color: var(--study-success); }
           .unir-persona-body .p-dato-examen svg { flex-shrink: 0; margin-top: 1px; }
           .unir-persona-body .p-tema { font-size: 0.72rem; color: var(--text-muted, #64748b); margin-top: 12px; font-weight: 600; }
 
@@ -3481,7 +3498,7 @@ function renderReview(questions, finalPct, passed) {
         <div class="unir-root">
           <!-- Floating Mastery Pill -->
           <div class="unir-mastery-pill">
-            <button id="unir-study-back" class="unir-study-back" type="button">${svgIcon(SVG.back, 14)} Volver</button>
+            <button id="unir-study-back" class="unir-study-back" type="button">${svgIcon(SVG.back, 14)} ${localizedMarkup('Back', 'Volver')}</button>
             <div class="m-label">${svgIcon(SVG.star, 13)} <span id="unir-xp-display">${mastery.xp} XP</span></div>
             <div class="m-track"><div class="m-fill" id="unir-mastery-bar" style="width:0%"></div></div>
             <span class="m-label" id="unir-mastery-text">0/${totalSections}</span>
@@ -3491,25 +3508,25 @@ function renderReview(questions, finalPct, passed) {
           <!-- Tab Pills — centered row -->
           <div class="unir-tabs-row" role="tablist" aria-label="Opciones del módulo de estudio">
             <button type="button" class="unir-tab active" id="unir-tab-study" role="tab" aria-selected="true" aria-controls="unir-panel-study" onclick="window._unirSwitchTab('study')">
-              ${svgIcon(SVG.eye, 15)} Estudiar
+              ${svgIcon(SVG.eye, 15)} ${localizedMarkup('Study', 'Estudiar')}
             </button>
             ${hasPersonajes ? `<button type="button" class="unir-tab" id="unir-tab-personajes" role="tab" aria-selected="false" aria-controls="unir-panel-personajes" tabindex="-1" onclick="window._unirSwitchTab('personajes')">
-              ${svgIcon('M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z', 15)} Personajes <span class="unir-tab-count">${window.personajesUnirViz.reduce((a,c) => a + c.personas.length, 0)}</span>
+              ${svgIcon('M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z', 15)} ${localizedMarkup('People', 'Personajes')} <span class="unir-tab-count">${window.personajesUnirViz.reduce((a,c) => a + c.personas.length, 0)}</span>
             </button>` : ''}
             ${hasConceptos ? `<button type="button" class="unir-tab" id="unir-tab-conceptos" role="tab" aria-selected="false" aria-controls="unir-panel-conceptos" tabindex="-1" onclick="window._unirSwitchTab('conceptos')">
-              ${svgIcon('M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5', 15)} ${isGenAICourse ? 'Términos EN/ES' : 'Conceptos Clave'} <span class="unir-tab-count">${conceptos.reduce((a,c) => a + c.conceptos.length, 0)}</span>
+              ${svgIcon('M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5', 15)} ${isGenAICourse ? localizedMarkup('Terms', 'Términos') : localizedMarkup('Key Concepts', 'Conceptos Clave')} <span class="unir-tab-count">${conceptos.reduce((a,c) => a + c.conceptos.length, 0)}</span>
             </button>` : ''}
             ${hasComandosSQL ? `<button type="button" class="unir-tab" id="unir-tab-comandos" role="tab" aria-selected="false" aria-controls="unir-panel-comandos" tabindex="-1" onclick="window._unirSwitchTab('comandos')">
-              ${svgIcon('M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z', 15)} Comandos SQL <span class="unir-tab-count">${window.comandosSqlDatabricks.reduce((a,c) => a + c.comandos.length, 0)}</span>
+              ${svgIcon('M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z', 15)} ${localizedMarkup('SQL Commands', 'Comandos SQL')} <span class="unir-tab-count">${window.comandosSqlDatabricks.reduce((a,c) => a + c.comandos.length, 0)}</span>
             </button>` : ''}
             ${hasGenAIPatterns ? `<button type="button" class="unir-tab" id="unir-tab-patterns" role="tab" aria-selected="false" aria-controls="unir-panel-patterns" tabindex="-1" onclick="window._unirSwitchTab('patterns')">
-              ${svgIcon('M9 18h6M10 22h4M12 2a7 7 0 00-4 12.74V16h8v-1.26A7 7 0 0012 2z', 15)} Escenarios EN/ES <span class="unir-tab-count">${genAIPatterns.reduce((a,c) => a + c.items.length, 0)}</span>
+              ${svgIcon('M9 18h6M10 22h4M12 2a7 7 0 00-4 12.74V16h8v-1.26A7 7 0 0012 2z', 15)} ${localizedMarkup('Scenarios', 'Escenarios')} <span class="unir-tab-count">${genAIPatterns.reduce((a,c) => a + c.items.length, 0)}</span>
             </button>` : ''}
             ${hasFlashcards ? `<button type="button" class="unir-tab" id="unir-tab-flashcards" role="tab" aria-selected="false" aria-controls="unir-panel-flashcards" tabindex="-1" onclick="window._unirSwitchTab('flashcards')">
               ${svgIcon(SVG.flip, 15)} Flashcards <span class="unir-tab-count">${flashcards.length}</span>
             </button>` : ''}
             <button type="button" class="unir-tab" id="unir-tab-achievements" role="tab" aria-selected="false" aria-controls="unir-panel-achievements" tabindex="-1" onclick="window._unirSwitchTab('achievements')">
-              ${svgIcon(SVG.trophy, 15)} Logros
+              ${svgIcon(SVG.trophy, 15)} ${localizedMarkup('Achievements', 'Logros')}
             </button>
           </div>
 
@@ -3754,8 +3771,8 @@ function renderReview(questions, finalPct, passed) {
         const totalConceptos = conceptos.reduce((a,c) => a + c.conceptos.length, 0);
 
         let html = `<div style="text-align:center;margin-bottom:18px;">
-          <h2 style="margin:0 0 4px;font-size:1.3rem;color:var(--text-color,#1e293b);">${isGenAICourse ? 'Términos y competencias / Terms and competencies' : 'Conceptos Clave para el Examen'}</h2>
-          <p style="margin:0;font-size:0.85rem;color:var(--text-muted,#64748b);">${isGenAICourse ? 'Cada término incluye explicación y respuesta clave en inglés y español. Todo inicia contraído.' : 'Despliega cada concepto para ver su descripci&oacute;n y dato clave para el examen.'}</p>
+          <h2 style="margin:0 0 4px;font-size:1.3rem;color:var(--text-color,#1e293b);">${isGenAICourse ? localizedMarkup('Terms and competencies', 'Términos y competencias') : localizedMarkup('Key Concepts for the Exam', 'Conceptos Clave para el Examen')}</h2>
+          <p style="margin:0;font-size:0.85rem;color:var(--text-muted,#64748b);">${isGenAICourse ? localizedMarkup('Each term includes an explanation and key answer. Everything starts collapsed.', 'Cada término incluye explicación y respuesta clave. Todo inicia contraído.') : localizedMarkup('Open each concept to see its description and key exam fact.', 'Despliega cada concepto para ver su descripción y dato clave para el examen.')}</p>
           <div id="unir-concepto-progress" style="margin-top:8px;font-size:0.8rem;color:var(--primary-color,#3157d5);font-weight:600;">${cIcon(SVG.star, 14)} ${mastery.conceptosViewed.length}/${totalConceptos} le&iacute;dos &mdash; +5 XP por concepto nuevo</div>
           <div style="display:flex;gap:8px;justify-content:center;margin-top:10px;flex-wrap:wrap;">
             <span style="font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:8px;background:var(--primary-light);color:var(--primary-color);">CLAVE = Muy preguntado</span>
@@ -3837,7 +3854,7 @@ function renderReview(questions, finalPct, passed) {
         conceptos.forEach((cat, ci) => {
           const categoryId = `concepto-category-${ci}`;
           html += `<div class="unir-persona-category">`;
-          html += `<button type="button" class="unir-persona-cat-header unir-category-toggle" aria-expanded="false" aria-controls="${categoryId}">${cIcon(cat.icon, 20)} <span>${cat.category}</span><span style="margin-left:auto;font-size:0.72rem;opacity:0.7;">${cat.conceptos.length} conceptos</span><span class="unir-category-chevron">${cIcon(SVG.chevronDown, 16)}</span></button>`;
+          html += `<button type="button" class="unir-persona-cat-header unir-category-toggle" aria-expanded="false" aria-controls="${categoryId}">${cIcon(cat.icon, 20)} ${bilingualMarkup(cat.category)}<span style="margin-left:auto;font-size:0.72rem;opacity:0.7;">${cat.conceptos.length} conceptos</span><span class="unir-category-chevron">${cIcon(SVG.chevronDown, 16)}</span></button>`;
           html += `<div class="unir-category-body" id="${categoryId}" hidden>`;
 
           cat.conceptos.forEach((c, pi) => {
@@ -3848,15 +3865,15 @@ function renderReview(questions, finalPct, passed) {
             html += `<div class="unir-persona-card${isRead ? ' is-read' : ''}" style="${isRead ? 'border-left:3px solid var(--success-color);' : ''}">`;
             html += `  <div class="unir-persona-header" id="${uid}-hdr" onclick="window._unirConceptoToggle(${ci},${pi})">`;
             html += `    <span class="p-chevron">${cIcon('M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z', 16)}</span>`;
-            html += `    <span class="p-name" style="${isRead ? 'color:var(--success-color);' : ''}">${c.nombre}</span>`;
-            html += `    <span class="p-epoch">${c.tipo}</span>`;
+            html += `    ${bilingualMarkup(c.nombre, 'en-es', 'p-name')}`;
+            html += `    ${bilingualMarkup(c.tipo, 'en-es', 'p-epoch')}`;
             html += `    <span class="${badgeCls}">${badgeLabel[c.relevancia]}</span>`;
             html += `    ${isRead ? '<span style="font-size:0.65rem;color:var(--success-color);font-weight:700;">\u2713 LE\u00cdDO</span>' : ''}`;
             html += `  </div>`;
             html += `  <div class="unir-persona-body" id="${uid}-body" style="padding:20px 36px 24px;">`;
             html += `    <div class="p-contribucion">${c.contribucion}</div>`;
             html += `    <div class="p-dato-examen" style="padding:16px 24px;margin-left:16px;margin-right:8px;">${cIcon(alertIcon, 16)} <div><strong style="color:var(--primary-color);">Dato para el examen:</strong> ${c.datoExamen}</div></div>`;
-            html += `    <div class="p-tema">${cIcon('M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z', 12, '#64748b')} ${c.tema}</div>`;
+            html += `    <div class="p-tema">${cIcon('M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z', 12, '#64748b')} ${bilingualMarkup(c.tema)}</div>`;
             html += `  </div>`;
             html += `</div>`;
           });
@@ -3883,20 +3900,20 @@ function renderReview(questions, finalPct, passed) {
         const totalPatterns = genAIPatterns.reduce((total, group) => total + group.items.length, 0);
         let html = `
           <div style="text-align:center;margin-bottom:18px;">
-            <h2 style="margin:0 0 4px;font-size:1.3rem;color:var(--text-color,#1e293b);">Escenarios de decisión / Decision scenarios</h2>
-            <p style="margin:0;color:var(--text-muted,#64748b);font-size:0.85rem;">${totalPatterns} situaciones representativas del examen. Todos los escenarios inician contraídos.</p>
-            <button type="button" id="genai-patterns-collapse" class="btn btn-secondary btn-sm" style="margin-top:12px;">Contraer todo / Collapse all</button>
+            <h2 style="margin:0 0 4px;font-size:1.3rem;color:var(--text-color,#1e293b);">${localizedMarkup('Decision scenarios', 'Escenarios de decisión')}</h2>
+            <p style="margin:0;color:var(--text-muted,#64748b);font-size:0.85rem;">${localizedMarkup(`${totalPatterns} representative exam situations. All scenarios start collapsed.`, `${totalPatterns} situaciones representativas del examen. Todos los escenarios inician contraídos.`)}</p>
+            <button type="button" id="genai-patterns-collapse" class="btn btn-secondary btn-sm" style="margin-top:12px;">${localizedMarkup('Collapse all', 'Contraer todo')}</button>
           </div>`;
 
         genAIPatterns.forEach((group, groupIndex) => {
           const categoryId = `pattern-category-${groupIndex}`;
           html += `<section class="unir-persona-category">`;
-          html += `<button type="button" class="unir-persona-cat-header unir-category-toggle" aria-expanded="false" aria-controls="${categoryId}">${svgIcon(SVG.shield, 18)} <span>${group.category}</span><span style="margin-left:auto;font-size:0.72rem;opacity:0.7;">${group.items.length}</span><span class="unir-category-chevron">${svgIcon(SVG.chevronDown, 16)}</span></button>`;
+          html += `<button type="button" class="unir-persona-cat-header unir-category-toggle" aria-expanded="false" aria-controls="${categoryId}">${svgIcon(SVG.shield, 18)} ${bilingualMarkup(group.category)}<span style="margin-left:auto;font-size:0.72rem;opacity:0.7;">${group.items.length}</span><span class="unir-category-chevron">${svgIcon(SVG.chevronDown, 16)}</span></button>`;
           html += `<div class="unir-category-body" id="${categoryId}" hidden>`;
           group.items.forEach(item => {
             html += `
               <details class="unir-persona-card genai-pattern-card">
-                <summary>${svgIcon(SVG.chevronDown, 16, '#3157d5')}<span>${item.title}</span></summary>
+                <summary>${svgIcon(SVG.chevronDown, 16, '#3157d5')}${bilingualMarkup(item.title)}</summary>
                 <div class="genai-pattern-content">
                   ${item.scenario}
                   ${item.recommendation}
@@ -3925,16 +3942,7 @@ function renderReview(questions, finalPct, passed) {
           <h2 style="margin:0 0 4px;font-size:1.3rem;color:var(--text-color,#1e293b);">Comandos SQL para el Examen</h2>
           <p style="margin:0;color:var(--text-muted,#64748b);font-size:0.85rem;">Ejemplos explicados l&iacute;nea por l&iacute;nea</p>
           <div id="unir-cmd-progress" style="margin-top:8px;font-size:0.8rem;color:var(--primary-color,#3157d5);font-weight:600;">${cIcon(SVG.star, 14)} ${mastery.comandosViewed.length}/${totalComandos} le&iacute;dos &mdash; +8 XP c/u</div>
-          <div style="margin-top:10px;display:flex;gap:8px;justify-content:center;">
-            <button id="cmd-lang-es" onclick="window._cmdLang('es')" style="padding:4px 14px;border-radius:16px;border:2px solid var(--primary-color);background:var(--primary-color);color:#fff;cursor:pointer;font-size:0.78rem;font-weight:700;">ES</button>
-            <button id="cmd-lang-en" onclick="window._cmdLang('en')" style="padding:4px 14px;border-radius:16px;border:2px solid var(--primary-color);background:transparent;color:var(--primary-color);cursor:pointer;font-size:0.78rem;font-weight:700;">EN</button>
-          </div></div>`;
-        window._cmdLang = function(lang) {
-          document.querySelectorAll('.cmd-lt').forEach(el => { el.style.display = el.dataset.lang === lang ? '' : 'none'; });
-          const esB = document.getElementById('cmd-lang-es'), enB = document.getElementById('cmd-lang-en');
-          if(esB){esB.style.background=lang==='es'?'var(--primary-color)':'transparent';esB.style.color=lang==='es'?'#fff':'var(--primary-color)';}
-          if(enB){enB.style.background=lang==='en'?'var(--primary-color)':'transparent';enB.style.color=lang==='en'?'#fff':'var(--primary-color)';}
-        };
+        </div>`;
         window._cmdRead = function(key) {
           if (!mastery.comandosViewed.includes(key)) {
             mastery.comandosViewed.push(key); addXP(8); syncToGlobal('comando'); saveMastery(); checkAchievements();
@@ -4205,13 +4213,14 @@ function renderReview(questions, finalPct, passed) {
         const qEl = document.getElementById('unir-fc-question');
         const aEl = document.getElementById('unir-fc-answer');
         const countEl = document.getElementById('unir-fc-count');
-        if (temaEl) temaEl.textContent = fc.tema;
+        if (temaEl) temaEl.innerHTML = bilingualMarkup(fc.tema);
         if (qEl) {
           if (fc.front) qEl.innerHTML = fc.front;
           else qEl.textContent = fc.pregunta;
         }
         if (aEl) aEl.innerHTML = fc.back || fc.respuesta;
         if (countEl) countEl.textContent = `${fcIdx + 1} / ${fcFiltered.length}`;
+        if (studyI18n) studyI18n.apply(panel);
       }
 
       window._unirNextFC = function() {

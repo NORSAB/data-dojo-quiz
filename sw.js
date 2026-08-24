@@ -3,14 +3,16 @@
 // Codex (GPT-5) | 2026-08-23 21:49 CST | Ajusta contraste oscuro tras el QA visual de producción.
 // Codex (GPT-5) | 2026-08-23 21:55 CST | Fuerza la actualización del estado contraído en todas las subsecciones de estudio.
 // Codex (GPT-5) | 2026-08-23 22:00 CST | Versiona también script.js tras detectar caché HTTP anterior en GitHub Pages.
-const BUILD_TIMESTAMP = '20260823h';
-const CACHE_NAME = `simulador-v23-${BUILD_TIMESTAMP}`;
+// Codex (GPT-5) | 2026-08-23 22:17 CST | Publica el selector global persistente y sus puentes de traducción.
+const BUILD_TIMESTAMP = '20260823i';
+const CACHE_NAME = `simulador-v24-${BUILD_TIMESTAMP}`;
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './styles.css?v=20260823h',
-  './script.js?v=20260823h',
-  './features.js',
+  './styles.css?v=20260823i',
+  './app_i18n.js?v=20260823i',
+  './script.js?v=20260823i',
+  './features.js?v=20260823i',
   './hero_data.js',
   './auto_restore_data.js',
   './manifest.json',
@@ -43,7 +45,7 @@ const ASSETS_TO_CACHE = [
   './conceptos_databricks.js',
   './personajes_unir_viz.js',
   './translations_databricks_es.js',
-  './translate_toggle.js',
+  './translate_toggle.js?v=20260823i',
   './supabase-sync.js',
   './comandos_sql_databricks.js'
 ];

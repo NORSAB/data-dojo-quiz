@@ -23,6 +23,31 @@
  * F20: Dedicated Statistics Page
  */
 
+// Codex (GPT-5) | 2026-08-23 22:17 CST | Evita duplicar bancos gemelos y usa el idioma global en paneles derivados.
+function getLocalizedCourseQuestions(courseId) {
+    const allQuestions = window.questionsData || [];
+    const language = window.AppI18n ? window.AppI18n.getLanguage() : 'es';
+    if (courseId) {
+        const scoped = allQuestions.filter(q => q.courseId === courseId);
+        const localized = scoped.filter(q => q.lang === language);
+        return localized.length > 0 ? localized : scoped;
+    }
+    const byCourse = new Map();
+    allQuestions.forEach(question => {
+        const key = question.courseId || '__global__';
+        if (!byCourse.has(key)) byCourse.set(key, []);
+        byCourse.get(key).push(question);
+    });
+    return [...byCourse.values()].flatMap(scoped => {
+        const localized = scoped.filter(q => q.lang === language);
+        return localized.length > 0 ? localized : scoped;
+    });
+}
+
+function getCanonicalQuestionId(questionId) {
+    return String(questionId || '').replace(/-es$/, '');
+}
+
 // =============================================
 // F1: WEAKNESS REVIEW MODE
 // =============================================
@@ -110,8 +135,8 @@ function renderDomainCards(courseId) {
     if (!container || !wrapper) return;
 
     const cid = courseId || window.currentCourseId;
-    const allQuestions = window.questionsData || [];
-    const questions = allQuestions.filter(q => q.courseId === cid);
+    const allQuestions = getLocalizedCourseQuestions(cid);
+    const questions = allQuestions;
 
     if (!questions || questions.length === 0) { wrapper.style.display = 'none'; return; }
 
@@ -121,7 +146,7 @@ function renderDomainCards(courseId) {
         const d = q.domain || 'General';
         if (!domains[d]) domains[d] = { total: 0, ids: [] };
         domains[d].total++;
-        domains[d].ids.push(q.id);
+        domains[d].ids.push(getCanonicalQuestionId(q.id));
     });
 
     if (Object.keys(domains).length <= 1) { wrapper.style.display = 'none'; return; }
@@ -137,7 +162,7 @@ function renderDomainCards(courseId) {
         let latestAttemptIndex = -1;
         for (let i = 0; i < history.length; i++) {
             const h = history[i];
-            if (h.questionIds && h.questionIds.some(qId => domains[domain].ids.includes(qId))) {
+            if (h.questionIds && h.questionIds.some(qId => domains[domain].ids.includes(getCanonicalQuestionId(qId)))) {
                 latestAttemptIndex = i;
                 break;
             }
@@ -146,7 +171,7 @@ function renderDomainCards(courseId) {
         if (latestAttemptIndex >= 0) {
             const h = history[latestAttemptIndex];
             h.questionIds.forEach((qId, idx) => {
-                if (domains[domain].ids.includes(qId)) {
+                if (domains[domain].ids.includes(getCanonicalQuestionId(qId))) {
                     attempted++;
                     const ans = h.userAnswers[idx] || h.userAnswers[String(idx)];
                     if (ans && ans.isCorrect) correct++;
@@ -178,7 +203,7 @@ function renderDomainCards(courseId) {
             </div>
         `;
         card.onclick = () => {
-            const domainQuestions = allQuestions.filter(q => data.ids.includes(q.id));
+            const domainQuestions = allQuestions.filter(q => data.ids.includes(getCanonicalQuestionId(q.id)));
             launchDirectQuiz(domainQuestions, 'domain');
         };
         container.appendChild(card);
@@ -240,8 +265,8 @@ function setupRealExamButton(courseId) {
     if (!btn) return;
 
     const cid = courseId || window.currentCourseId;
-    const allQuestions = window.questionsData || [];
-    const questions = allQuestions.filter(q => q.courseId === cid);
+    const allQuestions = getLocalizedCourseQuestions(cid);
+    const questions = allQuestions;
 
     if (questions && questions.length >= 45) {
         btn.style.display = 'flex';
@@ -838,7 +863,7 @@ function trackDailyActivity() {
 // =============================================
 function getDomainStats(courseId) {
     const cid = courseId || window.currentCourseId;
-    const allQ = (window.questionsData || []).filter(q => !cid || q.courseId === cid);
+    const allQ = getLocalizedCourseQuestions(cid);
     const history = JSON.parse(localStorage.getItem('quizHistory') || '[]')
         .filter(h => !cid || h.courseCheck === cid);
 
@@ -847,24 +872,25 @@ function getDomainStats(courseId) {
         const d = q.domain || 'General';
         if (!stats[d]) stats[d] = { total: 0, seen: new Set(), missed: new Set(), correct: 0, attempted: 0, ids: [] };
         stats[d].total++;
-        stats[d].ids.push(q.id);
+        stats[d].ids.push(getCanonicalQuestionId(q.id));
     });
 
     history.forEach(h => {
         if (!h.questionIds || !h.userAnswers) return;
         h.questionIds.forEach((qId, idx) => {
-            const q = allQ.find(qq => qq.id === qId);
+            const canonicalId = getCanonicalQuestionId(qId);
+            const q = allQ.find(qq => getCanonicalQuestionId(qq.id) === canonicalId);
             if (!q) return;
             const d = q.domain || 'General';
             if (!stats[d]) return;
-            stats[d].seen.add(qId);
+            stats[d].seen.add(canonicalId);
             stats[d].attempted++;
             const ans = h.userAnswers[idx] || h.userAnswers[String(idx)];
             if (ans && ans.isCorrect) {
                 stats[d].correct++;
-                stats[d].missed.delete(qId);
+                stats[d].missed.delete(canonicalId);
             } else {
-                stats[d].missed.add(qId);
+                stats[d].missed.add(canonicalId);
             }
         });
     });
@@ -1112,7 +1138,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // F9: QUICK QUIZ MODE (10 random questions)
 // =============================================
 function launchQuickQuiz() {
-    const allQ = window.questionsData || [];
+    const allQ = getLocalizedCourseQuestions();
     if (allQ.length === 0) {
         alert('No hay preguntas disponibles todavía.');
         return;
@@ -1129,7 +1155,7 @@ function launchQuickQuiz() {
 }
 
 function launchMappingQuiz() {
-    const allQ = window.questionsData || [];
+    const allQ = getLocalizedCourseQuestions();
     // Filter questions mapped with mapping_missing true
     const mappingQs = allQ.filter(q => q.isMapping === true);
 
@@ -1570,7 +1596,7 @@ function renderStudyPlan(courseId) {
     if (!panel || !content) return;
 
     const cid = courseId || window.currentCourseId;
-    const allQ = (window.questionsData || []).filter(q => q.courseId === cid);
+    const allQ = getLocalizedCourseQuestions(cid);
     if (allQ.length === 0) { panel.style.display = 'none'; return; }
 
     const history = JSON.parse(localStorage.getItem('quizHistory') || '[]')
@@ -1588,18 +1614,19 @@ function renderStudyPlan(courseId) {
     history.forEach(h => {
         if (!h.questionIds) return;
         h.questionIds.forEach((qId, idx) => {
-            const q = allQ.find(qq => qq.id === qId);
+            const canonicalId = getCanonicalQuestionId(qId);
+            const q = allQ.find(qq => getCanonicalQuestionId(qq.id) === canonicalId);
             if (!q) return;
             const d = q.domain || 'General';
             if (!domains[d]) return;
-            domains[d].seen.add(qId);
+            domains[d].seen.add(canonicalId);
             domains[d].attempted++;
             const ans = h.userAnswers ? (h.userAnswers[idx] || h.userAnswers[String(idx)]) : null;
             if (ans && ans.isCorrect) {
                 domains[d].correct++;
-                domains[d].missed.delete(qId);
+                domains[d].missed.delete(canonicalId);
             } else {
-                domains[d].missed.add(qId);
+                domains[d].missed.add(canonicalId);
             }
         });
     });
@@ -1625,7 +1652,10 @@ function renderStudyPlan(courseId) {
             name, pct, unseenCount, missedCount,
             total: d.total, seen: d.seen.size,
             priority, level,
-            questionIds: [...d.missed, ...allQ.filter(q => (q.domain || 'General') === name && !d.seen.has(q.id)).map(q => q.id)]
+            questionIds: allQ
+                .filter(q => (q.domain || 'General') === name)
+                .filter(q => d.missed.has(getCanonicalQuestionId(q.id)) || !d.seen.has(getCanonicalQuestionId(q.id)))
+                .map(q => q.id)
         };
     }).sort((a, b) => b.priority - a.priority);
 
@@ -1821,7 +1851,7 @@ function importFullProgress(file) {
 // =============================================
 function setupMarathonButton(courseId) {
     const cid = courseId || window.currentCourseId;
-    const allQ = (window.questionsData || []).filter(q => q.courseId === cid);
+    const allQ = getLocalizedCourseQuestions(cid);
 
     const examBtn = document.getElementById('start-real-exam-btn');
     if (!examBtn) return;
@@ -2272,8 +2302,7 @@ function openStatsPage() {
  * Returns { domainName: { total, attempted, correct, pct } }
  */
 function _computeDomainStats(courseId) {
-    const allQuestions = window.questionsData || [];
-    const questions = allQuestions.filter(q => q.courseId === courseId);
+    const questions = getLocalizedCourseQuestions(courseId);
     if (!questions.length) return {};
 
     // Build domain index
@@ -2282,7 +2311,7 @@ function _computeDomainStats(courseId) {
         const d = q.domain || 'General';
         if (!domains[d]) domains[d] = { total: 0, ids: [], attempted: 0, correct: 0 };
         domains[d].total++;
-        domains[d].ids.push(q.id);
+        domains[d].ids.push(getCanonicalQuestionId(q.id));
     });
 
     // Accumulate from history
@@ -2293,7 +2322,7 @@ function _computeDomainStats(courseId) {
         history.forEach(h => {
             if (!h.questionIds || !h.userAnswers) return;
             h.questionIds.forEach((qId, idx) => {
-                if (domains[domain].ids.includes(qId)) {
+                if (domains[domain].ids.includes(getCanonicalQuestionId(qId))) {
                     domains[domain].attempted++;
                     const ans = h.userAnswers[idx] || h.userAnswers[String(idx)];
                     if (ans && ans.isCorrect) domains[domain].correct++;
@@ -2363,7 +2392,7 @@ function renderStudyCoach(courseId) {
     if (!panel) return;
 
     const cid = courseId || window.currentCourseId;
-    const allQuestions = window.questionsData || [];
+    const allQuestions = getLocalizedCourseQuestions(cid);
     const hasCourseQuestions = allQuestions.some(q => q.courseId === cid);
 
     if (!hasCourseQuestions) {

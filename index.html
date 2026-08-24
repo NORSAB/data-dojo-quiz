@@ -17,7 +17,7 @@
     <title>Quiz Simulator</title>
     <link rel="manifest" href="manifest.json" />
     <meta name="theme-color" content="#3157d5" />
-    <link rel="stylesheet" href="styles.css?v=20260823h" />
+    <link rel="stylesheet" href="styles.css?v=20260823i" />
     <style>
       /* =======================================================================
          TRUE 100% FULL-WIDTH FLUID RESPONSIVE SYSTEM
@@ -274,6 +274,26 @@
             />
           </svg>
           <span class="icon-label">Admin</span>
+        </button>
+
+        <!-- Codex (GPT-5) | 2026-08-23 22:09 CST | Selector global persistente disponible sin abandonar la pantalla activa. -->
+        <button
+          id="global-language-toggle"
+          class="btn-icon-modern global-language-toggle"
+          type="button"
+          onclick="toggleAppLanguage()"
+          title="Cambiar toda la aplicación a inglés"
+          aria-label="Cambiar toda la aplicación a inglés"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <path d="M4 5h9M8.5 3v2M6 5c.4 3.4 2.4 6.1 5.4 7.7M11 5c-.7 4-3 7.1-6.5 9" />
+            <path d="M14 19l3.5-9 3.5 9M15.2 16h4.6" />
+          </svg>
+          <span class="global-language-pair" aria-hidden="true">
+            <span class="global-language-option" data-language="es">ES</span>
+            <span class="global-language-divider">/</span>
+            <span class="global-language-option" data-language="en">EN</span>
+          </span>
         </button>
 
         <!-- Theme Toggle -->
@@ -1079,20 +1099,6 @@
               <select id="admin-course-select">
                 <!-- Injected via JS -->
               </select>
-            </div>
-
-            <div class="form-group">
-              <label>Idioma Predeterminado:</label>
-              <div class="radio-group">
-                <label
-                  ><input type="radio" name="admin-lang" value="en" /> Inglés
-                  (English)</label
-                >
-                <label
-                  ><input type="radio" name="admin-lang" value="es" />
-                  Español</label
-                >
-              </div>
             </div>
 
             <div class="form-group">
@@ -2044,13 +2050,14 @@
     <script src="flashcards_unah_tesis.js"></script>
     <!-- Auto Restore Master Data -->
     <script src="auto_restore_data.js"></script>
-    <script src="script.js?v=20260823h"></script>
-    <script src="features.js"></script>
+    <script src="app_i18n.js?v=20260823i"></script>
+    <script src="script.js?v=20260823i"></script>
+    <script src="features.js?v=20260823i"></script>
     <!-- Supabase Cloud Backup -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-sync.js"></script>
     <!-- Databricks Spanish Translation Toggle -->
     <script src="translations_databricks_es.js"></script>
-    <script src="translate_toggle.js"></script>
+    <script src="translate_toggle.js?v=20260823i"></script>
   </body>
 </html>
