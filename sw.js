@@ -1,5 +1,5 @@
 // M5: Version hash with build timestamp
-const BUILD_TIMESTAMP = '20260823a';
+const BUILD_TIMESTAMP = '20260823b';
 const CACHE_NAME = `simulador-v17-${BUILD_TIMESTAMP}`;
 const ASSETS_TO_CACHE = [
   './',
