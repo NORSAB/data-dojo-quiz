@@ -4439,18 +4439,18 @@ html, body {
    ============================================================================= */
 .unir-search-container {
   width: 100%;
-  margin-bottom: 18px;
+  margin-bottom: 22px;
 }
 
 .unir-search-box {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 16px;
-  border-radius: 12px;
+  gap: 12px;
+  padding: 14px 20px;
+  border-radius: 14px;
   background: var(--bg-card, #ffffff);
   border: 1.5px solid var(--border-color, #e2e8f0);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   transition: all 0.2s ease;
 }
 
@@ -4464,7 +4464,8 @@ html, body {
   border: none;
   outline: none;
   background: transparent;
-  font-size: 0.95rem;
+  font-size: 1.15rem;
+  font-weight: 500;
   color: var(--text-color, #1e293b);
 }
 
@@ -4473,11 +4474,11 @@ html, body {
   background: transparent;
   cursor: pointer;
   color: var(--text-muted, #94a3b8);
-  padding: 4px;
+  padding: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 4px;
+  border-radius: 6px;
   transition: all 0.15s ease;
 }
 
@@ -4487,11 +4488,11 @@ html, body {
 }
 
 .unir-search-results-count {
-  font-size: 0.82rem;
-  font-weight: 600;
+  font-size: 0.95rem;
+  font-weight: 700;
   color: var(--primary-color, #4f6ef7);
-  margin-top: 6px;
-  padding: 0 4px;
+  margin-top: 8px;
+  padding: 0 6px;
 }
 
 .search-highlight {
