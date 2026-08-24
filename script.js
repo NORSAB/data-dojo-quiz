@@ -3126,11 +3126,18 @@ function renderReview(questions, finalPct, passed) {
         } catch (e) { console.warn('syncToGlobal error', e); }
       }
 
-      // Detect if this is a Databricks course for conditional rendering
-      const isDatabricksCourse = courseId === 'databricks-da' || courseId === 'databricks-fundamentals' || courseId === 'dp-600';
+      // Codex (GPT-5) | 2026-08-23 21:19 CST | Resuelve recursos complementarios por curso sin mezclar bancos de certificaciones distintas.
+      const isGenAICourse = courseId === 'databricks-genai-engineer';
+      const isDatabricksCourse = courseId === 'databricks-da' || courseId === 'databricks-fundamentals' || courseId === 'dp-600' || isGenAICourse;
       const hasPersonajes = courseId === 'unir-viz-interactiva' && window.personajesUnirViz;
-      const hasConceptos = isDatabricksCourse && window.conceptosDatabricks;
-      const hasComandosSQL = isDatabricksCourse && window.comandosSqlDatabricks;
+      const conceptos = isGenAICourse
+        ? (window.conceptosDatabricksGenAI || [])
+        : (isDatabricksCourse ? (window.conceptosDatabricks || []) : []);
+      const genAIPatterns = isGenAICourse ? (window.databricksGenAIPatterns || []) : [];
+      const comandosSql = !isGenAICourse && isDatabricksCourse ? (window.comandosSqlDatabricks || []) : [];
+      const hasConceptos = conceptos.length > 0;
+      const hasGenAIPatterns = genAIPatterns.length > 0;
+      const hasComandosSQL = comandosSql.length > 0;
 
       // Achievements config — dynamic based on course type
       const baseAchievements = [
@@ -3167,8 +3174,8 @@ function renderReview(questions, finalPct, passed) {
         { id: 'first_concepto', name: 'Aprendiz Lakehouse', desc: 'Lee tu primer concepto', xpReq: 0, icon: 'M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5', condition: () => mastery.conceptosViewed.length >= 1 },
         { id: 'five_conceptos', name: 'Explorador Delta', desc: 'Lee 5 conceptos', xpReq: 0, icon: 'M12 10.9c-.61 0-1.1.49-1.1 1.1s.49 1.1 1.1 1.1c.61 0 1.1-.49 1.1-1.1s-.49-1.1-1.1-1.1zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm2.19 12.19L6 18l3.81-8.19L18 6l-3.81 8.19z', condition: () => mastery.conceptosViewed.length >= 5 },
         { id: 'ten_conceptos', name: 'Architect Certified', desc: 'Lee 10 conceptos', xpReq: 0, icon: 'M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z', condition: () => mastery.conceptosViewed.length >= 10 },
-        { id: 'all_conceptos', name: 'Unity Catalog Master', desc: 'Lee todos los conceptos', xpReq: 0, icon: 'M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z', condition: () => { const total = window.conceptosDatabricks ? window.conceptosDatabricks.reduce((a,c) => a + c.conceptos.length, 0) : 20; return mastery.conceptosViewed.length >= total; } },
-        { id: 'lakehouse_secret', name: 'Mente de Lakehouse', desc: '???', xpReq: 0, icon: 'M19.8 18.4L14 10.67V6.5l1.35-1.69c.26-.33.03-.81-.39-.81H9.04c-.42 0-.65.48-.39.81L10 6.5v4.17L4.2 18.4c-.49.66-.02 1.6.8 1.6h14c.82 0 1.29-.94.8-1.6z', condition: () => { const total = window.conceptosDatabricks ? window.conceptosDatabricks.reduce((a,c) => a + c.conceptos.length, 0) : 20; return mastery.conceptosViewed.length >= total && mastery.flashcardsViewed >= 30; } }
+        { id: 'all_conceptos', name: isGenAICourse ? 'GenAI Vocabulary Master' : 'Unity Catalog Master', desc: 'Lee todos los conceptos', xpReq: 0, icon: 'M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z', condition: () => mastery.conceptosViewed.length >= conceptos.reduce((a,c) => a + c.conceptos.length, 0) },
+        { id: 'lakehouse_secret', name: isGenAICourse ? 'Mente GenAI' : 'Mente de Lakehouse', desc: '???', xpReq: 0, icon: 'M19.8 18.4L14 10.67V6.5l1.35-1.69c.26-.33.03-.81-.39-.81H9.04c-.42 0-.65.48-.39.81L10 6.5v4.17L4.2 18.4c-.49.66-.02 1.6.8 1.6h14c.82 0 1.29-.94.8-1.6z', condition: () => mastery.conceptosViewed.length >= conceptos.reduce((a,c) => a + c.conceptos.length, 0) && mastery.flashcardsViewed >= 30 }
       ] : [];
 
       // Comandos SQL achievements (Databricks only)
@@ -3231,6 +3238,7 @@ function renderReview(questions, finalPct, passed) {
         'databricks-da': () => window.databricksDAFlashcards,
         'databricks-fundamentals': () => window.databricksDAFlashcards,
         'dp-600': () => window.databricksDAFlashcards,
+        'databricks-genai-engineer': () => window.databricksGenAIFlashcards,
       };
       const flashcards = (STUDY_FLASHCARD_SOURCES[courseId] && STUDY_FLASHCARD_SOURCES[courseId]()) || [];
       const hasFlashcards = flashcards.length > 0;
@@ -3347,7 +3355,7 @@ function renderReview(questions, finalPct, passed) {
           .unir-fc-card { width: 100%; max-width: 780px; height: 420px; perspective: 1200px; cursor: pointer; }
           .unir-fc-inner { width: 100%; height: 100%; position: relative; transition: transform 0.6s cubic-bezier(.4,0,.2,1); transform-style: preserve-3d; border-radius: 20px; box-shadow: 0 8px 32px rgba(79,110,247,0.12); }
           .unir-fc-card.flipped .unir-fc-inner { transform: rotateY(180deg); }
-          .unir-fc-face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 32px; }
+          .unir-fc-face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 32px; overflow-y: auto; }
           .unir-fc-front { background: #1f2937; color: #fff; }
           .unir-fc-back { background: var(--bg-card, #fff); color: var(--text-color, #333); transform: rotateY(180deg); border: 1px solid var(--border-color, #e5e7eb); overflow-y: auto; }
           .unir-fc-nav { display: flex; align-items: center; gap: 12px; margin-top: 20px; }
@@ -3360,6 +3368,17 @@ function renderReview(questions, finalPct, passed) {
           .unir-fc-diff-btn.medium { border-color: #f59e0b; color: #f59e0b; background: #f59e0b10; }
           .unir-fc-diff-btn.hard { border-color: #ef4444; color: #ef4444; background: #ef444410; }
           .unir-fc-diff-btn:hover { transform: scale(1.05); }
+          .fc-language-block { width: 100%; text-align: left; padding: 12px 0; border-bottom: 1px solid var(--border-color, rgba(255,255,255,0.2)); }
+          .fc-language-block:last-child { border-bottom: 0; }
+          .fc-language-label { display: inline-block; margin-bottom: 6px; color: #93c5fd; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.12em; }
+          .unir-fc-back .fc-language-label { color: var(--primary-color, #3157d5); }
+          .fc-language-title { display: block; margin-bottom: 6px; font-size: 0.82rem; }
+          .fc-language-block > div { font-size: 0.9rem; line-height: 1.55; }
+          .genai-pattern-card summary { min-height: 44px; padding: 12px 16px; cursor: pointer; display: flex; align-items: center; gap: 10px; color: var(--text-color, #1e293b); font-weight: 700; list-style: none; }
+          .genai-pattern-card summary::-webkit-details-marker { display: none; }
+          .genai-pattern-card summary svg { flex-shrink: 0; transition: transform 0.2s ease; }
+          .genai-pattern-card[open] summary svg { transform: rotate(180deg); }
+          .genai-pattern-content { border-top: 1px solid var(--border-color, #e5e7eb); padding: 6px 20px 18px; }
 
           /* Achievements grid */
           .unir-ach-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
@@ -3458,10 +3477,13 @@ function renderReview(questions, finalPct, passed) {
               ${svgIcon('M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z', 15)} Personajes <span style="background:rgba(79,110,247,0.15);padding:2px 8px;border-radius:10px;font-size:0.72rem;font-weight:700;">${window.personajesUnirViz.reduce((a,c) => a + c.personas.length, 0)}</span>
             </button>` : ''}
             ${hasConceptos ? `<button type="button" class="unir-tab" id="unir-tab-conceptos" role="tab" aria-selected="false" aria-controls="unir-panel-conceptos" tabindex="-1" onclick="window._unirSwitchTab('conceptos')">
-              ${svgIcon('M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5', 15)} Conceptos Clave <span style="background:${isDatabricksCourse ? 'rgba(255,54,33,0.15)' : 'rgba(79,110,247,0.15)'};padding:2px 8px;border-radius:10px;font-size:0.72rem;font-weight:700;">${window.conceptosDatabricks.reduce((a,c) => a + c.conceptos.length, 0)}</span>
+              ${svgIcon('M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5', 15)} ${isGenAICourse ? 'Términos EN/ES' : 'Conceptos Clave'} <span style="background:${isDatabricksCourse ? 'rgba(255,54,33,0.15)' : 'rgba(79,110,247,0.15)'};padding:2px 8px;border-radius:10px;font-size:0.72rem;font-weight:700;">${conceptos.reduce((a,c) => a + c.conceptos.length, 0)}</span>
             </button>` : ''}
             ${hasComandosSQL ? `<button type="button" class="unir-tab" id="unir-tab-comandos" role="tab" aria-selected="false" aria-controls="unir-panel-comandos" tabindex="-1" onclick="window._unirSwitchTab('comandos')">
               ${svgIcon('M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z', 15)} Comandos SQL <span style="background:rgba(255,54,33,0.15);padding:2px 8px;border-radius:10px;font-size:0.72rem;font-weight:700;">${window.comandosSqlDatabricks.reduce((a,c) => a + c.comandos.length, 0)}</span>
+            </button>` : ''}
+            ${hasGenAIPatterns ? `<button type="button" class="unir-tab" id="unir-tab-patterns" role="tab" aria-selected="false" aria-controls="unir-panel-patterns" tabindex="-1" onclick="window._unirSwitchTab('patterns')">
+              ${svgIcon('M9 18h6M10 22h4M12 2a7 7 0 00-4 12.74V16h8v-1.26A7 7 0 0012 2z', 15)} Escenarios EN/ES <span style="background:rgba(49,87,213,0.15);padding:2px 8px;border-radius:10px;font-size:0.72rem;font-weight:700;">${genAIPatterns.reduce((a,c) => a + c.items.length, 0)}</span>
             </button>` : ''}
             ${hasFlashcards ? `<button type="button" class="unir-tab" id="unir-tab-flashcards" role="tab" aria-selected="false" aria-controls="unir-panel-flashcards" tabindex="-1" onclick="window._unirSwitchTab('flashcards')">
               ${svgIcon(SVG.flip, 15)} Flashcards <span style="background:${isDatabricksCourse ? 'rgba(255,54,33,0.15)' : 'rgba(79,110,247,0.15)'};padding:2px 8px;border-radius:10px;font-size:0.72rem;font-weight:700;">${flashcards.length}</span>
@@ -3485,6 +3507,8 @@ function renderReview(questions, finalPct, passed) {
           <!-- PANEL: Comandos SQL (Databricks) -->
           ${hasComandosSQL ? '<div class="unir-panel" id="unir-panel-comandos" role="tabpanel" aria-labelledby="unir-tab-comandos" hidden></div>' : ''}
 
+          ${hasGenAIPatterns ? '<div class="unir-panel" id="unir-panel-patterns" role="tabpanel" aria-labelledby="unir-tab-patterns" hidden></div>' : ''}
+
           <!-- PANEL: Flashcards -->
           ${hasFlashcards ? '<div class="unir-panel" id="unir-panel-flashcards" role="tabpanel" aria-labelledby="unir-tab-flashcards" hidden></div>' : ''}
 
@@ -3496,12 +3520,14 @@ function renderReview(questions, finalPct, passed) {
       const unifiedStudyBack = document.getElementById('unir-study-back');
       if (unifiedStudyBack) unifiedStudyBack.addEventListener('click', window.closeStudyMode);
 
-      // Tab switching
-      const allTabs = ['study','achievements'];
-      if (hasFlashcards) allTabs.splice(1, 0, 'flashcards');
-      if (hasPersonajes) allTabs.splice(1, 0, 'personajes');
-      if (hasConceptos) allTabs.splice(1, 0, 'conceptos');
-      if (hasComandosSQL) allTabs.splice(allTabs.indexOf('flashcards'), 0, 'comandos');
+      // Codex (GPT-5) | 2026-08-23 21:19 CST | Mantiene un orden estable de pestañas y añade escenarios prácticos para GenAI.
+      const allTabs = ['study'];
+      if (hasPersonajes) allTabs.push('personajes');
+      if (hasConceptos) allTabs.push('conceptos');
+      if (hasComandosSQL) allTabs.push('comandos');
+      if (hasGenAIPatterns) allTabs.push('patterns');
+      if (hasFlashcards) allTabs.push('flashcards');
+      allTabs.push('achievements');
       window._unirSwitchTab = function(tab) {
         allTabs.forEach(t => {
           const tabEl = document.getElementById('unir-tab-' + t);
@@ -3519,6 +3545,7 @@ function renderReview(questions, finalPct, passed) {
         if (tab === 'personajes') renderPersonajes();
         if (tab === 'conceptos') renderConceptos();
         if (tab === 'comandos') renderComandosSQL();
+        if (tab === 'patterns') renderGenAIPatterns();
       };
 
       // --- PERSONAJES PANEL RENDERER ---
@@ -3658,18 +3685,18 @@ function renderReview(questions, finalPct, passed) {
       // --- CONCEPTOS CLAVE PANEL RENDERER (Databricks) ---
       function renderConceptos() {
         const panel = document.getElementById('unir-panel-conceptos');
-        if (!panel || !window.conceptosDatabricks) return;
+        if (!panel || !hasConceptos) return;
         if (panel.dataset.rendered) return; // Only render once
         panel.dataset.rendered = '1';
 
         const cIcon = (path, sz=18, fill='#c7d2fe') => `<svg viewBox="0 0 24 24" width="${sz}" height="${sz}" fill="${fill}"><path d="${path}"/></svg>`;
         const alertIcon = 'M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z';
         const badgeLabel = { alta: 'CLAVE', media: 'IMPORTANTE', baja: 'COMPLEMENTARIO' };
-        const totalConceptos = window.conceptosDatabricks.reduce((a,c) => a + c.conceptos.length, 0);
+        const totalConceptos = conceptos.reduce((a,c) => a + c.conceptos.length, 0);
 
         let html = `<div style="text-align:center;margin-bottom:18px;">
-          <h2 style="margin:0 0 4px;font-size:1.3rem;color:var(--text-color,#1e293b);">Conceptos Clave para el Examen</h2>
-          <p style="margin:0;font-size:0.85rem;color:var(--text-muted,#64748b);">Despliega cada concepto para ver su descripci&oacute;n y dato clave para el examen.</p>
+          <h2 style="margin:0 0 4px;font-size:1.3rem;color:var(--text-color,#1e293b);">${isGenAICourse ? 'Términos y competencias / Terms and competencies' : 'Conceptos Clave para el Examen'}</h2>
+          <p style="margin:0;font-size:0.85rem;color:var(--text-muted,#64748b);">${isGenAICourse ? 'Cada término incluye explicación y respuesta clave en inglés y español. Todo inicia contraído.' : 'Despliega cada concepto para ver su descripci&oacute;n y dato clave para el examen.'}</p>
           <div id="unir-concepto-progress" style="margin-top:8px;font-size:0.8rem;color:#FF3621;font-weight:600;">${cIcon(SVG.star, 14, '#FF3621')} ${mastery.conceptosViewed.length}/${totalConceptos} le&iacute;dos &mdash; +5 XP por concepto nuevo</div>
           <div style="display:flex;gap:8px;justify-content:center;margin-top:10px;flex-wrap:wrap;">
             <span style="font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:8px;background:#ef444418;color:#ef4444;">CLAVE = Muy preguntado</span>
@@ -3712,7 +3739,7 @@ function renderReview(questions, finalPct, passed) {
         // Expand All Conceptos
         window._unirExpandAllConceptos = function() {
           let newCount = 0;
-          window.conceptosDatabricks.forEach((cat, ci) => {
+          conceptos.forEach((cat, ci) => {
             cat.conceptos.forEach((c, pi) => {
               const key = `${ci}-${pi}`;
               const uid = `concepto-${ci}-${pi}`;
@@ -3747,7 +3774,7 @@ function renderReview(questions, finalPct, passed) {
           }
         };
 
-        window.conceptosDatabricks.forEach((cat, ci) => {
+        conceptos.forEach((cat, ci) => {
           html += `<div class="unir-persona-category">`;
           html += `<div class="unir-persona-cat-header" style="background:#1f2937;">${cIcon(cat.icon, 20, '#3157d5')} ${cat.category} <span style="margin-left:auto;font-size:0.72rem;opacity:0.7;">${cat.conceptos.length} conceptos</span></div>`;
 
@@ -3782,6 +3809,42 @@ function renderReview(questions, finalPct, passed) {
         </div>`;
 
         panel.innerHTML = html;
+      }
+
+      // Codex (GPT-5) | 2026-08-23 21:19 CST | Presenta escenarios GenAI bilingües con elementos details cerrados por defecto.
+      function renderGenAIPatterns() {
+        const panel = document.getElementById('unir-panel-patterns');
+        if (!panel || !hasGenAIPatterns || panel.dataset.rendered) return;
+        panel.dataset.rendered = '1';
+
+        const totalPatterns = genAIPatterns.reduce((total, group) => total + group.items.length, 0);
+        let html = `
+          <div style="text-align:center;margin-bottom:18px;">
+            <h2 style="margin:0 0 4px;font-size:1.3rem;color:var(--text-color,#1e293b);">Escenarios de decisión / Decision scenarios</h2>
+            <p style="margin:0;color:var(--text-muted,#64748b);font-size:0.85rem;">${totalPatterns} situaciones representativas del examen. Todos los escenarios inician contraídos.</p>
+            <button type="button" id="genai-patterns-collapse" class="btn btn-secondary btn-sm" style="margin-top:12px;">Contraer todo / Collapse all</button>
+          </div>`;
+
+        genAIPatterns.forEach(group => {
+          html += `<section class="unir-persona-category">`;
+          html += `<div class="unir-persona-cat-header">${svgIcon(SVG.shield, 18, '#93c5fd')} ${group.category}<span style="margin-left:auto;font-size:0.72rem;opacity:0.7;">${group.items.length}</span></div>`;
+          group.items.forEach(item => {
+            html += `
+              <details class="unir-persona-card genai-pattern-card">
+                <summary>${svgIcon(SVG.chevronDown, 16, '#3157d5')}<span>${item.title}</span></summary>
+                <div class="genai-pattern-content">
+                  ${item.scenario}
+                  ${item.recommendation}
+                </div>
+              </details>`;
+          });
+          html += `</section>`;
+        });
+
+        panel.innerHTML = html;
+        document.getElementById('genai-patterns-collapse')?.addEventListener('click', () => {
+          panel.querySelectorAll('details[open]').forEach(details => details.removeAttribute('open'));
+        });
       }
 
       // --- COMANDOS SQL PANEL RENDERER ---
@@ -4011,18 +4074,7 @@ function renderReview(questions, finalPct, passed) {
         tocEl.appendChild(card);
       });
 
-      // Open the first section and click its first item
-      const firstCard = tocEl.querySelector('.unir-section-card');
-      if (firstCard) {
-        const firstBody = firstCard.querySelector('.unir-section-body');
-        const firstHdr = firstCard.querySelector('.unir-section-header');
-        const firstToggle = firstCard.querySelector('.unir-section-toggle');
-        if (firstBody) firstBody.removeAttribute('hidden');
-        if (firstHdr) firstHdr.classList.add('open');
-        if (firstToggle) firstToggle.setAttribute('aria-expanded', 'true');
-        const firstItemButton = firstCard.querySelector('.unir-item-button');
-        if (firstItemButton) firstItemButton.click();
-      }
+      // Codex (GPT-5) | 2026-08-23 21:19 CST | El Centro de estudio abre con todos los dominios y temas contraídos.
 
       // Flashcard mode
       let fcIdx = 0;
@@ -4083,8 +4135,11 @@ function renderReview(questions, finalPct, passed) {
         const aEl = document.getElementById('unir-fc-answer');
         const countEl = document.getElementById('unir-fc-count');
         if (temaEl) temaEl.textContent = fc.tema;
-        if (qEl) qEl.textContent = fc.pregunta;
-        if (aEl) aEl.innerHTML = fc.respuesta;
+        if (qEl) {
+          if (fc.front) qEl.innerHTML = fc.front;
+          else qEl.textContent = fc.pregunta;
+        }
+        if (aEl) aEl.innerHTML = fc.back || fc.respuesta;
         if (countEl) countEl.textContent = `${fcIdx + 1} / ${fcFiltered.length}`;
       }
 

@@ -1149,6 +1149,7 @@ function launchMappingQuiz() {
 // =============================================
 const FLASHCARD_MAP = {
     'databricks-da':        () => window.databricksDAFlashcards,
+    'databricks-genai-engineer': () => window.databricksGenAIFlashcards,
     'databricks-fund':      () => window.databricksFundFlashcards,
     'dp-600':               () => window.dp600Flashcards,
     'unir-viz':             () => window.unirVizFlashcards,

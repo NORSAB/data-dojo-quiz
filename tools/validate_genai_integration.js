@@ -55,6 +55,17 @@ function loadStudyModule() {
   return context.window.studyData['databricks-genai-engineer'];
 }
 
+function loadStudyResources(english, spanish) {
+  const context = { window: { questionsData: [...english, ...spanish] } };
+  const source = fs.readFileSync(path.join(root, 'study_databricks_genai_resources.js'), 'utf8');
+  vm.runInNewContext(source, context, { filename: 'study_databricks_genai_resources.js' });
+  return {
+    flashcards: context.window.databricksGenAIFlashcards,
+    concepts: context.window.conceptosDatabricksGenAI,
+    patterns: context.window.databricksGenAIPatterns,
+  };
+}
+
 function createLocalStorage(seed = {}) {
   const values = new Map(Object.entries(seed));
   return {
@@ -157,11 +168,34 @@ async function main() {
   assert.strictEqual(studySections.length, 6, 'El módulo de estudio debe tener 6 dominios');
   assert.strictEqual(studyItems, 35, 'El módulo de estudio debe tener 35 temas');
 
+  const resources = loadStudyResources(english, spanish);
+  const conceptCount = resources.concepts.reduce((total, group) => total + group.conceptos.length, 0);
+  const patternCount = resources.patterns.reduce((total, group) => total + group.items.length, 0);
+  assert.strictEqual(resources.flashcards.length, 96, 'GenAI debe ofrecer 96 flashcards');
+  assert.strictEqual(new Set(resources.flashcards.map((card) => card.domain)).size, 6, 'Las flashcards deben cubrir 6 dominios');
+  assert(resources.flashcards.every((card) => card.front.includes('ENGLISH') && card.front.includes('ESPAÑOL')), 'Hay flashcards sin frente bilingüe');
+  assert(resources.flashcards.every((card) => card.back.includes('ENGLISH') && card.back.includes('ESPAÑOL')), 'Hay flashcards sin reverso bilingüe');
+  assert.strictEqual(resources.concepts.length, 6, 'Los términos deben agruparse en 6 dominios');
+  assert.strictEqual(conceptCount, 65, 'Debe existir un término por cada subdominio validado');
+  assert(resources.concepts.every((group) => group.conceptos.every((concept) => concept.contribucion.includes('ENGLISH') && concept.contribucion.includes('ESPAÑOL'))), 'Hay términos sin explicación bilingüe');
+  assert.strictEqual(resources.patterns.length, 6, 'Los escenarios deben agruparse en 6 dominios');
+  assert.strictEqual(patternCount, 24, 'GenAI debe ofrecer 24 escenarios de decisión');
+  assert(resources.patterns.every((group) => group.items.every((item) => item.scenario.includes('ENGLISH') && item.scenario.includes('ESPAÑOL'))), 'Hay escenarios sin contenido bilingüe');
+
+  const indexSource = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+  const workerSource = fs.readFileSync(path.join(root, 'sw.js'), 'utf8');
+  const appSource = fs.readFileSync(path.join(root, 'script.js'), 'utf8');
+  assert(indexSource.includes('study_databricks_genai_resources.js'), 'Falta cargar los recursos GenAI en index.html');
+  assert(workerSource.includes("'./study_databricks_genai_resources.js'"), 'Falta cachear los recursos GenAI en sw.js');
+  assert(appSource.includes("body.setAttribute('hidden', ''); // Start collapsed"), 'Las secciones deben crearse contraídas');
+  assert(!appSource.includes('firstItemButton.click()'), 'El primer tema no debe abrirse automáticamente');
+
   await validateSupabaseCompatibility();
 
   console.log('GenAI EN/ES: 383 + 383 preguntas válidas y emparejadas.');
   console.log('Etiquetas: 6 dominios y 65 subdominios EN con traducción ES consistente.');
   console.log('Estudio GenAI: 6 módulos y 35 temas disponibles.');
+  console.log('Recursos GenAI: 96 flashcards, 65 términos y 24 escenarios bilingües; estado inicial contraído.');
   console.log('Supabase: payload compatible con el esquema y restauración genérica comprobada.');
 }
 

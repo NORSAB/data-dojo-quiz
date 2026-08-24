@@ -1,6 +1,6 @@
 // Codex (GPT-5) | 2026-08-23 20:35 CST | Invalida caché por nuevo centro de estudio y design system.
-const BUILD_TIMESTAMP = '20260823c';
-const CACHE_NAME = `simulador-v18-${BUILD_TIMESTAMP}`;
+const BUILD_TIMESTAMP = '20260823d';
+const CACHE_NAME = `simulador-v19-${BUILD_TIMESTAMP}`;
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -19,6 +19,7 @@ const ASSETS_TO_CACHE = [
   './questions_databricks_genai.js',
   './questions_databricks_genai_es.js',
   './study_databricks_genai.js',
+  './study_databricks_genai_resources.js',
   './questions_unir_viz.js',
   './questions_unir_herr.js',
   './questions_unah_tesis.js',
