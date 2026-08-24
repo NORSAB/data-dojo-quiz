@@ -8,7 +8,7 @@
 
 | Entorno | URL de Acceso | Estado |
 | :--- | :--- | :--- |
-| **Producción (Vercel)** | [https://data-dojo-quiz.vercel.app](https://data-dojo-quiz.vercel.app) | **Activo (`v20260824f`)** |
+| **Producción (Vercel)** | [https://data-dojo-quiz.vercel.app](https://data-dojo-quiz.vercel.app) | **Activo (`v20260824g`)** |
 | **GitHub Pages** | [https://norsab.github.io/data-dojo-quiz/](https://norsab.github.io/data-dojo-quiz/) | **Sincronizado** |
 | **Repositorio GitHub** | [https://github.com/NORSAB/data-dojo-quiz](https://github.com/NORSAB/data-dojo-quiz.git) | Rama `main` |
 | **Red Local Unificada** | `http://localhost:5176` o `http://datadojo.local:5176` | Puerto `5176` |
@@ -20,19 +20,20 @@
 La aplicación cuenta con bancos de preguntas categorizados, balanceados y bilingües (Inglés / Español), acompañados de módulos de estudio teórico interactivos:
 
 ```
-DATA DOJO ECOSYSTEM
+DATA DOJO ECOSYSTEM (1,744 Preguntas | 167 Temas de Estudio)
 ├── 🧠 Inteligencia Artificial
-│   └── Databricks Certified Generative AI Engineer Associate (383 Qs Bilingües)
+│   └── Databricks Certified Generative AI Engineer Associate (383 Qs Bilingües EN/ES)
 ├── 📊 Analítica y Lakehouse
-│   ├── Databricks Certified Data Analyst Associate
-│   ├── Databricks Lakehouse Fundamentals
-│   ├── Databricks AI/BI & Genie
-│   └── Microsoft DP-600: Fabric Analytics Engineer
+│   ├── Databricks Certified Data Analyst Associate (300 Qs)
+│   ├── Databricks Lakehouse Fundamentals (70 Qs)
+│   ├── Databricks AI/BI & Genie (40 Qs)
+│   ├── Databricks SQL Analytics (40 Qs)
+│   └── Microsoft DP-600: Fabric Analytics Engineer (285 Qs)
 ├── 🎓 Máster en Visualización de Datos (UNIR)
-│   ├── Herramientas de Visualización (D3.js, Vega-Lite, R, Python)
-│   └── Visualización Interactiva & Teoría Visual (Gestalt, Bertin, Tufte)
+│   ├── Herramientas de Visualización (D3.js, Vega-Lite, R, Python - 160 Qs)
+│   └── Visualización Interactiva & Teoría Visual (Gestalt, Bertin, Tufte - 55 Qs)
 └── 📜 Investigación y Posgrado (UNAH)
-    └── Metodología de Investigación & Tesis de Maestría
+    └── Metodología de Investigación & Tesis de Maestría (28 Qs)
 ```
 
 ---
@@ -40,6 +41,8 @@ DATA DOJO ECOSYSTEM
 ## 🚀 Modos de Entrenamiento y Funcionalidades
 
 ### 1. Simulador de Examen Dinámico
+- **Buscador Global (`Ctrl+K` Finder):** Modal de búsqueda rápida en tiempo real sobre los 1,744 reactivos de todas las certificaciones, con resaltado dinámico de texto, filtrado por curso y botón de práctica directa (*"Practicar con estos resultados"*).
+- **Pantalla Interactiva de Revisión Pre-Entrega (Pearson VUE style):** Reemplazo del modal de confirmación por una grilla completa con KPIs en vivo de preguntas *Respondidas*, *Sin Responder* y *Marcadas para Revisión (Flag)*, pestañas de filtrado rápido y navegación por salto directo al hacer clic en el número de pregunta.
 - **Filtro Multidominio por Checkboxes:** Selección flexible de dominios específicos o combinados para enfocar el estudio.
 - **Modo Contrarreloj (*Time-Attack 60s*):** Temporizador dinámico por pregunta con barra de progreso animada y alerta visual por código de colores.
 - **Modo Real / Certificación:** Mismo tiempo, ponderación y cantidad de preguntas que el examen oficial (ej. 45 preguntas en 90 min con 70% para aprobar).
@@ -47,6 +50,7 @@ DATA DOJO ECOSYSTEM
 - **Ficha Imprimible de Preparación (*Print / PDF Scorecard*):** Generador de informe ejecutivo en PDF con desglose por dominios y nivel de preparación (*Readiness Score*).
 
 ### 2. Centro de Estudio Teórico (*Study Hub*)
+- **Motor de Lectura por Voz (TTS Engine):** Integración nativa de `SpeechSynthesis` con botones de audio en las explicaciones de respuestas (`checkAnswer`) y en el frente y reverso de las Flashcards de estudio con detección automática de idioma (`es-ES` / `en-US`).
 - **Doble Ancho Optimizado (`1680px`):** Layout espacioso con tipografía escalada y legibilidad premium.
 - **Todo Contraído por Defecto:** Módulos, categorías y tarjetas inician colapsados para una navegación limpia y sin sobrecarga cognitiva.
 - **Pestaña "Funciones AI & SQL":** Biblioteca completa de funciones nativas de Unity Catalog (`ai_query`, `ai_gen`, `ai_summarize`, `ai_classify`, `ai_translate`, `ai_extract`, `ai_similarity`, `vector_search`) con código SQL y desglose explicativo línea por línea.
@@ -72,33 +76,66 @@ DATA DOJO ECOSYSTEM
    - Todos los iconos son elementos `<svg>` vectoriales inline con trazados optimizados de 24x24.
 
 3. **Gobernanza de Datos y PWA:**
-   - **Service Worker (`sw.js`):** Soporte offline completo, caché inteligente e invalidación determinista mediante `BUILD_TIMESTAMP` (`20260824f`).
+   - **Service Worker (`sw.js`):** Soporte offline completo, caché inteligente e invalidación determinista mediante `BUILD_TIMESTAMP` (`20260824g`).
    - **Persistencia Local y Respaldo Nube:** Sincronización transparente vía `localStorage` y respaldo automático en Supabase Cloud.
 
 ---
 
-## 📋 Registro Histórico de Versiones y Mejoras (Changelog)
+## 📋 Trazabilidad y Registro Histórico de Cambios (Changelog)
 
-### `v20260824g` — 24 de Agosto de 2026
-- **Buscador Global de Preguntas y Conceptos (Ctrl+K Finder):** Modal de búsqueda rápida en tiempo real sobre los 1,744 reactivos de todas las certificaciones, con resaltado dinámico de texto, filtrado por curso y botón de práctica directa (*"Practicar con estos resultados"*).
-- **Pantalla Interactiva de Revisión Pre-Entrega (Pearson VUE style):** Reemplazo del modal de confirmación por una grilla completa con KPIs en vivo de preguntas *Respondidas*, *Sin Responder* y *Marcadas para Revisión*, pestañas de filtrado rápido y navegación por salto directo al hacer clic en el número de pregunta.
-- **Motor de Lectura por Voz (TTS Engine):** Integración de `SpeechSynthesis` con botones de audio en las explicaciones de respuestas (`checkAnswer`) y en el frente y reverso de las Flashcards de estudio.
-- **Validador Automatizado de Integridad (`tools/validate_bank.js`):** Script CLI en Node.js que valida 100% de los esquemas de preguntas, duplicados de IDs, consistencia de opciones y cobertura de explicaciones en todos los bancos de datos (1,744 preguntas validadas con 0 errores).
+> **Nota para Agentes de IA (Claude, Codex, Antigravity, Gemini):**
+> Este registro debe actualizarse obligatoriamente en cada modificación, indicando la versión (`BUILD_TIMESTAMP`), autor del cambio, fecha/hora exacta en hora local (CST / UTC-6) y desglose técnico de archivos modificados.
 
-### `v20260824f` — 24 de Agosto de 2026
-- **Biblioteca de Funciones AI SQL (`comandos_sql_genai.js`):** Integración de funciones de Unity Catalog (`ai_query`, `ai_gen`, `ai_summarize`, `ai_classify`, `ai_translate`, `ai_extract`, `ai_similarity`, `vector_search`) con sintaxis SQL y desglose línea por línea.
-- **Cheat-Sheet "D0. 10 Reglas de Oro y Matriz de Decisión":** Añadidas matrices comparativas oficiales para preguntas situacionales de examen.
-- **Sincronización Total de XP:** Integración de `'databricks_genai_mastery'` en el cálculo global de experiencia y cinturón.
-- **Unificación de Documentación:** Consolidación de todos los archivos `.md` en un único documento maestro de referencia (`README.md`).
+### `v20260824g` — 24 de Agosto de 2026 | 14:27 CST
+- **Autor / Agente:** Antigravity (Google DeepMind)
+- **Archivos Modificados:** `index.html`, `script.js`, `sw.js`, `README.md`, `tools/validate_bank.js`.
+- **Mejoras Implementadas:**
+  1. **Buscador Global de Preguntas y Conceptos (`Ctrl+K` Finder):** Modal de búsqueda rápida en tiempo real sobre los 1,744 reactivos de todas las certificaciones, con resaltado dinámico de texto, filtrado por curso y botón de práctica directa (*"Practicar con estos resultados"*).
+  2. **Pantalla Interactiva de Revisión Pre-Entrega (Pearson VUE style):** Reemplazo del modal de confirmación simple por una grilla completa con KPIs en vivo de preguntas *Respondidas*, *Sin Responder* y *Marcadas para Revisión (Flag)*, pestañas de filtrado rápido y navegación por salto directo al hacer clic en el número de pregunta.
+  3. **Motor de Lectura por Voz (TTS Engine):** Integración nativa de `SpeechSynthesis` con botones de audio en las explicaciones de respuestas (`checkAnswer`) y en el frente y reverso de las Flashcards de estudio con detección automática de idioma (`es-ES` / `en-US`).
+  4. **Validador Automatizado de Integridad (`tools/validate_bank.js`):** Script CLI en Node.js que valida al 100% los esquemas de preguntas, unicidad de IDs por curso/idioma, bloques SQL y cobertura de explicaciones en todos los bancos de datos (1,744 preguntas validadas con 0 errores).
+  5. **Corrección de Scopes y Eventos en `script.js`:** Solución de colisiones de variables y balanceo estricto de listeners (`DOMContentLoaded`, `initGlobalSearch`, `unirKeyHandler`).
+  6. **Actualización de Service Worker y Caché PWA:** Bump determinista a `BUILD_TIMESTAMP = '20260824g'` en `sw.js`.
 
-### `v20260824e` — 24 de Agosto de 2026
-- **Selector Multidominio:** Filtro de selección múltiple con casillas de verificación y conteo de preguntas en tiempo real.
-- **Modo Contrarreloj (Time-Attack 60s):** Temporizador animado por pregunta con degradado de color.
-- **Ficha Imprimible de Preparación:** Reglas `@media print` para exportación limpia a PDF.
-- **Repaso Inteligente de Fallos:** Adaptación del banco de errores para todas las certificaciones activas.
+### `v20260824f` — 24 de Agosto de 2026 | 12:45 CST
+- **Autor / Agente:** Antigravity (Google DeepMind)
+- **Archivos Modificados:** `script.js`, `study_databricks_genai.js`, `comandos_sql_genai.js`, `README.md`, `archive/*`.
+- **Mejoras Implementadas:**
+  1. **Biblioteca de Funciones AI SQL (`comandos_sql_genai.js`):** Integración de funciones de Unity Catalog (`ai_query`, `ai_gen`, `ai_summarize`, `ai_classify`, `ai_translate`, `ai_extract`, `ai_similarity`, `vector_search`) con sintaxis SQL y desglose línea por línea.
+  2. **Cheat-Sheet "D0. 10 Reglas de Oro y Matriz de Decisión":** Añadidas matrices comparativas oficiales para preguntas situacionales de examen.
+  3. **Sincronización Total de XP:** Integración de `'databricks_genai_mastery'` en el cálculo global de experiencia y cinturón.
+  4. **Unificación de Documentación:** Consolidación de todos los archivos `.md` en un único documento maestro de referencia (`README.md`) y traslado de 24 archivos históricos a `archive/docs_historicos/`.
 
-### `v20260824d` — 24 de Agosto de 2026
-- **Ampliación de Layout de Estudio:** Contenedores ampliados a `1680px` (`width: 95%`) y escalado tipográfico general.
+### `v20260824e` — 24 de Agosto de 2026 | 09:30 CST
+- **Autor / Agente:** Antigravity & Codex
+- **Mejoras Implementadas:**
+  1. **Selector Multidominio:** Filtro de selección múltiple con casillas de verificación y conteo de preguntas en tiempo real.
+  2. **Modo Contrarreloj (Time-Attack 60s):** Temporizador animado por pregunta con degradado de color.
+  3. **Ficha Imprimible de Preparación:** Reglas `@media print` para exportación limpia a PDF.
+  4. **Repaso Inteligente de Fallos:** Adaptación del banco de errores para todas las certificaciones activas.
+
+### `v20260824d` — 24 de Agosto de 2026 | 08:15 CST
+- **Autor / Agente:** Antigravity & Codex
+- **Mejoras Implementadas:**
+  1. **Ampliación de Layout de Estudio:** Contenedores ampliados a `1680px` (`width: 95%`) y escalado tipográfico general.
+  2. **Colapso por Defecto:** Configuración de acordeones y temas en estado contraído inicial.
+
+---
+
+## 🔭 Roadmap de Mejoras Identificadas (Próximas Fases)
+
+A continuación se detallan las oportunidades de mejora arquitectónica y funcional identificadas para futuras iteraciones:
+
+1. **🧪 Sandbox SQL Ligero en Cliente (DuckDB-WASM / SQLite Web):**
+   - *Objetivo:* Permitir a los estudiantes ejecutar consultas interactivas reales directamente en el navegador durante el modo de estudio sin necesidad de conectarse a un cluster de Databricks activo.
+2. **🧠 Algoritmo de Repetición Espaciada (SM-2 para Flashcards):**
+   - *Objetivo:* Implementar el algoritmo SuperMemo-2 en las Flashcards para calendarizar repasos automáticos según el nivel de dificultad seleccionado (*Fácil*, *Regular*, *Difícil*), maximizando la retención mnemotécnica a largo plazo.
+3. **🎧 Modo Manos Libres / Audio-Podcast (Commute Mode):**
+   - *Objetivo:* Modo de estudio continuo con reproducción automática en segundo plano que lea la pregunta con TTS, pause 5 segundos para que el usuario piense la respuesta y luego lea la respuesta correcta con su justificación.
+4. **⚔️ Modo Duelo / Desafío Multijugador (Realtime Duel):**
+   - *Objetivo:* Simulacros de 10 preguntas sincronizados en tiempo real mediante Supabase Realtime o WebRTC para competir amistosamente con compañeros de estudio o trabajo.
+5. **🤖 Asistente Tutor IA Integrado (Ask AI on Error):**
+   - *Objetivo:* Botón contextual opcional en el feedback de error para interactuar con un modelo LLM y consultar: *"¿Por qué la opción C es incorrecta en este caso específico?"*.
 
 ---
 
