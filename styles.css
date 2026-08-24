@@ -482,7 +482,7 @@ header {
 .course-item:hover:not(.disabled) {
   transform: translateY(-4px);
   box-shadow: 0 12px 32px rgba(30, 41, 59, 0.12);
-  border-color: rgba(79, 110, 247, 0.2);
+  border-color: rgba(49, 87, 213, 0.2);
 }
 
 .course-item:hover:not(.disabled)::before {
@@ -714,11 +714,11 @@ header {
 
 /* Map Colors */
 .map-node.active {
-  background: var(--warning-color) !important;
+  background: var(--primary-color) !important;
   color: #ffffff !important;
-  border-color: var(--warning-color) !important;
+  border-color: var(--primary-color) !important;
   transform: scale(1.15);
-  box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+  box-shadow: 0 0 12px rgba(49, 87, 213, 0.35);
 }
 
 .map-node.answered {
@@ -777,10 +777,10 @@ header {
 .btn-primary {
   background: var(--primary-color);
   color: white;
-  box-shadow: 0 2px 8px rgba(79, 110, 247, 0.3);
+  box-shadow: 0 2px 8px rgba(49, 87, 213, 0.3);
 }
 .btn-primary:hover {
-  box-shadow: 0 4px 16px rgba(79, 110, 247, 0.4);
+  box-shadow: 0 4px 16px rgba(49, 87, 213, 0.4);
   transform: translateY(-1px);
 }
 
@@ -1359,10 +1359,10 @@ html[data-theme="dark"] .modal-content,
   color: #3157d5;
 }
 .sql-str {
-  color: #e4b63f;
+  color: var(--primary-color);
 }
 .sql-op {
-  color: #e4b63f;
+  color: var(--primary-color);
 }
 .sql-cmt {
   color: #667085;
@@ -1448,12 +1448,12 @@ html[data-theme="dark"] .modal-content,
   width: 120px;
   height: 120px;
   animation: emblemPulse 6s infinite ease-in-out;
-  filter: drop-shadow(0 0 24px rgba(79, 110, 247, 0.2));
+  filter: drop-shadow(0 0 24px rgba(49, 87, 213, 0.2));
 }
 
 @keyframes emblemPulse {
-  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 20px rgba(79, 110, 247, 0.15)); }
-  50%      { transform: scale(1.04); filter: drop-shadow(0 0 30px rgba(124, 58, 237, 0.25)); }
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 20px rgba(49, 87, 213, 0.15)); }
+  50%      { transform: scale(1.04); filter: drop-shadow(0 0 30px rgba(49, 87, 213, 0.25)); }
 }
 
 /* === HEADLINE === */
@@ -1523,7 +1523,7 @@ html[data-theme="dark"] .modal-content,
   padding: 1.5rem 2rem;
   background: var(--card-bg);
   border-radius: 16px;
-  border: 1px solid rgba(79, 110, 247, 0.08);
+  border: 1px solid rgba(49, 87, 213, 0.08);
 }
 
 .sensei-quote-icon {
@@ -1664,8 +1664,8 @@ html[data-theme="dark"] .modal-content,
 
 .path-card:hover {
   transform: translateY(-6px);
-  border-color: rgba(79, 110, 247, 0.3) !important;
-  box-shadow: 0 12px 32px rgba(79, 110, 247, 0.12) !important;
+  border-color: rgba(49, 87, 213, 0.3) !important;
+  box-shadow: 0 12px 32px rgba(49, 87, 213, 0.12) !important;
 }
 
 .path-card:hover::before {
@@ -1716,7 +1716,7 @@ html[data-theme="dark"] .modal-content,
   letter-spacing: 0.3px;
   box-shadow:
     0 4px 16px rgba(30, 41, 59, 0.25),
-    0 0 0 0 rgba(79, 110, 247, 0);
+    0 0 0 0 rgba(49, 87, 213, 0);
   overflow: hidden;
 }
 
@@ -1733,8 +1733,8 @@ html[data-theme="dark"] .modal-content,
 .btn-dojo-enter:hover {
   transform: translateY(-3px) scale(1.02);
   box-shadow:
-    0 8px 32px rgba(79, 110, 247, 0.35),
-    0 0 0 3px rgba(79, 110, 247, 0.1);
+    0 8px 32px rgba(49, 87, 213, 0.35),
+    0 0 0 3px rgba(49, 87, 213, 0.1);
 }
 
 .btn-dojo-enter:hover::before {
@@ -1776,14 +1776,14 @@ html[data-theme="dark"] .modal-content,
   border-radius: var(--radius-full);
   cursor: pointer;
   transition: all var(--transition-fast);
-  box-shadow: 0 4px 16px rgba(79, 110, 247, 0.3);
+  box-shadow: 0 4px 16px rgba(49, 87, 213, 0.3);
   font-family: "Inter", sans-serif;
   letter-spacing: 0.3px;
 }
 
 .btn-cyan-action:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 24px rgba(79, 110, 247, 0.45);
+  box-shadow: 0 6px 24px rgba(49, 87, 213, 0.45);
 }
 
 /* === ONBOARDING FOOTER === */
@@ -1827,7 +1827,7 @@ html[data-theme="dark"] .modal-content,
 
 [data-theme="dark"] .sensei-quote-block {
   background: var(--card-bg);
-  border-color: rgba(79, 110, 247, 0.12);
+  border-color: rgba(49, 87, 213, 0.12);
 }
 
 [data-theme="dark"] .sensei-quote-text {
@@ -1878,7 +1878,7 @@ html[data-theme="dark"] .modal-content,
 .levelup-card {
   background: #2447b8;
   border: 2px solid #3157d5;
-  box-shadow: 0 0 50px rgba(79, 70, 229, 0.4);
+  box-shadow: 0 0 50px rgba(49, 87, 213, 0.4);
   padding: 3rem;
   border-radius: var(--radius-xl);
   text-align: center;
@@ -1939,7 +1939,7 @@ html[data-theme="dark"] .modal-content,
 }
 
 .reward-val {
-  color: #e4b63f;
+  color: var(--primary-color);
   font-weight: bold;
   font-size: 1.2rem;
 }
@@ -1954,13 +1954,13 @@ html[data-theme="dark"] .modal-content,
   cursor: pointer;
   text-transform: uppercase;
   letter-spacing: 1px;
-  box-shadow: 0 0 20px rgba(124, 58, 237, 0.4);
+  box-shadow: 0 0 20px rgba(49, 87, 213, 0.4);
   transition: transform var(--transition-fast);
 }
 
 .btn-purple-glow:hover {
   transform: scale(1.05);
-  box-shadow: 0 0 30px rgba(124, 58, 237, 0.6);
+  box-shadow: 0 0 30px rgba(49, 87, 213, 0.6);
 }
 
 /* =============================================================================
@@ -1968,20 +1968,20 @@ html[data-theme="dark"] .modal-content,
    ============================================================================= */
 .certificate-container {
   background: #111827;
-  border: 4px double #e4b63f;
+  border: 4px double var(--primary-color);
   padding: 3rem;
   width: 90%;
   max-width: 700px;
   text-align: center;
   position: relative;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-  color: #e4b63f;
+  color: #f3f4f6;
 }
 
 [data-theme="light"] .certificate-container {
   background: #f4f6f8;
   color: #1f2937;
-  border-color: #9a6700;
+  border-color: var(--primary-color);
 }
 [data-theme="light"] .cert-header-text,
 [data-theme="light"] .cert-title,
@@ -1994,7 +1994,7 @@ html[data-theme="dark"] .modal-content,
   top: 15px;
   left: 15px;
   background: transparent;
-  border: 1px solid rgba(251, 191, 36, 0.3);
+  border: 1px solid rgba(49, 87, 213, 0.3);
   color: inherit;
   padding: 5px 10px;
   border-radius: 4px;
@@ -2006,7 +2006,7 @@ html[data-theme="dark"] .modal-content,
 
 .cert-home-action:hover {
   opacity: 1;
-  background: rgba(251, 191, 36, 0.1);
+  background: rgba(49, 87, 213, 0.1);
 }
 
 .cert-header-text {
@@ -2019,7 +2019,7 @@ html[data-theme="dark"] .modal-content,
 
 .cert-paper {
   padding: 2rem;
-  border: 1px solid rgba(251, 191, 36, 0.3);
+  border: 1px solid rgba(49, 87, 213, 0.3);
 }
 
 .cert-title {
@@ -2032,19 +2032,19 @@ html[data-theme="dark"] .modal-content,
 .cert-course-name {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #e4b63f;
+  color: var(--primary-color);
   margin-bottom: 2rem;
 }
 
 [data-theme="light"] .cert-course-name {
-  color: #9a6700;
+  color: var(--primary-color);
 }
 
 .cert-user-name {
   font-family: "Inter", serif;
   font-size: 3rem;
   margin: 1rem 0 2rem 0;
-  border-bottom: 1px solid rgba(251, 191, 36, 0.3);
+  border-bottom: 1px solid rgba(49, 87, 213, 0.3);
   display: inline-block;
   padding-bottom: 0.5rem;
   min-width: 300px;
@@ -2077,8 +2077,8 @@ html[data-theme="dark"] .modal-content,
 
 .btn-gold-outline {
   background: transparent;
-  border: 2px solid #e4b63f;
-  color: #e4b63f;
+  border: 2px solid var(--primary-color);
+  color: var(--primary-color);
   padding: 1rem 3rem;
   font-size: 1rem;
   font-weight: bold;
@@ -2089,13 +2089,13 @@ html[data-theme="dark"] .modal-content,
 }
 
 [data-theme="light"] .btn-gold-outline {
-  color: #9a6700;
-  border-color: #9a6700;
+  color: var(--primary-color);
+  border-color: var(--primary-color);
 }
 
 .btn-gold-outline:hover {
-  background: #e4b63f;
-  color: #111827;
+  background: var(--primary-color);
+  color: #ffffff;
 }
 
 /* =============================================================================
@@ -2255,10 +2255,10 @@ body.zen-mode .zen-exit-btn {
 @keyframes subtlePulse {
   0%,
   100% {
-    box-shadow: 0 0 0 0 rgba(79, 110, 247, 0.2);
+    box-shadow: 0 0 0 0 rgba(49, 87, 213, 0.2);
   }
   50% {
-    box-shadow: 0 0 0 6px rgba(79, 110, 247, 0);
+    box-shadow: 0 0 0 6px rgba(49, 87, 213, 0);
   }
 }
 
@@ -2401,6 +2401,13 @@ body.zen-mode .zen-exit-btn {
 .wisdom-bonsai {
   flex-shrink: 0;
   opacity: 0.6;
+}
+/* Codex (GPT-5) | 2026-08-23 21:32 CST | La ilustración decorativa hereda el acento principal. */
+.wisdom-bonsai svg [fill]:not([fill="none"]) {
+  fill: var(--primary-color) !important;
+}
+.wisdom-bonsai svg [stroke]:not([stroke="none"]) {
+  stroke: var(--primary-color) !important;
 }
 .wisdom-text {
   flex: 1;
@@ -2611,11 +2618,11 @@ body.zen-mode .zen-exit-btn {
   text-align: left;
   margin-top: 16px;
   transition: all var(--transition-fast);
-  box-shadow: 0 4px 12px rgba(79, 110, 247, 0.3);
+  box-shadow: 0 4px 12px rgba(49, 87, 213, 0.3);
 }
 .btn-exam-simulate:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(79, 110, 247, 0.4);
+  box-shadow: 0 8px 24px rgba(49, 87, 213, 0.4);
 }
 .btn-exam-simulate strong {
   display: block;
@@ -2706,7 +2713,7 @@ body.zen-mode .zen-exit-btn {
 }
 .dashboard-recommendation {
   background: var(--primary-light);
-  border: 1px solid rgba(79, 110, 247, 0.2);
+  border: 1px solid rgba(49, 87, 213, 0.2);
   border-radius: var(--radius-md);
   padding: 16px;
   color: var(--text-color);
@@ -2815,11 +2822,11 @@ body.zen-mode .zen-exit-btn {
     text-align: left;
     margin-top: 10px;
     transition: all var(--transition-fast);
-    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+    box-shadow: 0 4px 12px rgba(49, 87, 213, 0.3);
 }
 .btn-flashcard-quick:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(245, 158, 11, 0.4);
+    box-shadow: 0 8px 24px rgba(49, 87, 213, 0.4);
 }
 .btn-flashcard-quick svg {
     color: #ffffff;
@@ -3181,7 +3188,7 @@ body.zen-mode .zen-exit-btn {
 }
 
 .study-plan-badge.new {
-    background: var(--primary-light, rgba(79, 110, 247, 0.1));
+    background: var(--primary-light, rgba(49, 87, 213, 0.1));
     color: var(--primary-color);
 }
 
@@ -3221,19 +3228,19 @@ body.zen-mode .zen-exit-btn {
 
 /* F16: Domain Flashcard Button */
 .study-plan-fc-btn {
-    background: var(--warning-light, rgba(245, 158, 11, 0.1));
-    border: 1px solid rgba(245, 158, 11, 0.2);
+    background: var(--primary-light, rgba(49, 87, 213, 0.1));
+    border: 1px solid rgba(49, 87, 213, 0.2);
     border-radius: var(--radius-sm);
     padding: 6px 8px;
     cursor: pointer;
-    color: var(--warning-color);
+    color: var(--primary-color);
     transition: all var(--transition-fast);
     display: flex;
     align-items: center;
 }
 
 .study-plan-fc-btn:hover {
-    background: var(--warning-color);
+    background: var(--primary-color);
     color: white;
 }
 

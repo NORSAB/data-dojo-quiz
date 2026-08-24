@@ -69,8 +69,9 @@
         const btn = document.createElement('button');
         btn.id = 'translate-toggle-btn';
         btn.className = 'btn btn-sm';
+        // Codex (GPT-5) | 2026-08-23 21:32 CST | El selector bilingüe hereda el único acento visual de la aplicación.
         btn.style.cssText = `
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--primary-color, #3157d5);
             color: white;
             border: none;
             padding: 6px 14px;
@@ -83,7 +84,7 @@
             gap: 6px;
             transition: all 0.3s ease;
             margin-right: 8px;
-            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 2px 8px rgba(49, 87, 213, 0.3);
         `;
 
         btn.innerHTML = `
@@ -102,11 +103,11 @@
 
         btn.addEventListener('mouseenter', () => {
             btn.style.transform = 'translateY(-1px)';
-            btn.style.boxShadow = '0 4px 12px rgba(102, 126, 234, 0.5)';
+            btn.style.boxShadow = '0 4px 12px rgba(49, 87, 213, 0.4)';
         });
         btn.addEventListener('mouseleave', () => {
             btn.style.transform = 'translateY(0)';
-            btn.style.boxShadow = '0 2px 8px rgba(102, 126, 234, 0.3)';
+            btn.style.boxShadow = '0 2px 8px rgba(49, 87, 213, 0.3)';
         });
 
         btn.addEventListener('click', toggleTranslation);
@@ -127,13 +128,13 @@
             currentLang = 'es';
             label.textContent = 'EN';
             btn.title = 'Switch to English';
-            btn.style.background = 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)';
+            btn.style.background = 'var(--primary-color, #3157d5)';
             applySpanish();
         } else {
             currentLang = 'en';
             label.textContent = 'ES';
             btn.title = 'Traducir a Español';
-            btn.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+            btn.style.background = 'var(--primary-color, #3157d5)';
             restoreEnglishFromData();
         }
     }

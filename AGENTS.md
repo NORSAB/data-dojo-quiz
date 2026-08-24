@@ -190,3 +190,9 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
 - Verificó visualmente Vercel: cinco pestañas visibles; 6/6 secciones de estudio contraídas; 65/65 términos contraídos; 24/24 escenarios contraídos; flashcard 1/96 con bloques English y Español; consola sin errores ni advertencias.
 - Confirmó por HTTP que Vercel y GitHub Pages sirven `study_databricks_genai_resources.js` y el build PWA `20260823d`.
 - Conservó fuera del commit los artefactos locales previos `.genai_translation_work/`, `__pycache__/` y `translation_cache_genai.json`.
+
+### Regla permanente de control de paleta previo al despliegue — Codex (GPT-5) — 2026-08-23 21:32 CST
+- Antes de cualquier `commit` o `push` que despliegue cambios visuales, es obligatorio ejecutar `node tools/validate_ui_palette.js`; si el validador falla, el despliegue queda bloqueado hasta corregir las desviaciones.
+- La interfaz debe usar `--primary-color` (`#3157d5`) como único acento visual, acompañado por la escala neutral del design system. Los colores `success`, `warning` y `danger` se reservan exclusivamente para estados y retroalimentación reales, nunca para diferenciar cursos, proveedores, dominios, pestañas o contenido decorativo.
+- El Centro de Estudio debe pasar una revisión específica de pestañas, encabezados, iconos SVG, etiquetas de idioma, cajas informativas, flashcards y logros en tema claro y oscuro. Los SVG de la interfaz heredan `currentColor`; se exceptúan únicamente logotipos oficiales y colores funcionales inherentes a la progresión de cinturones.
+- La comprobación previa al despliegue incluye ausencia de gradientes decorativos en la interfaz activa, coherencia de caché PWA y una revisión visual de al menos una pantalla principal y una pantalla interna del Centro de Estudio.

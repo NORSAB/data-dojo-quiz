@@ -2369,7 +2369,7 @@ const badgesConfig = [
         alert("SYSTEM ERROR loading question:\n" + err.message + "\n" + err.stack);
         const qt = document.getElementById("question-text");
         if (qt) {
-             qt.innerHTML = `<div style="color:var(--danger-color, #ef4444); font-weight:bold; padding:1rem; border:1px solid var(--danger-color, #ef4444);">
+             qt.innerHTML = `<div style="color:var(--danger-color, #b42318); font-weight:bold; padding:1rem; border:1px solid var(--danger-color, #b42318);">
              ERROR LOADING QUESTION:<br>
              ${err.message}
              <br><small>${err.stack}</small>
@@ -3205,7 +3205,7 @@ function renderReview(questions, finalPct, passed) {
       function showAchievementToast(a) {
         const toast = document.createElement('div');
         toast.style.cssText = 'position:fixed;top:20px;right:20px;z-index:10000;background:#3157d5;color:#fff;padding:16px 24px;border-radius:16px;box-shadow:0 8px 32px rgba(49,87,213,0.3);display:flex;align-items:center;gap:12px;animation:slideInRight 0.5s ease-out;font-family:Inter,sans-serif;';
-        toast.innerHTML = `<svg viewBox="0 0 24 24" width="28" height="28" fill="#fbbf24"><path d="${a.icon}"/></svg><div><div style="font-weight:700;font-size:1rem;display:flex;align-items:center;gap:6px;"><svg viewBox="0 0 24 24" width="18" height="18" fill="#fbbf24"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/></svg> Logro Desbloqueado</div><div style="font-size:0.85rem;opacity:0.9;">${a.name}: ${a.desc}</div></div>`;
+        toast.innerHTML = `<svg viewBox="0 0 24 24" width="28" height="28" fill="#ffffff"><path d="${a.icon}"/></svg><div><div style="font-weight:700;font-size:1rem;display:flex;align-items:center;gap:6px;"><svg viewBox="0 0 24 24" width="18" height="18" fill="#ffffff"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/></svg> Logro Desbloqueado</div><div style="font-size:0.85rem;opacity:0.9;">${a.name}: ${a.desc}</div></div>`;
         document.body.appendChild(toast);
         setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = 'opacity 0.5s'; setTimeout(() => toast.remove(), 500); }, 3500);
       }
@@ -3262,45 +3262,59 @@ function renderReview(questions, finalPct, passed) {
       };
       const svgIcon = (path, size=16, fill='currentColor', extra='') => `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="${fill}" ${extra}><path d="${path}"/></svg>`;
 
+      // Codex (GPT-5) | 2026-08-23 21:32 CST | Unifica el Centro de Estudio con el acento principal y estados semánticos.
       // --- Build the Dojo-styled study UI (OPEN LAYOUT — no boxes) ---
       studyScreen.innerHTML = `
         <style>
           @keyframes slideInRight { from { transform: translateX(80px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
           @keyframes fadeUp { from { transform: translateY(12px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-          .unir-root { height: 100%; overflow-y: auto; overflow-x: hidden; padding: 0; font-family: 'Inter', sans-serif; }
+          .unir-root {
+            --study-accent: var(--primary-color, #3157d5);
+            --study-accent-soft: var(--primary-light, rgba(49,87,213,0.1));
+            --study-success: var(--success-color, #16794a);
+            --study-success-soft: var(--success-light, rgba(22,121,74,0.1));
+            --study-warning: var(--warning-color, #9a6700);
+            --study-danger: var(--danger-color, #b42318);
+            height: 100%; overflow-y: auto; overflow-x: hidden; padding: 0; font-family: 'Inter', sans-serif;
+          }
           body.zen-mode .unir-root { padding-top: 56px; }
+          .unir-root button:focus-visible, .unir-root summary:focus-visible { outline: 3px solid var(--study-accent-soft); outline-offset: 2px; }
+          .unir-root button svg, .unir-root summary svg, .unir-root .unir-section-header svg, .unir-root .unir-persona-cat-header svg { fill: currentColor !important; stroke: currentColor !important; }
 
           /* Floating mastery pill */
           .unir-mastery-pill { max-width: 900px; margin: 20px auto 0; display: flex; align-items: center; gap: 14px; padding: 10px 20px; border-radius: 40px; background: #111827; box-shadow: 0 4px 20px rgba(17,24,39,0.2); }
           .unir-mastery-pill .m-track { flex: 1; height: 6px; background: rgba(255,255,255,0.15); border-radius: 99px; overflow: hidden; }
-          .unir-mastery-pill .m-fill { height: 100%; background: #3157d5; border-radius: 99px; transition: width 0.6s ease; }
-          .unir-mastery-pill .m-label { color: #c7d2fe; font-size: 0.78rem; font-weight: 600; white-space: nowrap; display: flex; align-items: center; gap: 4px; }
+          .unir-mastery-pill .m-fill { height: 100%; background: var(--study-accent); border-radius: 99px; transition: width 0.6s ease; }
+          .unir-mastery-pill .m-label { color: #f3f4f6; font-size: 0.78rem; font-weight: 600; white-space: nowrap; display: flex; align-items: center; gap: 4px; }
+          .unir-study-back { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #f3f4f6; border-radius: 20px; padding: 5px 14px; cursor: pointer; font-size: 0.82rem; font-weight: 600; display: flex; align-items: center; gap: 5px; transition: background 0.2s; }
+          .unir-study-back:hover { background: rgba(255,255,255,0.18); }
 
           /* Tab row — centered like category pills */
           .unir-tabs-row { max-width: 900px; margin: 16px auto 0; display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
           .unir-tab { min-height: 44px; padding: 8px 20px; cursor: pointer; font-family: inherit; font-weight: 600; font-size: 0.85rem; color: var(--text-muted, #64748b); border: 1px solid var(--border-color, #e5e7eb); border-radius: 24px; transition: all 0.2s; display: flex; align-items: center; gap: 6px; background: var(--bg-card, #fff); }
-          .unir-tab:hover { color: #4f6ef7; border-color: #4f6ef7; background: #4f6ef708; }
-          .unir-tab.active { color: #fff; border-color: #4f6ef7; background: #4f6ef7; }
+          .unir-tab:hover { color: var(--study-accent); border-color: var(--study-accent); background: var(--study-accent-soft); }
+          .unir-tab.active { color: #fff; border-color: var(--study-accent); background: var(--study-accent); }
+          .unir-tab-count { background: var(--study-accent-soft); color: currentColor; padding: 2px 8px; border-radius: 10px; font-size: 0.72rem; font-weight: 700; }
+          .unir-tab.active .unir-tab-count { background: rgba(255,255,255,0.18); }
 
           /* Personajes panel styles */
           .unir-persona-category { margin-bottom: 16px; }
           .unir-persona-cat-header { display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: #1f2937; border-radius: 14px; color: #f3f4f6; font-weight: 700; font-size: 0.9rem; margin-bottom: 8px; }
-          .unir-persona-cat-header svg { flex-shrink: 0; }
+          .unir-persona-cat-header svg { flex-shrink: 0; color: #f3f4f6; }
           .unir-persona-card { background: var(--bg-card, #fff); border: 1px solid var(--border-color, #e5e7eb); border-radius: 12px; overflow: hidden; margin-bottom: 6px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); transition: all 0.2s; }
           .unir-persona-header { padding: 10px 16px; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: all 0.15s; user-select: none; }
-          .unir-persona-header:hover { background: #4f6ef708; }
+          .unir-persona-header:hover { background: var(--study-accent-soft); }
           .unir-persona-header .p-chevron { transition: transform 0.25s ease; flex-shrink: 0; }
           .unir-persona-header.open .p-chevron { transform: rotate(180deg); }
           .unir-persona-header .p-name { font-weight: 700; font-size: 0.95rem; color: var(--text-color, #1e293b); flex: 1; }
           .unir-persona-header .p-epoch { font-size: 0.72rem; color: var(--text-muted, #64748b); padding: 2px 10px; border-radius: 10px; background: var(--bg-surface, #f1f5f9); white-space: nowrap; }
-          .unir-persona-header .p-badge-alta { background: #ef444418; color: #ef4444; font-size: 0.68rem; font-weight: 700; padding: 2px 8px; border-radius: 8px; }
-          .unir-persona-header .p-badge-media { background: #f59e0b18; color: #f59e0b; font-size: 0.68rem; font-weight: 700; padding: 2px 8px; border-radius: 8px; }
-          .unir-persona-header .p-badge-baja { background: #64748b18; color: #64748b; font-size: 0.68rem; font-weight: 700; padding: 2px 8px; border-radius: 8px; }
+          .unir-persona-header .p-badge-alta { background: var(--study-accent-soft); color: var(--study-accent); font-size: 0.68rem; font-weight: 700; padding: 2px 8px; border-radius: 8px; }
+          .unir-persona-header .p-badge-media, .unir-persona-header .p-badge-baja { background: var(--bg-surface, #f4f6f8); color: var(--text-muted, #667085); font-size: 0.68rem; font-weight: 700; padding: 2px 8px; border-radius: 8px; }
           .unir-persona-body { display: none; border-top: 1px solid var(--border-color, #e5e7eb); padding: 20px 36px 24px; animation: fadeUp 0.25s ease; }
           .unir-persona-body.open { display: block; }
           .unir-persona-body .p-contribucion { font-size: 0.9rem; line-height: 1.65; color: var(--text-color, #333); margin-bottom: 14px; padding-right: 8px; }
-          .unir-persona-body .p-contribucion strong { color: #4f6ef7; }
+          .unir-persona-body .p-contribucion strong { color: var(--study-accent); }
           .unir-persona-body .p-dato-examen { background: var(--bg-surface, #f1f5f9); padding: 14px 18px; border-radius: 8px; font-size: 0.82rem; color: var(--text-color); display: flex; align-items: flex-start; gap: 10px; position: relative; border-left: 3px solid var(--border-color, #e5e7eb); }
           .unir-persona-body .p-dato-examen::before { display: none; }
           .unir-persona-card.is-read { background: rgba(22,121,74,0.05); }
@@ -3314,35 +3328,35 @@ function renderReview(questions, finalPct, passed) {
           /* Topic chips — horizontal scrollable nav */
           .unir-topic-nav { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; justify-content: center; }
           .unir-topic-chip { padding: 5px 14px; border-radius: 16px; font-size: 0.78rem; font-weight: 600; cursor: pointer; border: 1px solid var(--border-color, #e5e7eb); color: var(--text-muted, #64748b); background: var(--bg-card, #fff); transition: all 0.2s; white-space: nowrap; display: flex; align-items: center; gap: 5px; }
-          .unir-topic-chip:hover { border-color: #4f6ef7; color: #4f6ef7; }
-          .unir-topic-chip.active { background: #4f6ef7; color: #fff; border-color: #4f6ef7; }
+          .unir-topic-chip:hover { border-color: var(--study-accent); color: var(--study-accent); }
+          .unir-topic-chip.active { background: var(--study-accent); color: #fff; border-color: var(--study-accent); }
           .unir-topic-chip .chip-check { width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid currentColor; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; opacity: 0.5; }
-          .unir-topic-chip .chip-check.done { background: #10b981; border-color: #10b981; opacity: 1; }
+          .unir-topic-chip .chip-check.done { background: var(--study-success); border-color: var(--study-success); opacity: 1; }
 
           /* Section items list — dropdown cards */
           .unir-section-card { background: var(--bg-card, #fff); border: 1px solid var(--border-color, #e5e7eb); border-radius: 12px; overflow: hidden; margin-bottom: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); transition: all 0.2s; }
-          .unir-section-card.completed { border-color: #10b98140; }
+          .unir-section-card.completed { border-color: var(--study-success); }
           .unir-section-header { padding: 0 10px 0 0; font-weight: 700; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--primary-color, #3157d5); background: var(--bg-card, #fff); display: flex; align-items: center; gap: 8px; transition: all 0.2s; user-select: none; }
-          .unir-section-header:hover { background: #4f6ef708; }
+          .unir-section-header:hover { background: var(--study-accent-soft); }
           .unir-section-toggle { flex: 1; min-width: 0; min-height: 44px; padding: 10px 6px 10px 16px; border: 0; color: inherit; background: transparent; cursor: pointer; display: flex; align-items: center; gap: 8px; text-align: left; font: inherit; text-transform: inherit; letter-spacing: inherit; }
           .unir-section-header .hdr-chevron { transition: transform 0.25s ease; flex-shrink: 0; }
           .unir-section-header.open .hdr-chevron { transform: rotate(180deg); }
           .unir-section-header .hdr-title { flex: 1; }
-          .unir-section-header .hdr-progress { font-size: 0.7rem; font-weight: 600; padding: 2px 8px; border-radius: 10px; background: #4f6ef715; color: #4f6ef7; white-space: nowrap; }
-          .unir-section-header .hdr-progress.all-done { background: #10b98118; color: #10b981; }
-          .unir-section-header .hdr-complete-btn { min-height: 36px; font-size: 0.72rem; font-weight: 600; padding: 3px 10px; border-radius: 10px; border: 1px solid #10b98140; color: #10b981; background: #10b98108; cursor: pointer; white-space: nowrap; transition: all 0.2s; display: flex; align-items: center; gap: 4px; }
-          .unir-section-header .hdr-complete-btn:hover { background: #10b981; color: #fff; border-color: #10b981; }
-          .unir-section-header .hdr-complete-btn.is-done { background: #10b981; color: #fff; border-color: #10b981; pointer-events: none; }
+          .unir-section-header .hdr-progress { font-size: 0.7rem; font-weight: 600; padding: 2px 8px; border-radius: 10px; background: var(--study-accent-soft); color: var(--study-accent); white-space: nowrap; }
+          .unir-section-header .hdr-progress.all-done { background: var(--study-success-soft); color: var(--study-success); }
+          .unir-section-header .hdr-complete-btn { min-height: 36px; font-size: 0.72rem; font-weight: 600; padding: 3px 10px; border-radius: 10px; border: 1px solid var(--study-success); color: var(--study-success); background: var(--study-success-soft); cursor: pointer; white-space: nowrap; transition: all 0.2s; display: flex; align-items: center; gap: 4px; }
+          .unir-section-header .hdr-complete-btn:hover, .unir-section-header .hdr-complete-btn.is-done { background: var(--study-success); color: #fff; border-color: var(--study-success); }
+          .unir-section-header .hdr-complete-btn.is-done { pointer-events: none; }
           .unir-section-items { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--border-color, #e5e7eb); }
           .unir-section-items[hidden] { display: none; }
           .unir-section-body[hidden] { display: none; }
           .unir-section-items > li.unir-topic-item { padding: 0; font-size: 0.9rem; color: var(--text-color, #333); transition: all 0.15s; border-bottom: 1px solid var(--border-color, #e5e7eb08); }
           .unir-section-items > li.unir-topic-item:last-of-type { border-bottom: none; }
           .unir-item-button { width: 100%; min-height: 44px; padding: 10px 18px; border: 0; background: transparent; color: inherit; cursor: pointer; font: inherit; text-align: left; display: flex; align-items: center; gap: 10px; }
-          .unir-section-items > li.unir-topic-item:hover { background: #4f6ef706; color: var(--primary-color, #3157d5); }
+          .unir-section-items > li.unir-topic-item:hover { background: var(--study-accent-soft); color: var(--study-accent); }
           .unir-section-items > li.unir-topic-item.active { background: var(--primary-light, rgba(49,87,213,0.1)); color: var(--primary-color, #3157d5); font-weight: 600; }
           .unir-section-items .li-check { width: 18px; height: 18px; border-radius: 50%; border: 2px solid #d1d5db; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
-          .unir-section-items .li-check.done { background: #10b981; border-color: #10b981; }
+          .unir-section-items .li-check.done { background: var(--study-success); border-color: var(--study-success); }
 
           /* Content display — inserted after active item inside ul */
           .unir-item-content { display: block; list-style: none; border-top: 1px solid var(--border-color, #e5e7eb); padding: 24px 24px 28px; animation: fadeUp 0.25s ease; color: var(--text-color, #e2e8f0); background: var(--bg-card, #fff); border-radius: 0 0 8px 8px; margin: 0; }
@@ -3353,24 +3367,24 @@ function renderReview(questions, finalPct, passed) {
           /* Flashcard mode — centered float */
           .unir-fc-wrap { display: flex; flex-direction: column; align-items: center; padding: 24px 0 40px; }
           .unir-fc-card { width: 100%; max-width: 780px; height: 420px; perspective: 1200px; cursor: pointer; }
-          .unir-fc-inner { width: 100%; height: 100%; position: relative; transition: transform 0.6s cubic-bezier(.4,0,.2,1); transform-style: preserve-3d; border-radius: 20px; box-shadow: 0 8px 32px rgba(79,110,247,0.12); }
+          .unir-fc-inner { width: 100%; height: 100%; position: relative; transition: transform 0.6s cubic-bezier(.4,0,.2,1); transform-style: preserve-3d; border-radius: 20px; box-shadow: 0 8px 32px rgba(49,87,213,0.12); }
           .unir-fc-card.flipped .unir-fc-inner { transform: rotateY(180deg); }
           .unir-fc-face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 32px; overflow-y: auto; }
           .unir-fc-front { background: #1f2937; color: #fff; }
           .unir-fc-back { background: var(--bg-card, #fff); color: var(--text-color, #333); transform: rotateY(180deg); border: 1px solid var(--border-color, #e5e7eb); overflow-y: auto; }
           .unir-fc-nav { display: flex; align-items: center; gap: 12px; margin-top: 20px; }
-          .unir-fc-btn { width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--border-color, #e5e7eb); background: var(--bg-card, #fff); color: #4f6ef7; font-size: 1.3rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
-          .unir-fc-btn:hover { background: #4f6ef7; color: #fff; border-color: #4f6ef7; }
+          .unir-fc-btn { width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--border-color, #e5e7eb); background: var(--bg-card, #fff); color: var(--study-accent); font-size: 1.3rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+          .unir-fc-btn:hover, .unir-fc-btn.primary { background: var(--study-accent); color: #fff; border-color: var(--study-accent); }
           .unir-fc-count { font-weight: 600; color: var(--text-muted, #64748b); min-width: 80px; text-align: center; }
           .unir-fc-actions { display: flex; gap: 8px; margin-top: 14px; }
           .unir-fc-diff-btn { padding: 6px 16px; border-radius: 20px; border: 1px solid; cursor: pointer; font-size: 0.8rem; font-weight: 600; transition: all 0.2s; display: flex; align-items: center; gap: 5px; }
-          .unir-fc-diff-btn.easy { border-color: #10b981; color: #10b981; background: #10b98110; }
-          .unir-fc-diff-btn.medium { border-color: #f59e0b; color: #f59e0b; background: #f59e0b10; }
-          .unir-fc-diff-btn.hard { border-color: #ef4444; color: #ef4444; background: #ef444410; }
+          .unir-fc-diff-btn.easy { border-color: var(--study-success); color: var(--study-success); background: var(--study-success-soft); }
+          .unir-fc-diff-btn.medium { border-color: var(--study-warning); color: var(--study-warning); background: var(--warning-light, rgba(154,103,0,0.1)); }
+          .unir-fc-diff-btn.hard { border-color: var(--study-danger); color: var(--study-danger); background: var(--danger-light, rgba(180,35,24,0.1)); }
           .unir-fc-diff-btn:hover { transform: scale(1.05); }
           .fc-language-block { width: 100%; text-align: left; padding: 12px 0; border-bottom: 1px solid var(--border-color, rgba(255,255,255,0.2)); }
           .fc-language-block:last-child { border-bottom: 0; }
-          .fc-language-label { display: inline-block; margin-bottom: 6px; color: #93c5fd; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.12em; }
+          .fc-language-label { display: inline-block; margin-bottom: 6px; color: #f3f4f6; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.12em; }
           .unir-fc-back .fc-language-label { color: var(--primary-color, #3157d5); }
           .fc-language-title { display: block; margin-bottom: 6px; font-size: 0.82rem; }
           .fc-language-block > div { font-size: 0.9rem; line-height: 1.55; }
@@ -3383,7 +3397,7 @@ function renderReview(questions, finalPct, passed) {
           /* Achievements grid */
           .unir-ach-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
           .unir-ach-card { padding: 16px; border-radius: 12px; background: var(--bg-card, #fff); border: 1px solid var(--border-color, #e5e7eb); text-align: center; transition: all 0.2s; }
-          .unir-ach-card.unlocked { border-color: #4f6ef7; box-shadow: 0 4px 12px rgba(79,110,247,0.12); }
+          .unir-ach-card.unlocked { border-color: var(--study-accent); box-shadow: 0 4px 12px rgba(49,87,213,0.12); }
           .unir-ach-card.locked { opacity: 0.4; filter: grayscale(1); border-style: dashed; }
 
           /* ====== Language Section Divider ====== */
@@ -3401,9 +3415,9 @@ function renderReview(questions, finalPct, passed) {
             font-size: 0.7rem;
             font-weight: 700;
             letter-spacing: 2px;
-            color: #f59e0b;
-            background: rgba(154,103,0,0.08);
-            border-top: 2px dashed rgba(245,158,11,0.35);
+            color: var(--study-accent);
+            background: var(--study-accent-soft);
+            border-top: 2px solid rgba(49,87,213,0.22);
             padding: 6px 0 4px;
           }
           .lang-section[data-lang="en"]::before {
@@ -3412,10 +3426,10 @@ function renderReview(questions, finalPct, passed) {
             font-size: 0.65rem;
             font-weight: 700;
             letter-spacing: 2px;
-            color: #6366f1;
+            color: var(--study-accent);
             margin-bottom: 8px;
             padding: 4px 12px;
-            background: rgba(99,102,241,0.06);
+            background: var(--study-accent-soft);
             border-radius: 6px;
             width: fit-content;
           }
@@ -3435,25 +3449,19 @@ function renderReview(questions, finalPct, passed) {
             margin-bottom: 6px;
             font-size: 0.88rem;
           }
-          .box-red { background: rgba(239,68,68,0.06); border-color: #ef4444; }
-          .box-red .box-title { color: #ef4444; }
-          .box-green { background: rgba(16,185,129,0.06); border-color: #10b981; }
-          .box-green .box-title { color: #10b981; }
-          .box-blue { background: rgba(59,130,246,0.06); border-color: #3b82f6; }
-          .box-blue .box-title { color: #3b82f6; }
-          .box-yellow { background: rgba(245,158,11,0.06); border-color: #f59e0b; }
-          .box-yellow .box-title { color: #f59e0b; }
+          .box-red, .box-green, .box-blue, .box-yellow { background: var(--study-accent-soft); border-color: var(--study-accent); }
+          .box-red .box-title, .box-green .box-title, .box-blue .box-title, .box-yellow .box-title { color: var(--study-accent); }
 
           /* Code blocks inside study content */
-          .unir-item-content pre { background: #1a1a2e; color: #e0e0ff; padding: 14px 16px; border-radius: 8px; font-size: 0.82rem; overflow-x: auto; margin: 10px 0; border: 1px solid rgba(255,255,255,0.08); }
+          .unir-item-content pre { background: #111827; color: #f3f4f6; padding: 14px 16px; border-radius: 8px; font-size: 0.82rem; overflow-x: auto; margin: 10px 0; border: 1px solid rgba(255,255,255,0.08); }
           .unir-item-content code { font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace; font-size: 0.82rem; }
-          .unir-item-content pre code { color: #e0e0ff; }
-          .unir-item-content :not(pre) > code { background: rgba(79,110,247,0.1); color: #6366f1; padding: 2px 6px; border-radius: 4px; font-size: 0.82em; }
+          .unir-item-content pre code { color: #f3f4f6; }
+          .unir-item-content :not(pre) > code { background: var(--study-accent-soft); color: var(--study-accent); padding: 2px 6px; border-radius: 4px; font-size: 0.82em; }
           .unir-item-content table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.85rem; }
           .unir-item-content table th, .unir-item-content table td { padding: 8px 12px; border: 1px solid var(--border-color, #e5e7eb); text-align: left; }
-          .unir-item-content table th, .unir-item-content .table-header th { background: rgba(79,110,247,0.08); font-weight: 700; color: #4f6ef7; }
+          .unir-item-content table th, .unir-item-content .table-header th { background: var(--study-accent-soft); font-weight: 700; color: var(--study-accent); }
           .unir-item-content table tr:nth-child(even) { background: rgba(0,0,0,0.02); }
-          .unir-item-content h5 { color: var(--text-color, #1e293b); font-size: 1.05rem; margin: 18px 0 8px; padding-bottom: 4px; border-bottom: 1px solid rgba(79,110,247,0.12); }
+          .unir-item-content h5 { color: var(--text-color, #1e293b); font-size: 1.05rem; margin: 18px 0 8px; padding-bottom: 4px; border-bottom: 1px solid rgba(49,87,213,0.14); }
           .unir-item-content ul { padding-left: 20px; margin: 8px 0; }
           .unir-item-content li { margin-bottom: 4px; }
         </style>
@@ -3461,11 +3469,11 @@ function renderReview(questions, finalPct, passed) {
         <div class="unir-root">
           <!-- Floating Mastery Pill -->
           <div class="unir-mastery-pill">
-            <button id="unir-study-back" type="button" style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);color:#c7d2fe;border-radius:20px;padding:5px 14px;cursor:pointer;font-size:0.82rem;font-weight:600;display:flex;align-items:center;gap:5px;transition:background 0.2s;">${svgIcon(SVG.back, 14, '#c7d2fe')} Volver</button>
-            <div class="m-label">${svgIcon(SVG.star, 13, '#fbbf24')} <span id="unir-xp-display">${mastery.xp} XP</span></div>
+            <button id="unir-study-back" class="unir-study-back" type="button">${svgIcon(SVG.back, 14)} Volver</button>
+            <div class="m-label">${svgIcon(SVG.star, 13)} <span id="unir-xp-display">${mastery.xp} XP</span></div>
             <div class="m-track"><div class="m-fill" id="unir-mastery-bar" style="width:0%"></div></div>
             <span class="m-label" id="unir-mastery-text">0/${totalSections}</span>
-            <div class="m-label">${svgIcon(SVG.trophy, 13, '#fbbf24')} <span id="unir-ach-count">${mastery.achievements.length}/${achievementsDef.length}</span></div>
+            <div class="m-label">${svgIcon(SVG.trophy, 13)} <span id="unir-ach-count">${mastery.achievements.length}/${achievementsDef.length}</span></div>
           </div>
 
           <!-- Tab Pills — centered row -->
@@ -3474,19 +3482,19 @@ function renderReview(questions, finalPct, passed) {
               ${svgIcon(SVG.eye, 15)} Estudiar
             </button>
             ${hasPersonajes ? `<button type="button" class="unir-tab" id="unir-tab-personajes" role="tab" aria-selected="false" aria-controls="unir-panel-personajes" tabindex="-1" onclick="window._unirSwitchTab('personajes')">
-              ${svgIcon('M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z', 15)} Personajes <span style="background:rgba(79,110,247,0.15);padding:2px 8px;border-radius:10px;font-size:0.72rem;font-weight:700;">${window.personajesUnirViz.reduce((a,c) => a + c.personas.length, 0)}</span>
+              ${svgIcon('M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z', 15)} Personajes <span class="unir-tab-count">${window.personajesUnirViz.reduce((a,c) => a + c.personas.length, 0)}</span>
             </button>` : ''}
             ${hasConceptos ? `<button type="button" class="unir-tab" id="unir-tab-conceptos" role="tab" aria-selected="false" aria-controls="unir-panel-conceptos" tabindex="-1" onclick="window._unirSwitchTab('conceptos')">
-              ${svgIcon('M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5', 15)} ${isGenAICourse ? 'Términos EN/ES' : 'Conceptos Clave'} <span style="background:${isDatabricksCourse ? 'rgba(255,54,33,0.15)' : 'rgba(79,110,247,0.15)'};padding:2px 8px;border-radius:10px;font-size:0.72rem;font-weight:700;">${conceptos.reduce((a,c) => a + c.conceptos.length, 0)}</span>
+              ${svgIcon('M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5', 15)} ${isGenAICourse ? 'Términos EN/ES' : 'Conceptos Clave'} <span class="unir-tab-count">${conceptos.reduce((a,c) => a + c.conceptos.length, 0)}</span>
             </button>` : ''}
             ${hasComandosSQL ? `<button type="button" class="unir-tab" id="unir-tab-comandos" role="tab" aria-selected="false" aria-controls="unir-panel-comandos" tabindex="-1" onclick="window._unirSwitchTab('comandos')">
-              ${svgIcon('M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z', 15)} Comandos SQL <span style="background:rgba(255,54,33,0.15);padding:2px 8px;border-radius:10px;font-size:0.72rem;font-weight:700;">${window.comandosSqlDatabricks.reduce((a,c) => a + c.comandos.length, 0)}</span>
+              ${svgIcon('M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z', 15)} Comandos SQL <span class="unir-tab-count">${window.comandosSqlDatabricks.reduce((a,c) => a + c.comandos.length, 0)}</span>
             </button>` : ''}
             ${hasGenAIPatterns ? `<button type="button" class="unir-tab" id="unir-tab-patterns" role="tab" aria-selected="false" aria-controls="unir-panel-patterns" tabindex="-1" onclick="window._unirSwitchTab('patterns')">
-              ${svgIcon('M9 18h6M10 22h4M12 2a7 7 0 00-4 12.74V16h8v-1.26A7 7 0 0012 2z', 15)} Escenarios EN/ES <span style="background:rgba(49,87,213,0.15);padding:2px 8px;border-radius:10px;font-size:0.72rem;font-weight:700;">${genAIPatterns.reduce((a,c) => a + c.items.length, 0)}</span>
+              ${svgIcon('M9 18h6M10 22h4M12 2a7 7 0 00-4 12.74V16h8v-1.26A7 7 0 0012 2z', 15)} Escenarios EN/ES <span class="unir-tab-count">${genAIPatterns.reduce((a,c) => a + c.items.length, 0)}</span>
             </button>` : ''}
             ${hasFlashcards ? `<button type="button" class="unir-tab" id="unir-tab-flashcards" role="tab" aria-selected="false" aria-controls="unir-panel-flashcards" tabindex="-1" onclick="window._unirSwitchTab('flashcards')">
-              ${svgIcon(SVG.flip, 15)} Flashcards <span style="background:${isDatabricksCourse ? 'rgba(255,54,33,0.15)' : 'rgba(79,110,247,0.15)'};padding:2px 8px;border-radius:10px;font-size:0.72rem;font-weight:700;">${flashcards.length}</span>
+              ${svgIcon(SVG.flip, 15)} Flashcards <span class="unir-tab-count">${flashcards.length}</span>
             </button>` : ''}
             <button type="button" class="unir-tab" id="unir-tab-achievements" role="tab" aria-selected="false" aria-controls="unir-panel-achievements" tabindex="-1" onclick="window._unirSwitchTab('achievements')">
               ${svgIcon(SVG.trophy, 15)} Logros
@@ -3555,7 +3563,7 @@ function renderReview(questions, finalPct, passed) {
         if (panel.dataset.rendered) return; // Only render once
         panel.dataset.rendered = '1';
 
-        const personaIcon = (path, sz=18, fill='#c7d2fe') => `<svg viewBox="0 0 24 24" width="${sz}" height="${sz}" fill="${fill}"><path d="${path}"/></svg>`;
+        const personaIcon = (path, sz=18, fill='currentColor') => `<svg viewBox="0 0 24 24" width="${sz}" height="${sz}" fill="${fill}"><path d="${path}"/></svg>`;
         const alertIcon = 'M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z';
         const badgeLabel = { alta: 'CLAVE', media: 'IMPORTANTE', baja: 'COMPLEMENTARIO' };
         const totalPersonajes = window.personajesUnirViz.reduce((a,c) => a + c.personas.length, 0);
@@ -3563,11 +3571,11 @@ function renderReview(questions, finalPct, passed) {
         let html = `<div style="text-align:center;margin-bottom:18px;">
           <h2 style="margin:0 0 4px;font-size:1.3rem;color:var(--text-color,#1e293b);">Personajes para el Examen</h2>
           <p style="margin:0;font-size:0.85rem;color:var(--text-muted,#64748b);">Despliega cada personaje para ver su contribución y dato clave para el examen.</p>
-          <div id="unir-persona-progress" style="margin-top:8px;font-size:0.8rem;color:#4f6ef7;font-weight:600;">${svgIcon(SVG.star, 14, '#4f6ef7')} ${mastery.personajesViewed.length}/${totalPersonajes} leídos — +5 XP por personaje nuevo</div>
+          <div id="unir-persona-progress" style="margin-top:8px;font-size:0.8rem;color:var(--primary-color,#3157d5);font-weight:600;">${svgIcon(SVG.star, 14)} ${mastery.personajesViewed.length}/${totalPersonajes} leídos — +5 XP por personaje nuevo</div>
           <div style="display:flex;gap:8px;justify-content:center;margin-top:10px;flex-wrap:wrap;">
-            <span style="font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:8px;background:#ef444418;color:#ef4444;">CLAVE = Muy preguntado</span>
-            <span style="font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:8px;background:#f59e0b18;color:#f59e0b;">IMPORTANTE</span>
-            <span style="font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:8px;background:#64748b18;color:#64748b;">COMPLEMENTARIO</span>
+            <span style="font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:8px;background:var(--primary-light);color:var(--primary-color);">CLAVE = Muy preguntado</span>
+            <span style="font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:8px;background:var(--bg-surface);color:var(--text-muted);">IMPORTANTE</span>
+            <span style="font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:8px;background:var(--bg-surface);color:var(--text-muted);">COMPLEMENTARIO</span>
           </div>
         </div>`;
 
@@ -3588,17 +3596,17 @@ function renderReview(questions, finalPct, passed) {
               syncToGlobal('personaje');
               // Update progress counter
               const progEl = document.getElementById('unir-persona-progress');
-              if (progEl) progEl.innerHTML = `${personaIcon(SVG.star, 14, '#4f6ef7')} ${mastery.personajesViewed.length}/${totalPersonajes} leídos — +5 XP por personaje nuevo`;
+              if (progEl) progEl.innerHTML = `${personaIcon(SVG.star, 14)} ${mastery.personajesViewed.length}/${totalPersonajes} leídos — +5 XP por personaje nuevo`;
               // Mark card as read visually
               const card = h.closest('.unir-persona-card');
-              if (card) card.style.borderLeft = '3px solid #10b981';
+              if (card) card.style.borderLeft = '3px solid var(--success-color)';
               const nameEl = h.querySelector('.p-name');
-              if (nameEl) nameEl.style.color = '#10b981';
+              if (nameEl) nameEl.style.color = 'var(--success-color)';
               // Add ✓ LEÍDO badge if not already present
               if (!h.querySelector('.p-leido-badge')) {
                 const leidoBadge = document.createElement('span');
                 leidoBadge.className = 'p-leido-badge';
-                leidoBadge.style.cssText = 'font-size:0.65rem;color:#10b981;font-weight:700;margin-left:6px;';
+                leidoBadge.style.cssText = 'font-size:0.65rem;color:var(--success-color);font-weight:700;margin-left:6px;';
                 leidoBadge.textContent = '✓ LEÍDO';
                 h.appendChild(leidoBadge);
               }
@@ -3623,13 +3631,13 @@ function renderReview(questions, finalPct, passed) {
                 // Add visual LEÍDO markers
                 if (hdr) {
                   const card = hdr.closest('.unir-persona-card');
-                  if (card) card.style.borderLeft = '3px solid #10b981';
+                  if (card) card.style.borderLeft = '3px solid var(--success-color)';
                   const nameEl = hdr.querySelector('.p-name');
-                  if (nameEl) nameEl.style.color = '#10b981';
+                  if (nameEl) nameEl.style.color = 'var(--success-color)';
                   if (!hdr.querySelector('.p-leido-badge')) {
                     const leidoBadge = document.createElement('span');
                     leidoBadge.className = 'p-leido-badge';
-                    leidoBadge.style.cssText = 'font-size:0.65rem;color:#10b981;font-weight:700;margin-left:6px;';
+                    leidoBadge.style.cssText = 'font-size:0.65rem;color:var(--success-color);font-weight:700;margin-left:6px;';
                     leidoBadge.textContent = '✓ LEÍDO';
                     hdr.appendChild(leidoBadge);
                   }
@@ -3641,30 +3649,30 @@ function renderReview(questions, finalPct, passed) {
             addXP(newCount * 5);
             for (let i = 0; i < newCount; i++) syncToGlobal('personaje');
             const progEl = document.getElementById('unir-persona-progress');
-            if (progEl) progEl.innerHTML = `${personaIcon(SVG.star, 14, '#4f6ef7')} ${mastery.personajesViewed.length}/${totalPersonajes} leídos — +5 XP por personaje nuevo`;
+            if (progEl) progEl.innerHTML = `${personaIcon(SVG.star, 14)} ${mastery.personajesViewed.length}/${totalPersonajes} leídos — +5 XP por personaje nuevo`;
           }
         };
 
         window.personajesUnirViz.forEach((cat, ci) => {
           html += `<div class="unir-persona-category">`;
-          html += `<div class="unir-persona-cat-header">${personaIcon(cat.icon, 20, '#818cf8')} ${cat.category} <span style="margin-left:auto;font-size:0.72rem;opacity:0.7;">${cat.personas.length} personajes</span></div>`;
+          html += `<div class="unir-persona-cat-header">${personaIcon(cat.icon, 20)} ${cat.category} <span style="margin-left:auto;font-size:0.72rem;opacity:0.7;">${cat.personas.length} personajes</span></div>`;
 
           cat.personas.forEach((p, pi) => {
             const uid = `persona-${ci}-${pi}`;
             const key = `${ci}-${pi}`;
             const isRead = mastery.personajesViewed.includes(key);
             const badgeCls = `p-badge-${p.relevancia}`;
-            html += `<div class="unir-persona-card${isRead ? ' is-read' : ''}" style="${isRead ? 'border-left:3px solid #10b981;' : ''}">`;
+            html += `<div class="unir-persona-card${isRead ? ' is-read' : ''}" style="${isRead ? 'border-left:3px solid var(--success-color);' : ''}">`;
             html += `  <div class="unir-persona-header" id="${uid}-hdr" onclick="window._unirPersonaToggle(${ci},${pi})">` ;
-            html += `    <span class="p-chevron">${personaIcon('M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z', 16, '#4f6ef7')}</span>`;
-            html += `    <span class="p-name" style="${isRead ? 'color:#10b981;' : ''}">${p.nombre}</span>`;
+            html += `    <span class="p-chevron">${personaIcon('M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z', 16)}</span>`;
+            html += `    <span class="p-name" style="${isRead ? 'color:var(--success-color);' : ''}">${p.nombre}</span>`;
             html += `    <span class="p-epoch">${p.epoca}</span>`;
             html += `    <span class="${badgeCls}">${badgeLabel[p.relevancia]}</span>`;
-            html += `    ${isRead ? '<span style="font-size:0.65rem;color:#10b981;font-weight:700;">✓ LEÍDO</span>' : ''}`;
+            html += `    ${isRead ? '<span style="font-size:0.65rem;color:var(--success-color);font-weight:700;">✓ LEÍDO</span>' : ''}`;
             html += `  </div>`;
             html += `  <div class="unir-persona-body" id="${uid}-body" style="padding:20px 36px 24px;">`;
             html += `    <div class="p-contribucion">${p.contribucion}</div>`;
-            html += `    <div class="p-dato-examen" style="padding:16px 24px;margin-left:16px;margin-right:8px;">${personaIcon(alertIcon, 16, '#f59e0b')} <div><strong style="color:#f59e0b;">Dato para el examen:</strong> ${p.datoExamen}</div></div>`;
+            html += `    <div class="p-dato-examen" style="padding:16px 24px;margin-left:16px;margin-right:8px;">${personaIcon(alertIcon, 16)} <div><strong style="color:var(--primary-color);">Dato para el examen:</strong> ${p.datoExamen}</div></div>`;
             html += `    <div class="p-tema">${personaIcon('M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z', 12, '#64748b')} ${p.tema}</div>`;
             html += `  </div>`;
             html += `</div>`;
@@ -3675,7 +3683,7 @@ function renderReview(questions, finalPct, passed) {
 
         // Expand all / collapse all buttons
         html += `<div style="display:flex;gap:8px;justify-content:center;margin-top:16px;">
-          <button onclick="window._unirExpandAllPersonas()" style="padding:6px 16px;border-radius:20px;border:1px solid #4f6ef7;color:#4f6ef7;background:#4f6ef708;cursor:pointer;font-size:0.8rem;font-weight:600;transition:all 0.2s;">Expandir Todos</button>
+          <button onclick="window._unirExpandAllPersonas()" style="padding:6px 16px;border-radius:20px;border:1px solid var(--primary-color);color:var(--primary-color);background:var(--primary-light);cursor:pointer;font-size:0.8rem;font-weight:600;transition:all 0.2s;">Expandir Todos</button>
           <button onclick="document.querySelectorAll('.unir-persona-body').forEach(b=>b.classList.remove('open'));document.querySelectorAll('.unir-persona-header').forEach(h=>h.classList.remove('open'));" style="padding:6px 16px;border-radius:20px;border:1px solid var(--border-color,#e5e7eb);color:var(--text-muted,#64748b);background:var(--bg-card,#fff);cursor:pointer;font-size:0.8rem;font-weight:600;transition:all 0.2s;">Colapsar Todos</button>
         </div>`;
 
@@ -3689,7 +3697,7 @@ function renderReview(questions, finalPct, passed) {
         if (panel.dataset.rendered) return; // Only render once
         panel.dataset.rendered = '1';
 
-        const cIcon = (path, sz=18, fill='#c7d2fe') => `<svg viewBox="0 0 24 24" width="${sz}" height="${sz}" fill="${fill}"><path d="${path}"/></svg>`;
+        const cIcon = (path, sz=18, fill='currentColor') => `<svg viewBox="0 0 24 24" width="${sz}" height="${sz}" fill="${fill}"><path d="${path}"/></svg>`;
         const alertIcon = 'M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z';
         const badgeLabel = { alta: 'CLAVE', media: 'IMPORTANTE', baja: 'COMPLEMENTARIO' };
         const totalConceptos = conceptos.reduce((a,c) => a + c.conceptos.length, 0);
@@ -3697,11 +3705,11 @@ function renderReview(questions, finalPct, passed) {
         let html = `<div style="text-align:center;margin-bottom:18px;">
           <h2 style="margin:0 0 4px;font-size:1.3rem;color:var(--text-color,#1e293b);">${isGenAICourse ? 'Términos y competencias / Terms and competencies' : 'Conceptos Clave para el Examen'}</h2>
           <p style="margin:0;font-size:0.85rem;color:var(--text-muted,#64748b);">${isGenAICourse ? 'Cada término incluye explicación y respuesta clave en inglés y español. Todo inicia contraído.' : 'Despliega cada concepto para ver su descripci&oacute;n y dato clave para el examen.'}</p>
-          <div id="unir-concepto-progress" style="margin-top:8px;font-size:0.8rem;color:#FF3621;font-weight:600;">${cIcon(SVG.star, 14, '#FF3621')} ${mastery.conceptosViewed.length}/${totalConceptos} le&iacute;dos &mdash; +5 XP por concepto nuevo</div>
+          <div id="unir-concepto-progress" style="margin-top:8px;font-size:0.8rem;color:var(--primary-color,#3157d5);font-weight:600;">${cIcon(SVG.star, 14)} ${mastery.conceptosViewed.length}/${totalConceptos} le&iacute;dos &mdash; +5 XP por concepto nuevo</div>
           <div style="display:flex;gap:8px;justify-content:center;margin-top:10px;flex-wrap:wrap;">
-            <span style="font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:8px;background:#ef444418;color:#ef4444;">CLAVE = Muy preguntado</span>
-            <span style="font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:8px;background:#f59e0b18;color:#f59e0b;">IMPORTANTE</span>
-            <span style="font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:8px;background:#64748b18;color:#64748b;">COMPLEMENTARIO</span>
+            <span style="font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:8px;background:var(--primary-light);color:var(--primary-color);">CLAVE = Muy preguntado</span>
+            <span style="font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:8px;background:var(--bg-surface);color:var(--text-muted);">IMPORTANTE</span>
+            <span style="font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:8px;background:var(--bg-surface);color:var(--text-muted);">COMPLEMENTARIO</span>
           </div>
         </div>`;
 
@@ -3720,15 +3728,15 @@ function renderReview(questions, finalPct, passed) {
               addXP(5);
               syncToGlobal('concepto'); // Databricks conceptos use their own counter
               const progEl = document.getElementById('unir-concepto-progress');
-              if (progEl) progEl.innerHTML = `${cIcon(SVG.star, 14, '#FF3621')} ${mastery.conceptosViewed.length}/${totalConceptos} le&iacute;dos &mdash; +5 XP por concepto nuevo`;
+              if (progEl) progEl.innerHTML = `${cIcon(SVG.star, 14)} ${mastery.conceptosViewed.length}/${totalConceptos} le&iacute;dos &mdash; +5 XP por concepto nuevo`;
               const card = h.closest('.unir-persona-card');
-              if (card) card.style.borderLeft = '3px solid #10b981';
+              if (card) card.style.borderLeft = '3px solid var(--success-color)';
               const nameEl = h.querySelector('.p-name');
-              if (nameEl) nameEl.style.color = '#10b981';
+              if (nameEl) nameEl.style.color = 'var(--success-color)';
               if (!h.querySelector('.p-leido-badge')) {
                 const leidoBadge = document.createElement('span');
                 leidoBadge.className = 'p-leido-badge';
-                leidoBadge.style.cssText = 'font-size:0.65rem;color:#10b981;font-weight:700;margin-left:6px;';
+                leidoBadge.style.cssText = 'font-size:0.65rem;color:var(--success-color);font-weight:700;margin-left:6px;';
                 leidoBadge.textContent = '\u2713 LE\u00cdDO';
                 h.appendChild(leidoBadge);
               }
@@ -3752,13 +3760,13 @@ function renderReview(questions, finalPct, passed) {
                 newCount++;
                 if (hdr) {
                   const card = hdr.closest('.unir-persona-card');
-                  if (card) card.style.borderLeft = '3px solid #10b981';
+                  if (card) card.style.borderLeft = '3px solid var(--success-color)';
                   const nameEl = hdr.querySelector('.p-name');
-                  if (nameEl) nameEl.style.color = '#10b981';
+                  if (nameEl) nameEl.style.color = 'var(--success-color)';
                   if (!hdr.querySelector('.p-leido-badge')) {
                     const leidoBadge = document.createElement('span');
                     leidoBadge.className = 'p-leido-badge';
-                    leidoBadge.style.cssText = 'font-size:0.65rem;color:#10b981;font-weight:700;margin-left:6px;';
+                    leidoBadge.style.cssText = 'font-size:0.65rem;color:var(--success-color);font-weight:700;margin-left:6px;';
                     leidoBadge.textContent = '\u2713 LE\u00cdDO';
                     hdr.appendChild(leidoBadge);
                   }
@@ -3770,7 +3778,7 @@ function renderReview(questions, finalPct, passed) {
             addXP(newCount * 5);
             for (let i = 0; i < newCount; i++) syncToGlobal('concepto');
             const progEl = document.getElementById('unir-concepto-progress');
-            if (progEl) progEl.innerHTML = `${cIcon(SVG.star, 14, '#FF3621')} ${mastery.conceptosViewed.length}/${totalConceptos} le&iacute;dos &mdash; +5 XP por concepto nuevo`;
+            if (progEl) progEl.innerHTML = `${cIcon(SVG.star, 14)} ${mastery.conceptosViewed.length}/${totalConceptos} le&iacute;dos &mdash; +5 XP por concepto nuevo`;
           }
         };
 
@@ -3783,17 +3791,17 @@ function renderReview(questions, finalPct, passed) {
             const key = `${ci}-${pi}`;
             const isRead = mastery.conceptosViewed.includes(key);
             const badgeCls = `p-badge-${c.relevancia}`;
-            html += `<div class="unir-persona-card${isRead ? ' is-read' : ''}" style="${isRead ? 'border-left:3px solid #10b981;' : ''}">`;
+            html += `<div class="unir-persona-card${isRead ? ' is-read' : ''}" style="${isRead ? 'border-left:3px solid var(--success-color);' : ''}">`;
             html += `  <div class="unir-persona-header" id="${uid}-hdr" onclick="window._unirConceptoToggle(${ci},${pi})">`;
-            html += `    <span class="p-chevron">${cIcon('M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z', 16, '#FF3621')}</span>`;
-            html += `    <span class="p-name" style="${isRead ? 'color:#10b981;' : ''}">${c.nombre}</span>`;
+            html += `    <span class="p-chevron">${cIcon('M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z', 16)}</span>`;
+            html += `    <span class="p-name" style="${isRead ? 'color:var(--success-color);' : ''}">${c.nombre}</span>`;
             html += `    <span class="p-epoch">${c.tipo}</span>`;
             html += `    <span class="${badgeCls}">${badgeLabel[c.relevancia]}</span>`;
-            html += `    ${isRead ? '<span style="font-size:0.65rem;color:#10b981;font-weight:700;">\u2713 LE\u00cdDO</span>' : ''}`;
+            html += `    ${isRead ? '<span style="font-size:0.65rem;color:var(--success-color);font-weight:700;">\u2713 LE\u00cdDO</span>' : ''}`;
             html += `  </div>`;
             html += `  <div class="unir-persona-body" id="${uid}-body" style="padding:20px 36px 24px;">`;
             html += `    <div class="p-contribucion">${c.contribucion}</div>`;
-            html += `    <div class="p-dato-examen" style="padding:16px 24px;margin-left:16px;margin-right:8px;">${cIcon(alertIcon, 16, '#f59e0b')} <div><strong style="color:#f59e0b;">Dato para el examen:</strong> ${c.datoExamen}</div></div>`;
+            html += `    <div class="p-dato-examen" style="padding:16px 24px;margin-left:16px;margin-right:8px;">${cIcon(alertIcon, 16)} <div><strong style="color:var(--primary-color);">Dato para el examen:</strong> ${c.datoExamen}</div></div>`;
             html += `    <div class="p-tema">${cIcon('M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z', 12, '#64748b')} ${c.tema}</div>`;
             html += `  </div>`;
             html += `</div>`;
@@ -3804,7 +3812,7 @@ function renderReview(questions, finalPct, passed) {
 
         // Expand all / collapse all buttons
         html += `<div style="display:flex;gap:8px;justify-content:center;margin-top:16px;">
-          <button onclick="window._unirExpandAllConceptos()" style="padding:6px 16px;border-radius:20px;border:1px solid #FF3621;color:#FF3621;background:#FF362108;cursor:pointer;font-size:0.8rem;font-weight:600;transition:all 0.2s;">Expandir Todos</button>
+          <button onclick="window._unirExpandAllConceptos()" style="padding:6px 16px;border-radius:20px;border:1px solid var(--primary-color);color:var(--primary-color);background:var(--primary-light);cursor:pointer;font-size:0.8rem;font-weight:600;transition:all 0.2s;">Expandir Todos</button>
           <button onclick="document.querySelectorAll('#unir-panel-conceptos .unir-persona-body').forEach(b=>b.classList.remove('open'));document.querySelectorAll('#unir-panel-conceptos .unir-persona-header').forEach(h=>h.classList.remove('open'));" style="padding:6px 16px;border-radius:20px;border:1px solid var(--border-color,#e5e7eb);color:var(--text-muted,#64748b);background:var(--bg-card,#fff);cursor:pointer;font-size:0.8rem;font-weight:600;transition:all 0.2s;">Colapsar Todos</button>
         </div>`;
 
@@ -3827,7 +3835,7 @@ function renderReview(questions, finalPct, passed) {
 
         genAIPatterns.forEach(group => {
           html += `<section class="unir-persona-category">`;
-          html += `<div class="unir-persona-cat-header">${svgIcon(SVG.shield, 18, '#93c5fd')} ${group.category}<span style="margin-left:auto;font-size:0.72rem;opacity:0.7;">${group.items.length}</span></div>`;
+          html += `<div class="unir-persona-cat-header">${svgIcon(SVG.shield, 18)} ${group.category}<span style="margin-left:auto;font-size:0.72rem;opacity:0.7;">${group.items.length}</span></div>`;
           group.items.forEach(item => {
             html += `
               <details class="unir-persona-card genai-pattern-card">
@@ -3853,39 +3861,39 @@ function renderReview(questions, finalPct, passed) {
         if (!panel || !window.comandosSqlDatabricks) return;
         if (panel.dataset.rendered) return;
         panel.dataset.rendered = '1';
-        const cIcon = (path, sz=18, fill='#c7d2fe') => `<svg viewBox="0 0 24 24" width="${sz}" height="${sz}" fill="${fill}"><path d="${path}"/></svg>`;
+        const cIcon = (path, sz=18, fill='currentColor') => `<svg viewBox="0 0 24 24" width="${sz}" height="${sz}" fill="${fill}"><path d="${path}"/></svg>`;
         const totalComandos = window.comandosSqlDatabricks.reduce((a,c) => a + c.comandos.length, 0);
         let html = `<div style="text-align:center;margin-bottom:18px;">
           <h2 style="margin:0 0 4px;font-size:1.3rem;color:var(--text-color,#1e293b);">Comandos SQL para el Examen</h2>
           <p style="margin:0;color:var(--text-muted,#64748b);font-size:0.85rem;">Ejemplos explicados l&iacute;nea por l&iacute;nea</p>
-          <div id="unir-cmd-progress" style="margin-top:8px;font-size:0.8rem;color:#FF3621;font-weight:600;">${cIcon(SVG.star, 14, '#FF3621')} ${mastery.comandosViewed.length}/${totalComandos} le&iacute;dos &mdash; +8 XP c/u</div>
+          <div id="unir-cmd-progress" style="margin-top:8px;font-size:0.8rem;color:var(--primary-color,#3157d5);font-weight:600;">${cIcon(SVG.star, 14)} ${mastery.comandosViewed.length}/${totalComandos} le&iacute;dos &mdash; +8 XP c/u</div>
           <div style="margin-top:10px;display:flex;gap:8px;justify-content:center;">
-            <button id="cmd-lang-es" onclick="window._cmdLang('es')" style="padding:4px 14px;border-radius:16px;border:2px solid #FF3621;background:#FF3621;color:#fff;cursor:pointer;font-size:0.78rem;font-weight:700;">ES</button>
-            <button id="cmd-lang-en" onclick="window._cmdLang('en')" style="padding:4px 14px;border-radius:16px;border:2px solid #FF3621;background:transparent;color:#FF3621;cursor:pointer;font-size:0.78rem;font-weight:700;">EN</button>
+            <button id="cmd-lang-es" onclick="window._cmdLang('es')" style="padding:4px 14px;border-radius:16px;border:2px solid var(--primary-color);background:var(--primary-color);color:#fff;cursor:pointer;font-size:0.78rem;font-weight:700;">ES</button>
+            <button id="cmd-lang-en" onclick="window._cmdLang('en')" style="padding:4px 14px;border-radius:16px;border:2px solid var(--primary-color);background:transparent;color:var(--primary-color);cursor:pointer;font-size:0.78rem;font-weight:700;">EN</button>
           </div></div>`;
         window._cmdLang = function(lang) {
           document.querySelectorAll('.cmd-lt').forEach(el => { el.style.display = el.dataset.lang === lang ? '' : 'none'; });
           const esB = document.getElementById('cmd-lang-es'), enB = document.getElementById('cmd-lang-en');
-          if(esB){esB.style.background=lang==='es'?'#FF3621':'transparent';esB.style.color=lang==='es'?'#fff':'#FF3621';}
-          if(enB){enB.style.background=lang==='en'?'#FF3621':'transparent';enB.style.color=lang==='en'?'#fff':'#FF3621';}
+          if(esB){esB.style.background=lang==='es'?'var(--primary-color)':'transparent';esB.style.color=lang==='es'?'#fff':'var(--primary-color)';}
+          if(enB){enB.style.background=lang==='en'?'var(--primary-color)':'transparent';enB.style.color=lang==='en'?'#fff':'var(--primary-color)';}
         };
         window._cmdRead = function(key) {
           if (!mastery.comandosViewed.includes(key)) {
             mastery.comandosViewed.push(key); addXP(8); syncToGlobal('comando'); saveMastery(); checkAchievements();
             const p = document.getElementById('unir-cmd-progress');
-            if(p) p.innerHTML = `${cIcon(SVG.star,14,'#FF3621')} ${mastery.comandosViewed.length}/${totalComandos} le&iacute;dos &mdash; +8 XP c/u`;
+            if(p) p.innerHTML = `${cIcon(SVG.star,14)} ${mastery.comandosViewed.length}/${totalComandos} le&iacute;dos &mdash; +8 XP c/u`;
             const b = document.getElementById('cb-'+key.replace(/[^a-z0-9]/gi,''));
-            if(b){b.style.background='#10b981';b.textContent='✓';}
+            if(b){b.style.background='var(--success-color)';b.textContent='✓';}
           }
         };
         window.comandosSqlDatabricks.forEach((cat, ci) => {
           html += `<div class="unir-persona-cat-header" style="background:#1f2937;">${cIcon(cat.icon,20,'#3157d5')} ${cat.category} <span style="margin-left:auto;font-size:0.72rem;opacity:0.7;">${cat.comandos.length}</span></div>`;
           cat.comandos.forEach((cmd, pi) => {
             const key = `cmd-${ci}-${pi}`, sk = key.replace(/[^a-z0-9]/gi,''), isR = mastery.comandosViewed.includes(key);
-            html += `<div class="unir-persona-card" style="border-left:3px solid ${isR?'#10b981':'#FF3621'};">
+            html += `<div class="unir-persona-card" style="border-left:3px solid ${isR?'var(--success-color)':'var(--primary-color)'};">
               <div class="unir-persona-header" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open');window._cmdRead('${key}');">
                 <div style="display:flex;align-items:center;gap:8px;flex:1;"><span style="font-weight:700;color:var(--text-color,#1e293b);font-size:0.95rem;">${cmd.nombre}</span>
-                <span id="cb-${sk}" style="font-size:0.65rem;padding:2px 8px;border-radius:10px;background:${isR?'#10b981':'#ef4444'};color:#fff;font-weight:700;">${isR?'✓':'NEW'}</span></div>
+                <span id="cb-${sk}" style="font-size:0.65rem;padding:2px 8px;border-radius:10px;background:${isR?'var(--success-color)':'var(--primary-color)'};color:#fff;font-weight:700;">${isR?'✓':'NUEVO'}</span></div>
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="var(--text-muted,#64748b)"><path d="M7 10l5 5 5-5z"/></svg>
               </div>
               <div class="unir-persona-body"><div style="padding:12px 16px;">
@@ -3901,7 +3909,7 @@ function renderReview(questions, finalPct, passed) {
                     <span class="cmd-lt" data-lang="es">Desglose:</span><span class="cmd-lt" data-lang="en" style="display:none">Breakdown:</span></div>`;
               ej.lineas.forEach(l => {
                 html += `<div style="display:flex;gap:8px;padding:3px 0;font-size:0.8rem;border-bottom:1px solid var(--border-color,#e5e7eb22);">
-                  <code style="color:#FF3621;font-weight:600;white-space:nowrap;font-size:0.76rem;">${l.code.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</code>
+                  <code style="color:var(--primary-color);font-weight:600;white-space:nowrap;font-size:0.76rem;">${l.code.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</code>
                   <span class="cmd-lt" data-lang="es" style="color:var(--text-color,#1e293b);">&rarr; ${l.es}</span>
                   <span class="cmd-lt" data-lang="en" style="color:var(--text-color,#1e293b);display:none">&rarr; ${l.en}</span></div>`;
               });
@@ -3911,7 +3919,7 @@ function renderReview(questions, finalPct, passed) {
           });
         });
         html += `<div style="display:flex;gap:8px;justify-content:center;margin-top:16px;">
-          <button onclick="document.querySelectorAll('#unir-panel-comandos .unir-persona-body').forEach(b=>b.classList.add('open'));document.querySelectorAll('#unir-panel-comandos .unir-persona-header').forEach(h=>h.classList.add('open'));" style="padding:6px 16px;border-radius:20px;border:1px solid #FF3621;color:#FF3621;background:#FF362108;cursor:pointer;font-size:0.8rem;font-weight:600;">Expandir</button>
+          <button onclick="document.querySelectorAll('#unir-panel-comandos .unir-persona-body').forEach(b=>b.classList.add('open'));document.querySelectorAll('#unir-panel-comandos .unir-persona-header').forEach(h=>h.classList.add('open'));" style="padding:6px 16px;border-radius:20px;border:1px solid var(--primary-color);color:var(--primary-color);background:var(--primary-light);cursor:pointer;font-size:0.8rem;font-weight:600;">Expandir</button>
           <button onclick="document.querySelectorAll('#unir-panel-comandos .unir-persona-body').forEach(b=>b.classList.remove('open'));document.querySelectorAll('#unir-panel-comandos .unir-persona-header').forEach(h=>h.classList.remove('open'));" style="padding:6px 16px;border-radius:20px;border:1px solid var(--border-color,#e5e7eb);color:var(--text-muted,#64748b);background:var(--bg-card,#fff);cursor:pointer;font-size:0.8rem;font-weight:600;">Colapsar</button></div>`;
         panel.innerHTML = html;
       }
@@ -3970,7 +3978,7 @@ function renderReview(questions, finalPct, passed) {
         sectionToggle.setAttribute('aria-expanded', 'false');
         sectionToggle.setAttribute('aria-controls', `unir-section-body-${docIdx}`);
         sectionToggle.innerHTML = `
-          <span class="hdr-chevron">${svgIcon(SVG.chevronDown, 16, '#4f6ef7')}</span>
+          <span class="hdr-chevron">${svgIcon(SVG.chevronDown, 16)}</span>
           <span class="hdr-title">${section.title}</span>
           <span class="hdr-progress ${allDone ? 'all-done' : ''}">${viewedN}/${section.items.length}</span>
         `;
@@ -3982,7 +3990,7 @@ function renderReview(questions, finalPct, passed) {
         completeBtn.dataset.count = section.items.length;
         completeBtn.innerHTML = allDone
           ? `${svgIcon(SVG.checkCircle, 12, '#fff')} Completo`
-          : `${svgIcon(SVG.checkCircle, 12, '#10b981')} Marcar completo`;
+          : `${svgIcon(SVG.checkCircle, 12)} Marcar completo`;
 
         header.append(sectionToggle, completeBtn);
         card.appendChild(header);
@@ -4096,7 +4104,7 @@ function renderReview(questions, finalPct, passed) {
                 <option value="all">Todos los temas</option>
                 ${[...new Set(flashcards.map(f => f.tema))].map(t => `<option value="${t}">${t}</option>`).join('')}
               </select>
-              <button class="unir-fc-btn" onclick="window._unirShuffleFC()" title="Aleatorio" style="width:36px;height:36px;">${svgIcon(SVG.shuffle, 16, '#4f6ef7')}</button>
+              <button class="unir-fc-btn" onclick="window._unirShuffleFC()" title="Aleatorio" style="width:36px;height:36px;">${svgIcon(SVG.shuffle, 16)}</button>
             </div>
             <div class="unir-fc-card" id="unir-fc-card" onclick="this.classList.toggle('flipped')">
               <div class="unir-fc-inner">
@@ -4113,12 +4121,12 @@ function renderReview(questions, finalPct, passed) {
             <div class="unir-fc-nav">
               <button class="unir-fc-btn" onclick="window._unirPrevFC()">&#8249;</button>
               <span class="unir-fc-count" id="unir-fc-count">1 / ${fcFiltered.length}</span>
-              <button class="unir-fc-btn" onclick="window._unirNextFC()" style="background:#4f6ef7;color:#fff;border-color:#4f6ef7;">&#8250;</button>
+              <button class="unir-fc-btn primary" onclick="window._unirNextFC()">&#8250;</button>
             </div>
             <div class="unir-fc-actions">
-              <button class="unir-fc-diff-btn easy" onclick="window._unirRateFC('easy')">${svgIcon(SVG.thumbUp, 13, '#10b981')} Fácil</button>
-              <button class="unir-fc-diff-btn medium" onclick="window._unirRateFC('medium')">${svgIcon(SVG.star, 13, '#f59e0b')} Regular</button>
-              <button class="unir-fc-diff-btn hard" onclick="window._unirRateFC('hard')">${svgIcon(SVG.thumbDown, 13, '#ef4444')} Difícil</button>
+              <button class="unir-fc-diff-btn easy" onclick="window._unirRateFC('easy')">${svgIcon(SVG.thumbUp, 13)} Fácil</button>
+              <button class="unir-fc-diff-btn medium" onclick="window._unirRateFC('medium')">${svgIcon(SVG.star, 13)} Regular</button>
+              <button class="unir-fc-diff-btn hard" onclick="window._unirRateFC('hard')">${svgIcon(SVG.thumbDown, 13)} Difícil</button>
             </div>
           </div>
         `;
@@ -4176,7 +4184,7 @@ function renderReview(questions, finalPct, passed) {
         const panel = document.getElementById('unir-panel-achievements');
         panel.innerHTML = `
           <div style="max-width:800px;margin:0 auto;">
-            <h2 style="color:var(--text-color,#1e293b);margin-bottom:8px;display:flex;align-items:center;gap:10px;">${svgIcon(SVG.trophy, 24, '#4f6ef7')} Logros del Dojo</h2>
+            <h2 style="color:var(--text-color,#1e293b);margin-bottom:8px;display:flex;align-items:center;gap:10px;">${svgIcon(SVG.trophy, 24, 'var(--primary-color,#3157d5)')} Logros del Dojo</h2>
             <p style="color:var(--text-muted,#64748b);margin-bottom:20px;">Desbloqueados: ${mastery.achievements.length}/${achievementsDef.length}</p>
             <div class="unir-ach-grid">
               ${achievementsDef.map(a => {
@@ -4185,11 +4193,11 @@ function renderReview(questions, finalPct, passed) {
                 const showName = (isSecret && !unlocked) ? 'Misterioso' : a.name;
                 const showDesc = (isSecret && !unlocked) ? 'Descubre c\u00f3mo desbloquearlo...' : a.desc;
                 const showIcon = (isSecret && !unlocked) ? 'M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z' : a.icon;
-                return `<div class="unir-ach-card ${unlocked ? 'unlocked' : 'locked'}${isSecret && !unlocked ? ' secret-ach' : ''}" style="${isSecret && !unlocked ? 'border:1px dashed #94a3b8;background:var(--bg-card,#f8fafc);' : ''}">
-                  ${svgIcon(showIcon, 32, unlocked ? '#4f6ef7' : (isSecret ? '#c084fc' : '#94a3b8'), 'style="margin-bottom:8px;"')}
-                  <div style="font-weight:700;font-size:0.88rem;margin-bottom:4px;${isSecret && !unlocked ? 'font-style:italic;color:#c084fc;' : ''}">${showName}</div>
+                return `<div class="unir-ach-card ${unlocked ? 'unlocked' : 'locked'}${isSecret && !unlocked ? ' secret-ach' : ''}" style="${isSecret && !unlocked ? 'border:1px dashed var(--border-color);background:var(--bg-card);' : ''}">
+                  ${svgIcon(showIcon, 32, unlocked ? 'var(--primary-color,#3157d5)' : 'var(--text-muted,#667085)', 'style="margin-bottom:8px;"')}
+                  <div style="font-weight:700;font-size:0.88rem;margin-bottom:4px;${isSecret && !unlocked ? 'font-style:italic;color:var(--text-muted);' : ''}">${showName}</div>
                   <div style="font-size:0.78rem;color:var(--text-muted,#64748b);">${showDesc}</div>
-                  ${unlocked ? `<div style="margin-top:6px;font-size:0.7rem;color:#10b981;font-weight:600;display:flex;align-items:center;justify-content:center;gap:4px;">${svgIcon(SVG.check, 12, '#10b981')} Completado</div>` : ''}
+                  ${unlocked ? `<div style="margin-top:6px;font-size:0.7rem;color:var(--success-color);font-weight:600;display:flex;align-items:center;justify-content:center;gap:4px;">${svgIcon(SVG.check, 12)} Completado</div>` : ''}
                 </div>`;
               }).join('')}
             </div>
@@ -4572,7 +4580,7 @@ function renderReview(questions, finalPct, passed) {
             <p style="margin:0 0 16px;font-size:0.8rem;opacity:0.6;">Arrastra el recuadro para elegir la zona del rostro</p>
             <div id="crop-container" style="position:relative;display:inline-block;max-width:100%;max-height:400px;overflow:hidden;border-radius:8px;cursor:default;user-select:none;">
                 <img id="crop-image" src="${imageSrc}" style="display:block;max-width:100%;max-height:380px;" draggable="false"/>
-                <div id="crop-overlay" style="position:absolute;border:3px solid #6366f1;border-radius:50%;cursor:move;box-shadow:0 0 0 9999px rgba(0,0,0,0.5);background:transparent;"></div>
+                <div id="crop-overlay" style="position:absolute;border:3px solid #3157d5;border-radius:50%;cursor:move;box-shadow:0 0 0 9999px rgba(0,0,0,0.5);background:transparent;"></div>
             </div>
             <div style="display:flex;gap:12px;justify-content:center;margin-top:16px;">
                 <button id="crop-cancel" style="padding:8px 24px;border:1px solid var(--border-color,#ddd);border-radius:8px;background:transparent;cursor:pointer;font-size:0.85rem;color:var(--text-color,#333);">Cancelar</button>
@@ -5020,7 +5028,7 @@ window.renderLibrary = function() {
             reqName: 'Orange Belt',
             link: '#sql-cheat-sheet',
             icon: '<svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>',
-            color: '#f39c12' // Orange
+            color: '#3157d5' // Codex (GPT-5) | 2026-08-23 21:32 CST | Recurso con el acento principal.
         },
         {
             id: 'git_guide',
@@ -5031,7 +5039,7 @@ window.renderLibrary = function() {
             reqName: 'Green Belt',
             link: '#', 
             icon: '<svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93z"/></svg>',
-            color: '#2ecc71' // Green
+            color: '#3157d5' // Codex (GPT-5) | 2026-08-23 21:32 CST | Recurso con el acento principal.
         },
         {
             id: 'spark_opt',
@@ -5042,7 +5050,7 @@ window.renderLibrary = function() {
             reqName: 'Black Belt',
             link: '#', 
             icon: '<svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg>',
-            color: '#000000' // Black
+            color: '#3157d5' // Codex (GPT-5) | 2026-08-23 21:32 CST | Recurso con el acento principal.
         }
     ];
     

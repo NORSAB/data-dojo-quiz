@@ -1,6 +1,7 @@
 // Codex (GPT-5) | 2026-08-23 20:35 CST | Invalida caché por nuevo centro de estudio y design system.
-const BUILD_TIMESTAMP = '20260823d';
-const CACHE_NAME = `simulador-v19-${BUILD_TIMESTAMP}`;
+// Codex (GPT-5) | 2026-08-23 21:32 CST | Publica la unificación de paleta y el control previo al despliegue.
+const BUILD_TIMESTAMP = '20260823e';
+const CACHE_NAME = `simulador-v20-${BUILD_TIMESTAMP}`;
 const ASSETS_TO_CACHE = [
   './',
   './index.html',

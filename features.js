@@ -342,15 +342,15 @@ function generateCertificate(courseName, score, userName, beltName, beltColor) {
         ctx.fillRect(0, 0, 1200, 800);
 
         // Decorative border
-        ctx.strokeStyle = '#4f6ef7';
+        ctx.strokeStyle = '#3157d5';
         ctx.lineWidth = 3;
         ctx.strokeRect(30, 30, 1140, 740);
-        ctx.strokeStyle = 'rgba(79, 110, 247, 0.3)';
+        ctx.strokeStyle = 'rgba(49, 87, 213, 0.3)';
         ctx.lineWidth = 1;
         ctx.strokeRect(40, 40, 1120, 720);
 
         // Header
-        ctx.fillStyle = '#4f6ef7';
+        ctx.fillStyle = '#3157d5';
         ctx.font = `700 14px ${ff}`;
         ctx.textAlign = 'center';
         ctx.fillText('THE DATA DOJO', 600, 90);
@@ -362,7 +362,7 @@ function generateCertificate(courseName, score, userName, beltName, beltColor) {
         // Decorative line
         const lineGrad = ctx.createLinearGradient(300, 160, 900, 160);
         lineGrad.addColorStop(0, 'transparent');
-        lineGrad.addColorStop(0.5, '#4f6ef7');
+        lineGrad.addColorStop(0.5, '#3157d5');
         lineGrad.addColorStop(1, 'transparent');
         ctx.strokeStyle = lineGrad;
         ctx.lineWidth = 2;
@@ -384,16 +384,16 @@ function generateCertificate(courseName, score, userName, beltName, beltColor) {
         ctx.font = `400 18px ${ff}`;
         ctx.fillText('ha completado exitosamente el examen', 600, 350);
 
-        ctx.fillStyle = '#4f6ef7';
+        ctx.fillStyle = '#3157d5';
         ctx.font = `700 28px ${ff}`;
         ctx.fillText(courseName, 600, 400);
 
         // Score circle
         ctx.beginPath();
         ctx.arc(600, 500, 60, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(79, 110, 247, 0.15)';
+        ctx.fillStyle = 'rgba(49, 87, 213, 0.15)';
         ctx.fill();
-        ctx.strokeStyle = '#4f6ef7';
+        ctx.strokeStyle = '#3157d5';
         ctx.lineWidth = 3;
         ctx.stroke();
 
@@ -508,16 +508,16 @@ function renderProgressDashboard(courseId) {
         const certBanner = document.createElement('div');
         certBanner.id = 'official-cert-banner';
         certBanner.className = 'kpi-card';
-        certBanner.style = 'grid-column: 1 / -1; border: 2px solid #9a6700; background: rgba(154,103,0,0.08); flex-direction: row; justify-content: space-between; align-items: center; padding: 15px 20px;';
+        certBanner.style = 'grid-column: 1 / -1; border: 2px solid #3157d5; background: rgba(49,87,213,0.08); flex-direction: row; justify-content: space-between; align-items: center; padding: 15px 20px;';
         certBanner.innerHTML = `
             <div style="display:flex; align-items:center; gap: 15px;">
-                <svg viewBox="0 0 24 24" width="32" height="32" stroke="#fbbf24" stroke-width="2" fill="none"><path d="M12 15l-5-5h3V4h4v6h3l-5 5zm-7 4v-2h14v2H5z"/></svg>
+                <svg viewBox="0 0 24 24" width="32" height="32" stroke="#3157d5" stroke-width="2" fill="none"><path d="M12 15l-5-5h3V4h4v6h3l-5 5zm-7 4v-2h14v2H5z"/></svg>
                 <div style="text-align:left;">
-                    <div style="color:#fbbf24; font-weight:bold; font-size:1.1rem; text-shadow: 0 0 10px rgba(251,191,36,0.5);">Oficialmente Certificado</div>
+                    <div style="color:#3157d5; font-weight:bold; font-size:1.1rem;">Oficialmente Certificado</div>
                     <div style="font-size:0.8rem; color:var(--text-muted);">Databricks Certified Data Analyst Associate</div>
                 </div>
             </div>
-            <div style="font-size:1.5rem; font-weight:900; color:#fbbf24;">15-Abr-2026</div>
+            <div style="font-size:1.5rem; font-weight:900; color:#3157d5;">15-Abr-2026</div>
         `;
         if (kpiContainer) {
             kpiContainer.parentNode.insertBefore(certBanner, kpiContainer);
@@ -679,7 +679,7 @@ function renderDashRadarChart(history) {
         
         let officialScoreTxt = '';
         if (isDatabricksCertified && certMap[p.name] !== undefined) {
-             officialScoreTxt = `<tspan x="${p.labelX}" dy="${lineH + 2}" fill="#fbbf24" font-weight="700" font-size="${pctFontSize}">Oficial: ${certMap[p.name]}%</tspan>`;
+             officialScoreTxt = `<tspan x="${p.labelX}" dy="${lineH + 2}" fill="#2447b8" font-weight="700" font-size="${pctFontSize}">Oficial: ${certMap[p.name]}%</tspan>`;
         }
         
         return `<text x="${p.labelX}" y="${startY}" text-anchor="${anchor}" font-size="${fontSize}" font-weight="600" fill="var(--text-muted)">${nameTspans}</text>` +
@@ -695,8 +695,8 @@ function renderDashRadarChart(history) {
                </filter>
             </defs>
             ${gridCircles}${gridLines}
-            ${isDatabricksCertified ? `<polygon points="${officialPolygon}" fill="rgba(251,191,36,0.15)" stroke="#fbbf24" stroke-width="2.5" stroke-dasharray="4" filter="url(#glowOfficial)"/>` : ''}
-            <polygon points="${polygon}" fill="rgba(79,110,247,0.15)" stroke="var(--primary-color)" stroke-width="2"/>
+            ${isDatabricksCertified ? `<polygon points="${officialPolygon}" fill="rgba(36,71,184,0.08)" stroke="#2447b8" stroke-width="2.5" stroke-dasharray="4" filter="url(#glowOfficial)"/>` : ''}
+            <polygon points="${polygon}" fill="rgba(49,87,213,0.15)" stroke="var(--primary-color)" stroke-width="2"/>
             <g class="points">
                 ${dataPoints.map(p => {
                     let officialCircle = '';
@@ -704,7 +704,7 @@ function renderDashRadarChart(history) {
                         const opct = certMap[p.name] / 100;
                         const ox = cx + rad * opct * Math.cos(p.angle);
                         const oy = cy + rad * opct * Math.sin(p.angle);
-                        officialCircle = `<circle cx="${ox}" cy="${oy}" r="4" fill="#fbbf24" stroke="var(--card-bg)" stroke-width="1.5" filter="url(#glowOfficial)"/>`;
+                        officialCircle = `<circle cx="${ox}" cy="${oy}" r="4" fill="#2447b8" stroke="var(--card-bg)" stroke-width="1.5" filter="url(#glowOfficial)"/>`;
                     }
                     return officialCircle + `<circle cx="${p.x}" cy="${p.y}" r="3" fill="var(--primary-color)"/>`;
                 }).join('')}
@@ -1052,10 +1052,10 @@ function setupLessonsLearnedLauncher(courseId) {
         const data = window.lessonsData[provider];
         content.innerHTML = '';
         data.forEach(lesson => {
-            const domainHtml = lesson.domain ? `<span style="display:inline-block; margin-bottom:10px; font-size:0.8rem; background:var(--primary-light, rgba(79,110,247,0.1)); color:var(--primary-color, #4f6ef7); padding:4px 8px; border-radius:4px; font-weight:bold;">${lesson.domain}</span>` : '';
+            const domainHtml = lesson.domain ? `<span style="display:inline-block; margin-bottom:10px; font-size:0.8rem; background:var(--primary-light, rgba(49,87,213,0.1)); color:var(--primary-color, #3157d5); padding:4px 8px; border-radius:4px; font-weight:bold;">${lesson.domain}</span>` : '';
             content.innerHTML += `
                 <div style="margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem;">
-                    <h3 style="color: var(--primary-color, #4f6ef7); margin-bottom: 4px;">${lesson.title}</h3>
+                    <h3 style="color: var(--primary-color, #3157d5); margin-bottom: 4px;">${lesson.title}</h3>
                     ${domainHtml}
                     <p style="margin-bottom: 8px;"><strong>Español:</strong> ${lesson.es}</p>
                     <p><strong>English:</strong> ${lesson.en}</p>
@@ -1944,8 +1944,8 @@ function openStatsPage() {
         const y = 20 + c.dow * totalCellSize;
         let fill;
         if (c.count === 0) fill = 'var(--border-color)';
-        else if (c.count <= 2) fill = 'rgba(79, 110, 247, 0.35)';
-        else if (c.count <= 5) fill = 'rgba(79, 110, 247, 0.6)';
+        else if (c.count <= 2) fill = 'rgba(49, 87, 213, 0.35)';
+        else if (c.count <= 5) fill = 'rgba(49, 87, 213, 0.6)';
         else fill = 'var(--primary-color)';
         const title = `${c.key}: ${c.count} sesion(es)`;
         return `<rect x="${x}" y="${y}" width="${cellSize}" height="${cellSize}" rx="3" fill="${fill}" data-tip="${title}"><title>${title}</title></rect>`;
@@ -2024,7 +2024,7 @@ function openStatsPage() {
 
         radarSVG = `<svg width="100%" height="${size}" viewBox="0 0 ${size} ${size}" style="overflow:visible;">
             ${gridCircles}${gridLines}
-            <polygon points="${polygon}" fill="rgba(79,110,247,0.15)" stroke="var(--primary-color)" stroke-width="2"/>
+            <polygon points="${polygon}" fill="rgba(49,87,213,0.15)" stroke="var(--primary-color)" stroke-width="2"/>
             ${pts.map(p => `<circle cx="${p.x}" cy="${p.y}" r="3.5" fill="var(--primary-color)"/>`).join('')}
             ${labels}
         </svg>`;
@@ -2182,8 +2182,8 @@ function openStatsPage() {
                 <div class="stats-heatmap-legend">
                     <span>Menos</span>
                     <span class="stats-legend-cell" style="background:var(--border-color)"></span>
-                    <span class="stats-legend-cell" style="background:rgba(79,110,247,0.35)"></span>
-                    <span class="stats-legend-cell" style="background:rgba(79,110,247,0.6)"></span>
+                    <span class="stats-legend-cell" style="background:rgba(49,87,213,0.35)"></span>
+                    <span class="stats-legend-cell" style="background:rgba(49,87,213,0.6)"></span>
                     <span class="stats-legend-cell" style="background:var(--primary-color)"></span>
                     <span>Más</span>
                 </div>
@@ -2423,14 +2423,14 @@ function renderStudyCoach(courseId) {
 
         // Color based on score
         if (readiness.score >= 80) {
-            barEl.style.background = 'var(--success-color, #22c55e)';
-            scoreEl.style.color = 'var(--success-color, #22c55e)';
+            barEl.style.background = 'var(--success-color, #16794a)';
+            scoreEl.style.color = 'var(--success-color, #16794a)';
         } else if (readiness.score >= 60) {
-            barEl.style.background = 'var(--warning-color, #f59e0b)';
-            scoreEl.style.color = 'var(--warning-color, #f59e0b)';
+            barEl.style.background = 'var(--warning-color, #9a6700)';
+            scoreEl.style.color = 'var(--warning-color, #9a6700)';
         } else {
-            barEl.style.background = 'var(--danger-color, #ef4444)';
-            scoreEl.style.color = 'var(--danger-color, #ef4444)';
+            barEl.style.background = 'var(--danger-color, #b42318)';
+            scoreEl.style.color = 'var(--danger-color, #b42318)';
         }
 
         detailEl.textContent = readiness.detail;
