@@ -5,16 +5,16 @@
 // Codex (GPT-5) | 2026-08-23 22:00 CST | Versiona también script.js tras detectar caché HTTP anterior en GitHub Pages.
 // Codex (GPT-5) & Antigravity | 2026-08-24 14:30 CST | Integra SM-2 SRS, Podcast Mode manos libres, Sandbox SQL interactivo y AI Coach.
 // Antigravity (Gemini 3.7 Flash) | 2026-08-26 08:55 CST | Agrega certificación Microsoft Azure AI-103 con 356 Qs bilingües y centro de estudio.
-// Antigravity (Gemini 3.7 Flash) | 2026-08-26 09:10 CST | Desacopla recursos de estudio y SDK de Azure AI-103 de Databricks GenAI.
-const BUILD_TIMESTAMP = '20260826b';
-const CACHE_NAME = `simulador-v27-${BUILD_TIMESTAMP}`;
+// Antigravity (Gemini 3.7 Flash) | 2026-08-26 09:20 CST | Habilita conmutación bilingüe EN/ES con selector global en todo AI-103 y asegura estándar SVG estricto.
+const BUILD_TIMESTAMP = '20260826c';
+const CACHE_NAME = `simulador-v28-${BUILD_TIMESTAMP}`;
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './styles.css?v=20260826b',
-  './app_i18n.js?v=20260826b',
-  './script.js?v=20260826b',
-  './features.js?v=20260826b',
+  './styles.css?v=20260826c',
+  './app_i18n.js?v=20260826c',
+  './script.js?v=20260826c',
+  './features.js?v=20260826c',
   './hero_data.js',
   './auto_restore_data.js',
   './manifest.json',
@@ -51,7 +51,7 @@ const ASSETS_TO_CACHE = [
   './conceptos_databricks.js',
   './personajes_unir_viz.js',
   './translations_databricks_es.js',
-  './translate_toggle.js?v=20260826b',
+  './translate_toggle.js?v=20260826c',
   './supabase-sync.js',
   './comandos_sql_databricks.js'
 ];

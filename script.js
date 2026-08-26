@@ -4348,7 +4348,7 @@ function renderReview(questions, finalPct, passed) {
         sectionToggle.setAttribute('aria-controls', `unir-section-body-${docIdx}`);
         sectionToggle.innerHTML = `
           <span class="hdr-chevron">${svgIcon(SVG.chevronDown, 16)}</span>
-          <span class="hdr-title">${section.title}</span>
+          <span class="hdr-title">${bilingualMarkup(section.title)}</span>
           <span class="hdr-progress ${allDone ? 'all-done' : ''}">${viewedN}/${section.items.length}</span>
         `;
 
@@ -4383,7 +4383,7 @@ function renderReview(questions, finalPct, passed) {
           const itemButton = document.createElement('button');
           itemButton.type = 'button';
           itemButton.className = 'unir-item-button';
-          itemButton.innerHTML = `<span class="li-check ${isViewed ? 'done' : ''}">${isViewed ? svgIcon(SVG.check, 10, '#fff') : ''}</span><span>${item.title}</span>`;
+          itemButton.innerHTML = `<span class="li-check ${isViewed ? 'done' : ''}">${isViewed ? svgIcon(SVG.check, 10, '#fff') : ''}</span><span>${bilingualMarkup(item.title)}</span>`;
           itemButton.addEventListener('click', (e) => {
             e.stopPropagation();
             // Deactivate all items across all cards
@@ -4392,7 +4392,7 @@ function renderReview(questions, finalPct, passed) {
             tocEl.querySelectorAll('.unir-item-content').forEach(a => a.innerHTML = '');
             li.classList.add('active');
             // Render content and insert RIGHT AFTER the clicked item
-            contentArea.innerHTML = `<h2>${item.title}</h2><div>${item.content}</div>`;
+            contentArea.innerHTML = `<h2>${bilingualMarkup(item.title)}</h2><div>${item.content}</div>`;
             // Move contentArea to be a sibling right after this li
             li.after(contentArea);
             if (!mastery.sectionsViewed.includes(key)) {

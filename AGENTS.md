@@ -261,4 +261,10 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
   - Actualizó la PWA a `BUILD_TIMESTAMP = '20260826b'` y caché `simulador-v27-20260826b` en `sw.js` e `index.html`.
   - Validación con `node tools/validate_ai103_integration.js` y `node --check` completadas con 100% de éxito.
 
-
+### 2026-08-26 09:22 CST — Antigravity (Gemini 3.7 Flash)
+- Habilitó la traducción global automática y dinámica para todo el contenido de **Microsoft Azure AI-103**:
+  - Verificó y aseguró 0 emojis en todos los archivos de AI-103 (`questions_azure_ai103.js`, `questions_azure_ai103_es.js`, `study_azure_ai103.js`, `study_azure_ai103_resources.js`), utilizando exclusivamente iconografía SVG inline con `currentColor`.
+  - Conectó `bilingualMarkup(section.title)` y `bilingualMarkup(item.title)` en el renderizador del TOC de estudio en `script.js`, permitiendo que los títulos de dominios y temas cambien en tiempo real con el botón global ES/EN sin recargar la página.
+  - Actualizó `study_azure_ai103.js` con títulos y subsecciones estructurados bilingüemente (`Title EN / Title ES`) y bloques paralelos `langSection('en', ...)` / `langSection('es', ...)`.
+  - Actualizó la versión PWA a `BUILD_TIMESTAMP = '20260826c'` y caché `simulador-v28-20260826c` en `sw.js` e `index.html`.
+  - Validación con `node tools/validate_ai103_integration.js` y `node --check` completada al 100%.

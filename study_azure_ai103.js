@@ -2,6 +2,7 @@
 // STUDY MODULE — Microsoft Certified: Azure AI Apps and Agents Developer Associate (AI-103)
 // Master Cheat-Sheet for all 5 Official Exam Domains & 14 Subdomains (2026 Edition)
 // Bilingual EN/ES side-by-side rendering using langSection('en', ...) / langSection('es', ...)
+// Pure SVG Iconography — Zero emojis in UI
 // ============================================================
 (function() {
     window.studyData = window.studyData || {};
@@ -17,10 +18,10 @@
     const azureAi103DomainSections = [
         // DOMAIN 0: CHEAT-SHEET & DECISION MATRIX
         {
-            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align:middle;margin-right:4px"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> D0. 10 Reglas de Oro y Matriz de Decisión AI-103 (Cheat-Sheet)',
+            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align:middle;margin-right:4px"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> D0. Decision Matrices & Golden Rules / D0. 10 Reglas de Oro y Matrices de Decisión (AI-103)',
             items: [
                 {
-                    title: "0.1 Matriz de Decisión: Despliegues de Azure OpenAI (Serverless vs PTU vs Provisioned)",
+                    title: "0.1 Azure OpenAI Deployment Decision Matrix / Matriz de Despliegue de Azure OpenAI (Serverless vs PTU vs Provisioned)",
                     content: `
                         ${langSection('en', `
                             ${styleBox('blue', 'Azure OpenAI Deployment Decision Matrix')}
@@ -55,7 +56,7 @@
                     `
                 },
                 {
-                    title: "0.2 Matriz de Herramientas de Agentes: Code Interpreter vs File Search vs Azure AI Search vs OpenAPI",
+                    title: "0.2 Agent Tools Selection Matrix / Matriz de Selección de Herramientas para Agentes",
                     content: `
                         ${langSection('en', `
                             ${styleBox('blue', 'Agent Tools Selection Guide')}
@@ -89,10 +90,10 @@
         },
         // DOMAIN 1
         {
-            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align:middle;margin-right:4px"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg> Domain 1: Plan and manage an Azure AI solution (25%)',
+            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align:middle;margin-right:4px"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg> Domain 1: Plan and manage an Azure AI solution / Dominio 1: Planificar y administrar una solución de Azure AI (25%)',
             items: [
                 {
-                    title: "1.1 Foundry Services & Architecture: Hubs vs Projects",
+                    title: "1.1 Foundry Services & Architecture / Servicios y Arquitectura de Azure AI Foundry (Hubs vs Projects)",
                     content: `
                         ${langSection('en', `
                             ${styleBox('blue', 'Hub and Project Architecture')}
@@ -109,7 +110,7 @@
                     `
                 },
                 {
-                    title: "1.2 Responsible AI & Prompt Shields",
+                    title: "1.2 Responsible AI & Content Safety / IA Responsable y Content Safety (Prompt Shields)",
                     content: `
                         ${langSection('en', `
                             ${styleBox('blue', 'Azure AI Content Safety & Shields')}
@@ -131,10 +132,10 @@
         },
         // DOMAIN 2
         {
-            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align:middle;margin-right:4px"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.5h-2v-2h2zm0-4h-2V7h2z"/></svg> Domain 2: Implement generative AI and agentic solutions (30%)',
+            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align:middle;margin-right:4px"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.5h-2v-2h2zm0-4h-2V7h2z"/></svg> Domain 2: Implement generative AI and agentic solutions / Dominio 2: Implementar soluciones generativas y agénticas (30%)',
             items: [
                 {
-                    title: "2.1 Azure AI Agent Service Lifecycle",
+                    title: "2.1 Agent Service Lifecycle / Ciclo de Vida de Azure AI Agent Service",
                     content: `
                         ${langSection('en', `
                             ${styleBox('blue', 'Agent Execution Flow')}
@@ -153,7 +154,7 @@
                     `
                 },
                 {
-                    title: "2.2 Foundry Evaluation Metrics (Groundedness, Relevance, Coherence)",
+                    title: "2.2 Foundry Evaluation Metrics / Métricas de Evaluación de Foundry (Groundedness, Relevance, Coherence)",
                     content: `
                         ${langSection('en', `
                             ${styleBox('blue', 'Evaluation Metrics')}
@@ -175,10 +176,10 @@
         },
         // DOMAIN 3
         {
-            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align:middle;margin-right:4px"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg> Domain 3: Implement computer vision solutions (10%)',
+            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align:middle;margin-right:4px"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg> Domain 3: Implement computer vision solutions / Dominio 3: Implementar soluciones de visión por computadora (10%)',
             items: [
                 {
-                    title: "3.1 Multimodal Vision & Content Understanding",
+                    title: "3.1 Multimodal Vision & Content Understanding / Visión Multimodal y Azure Content Understanding",
                     content: `
                         ${langSection('en', `
                             ${styleBox('blue', 'Multimodal Vision Models')}
@@ -196,10 +197,10 @@
         },
         // DOMAIN 4
         {
-            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align:middle;margin-right:4px"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/></svg> Domain 4: Implement text analysis solutions (10%)',
+            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align:middle;margin-right:4px"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/></svg> Domain 4: Implement text analysis solutions / Dominio 4: Implementar soluciones de análisis de texto (10%)',
             items: [
                 {
-                    title: "4.1 Language Analysis & Speech Integration",
+                    title: "4.1 Language Analysis & Speech Integration / Análisis de Lenguaje e Integración de Voz",
                     content: `
                         ${langSection('en', `
                             ${styleBox('blue', 'Text & Speech Services')}
@@ -221,10 +222,10 @@
         },
         // DOMAIN 5
         {
-            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align:middle;margin-right:4px"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg> Domain 5: Implement information extraction solutions (10%)',
+            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align:middle;margin-right:4px"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg> Domain 5: Implement information extraction solutions / Dominio 5: Implementar soluciones de extracción de información (10%)',
             items: [
                 {
-                    title: "5.1 Azure AI Search: Hybrid Search & Semantic Reranker",
+                    title: "5.1 Azure AI Search: Hybrid Search & Semantic Reranker / Búsqueda Híbrida y Reclasificador Semántico",
                     content: `
                         ${langSection('en', `
                             ${styleBox('blue', 'Hybrid Search & RRF')}
@@ -238,6 +239,21 @@
                                 <strong>Consulta Híbrida:</strong> Ejecuta búsqueda por palabras clave BM25 + búsqueda densa vectorial simultáneamente.<br>
                                 <strong>RRF (Reciprocal Rank Fusion):</strong> Fusiona las puntuaciones de palabras clave y vectoriales en una lista clasificada óptima.<br>
                                 <strong>Semantic Reranker:</strong> Modelo de aprendizaje profundo que reclasifica los 50 mejores resultados de RRF utilizando comprensión semántica.
+                            </div>
+                        `)}
+                    `
+                },
+                {
+                    title: "5.2 Document Intelligence Layout to Markdown / Extracción de Documentos con Modelo Layout a Markdown",
+                    content: `
+                        ${langSection('en', `
+                            ${styleBox('blue', 'Layout to Markdown for LLMs')}
+                                The <code>prebuilt-layout</code> model parses complex multi-column documents, tables, selection marks, and reading order, outputting native Markdown optimized for LLM RAG context injection.
+                            </div>
+                        `)}
+                        ${langSection('es', `
+                            ${styleBox('blue', 'Diseño a Markdown para LLMs')}
+                                El modelo <code>prebuilt-layout</code> analiza documentos complejos de varias columnas, tablas, marcas de selección y orden de lectura, generando Markdown nativo optimizado para inyección de contexto en RAG de LLMs.
                             </div>
                         `)}
                     `
