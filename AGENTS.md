@@ -252,3 +252,13 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
 - Creó el validador automatizado `tools/validate_ai103_integration.js` comprobando 712 preguntas (356 EN + 356 ES), emparejamiento gemelo 1:1, IDs, tipos y carga de recursos de estudio.
 - Comprobación de sintaxis JavaScript `node --check` completada con éxito en todos los archivos del repositorio.
 
+### 2026-08-26 09:12 CST — Antigravity (Gemini 3.7 Flash)
+- Desacopló al 100% la sección de estudio de **Microsoft Azure AI-103** respecto a Databricks GenAI:
+  - Creó en `study_azure_ai103_resources.js` el banco de **Términos y Competencias clave oficiales de Azure AI** (`window.conceptosAzureAi103`) estructurado en los 5 dominios y 14 subdominios de la certificación (Foundry Hubs vs Projects, Prompt Shields, RAG HNSW/RRF, Semantic Reranker, Agent Service Lifecycle, GPT-4o Vision, Whisper, Document Intelligence Layout Markdown).
+  - Creó **14 Escenarios de Decisión de Arquitectura Azure AI** (`window.azureAi103Patterns`) para la pestaña de Escenarios.
+  - Creó **Ejemplos de Código SDK & APIs de Azure AI** (`window.comandosAzureAi103`) explicados línea por línea en Python para Azure OpenAI Client con Entra ID/Keyless auth, Structured Outputs con JSON Schema, Azure AI Agent Service con tools, Azure AI Search Hybrid Query con Semantic Reranker, y Azure Document Intelligence con salida nativa Markdown.
+  - Actualizó `script.js` para resolver individualmente los recursos de Azure AI-103 (`isAzureAi103`), personalizando las pestañas a `SDK & Código` y los títulos a `Ejemplos de Código SDK & API de Azure AI` y `Términos y Competencias de Azure AI`.
+  - Actualizó la PWA a `BUILD_TIMESTAMP = '20260826b'` y caché `simulador-v27-20260826b` en `sw.js` e `index.html`.
+  - Validación con `node tools/validate_ai103_integration.js` y `node --check` completadas con 100% de éxito.
+
+

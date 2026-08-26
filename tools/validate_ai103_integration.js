@@ -76,4 +76,18 @@ if (flashcards.length !== 356) {
   process.exit(1);
 }
 
-console.log('SUCCESS: All 356 EN + 356 ES questions and study resources validated perfectly!');
+// Verify AI-103 specific Terms, Scenarios & SDK Code Examples
+const conceptos = sandbox.window.conceptosAzureAi103 || [];
+const patterns = sandbox.window.azureAi103Patterns || [];
+const comandos = sandbox.window.comandosAzureAi103 || [];
+
+console.log(`Azure AI Terms/Competencies categories: ${conceptos.length}`);
+console.log(`Azure AI Architecture Scenarios categories: ${patterns.length}`);
+console.log(`Azure AI SDK/Code Examples categories: ${comandos.length}`);
+
+if (conceptos.length === 0 || patterns.length === 0 || comandos.length === 0) {
+  console.error('FAIL: Missing dedicated Azure AI-103 terms, patterns or SDK code examples.');
+  process.exit(1);
+}
+
+console.log('SUCCESS: All 356 EN + 356 ES questions and dedicated Azure AI study resources validated perfectly!');

@@ -3410,17 +3410,25 @@ function renderReview(questions, finalPct, passed) {
         } catch (e) { console.warn('syncToGlobal error', e); }
       }
 
-      // Codex (GPT-5) | 2026-08-23 21:19 CST | Resuelve recursos complementarios por curso sin mezclar bancos de certificaciones distintas.
-      const isGenAICourse = courseId === 'databricks-genai-engineer' || courseId === 'azure-ai-103';
-      const isDatabricksCourse = courseId === 'databricks-da' || courseId === 'databricks-fundamentals' || courseId === 'dp-600' || isGenAICourse;
+      // Codex (GPT-5) & Antigravity | 2026-08-26 | Resuelve recursos complementarios por curso sin mezclar bancos de certificaciones distintas.
+      const isAzureAi103 = courseId === 'azure-ai-103';
+      const isDatabricksGenAI = courseId === 'databricks-genai-engineer';
+      const isGenAICourse = isDatabricksGenAI || isAzureAi103;
+      const isDatabricksCourse = courseId === 'databricks-da' || courseId === 'databricks-fundamentals' || courseId === 'dp-600' || isDatabricksGenAI;
       const hasPersonajes = courseId === 'unir-viz-interactiva' && window.personajesUnirViz;
-      const conceptos = isGenAICourse
-        ? (window.conceptosDatabricksGenAI || [])
-        : (isDatabricksCourse ? (window.conceptosDatabricks || []) : []);
-      const genAIPatterns = isGenAICourse ? (window.databricksGenAIPatterns || []) : [];
-      const comandosSql = isGenAICourse
-        ? (window.comandosSqlDatabricksGenAI || [])
-        : (!isGenAICourse && isDatabricksCourse ? (window.comandosSqlDatabricks || []) : []);
+      const conceptos = isAzureAi103
+        ? (window.conceptosAzureAi103 || [])
+        : (isDatabricksGenAI
+          ? (window.conceptosDatabricksGenAI || [])
+          : (isDatabricksCourse ? (window.conceptosDatabricks || []) : []));
+      const genAIPatterns = isAzureAi103
+        ? (window.azureAi103Patterns || [])
+        : (isDatabricksGenAI ? (window.databricksGenAIPatterns || []) : []);
+      const comandosSql = isAzureAi103
+        ? (window.comandosAzureAi103 || [])
+        : (isDatabricksGenAI
+          ? (window.comandosSqlDatabricksGenAI || [])
+          : (!isGenAICourse && isDatabricksCourse ? (window.comandosSqlDatabricks || []) : []));
       const hasConceptos = conceptos.length > 0;
       const hasGenAIPatterns = genAIPatterns.length > 0;
       const hasComandosSQL = comandosSql.length > 0;
@@ -3788,7 +3796,7 @@ function renderReview(questions, finalPct, passed) {
               ${svgIcon('M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5', 15)} ${isGenAICourse ? localizedMarkup('Terms', 'Términos') : localizedMarkup('Key Concepts', 'Conceptos Clave')} <span class="unir-tab-count">${conceptos.reduce((a,c) => a + c.conceptos.length, 0)}</span>
             </button>` : ''}
             ${hasComandosSQL ? `<button type="button" class="unir-tab" id="unir-tab-comandos" role="tab" aria-selected="false" aria-controls="unir-panel-comandos" tabindex="-1" onclick="window._unirSwitchTab('comandos')">
-              ${svgIcon('M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z', 15)} ${isGenAICourse ? localizedMarkup('AI Functions', 'Funciones AI') : localizedMarkup('SQL Commands', 'Comandos SQL')} <span class="unir-tab-count">${comandosSql.reduce((a,c) => a + c.comandos.length, 0)}</span>
+              ${svgIcon('M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z', 15)} ${isAzureAi103 ? localizedMarkup('SDK & Code', 'SDK & Código') : (isDatabricksGenAI ? localizedMarkup('AI Functions', 'Funciones AI') : localizedMarkup('SQL Commands', 'Comandos SQL'))} <span class="unir-tab-count">${comandosSql.reduce((a,c) => a + c.comandos.length, 0)}</span>
             </button>` : ''}
             ${hasGenAIPatterns ? `<button type="button" class="unir-tab" id="unir-tab-patterns" role="tab" aria-selected="false" aria-controls="unir-panel-patterns" tabindex="-1" onclick="window._unirSwitchTab('patterns')">
               ${svgIcon('M9 18h6M10 22h4M12 2a7 7 0 00-4 12.74V16h8v-1.26A7 7 0 0012 2z', 15)} ${localizedMarkup('Scenarios', 'Escenarios')} <span class="unir-tab-count">${genAIPatterns.reduce((a,c) => a + c.items.length, 0)}</span>
@@ -4060,8 +4068,8 @@ function renderReview(questions, finalPct, passed) {
         const totalConceptos = conceptos.reduce((a,c) => a + c.conceptos.length, 0);
 
         let html = `<div style="text-align:center;margin-bottom:18px;">
-          <h2 style="margin:0 0 4px;font-size:1.3rem;color:var(--text-color,#1e293b);">${isGenAICourse ? localizedMarkup('Terms and competencies', 'Términos y competencias') : localizedMarkup('Key Concepts for the Exam', 'Conceptos Clave para el Examen')}</h2>
-          <p style="margin:0;font-size:0.85rem;color:var(--text-muted,#64748b);">${isGenAICourse ? localizedMarkup('Each term includes an explanation and key answer. Everything starts collapsed.', 'Cada término incluye explicación y respuesta clave. Todo inicia contraído.') : localizedMarkup('Open each concept to see its description and key exam fact.', 'Despliega cada concepto para ver su descripción y dato clave para el examen.')}</p>
+          <h2 style="margin:0 0 4px;font-size:1.3rem;color:var(--text-color,#1e293b);">${isAzureAi103 ? localizedMarkup('Azure AI Terms & Competencies', 'Términos y Competencias de Azure AI') : (isGenAICourse ? localizedMarkup('Terms and competencies', 'Términos y competencias') : localizedMarkup('Key Concepts for the Exam', 'Conceptos Clave para el Examen'))}</h2>
+          <p style="margin:0;font-size:0.85rem;color:var(--text-muted,#64748b);">${isAzureAi103 ? localizedMarkup('Each competency includes official Azure AI patterns and exam facts. Everything starts collapsed.', 'Cada competencia incluye patrones oficiales de Azure AI y datos clave del examen. Todo inicia contraído.') : (isGenAICourse ? localizedMarkup('Each term includes an explanation and key answer. Everything starts collapsed.', 'Cada término incluye explicación y respuesta clave. Todo inicia contraído.') : localizedMarkup('Open each concept to see its description and key exam fact.', 'Despliega cada concepto para ver su descripción y dato clave para el examen.'))}</p>
           <div id="unir-concepto-progress" style="margin-top:8px;font-size:0.8rem;color:var(--primary-color,#3157d5);font-weight:600;">${cIcon(SVG.star, 14)} ${mastery.conceptosViewed.length}/${totalConceptos} le&iacute;dos &mdash; +5 XP por concepto nuevo</div>
           <div style="display:flex;gap:8px;justify-content:center;margin-top:10px;flex-wrap:wrap;">
             <span style="font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:8px;background:var(--primary-light);color:var(--primary-color);">CLAVE = Muy preguntado</span>
@@ -4229,8 +4237,8 @@ function renderReview(questions, finalPct, passed) {
         const cIcon = (path, sz=18, fill='currentColor') => `<svg viewBox="0 0 24 24" width="${sz}" height="${sz}" fill="${fill}"><path d="${path}"/></svg>`;
         const totalComandos = list.reduce((a,c) => a + c.comandos.length, 0);
         let html = `<div style="text-align:center;margin-bottom:18px;">
-          <h2 style="margin:0 0 4px;font-size:1.3rem;color:var(--text-color,#1e293b);">${isGenAICourse ? localizedMarkup('Databricks GenAI & AI Functions', 'Funciones de IA & SQL GenAI') : localizedMarkup('SQL Commands for Exam', 'Comandos SQL para el Examen')}</h2>
-          <p style="margin:0;color:var(--text-muted,#64748b);font-size:0.85rem;">${isGenAICourse ? localizedMarkup('Unity Catalog AI functions explained line-by-line. Everything starts collapsed.', 'Funciones de IA de Unity Catalog explicadas línea por línea. Todo inicia contraído.') : localizedMarkup('Commands with line-by-line explanations', 'Ejemplos explicados línea por línea')}</p>
+          <h2 style="margin:0 0 4px;font-size:1.3rem;color:var(--text-color,#1e293b);">${isAzureAi103 ? localizedMarkup('Azure AI SDK & API Code Examples', 'Ejemplos de Código SDK & API de Azure AI') : (isDatabricksGenAI ? localizedMarkup('Databricks GenAI & AI Functions', 'Funciones de IA & SQL GenAI') : localizedMarkup('SQL Commands for Exam', 'Comandos SQL para el Examen'))}</h2>
+          <p style="margin:0;color:var(--text-muted,#64748b);font-size:0.85rem;">${isAzureAi103 ? localizedMarkup('Official Azure OpenAI, Agent Service, Search & Document Intelligence SDK patterns explained line-by-line. Everything starts collapsed.', 'Patrones oficiales del SDK de Azure OpenAI, Agent Service, Search y Document Intelligence explicados línea por línea. Todo inicia contraído.') : (isDatabricksGenAI ? localizedMarkup('Unity Catalog AI functions explained line-by-line. Everything starts collapsed.', 'Funciones de IA de Unity Catalog explicadas línea por línea. Todo inicia contraído.') : localizedMarkup('Commands with line-by-line explanations', 'Ejemplos explicados línea por línea'))}</p>
           <div id="unir-cmd-progress" style="margin-top:8px;font-size:0.8rem;color:var(--primary-color,#3157d5);font-weight:600;">${cIcon(SVG.star, 14)} ${mastery.comandosViewed.length}/${totalComandos} le&iacute;dos &mdash; +8 XP c/u</div>
         </div>`;
         window._cmdRead = function(key) {
