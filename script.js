@@ -165,6 +165,11 @@ document.addEventListener("DOMContentLoaded", () => {
           status: "active",
         },
         {
+          id: "azure-ai-103",
+          name: "Microsoft Certified: Azure AI Apps and Agents Developer Associate (AI-103)",
+          status: "active",
+        },
+        {
           id: "dp-700",
           name: "Microsoft Certified: Fabric Data Engineer Associate (DP-700)",
           status: "coming",
@@ -3345,7 +3350,7 @@ function renderReview(questions, finalPct, passed) {
     // Dojo Data Study Mode — Unified Inline Renderer
     // Supports: UNIR, UNAH, and Databricks courses
     // ===================================================================
-    if (courseId === "unir-viz-interactiva" || courseId === "unir-herramientas-viz" || courseId === "unah-tesis" || courseId === "databricks-da" || courseId === "databricks-fundamentals" || courseId === "dp-600" || courseId === "databricks-genai-engineer") {
+    if (courseId === "unir-viz-interactiva" || courseId === "unir-herramientas-viz" || courseId === "unah-tesis" || courseId === "databricks-da" || courseId === "databricks-fundamentals" || courseId === "dp-600" || courseId === "databricks-genai-engineer" || courseId === "azure-ai-103") {
       const startScreen = document.getElementById("start-screen");
       const studyScreen = document.getElementById("study-screen");
       startScreen.classList.add("hidden");
@@ -3368,7 +3373,7 @@ function renderReview(questions, finalPct, passed) {
       };
 
       // XP / Mastery state from localStorage — each course has its own key
-      const storageKey = courseId === 'unir-herramientas-viz' ? 'unir_herr_mastery' : (courseId === 'unah-tesis' ? 'unah_tesis_mastery' : (courseId === 'databricks-da' ? 'databricks_da_mastery' : (courseId === 'databricks-fundamentals' ? 'databricks_fund_mastery' : (courseId === 'dp-600' ? 'dp600_mastery' : (courseId === 'databricks-genai-engineer' ? 'databricks_genai_mastery' : 'unir_viz_mastery')))));
+      const storageKey = courseId === 'unir-herramientas-viz' ? 'unir_herr_mastery' : (courseId === 'unah-tesis' ? 'unah_tesis_mastery' : (courseId === 'databricks-da' ? 'databricks_da_mastery' : (courseId === 'databricks-fundamentals' ? 'databricks_fund_mastery' : (courseId === 'dp-600' ? 'dp600_mastery' : (courseId === 'databricks-genai-engineer' ? 'databricks_genai_mastery' : (courseId === 'azure-ai-103' ? 'azure_ai103_mastery' : 'unir_viz_mastery'))))));
       let mastery = JSON.parse(localStorage.getItem(storageKey) || '{}');
       if (!mastery.xp) mastery = { xp: 0, sectionsViewed: [], flashcardsViewed: 0, personajesViewed: [], conceptosViewed: [], comandosViewed: [], achievements: [] };
       if (!mastery.personajesViewed) mastery.personajesViewed = []; // Migrate existing data
@@ -3406,7 +3411,7 @@ function renderReview(questions, finalPct, passed) {
       }
 
       // Codex (GPT-5) | 2026-08-23 21:19 CST | Resuelve recursos complementarios por curso sin mezclar bancos de certificaciones distintas.
-      const isGenAICourse = courseId === 'databricks-genai-engineer';
+      const isGenAICourse = courseId === 'databricks-genai-engineer' || courseId === 'azure-ai-103';
       const isDatabricksCourse = courseId === 'databricks-da' || courseId === 'databricks-fundamentals' || courseId === 'dp-600' || isGenAICourse;
       const hasPersonajes = courseId === 'unir-viz-interactiva' && window.personajesUnirViz;
       const conceptos = isGenAICourse
@@ -3433,7 +3438,7 @@ function renderReview(questions, finalPct, passed) {
       ];
 
       // Domain Mastery achievements (Databricks DA course only)
-      const domainMasteryAchievements = (courseId === 'databricks-da' || courseId === 'databricks-genai-engineer') ? [
+      const domainMasteryAchievements = (courseId === 'databricks-da' || courseId === 'databricks-genai-engineer' || courseId === 'azure-ai-103') ? [
         { id: 'domain_first', name: 'Primer Dominio', desc: 'Lee tu primera sección de dominio', xpReq: 0, icon: 'M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z', condition: () => mastery.sectionsViewed.length >= 1 },
         { id: 'domain_half', name: 'Medio Camino', desc: 'Completa la mitad de las secciones', xpReq: 0, icon: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z', condition: () => { const half = Math.ceil(totalSections / 2); return mastery.sectionsViewed.length >= half; } },
         { id: 'domain_xp_300', name: 'Dominator 300', desc: 'Acumula 300 XP de estudio de dominios', xpReq: 300, icon: 'M7 2v11h3v9l7-12h-4l4-8z', condition: () => mastery.xp >= 300 },
@@ -3520,6 +3525,7 @@ function renderReview(questions, finalPct, passed) {
         'databricks-fundamentals': () => window.databricksDAFlashcards,
         'dp-600': () => window.databricksDAFlashcards,
         'databricks-genai-engineer': () => window.databricksGenAIFlashcards,
+        'azure-ai-103': () => (window.studyFlashcards && window.studyFlashcards['azure-ai-103']) || [],
       };
       const flashcards = (STUDY_FLASHCARD_SOURCES[courseId] && STUDY_FLASHCARD_SOURCES[courseId]()) || [];
       const hasFlashcards = flashcards.length > 0;
@@ -4943,8 +4949,10 @@ function renderReview(questions, finalPct, passed) {
       const certs = p.certs || {};
       const cb1 = document.getElementById('cert-databricks-da');
       const cb2 = document.getElementById('cert-dp-600');
+      const cb3 = document.getElementById('cert-azure-ai-103');
       if(cb1) cb1.checked = !!certs['databricks-da'];
       if(cb2) cb2.checked = !!certs['dp-600'];
+      if(cb3) cb3.checked = !!certs['azure-ai-103'];
       
       document.getElementById('profile-modal').classList.remove('hidden');
   };
@@ -4955,10 +4963,12 @@ function renderReview(questions, finalPct, passed) {
       
       const cb1 = document.getElementById('cert-databricks-da');
       const cb2 = document.getElementById('cert-dp-600');
+      const cb3 = document.getElementById('cert-azure-ai-103');
 
       const certs = {
           'databricks-da': cb1 ? cb1.checked : false,
-          'dp-600': cb2 ? cb2.checked : false
+          'dp-600': cb2 ? cb2.checked : false,
+          'azure-ai-103': cb3 ? cb3.checked : false
       };
 
       const p = { name, nick, certs };

@@ -81,6 +81,8 @@ D:\2026\Simulador de Preguntas\AGENTS.md
 | `questions_unir_viz.js` | UNIR Visualización Interactiva |
 | `questions_unir_herr.js` | UNIR Herramientas de Visualización |
 | `questions_unah_tesis.js` | UNAH Tesis |
+| `questions_azure_ai103.js` | Microsoft Certified: Azure AI Apps and Agents Developer Associate (AI-103) — 356 preguntas EN, 5 dominios oficiales |
+| `questions_azure_ai103_es.js` | Traducción ES del banco anterior — 356 preguntas, IDs `-es`, agregado 2026-08-26 |
 
 **Módulos de estudio (cheat-sheets bilingües por dominio):** `study_databricks_domains.js`, `study_databricks_genai.js`, y equivalentes por curso. Patrón: `window.studyData[courseId] = [{title, items:[{title, content}]}]`, con bloques `langSection('en', …)` / `langSection('es', …)` renderizados simultáneamente (no es un toggle, es contenido bilingüe en paralelo). Estilos ya inyectados desde `script.js` (~línea 3254) — no tocar `styles.css` para esto.
 
@@ -234,3 +236,19 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
 ### 2026-08-23 22:39 CST — Codex (GPT-5) — Cierre de sesión
 - La entrada detallada de esta sesión es la de **2026-08-23 22:38 CST** inmediatamente anterior en esta bitácora. Esta referencia se agrega al final para restablecer el cierre append-only después de que la inserción automática la ubicara antes de la entrada 22:02, sin borrar ni mover contenido histórico.
 - Estado final confirmado: commit funcional `c8123ec` publicado; Vercel y GitHub Pages sirven `20260823i`; selector global ES/EN y estados contraídos verificados mediante clic real.
+
+### 2026-08-26 08:55 CST — Antigravity (Gemini 3.7 Flash)
+- Integró la certificación oficial **Microsoft Certified: Azure AI Apps and Agents Developer Associate (AI-103)** bajo el proveedor **Microsoft** con estado activo en el selector de cursos.
+- Extrajo y generó el banco completo de **356 preguntas oficiales de práctica** alineadas con la guía de examen de Microsoft Learn 2026 / CertSafari AI-103 en inglés (`questions_azure_ai103.js`, IDs `ai103-q1`..`ai103-q356`) y su traducción íntegra al español con preguntas gemelas (`questions_azure_ai103_es.js`, IDs `ai103-q1-es`..`ai103-q356-es`) distribuidas en los 5 dominios y 14 subdominios oficiales:
+  - **Dominio 1**: Plan and manage an Azure AI solution (25% — 104 Qs: Subdominios 1.1, 1.2, 1.3, 1.4).
+  - **Dominio 2**: Implement generative AI and agentic solutions (30% — 117 Qs: Subdominios 2.1, 2.2, 2.3).
+  - **Dominio 3**: Implement computer vision solutions (10% — 51 Qs: Subdominios 3.1, 3.2, 3.3).
+  - **Dominio 4**: Implement text analysis solutions (10% — 42 Qs: Subdominios 4.1, 4.2).
+  - **Dominio 5**: Implement information extraction solutions (10% — 42 Qs: Subdominios 5.1, 5.2).
+- Creó el módulo de estudio bilingüe `study_azure_ai103.js` con matrices de decisión arquitectónicas (despliegue Azure OpenAI Serverless vs PTU vs Provisioned, herramientas de agentes, Prompt Shields, RAG multimodal y búsqueda híbrida RRF en Azure AI Search).
+- Creó `study_azure_ai103_resources.js` con **356 flashcards bilingües EN/ES** emparejadas 1:1 con las preguntas del examen y logros por dominio (`ai103_plan_master`, `ai103_agent_master`, `ai103_vision_master`, `ai103_text_master`, `ai103_retrieval_master`).
+- Generó documentación offline en Markdown en `GENERATIVE AI ENGINEERING/Banco_Preguntas_Certificacion_AI103/` organizada por dominio.
+- Wireó los nuevos scripts en `index.html` y actualizó el service worker `sw.js` a `BUILD_TIMESTAMP = '20260826a'` y caché `simulador-v26-20260826a`.
+- Creó el validador automatizado `tools/validate_ai103_integration.js` comprobando 712 preguntas (356 EN + 356 ES), emparejamiento gemelo 1:1, IDs, tipos y carga de recursos de estudio.
+- Comprobación de sintaxis JavaScript `node --check` completada con éxito en todos los archivos del repositorio.
+
