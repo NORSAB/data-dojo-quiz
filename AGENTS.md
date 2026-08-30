@@ -332,11 +332,15 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
   - **Encabezado y Acciones**:
     - Header moderno con icono de configuración SVG, título, subtítulo explicativo y botón de cierre (`X`).
     - Pie de acciones con botón "Cancelar" y botón principal "Comenzar Examen" con icono de Play SVG.
-- Actualizó la PWA a `BUILD_TIMESTAMP = '20260830e'` y caché `simulador-v33-20260830e` en `sw.js` e `index.html`.
-- Validó con éxito las 5 suites automatizadas:
-  - `validate_ui_palette.js`: 17 colores hex únicos, 0 gradientes decorativos, compatibilidad total en temas claro y oscuro.
-  - `validate_global_language.js`: Integración de selector global y versión PWA 20260830e.
-  - `validate_ai103_integration.js`: 712 preguntas (356 EN + 356 ES) y recursos completos AI-103.
-  - `validate_genai_integration.js`: 766 preguntas (383 EN + 383 ES), 6 dominios, 65 subdominios y sync Supabase.
-  - `audit_code_structure.js`: 0 funciones duplicadas, 0 IDs HTML duplicados.
+### 2026-08-30 04:30 CST — Antigravity (Gemini 3.7 Flash)
+- Optimizó el espacio y la simetría del **Modal de Configuración del Examen** (`#quiz-config-modal`):
+  - **Aprovechamiento completo del espacio en Filtrado por Dominios**: Se eliminó la restricción de altura fija en `.quiz-config-domains-list` (`flex: 1`, `max-height: 380px`), permitiendo que la lista de dominios use el 100% de la altura de la columna derecha, mostrando todos los dominios con espaciado cómodo (`8px 12px` padding, bordes suaves y hover refinado) sin cortes ni scrolls innecesarios.
+  - **Matriz 2x2 en Opciones y Modos Inferiores**:
+    - Se reestructuró `.quiz-config-modes-grid` en una cuadrícula simétrica de **2x2** (`grid-template-columns: 1fr 1fr;`):
+      - **Fila 1**: [ Modo Examen Real ] | [ Modo Contrarreloj (Time-Attack 60s) ]
+      - **Fila 2**: [ Orden de Preguntas: Aleatorio / Secuencial ] (`#config-order-card`) | [ Modo Ataque a Debilidades ] (`#config-weakness-container`).
+    - Manejo dinámico para cuando Ataque a Debilidades está oculto: `#config-order-card` se expande a las 2 columnas con `:has(#config-weakness-container.hidden)` manteniendo el balance visual.
+- Actualizó la PWA a `BUILD_TIMESTAMP = '20260830f'` y caché `simulador-v34-20260830f` en `sw.js` e `index.html`.
+- Verificó con 0 fallos las 5 suites de validación (`validate_ui_palette.js`, `validate_global_language.js`, `validate_ai103_integration.js`, `validate_genai_integration.js`, `audit_code_structure.js`).
+
 

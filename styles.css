@@ -931,8 +931,9 @@ body:has(#onboarding-screen:not(.hidden)) #global-language-toggle {
 .quiz-config-domains-list {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  max-height: 250px;
+  gap: 7px;
+  flex: 1;
+  max-height: 380px;
   overflow-y: auto;
   padding-right: 4px;
 }
@@ -940,21 +941,22 @@ body:has(#onboarding-screen:not(.hidden)) #global-language-toggle {
 .config-domain-item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 0.84rem;
+  gap: 10px;
+  font-size: 0.86rem;
   cursor: pointer;
   user-select: none;
   color: var(--text-color);
   margin: 0;
-  padding: 6px 8px;
+  padding: 8px 12px;
   border-radius: var(--radius-md);
   background: var(--bg-card);
-  border: 1px solid transparent;
+  border: 1px solid var(--border-color);
   transition: all 0.15s ease;
 }
 
 .config-domain-item:hover {
-  border-color: var(--border-color);
+  border-color: var(--primary-color);
+  background: var(--bg-surface);
 }
 
 .config-domain-item .domain-name {
@@ -965,8 +967,12 @@ body:has(#onboarding-screen:not(.hidden)) #global-language-toggle {
 
 .quiz-config-modes-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 0.75rem;
+}
+
+.quiz-config-modes-grid:has(#config-weakness-container.hidden) #config-order-card {
+  grid-column: 1 / -1;
 }
 
 @media (max-width: 768px) {
@@ -985,14 +991,15 @@ body:has(#onboarding-screen:not(.hidden)) #global-language-toggle {
 .quiz-config-mode-card {
   display: flex;
   align-items: flex-start;
-  gap: 8px;
-  padding: 0.75rem 0.85rem;
+  gap: 10px;
+  padding: 0.85rem 1rem;
   background: var(--bg-surface);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   cursor: pointer;
   transition: all 0.15s ease;
   box-sizing: border-box;
+  min-height: 64px;
 }
 
 .quiz-config-mode-card:hover {
