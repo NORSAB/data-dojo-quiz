@@ -3835,12 +3835,44 @@ window.SpotlightSearch = {
         }
         this.selectedIndex = 0;
         this.activeCategory = 'all';
+        this.renderDomainFilters();
         this.renderInitialResults();
     },
 
     close() {
         const modal = document.getElementById('spotlight-search-modal');
         if (modal) modal.classList.add('hidden');
+    },
+
+    renderDomainFilters() {
+        const cid = window.currentCourseId || 'azure-ai-103';
+        const allQuestions = (window.questionsData || []).filter(q => q.courseId === cid);
+        const domains = ['all', ...new Set(allQuestions.map(q => q.domain).filter(Boolean))];
+        let container = document.getElementById('spotlight-domain-filters-bar');
+        if (!container) {
+            const catBar = document.querySelector('.spotlight-categories');
+            if (catBar) {
+                container = document.createElement('div');
+                container.id = 'spotlight-domain-filters-bar';
+                container.className = 'spotlight-domain-filters';
+                catBar.insertAdjacentElement('afterend', container);
+            }
+        }
+        if (container) {
+            container.innerHTML = domains.map(d => `
+                <button type="button" class="spotlight-domain-pill ${d === (this.activeDomain || 'all') ? 'active' : ''}" onclick="window.SpotlightSearch.setDomain('${d}')">
+                    ${d === 'all' ? 'Todos los Dominios' : d}
+                </button>
+            `).join('');
+        }
+    },
+
+    setDomain(dom) {
+        this.activeDomain = dom;
+        document.querySelectorAll('.spotlight-domain-pill').forEach(btn => {
+            btn.classList.toggle('active', btn.textContent.trim() === (dom === 'all' ? 'Todos los Dominios' : dom));
+        });
+        this.onInput();
     },
 
     setCategory(cat) {
@@ -3868,7 +3900,7 @@ window.SpotlightSearch = {
 
         // 1. Search Questions
         if (this.activeCategory === 'all' || this.activeCategory === 'questions') {
-            allQuestions.filter(q => q.lang === lang || !q.lang).forEach(q => {
+            allQuestions.filter(q => (q.lang === lang || !q.lang) && (!this.activeDomain || this.activeDomain === 'all' || q.domain === this.activeDomain)).forEach(q => {
                 const promptMatch = (q.prompt || '').toLowerCase().includes(query);
                 const explMatch = (q.explanation || '').toLowerCase().includes(query);
                 const domainMatch = (q.domain || '').toLowerCase().includes(query);
@@ -3980,6 +4012,7 @@ window.SpotlightSearch = {
                     <div class="spotlight-item-title">${this.escapeHtml(res.title)}</div>
                     <div class="spotlight-item-desc">${res.desc}</div>
                 </div>
+                <span class="spotlight-action-hint">Enter</span>
             </div>
         `).join('');
     },
@@ -4118,6 +4151,28 @@ window.DiagnosticMode = {
         const domains = Object.keys(domainStats);
         if (domains.length === 0) return;
 
+        // Calculate Pass Probability
+        let totalWeighted = 0;
+        domains.forEach(d => {
+            const s = domainStats[d];
+            totalWeighted += (s.correct / s.total);
+        });
+        const avgScorePct = Math.round((totalWeighted / Math.max(1, domains.length)) * 100);
+        let passProbPct = Math.min(98, Math.max(12, Math.round(avgScorePct * 1.04)));
+        let verdict = "Listo para el examen oficial";
+        let verdictDesc = "Tu rendimiento promedio en todos los dominios supera el umbral de aprobación del 70%.";
+        let gaugeColor = "var(--success-color, #28a745)";
+        if (avgScorePct < 70) {
+            passProbPct = Math.min(65, Math.round(avgScorePct * 0.9));
+            verdict = "Brechas Críticas Detectadas";
+            verdictDesc = "Se recomienda reforzar los dominios marcados en rojo antes de programar la certificación oficial.";
+            gaugeColor = "var(--danger-color, #dc3545)";
+        } else if (avgScorePct < 85) {
+            verdict = "Aprobación Probable con Refuerzo";
+            verdictDesc = "Estás cerca del nivel óptimo. Refuerza los dominios en amarillo para garantizar un margen seguro.";
+            gaugeColor = "#d97706";
+        }
+
         const rowsHtml = domains.map(d => {
             const stat = domainStats[d];
             const pct = Math.round((stat.correct / stat.total) * 100);
@@ -4148,6 +4203,16 @@ window.DiagnosticMode = {
         }).join('');
 
         containerEl.innerHTML = `
+            <div class="pass-probability-card">
+                <div style="text-align:center; min-width: 90px;">
+                    <div class="pass-gauge-score" style="color:${gaugeColor};">${passProbPct}%</div>
+                    <span style="font-size:0.75rem; font-weight:700; color:var(--text-muted);">PROBABILIDAD</span>
+                </div>
+                <div style="border-left:1px solid var(--border-color); padding-left:1rem; flex:1;">
+                    <div style="font-size:1.05rem; font-weight:800; color:${gaugeColor};">${verdict}</div>
+                    <p style="margin:4px 0 0 0; font-size:0.85rem; color:var(--text-muted);">${verdictDesc}</p>
+                </div>
+            </div>
             <div class="gap-analysis-card">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
                     <div style="display:flex; align-items:center; gap:8px;">
@@ -4161,6 +4226,53 @@ window.DiagnosticMode = {
                 </div>
             </div>
         `;
+    }
+};
+
+// =============================================================================
+// F30: PERFORMANCE & PROGRESS REPORT EXPORTER (CSV & JSON)
+// =============================================================================
+window.exportPerformanceReport = function(format) {
+    const history = JSON.parse(localStorage.getItem('quizHistory') || '[]');
+    const profile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+    const dateStr = new Date().toISOString().slice(0, 10);
+
+    if (format === 'json') {
+        const payload = {
+            exportDate: new Date().toISOString(),
+            candidate: "Norman Reynaldo Sabillon Castro (NorSab)",
+            profile,
+            examHistory: history,
+            masteryData: JSON.parse(localStorage.getItem('courseMastery') || '{}'),
+            dojoStreak: JSON.parse(localStorage.getItem('dojo_streak') || '{}')
+        };
+        const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `data_dojo_performance_${dateStr}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+    } else {
+        let csv = 'Fecha,Curso,TotalPreguntas,Correctas,Porcentaje,TiempoSegundos,Aprobado,Modo\n';
+        history.forEach(h => {
+            const date = (h.date || '').replace(/,/g, ' ');
+            const course = (h.courseCheck || h.courseTitle || 'general').replace(/,/g, ' ');
+            const total = h.totalQuestions || h.total || 0;
+            const correct = h.score || h.correctCount || 0;
+            const pct = h.percentage || Math.round((correct / Math.max(1, total)) * 100);
+            const time = h.timeTaken || 0;
+            const passed = pct >= 70 ? 'SI' : 'NO';
+            const mode = (h.mode || 'Standard').replace(/,/g, ' ');
+            csv += `"${date}","${course}",${total},${correct},${pct}%,${time},${passed},"${mode}"\n`;
+        });
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `data_dojo_history_${dateStr}.csv`;
+        a.click();
+        URL.revokeObjectURL(url);
     }
 };
 

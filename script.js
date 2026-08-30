@@ -1998,13 +1998,52 @@ const badgesConfig = [
   }
 
   function updateTimerDisplay() {
+    const timerText = document.getElementById("timer-text");
     const m = Math.floor(totalSeconds / 60);
     const s = totalSeconds % 60;
-    timerDisplay.textContent = `${m.toString().padStart(2, "0")}:${s
-      .toString()
-      .padStart(2, "0")}`;
+    const formatted = `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
+    if (timerText) {
+      timerText.textContent = formatted;
+    } else if (timerDisplay) {
+      timerDisplay.textContent = formatted;
+    }
     if (totalSeconds < 60) timerDisplay.style.color = "var(--danger-color)";
     else timerDisplay.style.color = "inherit";
+
+    updatePacingTracker();
+  }
+
+  function updatePacingTracker() {
+    const pacingPill = document.getElementById("quiz-pacing-pill");
+    if (!pacingPill) return;
+    if (!currentQuizQuestions || currentQuizQuestions.length <= 1) {
+      pacingPill.classList.add("hidden");
+      return;
+    }
+    const answeredCount = Object.keys(userAnswers).length;
+    if (answeredCount === 0) {
+      pacingPill.classList.remove("hidden");
+      pacingPill.className = "quiz-pacing-pill pacing-good";
+      pacingPill.textContent = "Ritmo Óptimo";
+      return;
+    }
+    const elapsed = Math.max(1, (currentQuizQuestions.length * 90) - totalSeconds);
+    const avgSec = Math.round(elapsed / answeredCount);
+    pacingPill.classList.remove("hidden");
+    const mAvg = Math.floor(avgSec / 60);
+    const sAvg = avgSec % 60;
+    const paceStr = `${mAvg > 0 ? mAvg + 'm ' : ''}${sAvg}s/q`;
+
+    if (avgSec <= 85) {
+      pacingPill.className = "quiz-pacing-pill pacing-good";
+      pacingPill.textContent = `🟢 ${paceStr}`;
+    } else if (avgSec <= 110) {
+      pacingPill.className = "quiz-pacing-pill pacing-warn";
+      pacingPill.textContent = `🟡 ${paceStr}`;
+    } else {
+      pacingPill.className = "quiz-pacing-pill pacing-slow";
+      pacingPill.textContent = `🔴 ${paceStr}`;
+    }
   }
 
   function returnToMenu() {
@@ -2691,6 +2730,36 @@ const badgesConfig = [
     });
     updateQuestionMap();
   }
+
+  function toggleStudyFocusMode() {
+    const studyScreen = document.getElementById("study-screen");
+    const focusBtn = document.getElementById("study-focus-mode-btn");
+    if (!studyScreen) return;
+    const isFocus = studyScreen.classList.toggle("study-focus-mode");
+    if (focusBtn) {
+      focusBtn.classList.toggle("bookmarked", isFocus);
+      focusBtn.innerHTML = isFocus
+        ? `<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg> Salir`
+        : `<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg> Enfoque`;
+    }
+  }
+  window.toggleStudyFocusMode = toggleStudyFocusMode;
+
+  window._copyCodeSnippet = function(btn, e) {
+    if (e && e.stopPropagation) e.stopPropagation();
+    const card = btn.closest('.unir-persona-card') || btn.closest('div').parentElement;
+    const codeEl = card ? card.querySelector('code') : null;
+    if (!codeEl) return;
+    navigator.clipboard.writeText(codeEl.textContent || '').then(() => {
+      const origHtml = btn.innerHTML;
+      btn.innerHTML = `<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Copiado`;
+      btn.style.color = "var(--success-color, #28a745)";
+      setTimeout(() => {
+        btn.innerHTML = origHtml;
+        btn.style.color = "";
+      }, 1500);
+    });
+  };
 
   // --- Modal Elements ---
   const confirmModal = document.getElementById("confirm-modal");
@@ -3829,6 +3898,7 @@ function renderReview(questions, finalPct, passed) {
           <!-- Floating Mastery Pill -->
           <div class="unir-mastery-pill">
             <button id="unir-study-back" class="unir-study-back" type="button">${svgIcon(SVG.back, 14)} ${localizedMarkup('Back', 'Volver')}</button>
+            <button id="study-focus-mode-btn" class="topic-bookmark-btn" type="button" onclick="window.toggleStudyFocusMode()" title="Modo Enfoque / Lectura Zen" style="border-radius:20px;padding:3px 10px;font-weight:600;">${svgIcon(SVG.eye, 13)} Enfoque</button>
             <div class="m-label">${svgIcon(SVG.star, 13)} <span id="unir-xp-display">${mastery.xp} XP</span></div>
             <div class="m-track"><div class="m-fill" id="unir-mastery-bar" style="width:0%"></div></div>
             <span class="m-label" id="unir-mastery-text">0/${totalSections}</span>
@@ -4327,8 +4397,10 @@ function renderReview(questions, finalPct, passed) {
                 <p class="cmd-lt" data-lang="en" style="color:var(--text-muted,#64748b);font-size:0.85rem;margin:0 0 12px;display:none;">${cmd.descripcion_en}</p>`;
             cmd.ejemplos.forEach((ej, ei) => {
               html += `<div style="margin-bottom:14px;border:1px solid var(--border-color,#e5e7eb);border-radius:10px;overflow:hidden;">
-                <div style="background:var(--bg-card,#f8fafc);padding:6px 12px;border-bottom:1px solid var(--border-color,#e5e7eb);font-size:0.8rem;font-weight:600;">
-                  <span class="cmd-lt" data-lang="es">Ej ${ei+1}: ${ej.titulo_es}</span><span class="cmd-lt" data-lang="en" style="display:none">Ex ${ei+1}: ${ej.titulo_en}</span></div>
+                <div style="background:var(--bg-card,#f8fafc);padding:6px 12px;border-bottom:1px solid var(--border-color,#e5e7eb);font-size:0.8rem;font-weight:600;display:flex;justify-content:space-between;align-items:center;">
+                  <div><span class="cmd-lt" data-lang="es">Ej ${ei+1}: ${ej.titulo_es}</span><span class="cmd-lt" data-lang="en" style="display:none">Ex ${ei+1}: ${ej.titulo_en}</span></div>
+                  <button type="button" class="code-copy-btn" onclick="window._copyCodeSnippet(this, event)">${svgIcon(SVG.copy, 12)} Copiar</button>
+                </div>
                 <pre style="margin:0;padding:12px;background:#0d1117;color:#e6edf3;font-size:0.82rem;line-height:1.6;overflow-x:auto;font-family:'Cascadia Code','Fira Code',monospace;"><code>${ej.sql.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</code></pre>
                 <div style="padding:8px 12px;background:var(--bg-secondary,#f1f5f9);">
                   <div style="font-size:0.7rem;font-weight:700;color:var(--text-muted,#64748b);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px;">

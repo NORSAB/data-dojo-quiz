@@ -5315,3 +5315,183 @@ html, body {
   margin-bottom: 4px;
 }
 
+/* =============================================================================
+   PACING & SPEED TRACKER (EXAM TIMING)
+   ============================================================================= */
+.quiz-pacing-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s ease;
+}
+
+.quiz-pacing-pill.pacing-good {
+  color: var(--success-color);
+  background: var(--bg-surface);
+  border-color: var(--success-color);
+}
+
+.quiz-pacing-pill.pacing-warn {
+  color: var(--warning-color);
+  background: var(--bg-surface);
+  border-color: var(--warning-color);
+}
+
+.quiz-pacing-pill.pacing-slow {
+  color: var(--danger-color);
+  background: var(--bg-surface);
+  border-color: var(--danger-color);
+}
+
+/* =============================================================================
+   DEEP STUDY FOCUS MODE
+   ============================================================================= */
+#study-screen.study-focus-mode .unir-tabs-row,
+#study-screen.study-focus-mode .unir-mastery-pill,
+#study-screen.study-focus-mode .study-header-banner {
+  display: none !important;
+}
+
+#study-screen.study-focus-mode {
+  max-width: 900px !important;
+  margin: 0 auto !important;
+  padding: 2rem 1.5rem !important;
+}
+
+.study-reading-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0%;
+  background: var(--primary-color);
+  z-index: 9999;
+  transition: width 0.1s linear;
+}
+
+.topic-bookmark-btn {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  border-radius: var(--radius-sm);
+  padding: 2px 6px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.15s ease;
+}
+
+.topic-bookmark-btn.bookmarked {
+  background: rgba(49, 87, 213, 0.1);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+/* =============================================================================
+   CODE COPY & LINE-BY-LINE BREAKDOWN
+   ============================================================================= */
+.code-action-bar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.code-copy-btn,
+.code-breakdown-toggle {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  font-size: 0.74rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.15s ease;
+}
+
+.code-copy-btn:hover,
+.code-breakdown-toggle:hover {
+  background: var(--bg-card);
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.code-breakdown-box {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
+  margin-top: 8px;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--text-color);
+}
+
+/* =============================================================================
+   OFFICIAL PASS PROBABILITY GAUGE
+   ============================================================================= */
+.pass-probability-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.pass-gauge-score {
+  font-size: 2.2rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+/* =============================================================================
+   SPOTLIGHT DOMAIN FILTERS & SHORTCUT HINTS
+   ============================================================================= */
+.spotlight-domain-filters {
+  display: flex;
+  gap: 6px;
+  padding: 4px 1.25rem 8px 1.25rem;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  overflow-x: auto;
+}
+
+.spotlight-domain-pill {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 99px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.spotlight-domain-pill.active,
+.spotlight-domain-pill:hover {
+  background: var(--primary-color);
+  color: #ffffff;
+  border-color: var(--primary-color);
+}
+
+.spotlight-action-hint {
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  font-weight: 700;
+}
+

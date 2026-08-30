@@ -350,8 +350,17 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
   6. **Buscador Global Rápido (`Spotlight / Ctrl + K`)**: Modal `#spotlight-search-modal` accesible mediante `Ctrl+K` o botón en cabecera, indexando en vivo preguntas, módulos de estudio, términos técnicos, escenarios, flashcards y fragmentos SDK con navegación completa por teclado.
   7. **Navegador Interactivo de Decisiones Técnicas ("¿Cuándo usar cuál?")**: Pestaña dedicada en el Centro de Estudio (`unir-tab-decisions` / `window.DecisionNavigator`) con matrices comparativas de Azure AI-103, Databricks GenAI y Fabric DP-600.
   8. **Exportación de Cheat-Sheet de Reglas de Oro en PDF**: Selector en `#pdf-guide-modal` para generar una hoja imprimible de alta densidad en 2 columnas con los 10 principios clave, matrices de decisión y trampas de examen.
-- Actualizó la PWA a `BUILD_TIMESTAMP = '20260830g'` y caché `simulador-v35-20260830g` en `sw.js` e `index.html`.
+### 2026-08-30 06:45 CST — Antigravity (Gemini 3.7 Flash)
+- Implementó e integró **6 mejoras avanzadas de alto valor** para el estudio y simulación de certificaciones:
+  1. **Indicador de Ritmo de Examen en Vivo (`Pacing & Speed Tracker`)**: Cálculo en tiempo real de velocidad promedio por pregunta con semáforo de ritmo (`🟢 En Ritmo`, `🟡 Ajustar Ritmo`, `🔴 Ritmo Lento`) y ETA en `#timer-display`.
+  2. **Modo Enfoque / Lectura Zen en el Centro de Estudio (`Deep Study Focus Mode`)**: Botón `[ Enfoque ]` en la barra del Centro de Estudio (`window.toggleStudyFocusMode()`) que activa un layout de lectura centrado e inmersivo.
+  3. **Visualizador de Código con Copiado Rápido en 1-Clic**: Botón `Copiar` con feedback visual (`[ ✓ Copiado ]` SVG) en cada fragmento de código SDK de Azure AI, funciones de IA de Databricks y consultas SQL.
+  4. **Estimador de Probabilidad de Aprobación Oficial (`Pass Probability Gauge`)**: Modelo estadístico ponderado en el Test Diagnóstico (`window.DiagnosticMode`) que calcula el % exacto de probabilidad de aprobación y veredicto de preparación oficial.
+  5. **Exportador Integral de Métricas a CSV y JSON**: Función `window.exportPerformanceReport('csv' | 'json')` con botones de descarga en la pantalla de resultados para respaldar el historial y maestría SM-2.
+  6. **Filtros por Dominio y Atajos en Spotlight Search (`Ctrl + K`)**: Píldoras interactivas para segmentar búsquedas por dominios específicos del curso y atajo directo `Enter`.
+- Actualizó la PWA a `BUILD_TIMESTAMP = '20260830h'` y caché `simulador-v36-20260830h` en `sw.js` e `index.html`.
 - Verificó con 0 errores las 5 suites de validación (`validate_ui_palette.js`, `validate_global_language.js`, `validate_ai103_integration.js`, `validate_genai_integration.js`, `audit_code_structure.js`).
+
 
 
 
