@@ -2288,7 +2288,7 @@ const badgesConfig = [
             let timeLeft = 60;
             if (timeAttackFill) {
                 timeAttackFill.style.width = "100%";
-                timeAttackFill.style.backgroundColor = "var(--primary-color, #4f6ef7)";
+                timeAttackFill.style.backgroundColor = "var(--primary-color)";
             }
             window.timeAttackInterval = setInterval(() => {
                 timeLeft--;
@@ -2296,11 +2296,11 @@ const badgesConfig = [
                 if (timeAttackFill) {
                     timeAttackFill.style.width = pct + "%";
                     if (timeLeft <= 10) {
-                        timeAttackFill.style.backgroundColor = "var(--danger-color, #ef4444)";
+                        timeAttackFill.style.backgroundColor = "var(--danger-color)";
                     } else if (timeLeft <= 20) {
-                        timeAttackFill.style.backgroundColor = "var(--warning-color, #f59e0b)";
+                        timeAttackFill.style.backgroundColor = "var(--warning-color)";
                     } else {
-                        timeAttackFill.style.backgroundColor = "var(--primary-color, #4f6ef7)";
+                        timeAttackFill.style.backgroundColor = "var(--primary-color)";
                     }
                 }
                 if (timeLeft <= 0) {
@@ -2632,8 +2632,8 @@ const badgesConfig = [
     ttsDiv.innerHTML = `
       <button type="button" class="btn btn-sm btn-outline" style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:14px;font-size:0.75rem;cursor:pointer;"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg> <span>${lang === 'es' ? 'Escuchar Explicación' : 'Listen Explanation'}</span></button>
       <button type="button" class="btn btn-sm btn-outline" onclick="window.AICoach ? window.AICoach.toggleBreakdown(${currentQuestionIndex}) : null" style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:14px;font-size:0.75rem;cursor:pointer;border-color:#3157d5;color:#3157d5;">
-        <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-        <span>🤖 ${lang === 'es' ? 'Desglose AI Coach' : 'AI Coach Breakdown'}</span>
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2a2 2 0 012 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 017 7h1a1 1 0 011 1v3a1 1 0 01-1 1h-1v1a2 2 0 01-2 2H5a2 2 0 01-2-2v-1H2a1 1 0 01-1-1v-3a1 1 0 011-1h1a7 7 0 017-7V5.73C7.4 5.39 7 4.74 7 4a2 2 0 012-2h3zM9 13a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm6 0a1.5 1.5 0 100 3 1.5 1.5 0 000-3z"/></svg>
+        <span>${lang === 'es' ? 'Desglose AI Coach' : 'AI Coach Breakdown'}</span>
       </button>
     `;
     ttsDiv.querySelector("button").onclick = () => window.speakText(q.explanation, lang);
@@ -2650,9 +2650,9 @@ const badgesConfig = [
         <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
         ${lang === 'es' ? 'Desglose Situacional de Examen Oficial' : 'Official Exam Situational Breakdown'}
       </div>
-      <div style="margin-bottom:6px;"><strong>🎯 ${lang === 'es' ? 'Clave de Certificación' : 'Exam Key'}:</strong> ${coachData ? coachData.examKey : ''}</div>
-      <div style="margin-bottom:6px;"><strong>⚠️ ${lang === 'es' ? 'Trampa Frecuente' : 'Common Pitfall'}:</strong> ${coachData ? coachData.pitfalls : ''}</div>
-      <div><strong>💡 ${lang === 'es' ? 'Regla Mnemotécnica' : 'Rule of Thumb'}:</strong> ${coachData ? coachData.ruleOfThumb : ''}</div>
+      <div style="margin-bottom:6px;"><strong><svg viewBox="0 0 24 24" width="13" height="13" fill="#3157d5" style="vertical-align:middle;margin-right:4px"><circle cx="12" cy="12" r="10" fill="none" stroke="#3157d5" stroke-width="2"/><circle cx="12" cy="12" r="6" fill="none" stroke="#3157d5" stroke-width="2"/><circle cx="12" cy="12" r="2" fill="#3157d5"/></svg>${lang === 'es' ? 'Clave de Certificación' : 'Exam Key'}:</strong> ${coachData ? coachData.examKey : ''}</div>
+      <div style="margin-bottom:6px;"><strong><svg viewBox="0 0 24 24" width="13" height="13" fill="#d97706" style="vertical-align:middle;margin-right:4px"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>${lang === 'es' ? 'Trampa Frecuente' : 'Common Pitfall'}:</strong> ${coachData ? coachData.pitfalls : ''}</div>
+      <div><strong><svg viewBox="0 0 24 24" width="13" height="13" fill="#3157d5" style="vertical-align:middle;margin-right:4px"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg>${lang === 'es' ? 'Regla Mnemotécnica' : 'Rule of Thumb'}:</strong> ${coachData ? coachData.ruleOfThumb : ''}</div>
     `;
     document.getElementById("feedback-explanation").appendChild(coachBox);
     
@@ -2819,7 +2819,7 @@ const badgesConfig = [
         ${idx === currentQuestionIndex ? 'box-shadow: 0 0 0 2px var(--primary-color);' : ''}
       `;
 
-      let flagIndicator = isFlagged ? '<span style="font-size:0.65rem;color:#d97706;">★</span>' : '';
+      let flagIndicator = isFlagged ? `<span style="display:inline-flex;margin-left:2px;">${svgIcon(SVG.star, 10, '#d97706')}</span>` : '';
       btn.innerHTML = `<span>${idx + 1}</span>${flagIndicator}`;
       btn.title = `Pregunta ${idx + 1}: ${isAnswered ? 'Respondida' : 'Sin responder'}${isFlagged ? ' (Marcada)' : ''}`;
       
@@ -3963,12 +3963,12 @@ function renderReview(questions, finalPct, passed) {
               if (card) card.style.borderLeft = '3px solid var(--success-color)';
               const nameEl = h.querySelector('.p-name');
               if (nameEl) nameEl.style.color = 'var(--success-color)';
-              // Add ✓ LEÍDO badge if not already present
+              // Add LEÍDO badge if not already present
               if (!h.querySelector('.p-leido-badge')) {
                 const leidoBadge = document.createElement('span');
                 leidoBadge.className = 'p-leido-badge';
-                leidoBadge.style.cssText = 'font-size:0.65rem;color:var(--success-color);font-weight:700;margin-left:6px;';
-                leidoBadge.textContent = '✓ LEÍDO';
+                leidoBadge.style.cssText = 'font-size:0.65rem;color:var(--success-color);font-weight:700;margin-left:6px;display:inline-flex;align-items:center;gap:3px;';
+                leidoBadge.innerHTML = `${svgIcon(SVG.check, 10, 'var(--success-color)')} LEÍDO`;
                 h.appendChild(leidoBadge);
               }
             }
@@ -3999,8 +3999,8 @@ function renderReview(questions, finalPct, passed) {
                   if (!hdr.querySelector('.p-leido-badge')) {
                     const leidoBadge = document.createElement('span');
                     leidoBadge.className = 'p-leido-badge';
-                    leidoBadge.style.cssText = 'font-size:0.65rem;color:var(--success-color);font-weight:700;margin-left:6px;';
-                    leidoBadge.textContent = '✓ LEÍDO';
+                    leidoBadge.style.cssText = 'font-size:0.65rem;color:var(--success-color);font-weight:700;margin-left:6px;display:inline-flex;align-items:center;gap:3px;';
+                    leidoBadge.innerHTML = `${svgIcon(SVG.check, 10, 'var(--success-color)')} LEÍDO`;
                     hdr.appendChild(leidoBadge);
                   }
                 }
@@ -4032,7 +4032,7 @@ function renderReview(questions, finalPct, passed) {
             html += `    <span class="p-name" style="${isRead ? 'color:var(--success-color);' : ''}">${p.nombre}</span>`;
             html += `    <span class="p-epoch">${p.epoca}</span>`;
             html += `    <span class="${badgeCls}">${badgeLabel[p.relevancia]}</span>`;
-            html += `    ${isRead ? '<span style="font-size:0.65rem;color:var(--success-color);font-weight:700;">✓ LEÍDO</span>' : ''}`;
+            html += `    ${isRead ? `<span style="font-size:0.65rem;color:var(--success-color);font-weight:700;display:inline-flex;align-items:center;gap:3px;">${svgIcon(SVG.check, 10, 'var(--success-color)')} LEÍDO</span>` : ''}`;
             html += `  </div>`;
             html += `  <div class="unir-persona-body" id="${uid}-body" style="padding:20px 36px 24px;">`;
             html += `    <div class="p-contribucion">${p.contribucion}</div>`;
@@ -4247,7 +4247,7 @@ function renderReview(questions, finalPct, passed) {
             const p = document.getElementById('unir-cmd-progress');
             if(p) p.innerHTML = `${cIcon(SVG.star,14)} ${mastery.comandosViewed.length}/${totalComandos} le&iacute;dos &mdash; +8 XP c/u`;
             const b = document.getElementById('cb-'+key.replace(/[^a-z0-9]/gi,''));
-            if(b){b.style.background='var(--success-color)';b.textContent='✓';}
+            if(b){b.style.background='var(--success-color)';b.innerHTML=svgIcon(SVG.check, 10, '#fff');}
           }
         };
         list.forEach((cat, ci) => {
@@ -4260,7 +4260,7 @@ function renderReview(questions, finalPct, passed) {
             html += `<div class="unir-persona-card" style="border-left:3px solid ${isR?'var(--success-color)':'var(--primary-color)'};">
               <div class="unir-persona-header" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open');window._cmdRead('${key}');">
                 <div style="display:flex;align-items:center;gap:8px;flex:1;"><span style="font-weight:700;color:var(--text-color,#1e293b);font-size:0.95rem;">${cmd.nombre}</span>
-                <span id="cb-${sk}" style="font-size:0.65rem;padding:2px 8px;border-radius:10px;background:${isR?'var(--success-color)':'var(--primary-color)'};color:#fff;font-weight:700;">${isR?'✓':'NUEVO'}</span></div>
+                <span id="cb-${sk}" style="font-size:0.65rem;padding:2px 8px;border-radius:10px;background:${isR?'var(--success-color)':'var(--primary-color)'};color:#fff;font-weight:700;display:inline-flex;align-items:center;justify-content:center;">${isR?svgIcon(SVG.check, 10, '#fff'):'NUEVO'}</span></div>
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="var(--text-muted,#64748b)"><path d="M7 10l5 5 5-5z"/></svg>
               </div>
               <div class="unir-persona-body"><div style="padding:12px 16px;">
@@ -4568,12 +4568,13 @@ function renderReview(questions, finalPct, passed) {
                 <svg viewBox="0 0 24 24" width="15" height="15" fill="#3157d5"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
                 <span>Repaso SRS: <strong>${srsStats.due}</strong> pendientes hoy</span>
               </div>
-              <button type="button" class="btn btn-sm ${isSRSEnabled ? 'btn-primary' : 'btn-outline'}" onclick="window._unirToggleSRS()" style="border-radius:16px;font-size:0.82rem;padding:5px 14px;cursor:pointer;">
-                🧠 ${isSRSEnabled ? 'Modo Repaso Hoy (Activo)' : 'Filtrar Repaso Hoy (SRS)'}
+              <button type="button" class="btn btn-sm ${isSRSEnabled ? 'btn-primary' : 'btn-outline'}" onclick="window._unirToggleSRS()" style="border-radius:16px;font-size:0.82rem;padding:5px 14px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+                <span>${isSRSEnabled ? 'Modo Repaso Hoy (Activo)' : 'Filtrar Repaso Hoy (SRS)'}</span>
               </button>
               <button type="button" class="btn btn-sm btn-primary" onclick="window.PodcastMode.start(fcFiltered, fcIdx)" style="border-radius:16px;font-size:0.82rem;padding:5px 16px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;">
                 <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M12 1a9 9 0 00-9 9v7c0 1.66 1.34 3 3 3h3v-8H5v-2a7 7 0 0114 0v2h-4v8h3c1.66 0 3-1.34 3-3v-7a9 9 0 00-9-9z"/></svg>
-                🎧 Iniciar Modo Podcast
+                <span>Iniciar Modo Podcast</span>
               </button>
             </div>
 

@@ -63,7 +63,7 @@
 
 [data-theme="dark"] {
   --light-bg: #111827;
-  --text-color: #f3f4f6;
+  --text-color: #f4f6f8;
   --text-muted: #a7b0c0;
   --card-bg: #1f2937;
   --bg-card: #1f2937;
@@ -2015,8 +2015,8 @@ html[data-theme="dark"] .modal-content,
 }
 
 [data-theme="dark"] .onboarding-container {
-  background: var(--bg-main, #0f172a) !important;
-  color: #f1f5f9 !important;
+  background: var(--bg-main, #111827) !important;
+  color: #f4f6f8 !important;
 }
 
 [data-theme="dark"] .sensei-quote-block {
@@ -2169,7 +2169,7 @@ html[data-theme="dark"] .modal-content,
   text-align: center;
   position: relative;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-  color: #f3f4f6;
+  color: #f4f6f8;
 }
 
 [data-theme="light"] .certificate-container {
@@ -4434,18 +4434,18 @@ html, body {
   font-size: 0.75rem;
   font-weight: 800;
   font-family: 'JetBrains Mono', monospace, sans-serif;
-  color: var(--primary-color, #4f6ef7);
-  background: rgba(79, 110, 247, 0.1);
-  border: 1px solid rgba(79, 110, 247, 0.25);
+  color: var(--primary-color, #3157d5);
+  background: rgba(49, 87, 213, 0.1);
+  border: 1px solid rgba(49, 87, 213, 0.25);
   flex-shrink: 0;
   transition: all 0.15s ease;
 }
 
 .option-item:hover .option-key-badge,
 .option-item.selected .option-key-badge {
-  background: var(--primary-color, #4f6ef7);
+  background: var(--primary-color, #3157d5);
   color: #ffffff;
-  border-color: var(--primary-color, #4f6ef7);
+  border-color: var(--primary-color, #3157d5);
 }
 
 .option-content-wrapper {
@@ -4470,45 +4470,48 @@ html, body {
   font-size: 0.82rem;
   font-weight: 700;
   cursor: pointer;
-  border: 1px solid var(--border-color, #e2e8f0);
+  border: 1px solid var(--border-color, #d9dee7);
   background: var(--bg-card, #ffffff);
-  color: var(--text-muted, #64748b);
+  color: var(--text-muted, #667085);
   transition: all 0.2s ease;
 }
 
 .flag-question-btn:hover {
   background: rgba(245, 158, 11, 0.1);
-  border-color: #f59e0b;
-  color: #d97706;
+  border-color: #9a6700;
+  color: #9a6700;
 }
 
 .flag-question-btn.flagged {
-  background: #fef3c7 !important;
-  border-color: #f59e0b !important;
-  color: #b45309 !important;
+  background: #f4f6f8 !important;
+  border-color: #9a6700 !important;
+  color: #9a6700 !important;
   box-shadow: 0 2px 8px rgba(245, 158, 11, 0.25);
 }
 
 [data-theme="dark"] .flag-question-btn.flagged {
   background: rgba(245, 158, 11, 0.25) !important;
-  border-color: #f59e0b !important;
-  color: #fbbf24 !important;
+  border-color: #9a6700 !important;
+  color: #e4b63f !important;
 }
 
 /* Question Map Node Flag Indicator */
 .question-node.flagged {
   position: relative;
-  border-color: #f59e0b !important;
+  border-color: #9a6700 !important;
   box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.4) !important;
 }
 
 .question-node.flagged::after {
-  content: '🚩';
+  content: '';
   position: absolute;
-  top: -8px;
-  right: -8px;
-  font-size: 10px;
-  line-height: 1;
+  top: -3px;
+  right: -3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--warning-color, #9a6700);
+  box-shadow: 0 0 4px rgba(217, 119, 6, 0.6);
 }
 
 /* =============================================================================
@@ -4526,14 +4529,14 @@ html, body {
   padding: 14px 20px;
   border-radius: 14px;
   background: var(--bg-card, #ffffff);
-  border: 1.5px solid var(--border-color, #e2e8f0);
+  border: 1.5px solid var(--border-color, #d9dee7);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   transition: all 0.2s ease;
 }
 
 .unir-search-box:focus-within {
-  border-color: var(--primary-color, #4f6ef7);
-  box-shadow: 0 0 0 3px rgba(79, 110, 247, 0.15);
+  border-color: var(--primary-color, #3157d5);
+  box-shadow: 0 0 0 3px rgba(49, 87, 213, 0.15);
 }
 
 .unir-search-input {
@@ -4543,14 +4546,14 @@ html, body {
   background: transparent;
   font-size: 1.15rem;
   font-weight: 500;
-  color: var(--text-color, #1e293b);
+  color: var(--text-color, #1f2937);
 }
 
 .unir-search-clear {
   border: none;
   background: transparent;
   cursor: pointer;
-  color: var(--text-muted, #94a3b8);
+  color: var(--text-muted, #a7b0c0);
   padding: 6px;
   display: flex;
   align-items: center;
@@ -4561,20 +4564,20 @@ html, body {
 
 .unir-search-clear:hover {
   background: rgba(0, 0, 0, 0.06);
-  color: var(--text-color, #1e293b);
+  color: var(--text-color, #1f2937);
 }
 
 .unir-search-results-count {
   font-size: 0.95rem;
   font-weight: 700;
-  color: var(--primary-color, #4f6ef7);
+  color: var(--primary-color, #3157d5);
   margin-top: 8px;
   padding: 0 6px;
 }
 
 .search-highlight {
-  background: #fef08a;
-  color: #854d0e;
+  background: #f4f6f8;
+  color: #9a6700;
   padding: 1px 4px;
   border-radius: 3px;
   font-weight: 700;
@@ -4582,7 +4585,7 @@ html, body {
 
 [data-theme="dark"] .search-highlight {
   background: rgba(250, 204, 21, 0.3);
-  color: #fde047;
+  color: #e4b63f;
 }
 
 /* Shortcut Helper Pill */
@@ -4591,7 +4594,7 @@ html, body {
   align-items: center;
   gap: 8px;
   font-size: 0.75rem;
-  color: var(--text-muted, #64748b);
+  color: var(--text-muted, #667085);
   background: rgba(0, 0, 0, 0.04);
   padding: 4px 10px;
   border-radius: 20px;
@@ -4600,12 +4603,12 @@ html, body {
 
 [data-theme="dark"] .keyboard-shortcuts-pill {
   background: rgba(255, 255, 255, 0.06);
-  color: #94a3b8;
+  color: #a7b0c0;
 }
 
 .keyboard-shortcuts-pill kbd {
   background: var(--bg-card, #ffffff);
-  border: 1px solid var(--border-color, #cbd5e1);
+  border: 1px solid var(--border-color, #d9dee7);
   padding: 1px 5px;
   border-radius: 4px;
   font-family: inherit;
@@ -4661,7 +4664,7 @@ html, body {
 
   .card, #results-screen, .dashboard-container {
     box-shadow: none !important;
-    border: 1.5px solid #d1d5db !important;
+    border: 1.5px solid #d9dee7 !important;
     background: #ffffff !important;
     color: #111827 !important;
     page-break-inside: avoid;
@@ -4679,8 +4682,8 @@ html, body {
     font-size: 14pt;
     font-weight: 800;
     text-align: center;
-    color: #1e293b;
-    border-bottom: 2px solid #0f172a;
+    color: #1f2937;
+    border-bottom: 2px solid #111827;
     padding-bottom: 8px;
     margin-bottom: 20px;
     letter-spacing: 1px;

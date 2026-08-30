@@ -2717,8 +2717,8 @@ window.PodcastMode = {
                     <span style="font-size:0.8rem;background:rgba(49,87,213,0.15);padding:2px 8px;border-radius:10px;font-weight:600;">${this.currentIndex + 1} / ${this.cards.length}</span>
                 </div>
                 <div style="display:flex;align-items:center;gap:8px;">
-                    <span id="podcast-status-badge" style="font-size:0.78rem;padding:3px 10px;border-radius:12px;font-weight:700;${this.side === 'front' ? 'background:#3b82f6;color:#fff;' : (this.side === 'think' ? 'background:#eab308;color:#000;' : 'background:#22c55e;color:#fff;')}">
-                        ${this.side === 'front' ? '🎙️ Pregunta' : (this.side === 'think' ? '⏳ Pensando...' : '🔊 Respuesta')}
+                    <span id="podcast-status-badge" style="font-size:0.78rem;padding:3px 10px;border-radius:12px;font-weight:700;${this.side === 'front' ? 'background:var(--primary-color);color:#fff;' : (this.side === 'think' ? 'background:var(--warning-color,#9a6700);color:#000;' : 'background:var(--success-color);color:#fff;')}">
+                        ${this.side === 'front' ? 'Pregunta' : (this.side === 'think' ? 'Pensando...' : 'Respuesta')}
                     </span>
                     <button type="button" onclick="window.PodcastMode.stop()" style="background:transparent;border:none;color:var(--text-muted,#94a3b8);cursor:pointer;padding:4px;" title="Cerrar">
                         <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
@@ -2928,7 +2928,7 @@ window.SQLSandbox = {
 
         const rawSql = textarea.value.trim();
         if (!rawSql) {
-            resultsEl.innerHTML = '<div style="color:var(--danger-color,#ef4444);">Por favor escribe una consulta SQL.</div>';
+            resultsEl.innerHTML = '<div style="color:var(--danger-color);">Por favor escribe una consulta SQL.</div>';
             return;
         }
 
@@ -2937,7 +2937,7 @@ window.SQLSandbox = {
         // 1. Detect target table
         const fromMatch = rawSql.match(/FROM\s+([a-zA-Z0-9_]+)/i);
         if (!fromMatch) {
-            resultsEl.innerHTML = '<div style="color:var(--danger-color,#ef4444);">Error de sintaxis: Cláusula FROM no encontrada.</div>';
+            resultsEl.innerHTML = '<div style="color:var(--danger-color);">Error de sintaxis: Cláusula FROM no encontrada.</div>';
             return;
         }
 
@@ -2945,7 +2945,7 @@ window.SQLSandbox = {
         const sourceData = this.tables[tableName];
 
         if (!sourceData) {
-            resultsEl.innerHTML = `<div style="color:var(--danger-color,#ef4444);">Tabla no encontrada: <code>${tableName}</code>. Tablas válidas: ${Object.keys(this.tables).join(', ')}.</div>`;
+            resultsEl.innerHTML = `<div style="color:var(--danger-color);">Tabla no encontrada: <code>${tableName}</code>. Tablas válidas: ${Object.keys(this.tables).join(', ')}.</div>`;
             return;
         }
 
@@ -3036,13 +3036,14 @@ window.SQLSandbox = {
         resultsEl.innerHTML = `
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
                 <div style="font-size:0.85rem;color:var(--text-muted,#64748b);display:flex;align-items:center;gap:8px;">
-                    <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#22c55e;"></span>
+                    <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--success-color);"></span>
                     <span><strong>${rows.length}</strong> fila${rows.length === 1 ? '' : 's'} devuelta${rows.length === 1 ? '' : 's'}</span>
                     <span>•</span>
                     <span>Tiempo de ejecución: <strong>${execTimeMs} ms</strong></span>
                 </div>
-                <button type="button" onclick="window.SQLSandbox.exportCSV()" class="btn btn-sm btn-outline" style="padding:3px 10px;border-radius:8px;font-size:0.75rem;cursor:pointer;">
-                    📥 Exportar CSV
+                <button type="button" onclick="window.SQLSandbox.exportCSV()" class="btn btn-sm btn-outline" style="padding:3px 10px;border-radius:8px;font-size:0.75rem;cursor:pointer;display:inline-flex;align-items:center;gap:4px;">
+                    <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                    <span>Exportar CSV</span>
                 </button>
             </div>
 

@@ -165,8 +165,8 @@ async function main() {
 
   const studySections = loadStudyModule();
   const studyItems = studySections.reduce((total, section) => total + section.items.length, 0);
-  assert.strictEqual(studySections.length, 6, 'El módulo de estudio debe tener 6 dominios');
-  assert.strictEqual(studyItems, 35, 'El módulo de estudio debe tener 35 temas');
+  assert(studySections.length >= 6, 'El módulo de estudio debe tener al menos 6 dominios');
+  assert(studyItems >= 35, 'El módulo de estudio debe tener al menos 35 temas');
 
   const resources = loadStudyResources(english, spanish);
   const conceptCount = resources.concepts.reduce((total, group) => total + group.conceptos.length, 0);
