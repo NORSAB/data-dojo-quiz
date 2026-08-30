@@ -16,15 +16,16 @@
 // Antigravity (Gemini 3.7 Flash) | 2026-08-30 14:36 CST | Podcast Multi-Curso y Selector de Múltiples Episodios / Álbumes Temáticos por Examen Oficial.
 // Antigravity (Gemini 3.7 Flash) | 2026-08-30 14:40 CST | Speech Humanizer: Eliminación total de ruidos LaTeX, Markdown, guiones y sintaxis de código para locución natural continua.
 // Antigravity (Gemini 3.7 Flash) | 2026-08-30 14:42 CST | Ajuste de overflow y truncation elíptica en pistas de playlist para layout perfecto.
-const BUILD_TIMESTAMP = '20260830p';
-const CACHE_NAME = `simulador-v44-${BUILD_TIMESTAMP}`;
+// Antigravity (Gemini 3.7 Flash) | 2026-08-30 14:48 CST | Distribución limpia, botones de cierre visibles (modal-close-btn), footer Volver y escape global.
+const BUILD_TIMESTAMP = '20260830q';
+const CACHE_NAME = `simulador-v45-${BUILD_TIMESTAMP}`;
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './styles.css?v=20260830p',
-  './app_i18n.js?v=20260830p',
-  './script.js?v=20260830p',
-  './features.js?v=20260830p',
+  './styles.css?v=20260830q',
+  './app_i18n.js?v=20260830q',
+  './script.js?v=20260830q',
+  './features.js?v=20260830q',
   './hero_data.js',
   './auto_restore_data.js',
   './manifest.json',
@@ -65,7 +66,7 @@ const ASSETS_TO_CACHE = [
   './conceptos_databricks.js',
   './personajes_unir_viz.js',
   './translations_databricks_es.js',
-  './translate_toggle.js?v=20260830p',
+  './translate_toggle.js?v=20260830q',
   './supabase-sync.js',
   './comandos_sql_databricks.js',
   './comandos_sql_genai.js'

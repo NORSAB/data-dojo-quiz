@@ -6288,16 +6288,35 @@ document.addEventListener('keydown', (e) => {
     return;
   }
 
-  // Global shortcut: ESC closes open modals
+  // Global shortcut: ESC closes any open modal/drawer
   if (e.key === 'Escape') {
-    const searchModal = document.getElementById('global-search-modal');
-    if (searchModal && !searchModal.classList.contains('hidden')) {
-      searchModal.classList.add('hidden');
+    if (window.PodcastPlaylist && document.getElementById('podcast-playlist-modal') && !document.getElementById('podcast-playlist-modal').classList.contains('hidden')) {
+      window.PodcastPlaylist.close();
       return;
     }
-    const confirmModal = document.getElementById('confirm-modal');
-    if (confirmModal && !confirmModal.classList.contains('hidden')) {
-      confirmModal.classList.add('hidden');
+    if (window.CaseStudySimulator && document.getElementById('case-study-modal') && !document.getElementById('case-study-modal').classList.contains('hidden')) {
+      window.CaseStudySimulator.close();
+      return;
+    }
+    if (window.ExamReadinessRadar && document.getElementById('readiness-radar-modal') && !document.getElementById('readiness-radar-modal').classList.contains('hidden')) {
+      window.ExamReadinessRadar.close();
+      return;
+    }
+    if (window.OralExamMode && document.getElementById('oral-exam-modal') && !document.getElementById('oral-exam-modal').classList.contains('hidden')) {
+      window.OralExamMode.close();
+      return;
+    }
+    if (window.SurvivalMode && document.getElementById('survival-mode-modal') && !document.getElementById('survival-mode-modal').classList.contains('hidden')) {
+      window.SurvivalMode.close();
+      return;
+    }
+    if (window.LiveSyncStatus && document.getElementById('sync-popover-modal') && !document.getElementById('sync-popover-modal').classList.contains('hidden')) {
+      window.LiveSyncStatus.closePopover();
+      return;
+    }
+    const openModals = document.querySelectorAll('.modal-overlay:not(.hidden)');
+    if (openModals.length > 0) {
+      openModals.forEach(m => m.classList.add('hidden'));
       return;
     }
   }
@@ -6394,6 +6413,28 @@ document.addEventListener('keydown', (e) => {
       e.preventDefault();
       if (typeof window._unirPrevFC === 'function') window._unirPrevFC();
       return;
+    }
+  }
+});
+
+// Global backdrop click listener to close modals
+document.addEventListener('click', (e) => {
+  if (e.target && e.target.classList && e.target.classList.contains('modal-overlay') && !e.target.classList.contains('hidden')) {
+    const modalId = e.target.id;
+    if (modalId === 'podcast-playlist-modal' && window.PodcastPlaylist) {
+      window.PodcastPlaylist.close();
+    } else if (modalId === 'case-study-modal' && window.CaseStudySimulator) {
+      window.CaseStudySimulator.close();
+    } else if (modalId === 'readiness-radar-modal' && window.ExamReadinessRadar) {
+      window.ExamReadinessRadar.close();
+    } else if (modalId === 'oral-exam-modal' && window.OralExamMode) {
+      window.OralExamMode.close();
+    } else if (modalId === 'survival-mode-modal' && window.SurvivalMode) {
+      window.SurvivalMode.close();
+    } else if (modalId === 'sync-popover-modal' && window.LiveSyncStatus) {
+      window.LiveSyncStatus.closePopover();
+    } else {
+      e.target.classList.add('hidden');
     }
   }
 });

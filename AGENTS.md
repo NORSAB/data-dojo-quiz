@@ -438,6 +438,16 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
 - Actualizó la PWA a `BUILD_TIMESTAMP = '20260830p'` y caché `simulador-v44-20260830p` en `sw.js` e `index.html`.
 - Verificó con 0 errores las 6 suites de validación (`validate_full_application.js` con **74/74 checks pasados**, `validate_ui_palette.js` con 18 colores hex y 0 gradientes, `validate_global_language.js`, `validate_ai103_integration.js`, `validate_genai_integration.js`, `audit_code_structure.js`).
 
+### 2026-08-30 14:48 CST — Antigravity (Gemini 3.7 Flash)
+- **Restauración de Visibilidad de Botones de Cierre, Retorno Global y Limpieza de Distribución**:
+  1. **Botones de cierre de alto contraste (`.modal-close-btn`)**: Sustituyó la clase `.btn-icon-modern` (que causaba texto blanco sobre fondo blanco en modales claros) por `.modal-close-btn` con bordes nítidos, icono SVG visible y hover de seguridad en todos los modales (`#podcast-playlist-modal`, `#case-study-modal`, `#readiness-radar-modal`, `#oral-exam-modal`, `#survival-mode-modal`, `#sync-popover-modal`, `#admin-modal`, `#profile-modal`, `#badges-modal`).
+  2. **Botón de regreso al panel ("Volver")**: Agregó un pie de modal inferior en cada vista con botón explícito de *Volver / Cerrar* para navegación inmediata en dispositivos móviles o de escritorio.
+  3. **Cierre universal por tecla ESC y clic en Backdrop**: Optimizó el manejador global de eventos en `script.js` para cerrar instantáneamente cualquier modal abierto al presionar `Escape` o hacer clic en el fondo oscurecido exterior.
+  4. **Distribución y contención en selector de episodios y voces**: Sanitizó los nombres de capítulos en `getEpisodesForCourse(cid)` (eliminando duplicidades bilingües y prefijos de código redundantes), añadió `text-overflow: ellipsis` a los menús desplegables y organizó los controles de velocidad y reproducción en bloques espaciados y táctiles.
+- Actualizó la PWA a `BUILD_TIMESTAMP = '20260830q'` y caché `simulador-v45-20260830q` en `sw.js` e `index.html`.
+- Verificó con 0 errores las 6 suites de validación (`validate_full_application.js` con **74/74 checks pasados**, `validate_ui_palette.js` con 18 colores hex y 0 gradientes, `validate_global_language.js`, `validate_ai103_integration.js`, `validate_genai_integration.js`, `audit_code_structure.js`).
+
+
 
 
 
