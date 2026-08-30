@@ -10,16 +10,16 @@
 // Antigravity (Gemini 3.7 Flash) | 2026-08-30 04:10 CST | Corrige títulos de módulos de estudio y sanitización bilingüe contra tags SVG escapados.
 // Antigravity (Gemini 3.7 Flash) | 2026-08-30 04:25 CST | Rediseño espacioso y organizado en 2 columnas del modal de configuración del examen con presets rápidos.
 // Antigravity (Gemini 3.7 Flash) | 2026-08-30 04:30 CST | Maximiza altura del filtrado de dominios y organiza opciones inferiores en matriz 2x2.
-// Antigravity (Gemini 3.7 Flash) | 2026-08-30 07:20 CST | Integra Architecture Canvas, Survival Mode con 3 vidas, Error Rescue Flashcards y LLM Parameters Playground.
-const BUILD_TIMESTAMP = '20260830j';
-const CACHE_NAME = `simulador-v38-${BUILD_TIMESTAMP}`;
+// Antigravity (Gemini 3.7 Flash) | 2026-08-30 07:30 CST | Integra Drag-and-Drop y mezclas en Architecture Canvas y expande Matrices de Decisión con tarjetas y filtros.
+const BUILD_TIMESTAMP = '20260830k';
+const CACHE_NAME = `simulador-v39-${BUILD_TIMESTAMP}`;
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './styles.css?v=20260830j',
-  './app_i18n.js?v=20260830j',
-  './script.js?v=20260830j',
-  './features.js?v=20260830j',
+  './styles.css?v=20260830k',
+  './app_i18n.js?v=20260830k',
+  './script.js?v=20260830k',
+  './features.js?v=20260830k',
   './hero_data.js',
   './auto_restore_data.js',
   './manifest.json',
@@ -58,7 +58,7 @@ const ASSETS_TO_CACHE = [
   './conceptos_databricks.js',
   './personajes_unir_viz.js',
   './translations_databricks_es.js',
-  './translate_toggle.js?v=20260830j',
+  './translate_toggle.js?v=20260830k',
   './supabase-sync.js',
   './comandos_sql_databricks.js',
   './comandos_sql_genai.js'

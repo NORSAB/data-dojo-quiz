@@ -377,7 +377,18 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
   2. Integridad estructural y de opciones en todas las 2,456 preguntas de los bancos activos.
   3. Carga y disponibilidad operativa de todos los motores interactivos (`CliSimulator`, `OralExamMode`, `ArchitectureCanvas`, `SurvivalMode`, `ErrorRescueCards`, `PromptPlayground`, `SpotlightSearch`, `DailyQuickDrill`, `DiagnosticMode`, `StudyGuidePDF`).
   4. Coherencia 100% en los 48 recursos de caché PWA en `sw.js` e `index.html`.
-  5. Paleta de diseño y ausencia de duplicados verificados con las 5 suites automáticas.
+### 2026-08-30 07:30 CST — Antigravity (Gemini 3.7 Flash)
+- Mejoró y enriqueció el **Simulador de Arquitectura Visual (`window.ArchitectureCanvas`)**:
+  1. Soporte completo de **Arrastrar y Soltar (Drag & Drop)** con eventos HTML5 nativos y resaltado `.arch-slot.drag-over`, manteniendo la opción táctil por clic.
+  2. **Barajado Aleatorio (Shuffle)** de componentes en la paleta para que nunca aparezcan en el orden de la solución correcta.
+  3. Múltiples escenarios por curso con paginación (`[ ← Anterior ]`, `[ Desafío X de Y ]`, `[ Siguiente &rarr; ]`) cubriendo RAG seguro, Agentes autónomos, Pipelines de voz/salud, Red teaming en Foundry, LoRA fine-tuning y Real-time Eventstreams.
+- Rediseñó y expandió las **Matrices de Decisión Técnica (`window.DecisionNavigator`)**:
+  1. Diseño en cuadrícula de tarjetas contrastadas (`.decision-card` con fondo `var(--bg-surface)` y caja `.decision-criteria-box`).
+  2. Filtro instantáneo por categorías (`Todas`, `Modelos de IA`, `Búsqueda & RAG`, `Agentes`, `Seguridad`, etc.).
+  3. Más de 20 dilemas oficiales añadidos para Azure AI-103, Databricks GenAI y Fabric DP-600.
+- Actualizó la PWA a `BUILD_TIMESTAMP = '20260830k'` y caché `simulador-v39-20260830k` en `sw.js` e `index.html`.
+- Verificó con 0 errores las 6 suites de validación (`validate_full_application.js` con 72/72 checks, `validate_ui_palette.js`, `validate_global_language.js`, `validate_ai103_integration.js`, `validate_genai_integration.js`, `audit_code_structure.js`).
+
 
 
 

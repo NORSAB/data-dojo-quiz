@@ -4280,49 +4280,76 @@ window.exportPerformanceReport = function(format) {
 // F29: HIGH-YIELD TECHNICAL DECISION MATRICES ("¿CUÁNDO USAR CUÁL?")
 // =============================================================================
 window.DecisionNavigator = {
+    activeCategory: 'all',
+
     matrices: {
         'azure-ai-103': [
             {
                 category: 'Modelos de IA',
                 decision: 'Azure OpenAI (GPT-4o / o1) vs Document Intelligence',
-                whenToUse: 'Usa <strong>Document Intelligence</strong> para facturas, recibos, IDs y formularios estructurados con coordenadas exactas. Usa <strong>Azure OpenAI</strong> para razonamiento general, redacción y extracción de texto libre no restringido.'
+                whenToUse: 'Usa <strong>Document Intelligence</strong> para facturas, recibos, IDs y formularios estructurados con coordenadas exactas de tablas. Usa <strong>Azure OpenAI</strong> para razonamiento general, redacción y extracción de texto libre no restringido.'
             },
             {
                 category: 'Modelos de IA',
-                decision: 'Language Studio vs Speech vs Vision',
-                whenToUse: 'Usa <strong>Language Studio</strong> para CLU, PII y Custom NER. Usa <strong>Azure AI Speech</strong> para transcripción STT con diarización de hablantes. Usa <strong>Azure AI Vision</strong> para OCR de markdown y dense captioning.'
+                decision: 'Language Studio vs Azure AI Speech vs Azure AI Vision',
+                whenToUse: 'Usa <strong>Language Studio</strong> para CLU, PII y Custom NER. Usa <strong>Azure AI Speech</strong> para transcripción STT con diarización de hablantes y síntesis TTS personalizada. Usa <strong>Azure AI Vision</strong> para OCR de markdown y dense captioning.'
             },
             {
                 category: 'Búsqueda & RAG',
                 decision: 'HNSW Vector vs Hybrid Search vs Semantic Re-ranker',
-                whenToUse: '<strong>Hybrid Search (Vector + BM25)</strong> es la mejor base. Añade <strong>Semantic Re-ranker (L2)</strong> para máxima precisión contextual en los 50 mejores resultados.'
+                whenToUse: '<strong>Hybrid Search (Vector + BM25)</strong> es la mejor base en Azure AI Search. Añade <strong>Semantic Re-ranker (L2)</strong> para máxima precisión contextual reordenando los 50 mejores resultados con modelos de deep learning de Bing.'
             },
             {
-                category: 'Agentes',
+                category: 'Búsqueda & RAG',
+                decision: 'text-embedding-3-small vs text-embedding-3-large vs Ada-002',
+                whenToUse: 'Usa <strong>text-embedding-3-small (1536d)</strong> para el mejor balance costo/rendimiento. Usa <strong>text-embedding-3-large (3072d)</strong> para dominios jurídicos/médicos complejos. <strong>Ada-002</strong> es legado.'
+            },
+            {
+                category: 'Agentes & Orquestación',
                 decision: 'Azure AI Agent Service vs Semantic Kernel vs AutoGen',
-                whenToUse: 'Usa <strong>Agent Service</strong> para agentes gestionados en la nube con Code Interpreter y Bing. Usa <strong>Semantic Kernel</strong> para desarrollo en código C#/Python con plugins corporativos.'
+                whenToUse: 'Usa <strong>Agent Service</strong> para agentes totalmente gestionados en la nube con Code Interpreter y Bing Search. Usa <strong>Semantic Kernel</strong> para código C#/Python con plugins corporativos. Usa <strong>AutoGen</strong> para conversaciones multi-agente asíncronas complejas.'
             },
             {
-                category: 'Seguridad',
-                decision: 'Groundedness Detection vs Prompt Shield',
-                whenToUse: '<strong>Prompt Shield</strong> bloquea ataques de inyección y jailbreaks. <strong>Groundedness Detection</strong> detecta alucinaciones comparando la respuesta del LLM con los documentos fuente.'
+                category: 'Seguridad & Gobernanza',
+                decision: 'Groundedness Detection vs Prompt Shields vs Protected Material',
+                whenToUse: '<strong>Prompt Shields</strong> bloquea ataques de inyección y jailbreaks en tiempo real. <strong>Groundedness Detection</strong> detecta alucinaciones comparando la respuesta del LLM con los documentos fuente. <strong>Protected Material</strong> bloquea generación de texto con derechos de autor.'
+            },
+            {
+                category: 'Cómputo & Despliegue',
+                decision: 'Pay-per-token (Serverless) vs Provisioned Throughput Units (PTU)',
+                whenToUse: 'Usa <strong>Pay-per-token</strong> para desarrollo, pruebas y tráfico esporádico. Usa <strong>PTU</strong> para cargas de producción con SLAs de latencia garantizados, alto volumen predecible y cumplimiento normativo estricto.'
+            },
+            {
+                category: 'Seguridad & Redes',
+                decision: 'System-Assigned vs User-Assigned Managed Identity',
+                whenToUse: 'Usa <strong>System-Assigned</strong> cuando la identidad pertenece a un único recurso Azure (ej. un Search Service). Usa <strong>User-Assigned</strong> cuando múltiples servicios comparten el mismo ciclo de vida y permisos de acceso a Azure OpenAI y Key Vault.'
             }
         ],
         'databricks-genai-engineer': [
             {
                 category: 'Model Serving',
                 decision: 'Pay-per-token vs Provisioned Throughput vs Custom PyFunc',
-                whenToUse: 'Usa <strong>Pay-per-token</strong> para prototipado rápido y volumen variable. Usa <strong>Provisioned Throughput</strong> para SLAs estrictos de latencia y alto QPS. Usa <strong>Custom PyFunc</strong> para pipelines RAG personalizados con LoRA.'
+                whenToUse: 'Usa <strong>Pay-per-token</strong> para prototipado rápido y volumen variable de Foundation Models. Usa <strong>Provisioned Throughput</strong> para SLAs estrictos de latencia y alto QPS. Usa <strong>Custom PyFunc</strong> para pipelines RAG personalizados empaquetados con MLflow.'
             },
             {
                 category: 'Vector Search',
                 decision: 'Delta Sync (Continuous vs Triggered) vs Direct Access',
-                whenToUse: 'Usa <strong>Continuous</strong> para sincronización en segundos con streaming. Usa <strong>Triggered</strong> para lotes programados de bajo costo. Usa <strong>Direct Access</strong> para inserciones directas vía REST sin tabla Delta.'
+                whenToUse: 'Usa <strong>Continuous</strong> para sincronización en segundos con Structured Streaming. Usa <strong>Triggered</strong> para lotes programados de bajo costo. Usa <strong>Direct Access</strong> para inserciones directas vía REST sin tabla Delta fuente.'
             },
             {
                 category: 'Adaptación LLM',
-                decision: 'Prompt Engineering vs RAG vs LoRA Fine-Tuning',
-                whenToUse: 'Usa <strong>RAG</strong> para datos dinámicos y gobernanza Unity Catalog. Usa <strong>LoRA/PEFT</strong> para cambiar formato, estilo y terminología especializada con menor latencia.'
+                decision: 'Prompt Engineering vs RAG vs LoRA Fine-Tuning vs Pre-training',
+                whenToUse: 'Usa <strong>Prompt Engineering</strong> para cambios de formato rápidos. Usa <strong>RAG</strong> para datos dinámicos y gobernanza Unity Catalog. Usa <strong>LoRA Fine-Tuning</strong> para cambiar estilo o aprender sintaxis interna con menor costo de cómputo. Usa <strong>Pre-training</strong> solo para nuevos idiomas o dominios fundacionales masivos.'
+            },
+            {
+                category: 'Almacenamiento & UC',
+                decision: 'Unity Catalog Managed Volumes vs External Volumes vs Delta Tables',
+                whenToUse: 'Usa <strong>Volumes</strong> para archivos no estructurados (PDFs, audios, imágenes). Usa <strong>Managed Volumes</strong> gobernados por Databricks y <strong>External Volumes</strong> para buckets S3/ADLS existentes. Usa <strong>Delta Tables</strong> para texto estructurado o chunks vectorizados.'
+            },
+            {
+                category: 'Evaluación & MLOps',
+                decision: 'MLflow LLM Evaluate vs Databricks AI Quality Lab',
+                whenToUse: 'Usa <strong>MLflow Evaluate</strong> para métricas automáticas (exactitud, toxicidad, Flesch-Kincaid). Usa <strong>Quality Lab</strong> para revisión humana con anotadores y benchmarking comparativo LLM-as-a-Judge.'
             }
         ],
         'dp-600': [
@@ -4334,43 +4361,77 @@ window.DecisionNavigator = {
             {
                 category: 'Modos Power BI',
                 decision: 'Direct Lake vs Import vs DirectQuery',
-                whenToUse: '<strong>Direct Lake</strong> es el modo óptimo en Fabric: lee directamente Delta Parquet desde OneLake sin duplicar datos ni traducir consultas a SQL.'
+                whenToUse: '<strong>Direct Lake</strong> es el modo óptimo en Fabric: lee directamente Delta Parquet desde OneLake sin duplicar datos ni traducir consultas a SQL. Usa <strong>Import</strong> solo para modelos heredados y <strong>DirectQuery</strong> cuando la fuente no esté en OneLake.'
+            },
+            {
+                category: 'Transformación',
+                decision: 'Dataflow Gen2 vs Notebooks Spark',
+                whenToUse: 'Usa <strong>Dataflow Gen2</strong> para interfaces visuales Power Query con transformaciones ligeras y analistas de negocio. Usa <strong>Notebooks Spark</strong> para transformaciones masivas a escala de terabytes, machine learning y particionamiento avanzado.'
+            },
+            {
+                category: 'Seguridad',
+                decision: 'Row-Level Security (RLS) en Semantic Model vs en Warehouse',
+                whenToUse: 'Define <strong>RLS en el Warehouse/Lakehouse</strong> si múltiples herramientas consumen la base de datos. Define <strong>RLS en el Semantic Model</strong> si solo Power BI consume el reporte y se requiere seguridad DAX dinámica (USERPRINCIPALNAME).'
+            },
+            {
+                category: 'Optimización',
+                decision: 'V-Order Optimization vs Standard Parquet vs Z-Order',
+                whenToUse: '<strong>V-Order</strong> es la ordenación columnar nativa de Fabric que acelera lecturas en Direct Lake. <strong>Z-Order</strong> agrupa datos multidimensionales para saltar archivos durante consultas de filtrado.'
             }
         ]
+    },
+
+    setFilter(category, btn) {
+        this.activeCategory = category;
+        document.querySelectorAll('.decision-cat-filter-btn').forEach(b => b.classList.remove('active'));
+        if (btn) btn.classList.add('active');
+        const cid = window.currentCourseId || 'azure-ai-103';
+        const container = document.getElementById('unir-panel-decisions');
+        if (container) this.renderMatrix(container, cid);
     },
 
     renderMatrix(containerEl, courseId) {
         if (!containerEl) return;
         const cid = courseId || window.currentCourseId || 'azure-ai-103';
-        const list = this.matrices[cid] || this.matrices['azure-ai-103'];
+        const fullList = this.matrices[cid] || this.matrices['azure-ai-103'];
+        const categories = ['all', ...Array.from(new Set(fullList.map(item => item.category)))];
 
-        const rows = list.map(item => `
-            <tr>
-                <td style="width: 140px;"><span class="decision-tag">${item.category}</span></td>
-                <td style="width: 220px; font-weight:700;">${item.decision}</td>
-                <td>${item.whenToUse}</td>
-            </tr>
+        const filteredList = this.activeCategory === 'all' 
+            ? fullList 
+            : fullList.filter(item => item.category === this.activeCategory);
+
+        const filterBtnsHtml = categories.map(cat => `
+            <button type="button" class="btn btn-sm ${this.activeCategory === cat ? 'btn-primary' : 'btn-outline'} decision-cat-filter-btn" onclick="window.DecisionNavigator.setFilter('${cat}', this)" style="border-radius:99px; padding:3px 12px; font-size:0.78rem;">
+                ${cat === 'all' ? 'Todas' : cat}
+            </button>
+        `).join('');
+
+        const cardsHtml = filteredList.map(item => `
+            <div class="decision-card">
+                <div class="decision-card-header">
+                    <div class="decision-dilemma-title">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:6px;"><path d="M9 18h6M10 22h4M12 2a7 7 0 00-4 12.74V16h8v-1.26A7 7 0 0012 2z"/></svg>
+                        ${item.decision}
+                    </div>
+                    <span class="decision-category-pill">${item.category}</span>
+                </div>
+                <div class="decision-criteria-box">
+                    ${item.whenToUse}
+                </div>
+            </div>
         `).join('');
 
         containerEl.innerHTML = `
-            <div style="margin-bottom: 12px; display:flex; justify-content:space-between; align-items:center;">
+            <div style="margin-bottom: 12px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
                 <div>
                     <h3 style="margin:0; font-size:1.15rem; color:var(--text-color);">Matrices de Decisión Técnica ("¿Cuándo usar cuál?")</h3>
                     <p style="margin:3px 0 0 0; font-size:0.84rem; color:var(--text-muted);">Criterios de decisión rápida para las preguntas de arquitectura más recurrentes del examen.</p>
                 </div>
+                <div style="display:flex; gap:6px; flex-wrap:wrap;">${filterBtnsHtml}</div>
             </div>
-            <table class="decision-matrix-table">
-                <thead>
-                    <tr>
-                        <th>Categoría</th>
-                        <th>Dilema Técnico</th>
-                        <th>Criterio y Decisión Óptima</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${rows}
-                </tbody>
-            </table>
+            <div class="decision-cards-grid">
+                ${cardsHtml}
+            </div>
         `;
     }
 };
@@ -4812,6 +4873,7 @@ window.OralExamMode = {
 window.ArchitectureCanvas = {
     selectedChip: null,
     currentCaseIndex: 0,
+    shuffledServices: [],
 
     cases: {
         'azure-ai-103': [
@@ -4829,6 +4891,47 @@ window.ArchitectureCanvas = {
                 ],
                 correctSequence: ['s1', 's2', 's3', 's4', 's5', 's6'],
                 explanation: 'Flujo oficial: 1. Ingesta en Blob -> 2. Extracción con Document Intelligence -> 3. Embeddings -> 4. Indexación Híbrida en AI Search -> 5. Filtrado con Content Safety Prompt Shield -> 6. Inferencia final fundamentada en GPT-4o.'
+            },
+            {
+                id: 'arch-az-2',
+                title: 'Agente Autónomo con Function Calling & Bing Grounding',
+                desc: 'Diseña el ciclo de ejecución de un agente de IA que invoca herramientas externas y sintetiza respuestas con datos en vivo.',
+                services: [
+                    { id: 'ag1', name: 'User Prompt Input', desc: 'Consulta en lenguaje natural del usuario' },
+                    { id: 'ag2', name: 'Azure AI Agent Service', desc: 'Orquestación de estado, hilos e historial' },
+                    { id: 'ag3', name: 'Function Calling Tool', desc: 'Invocación de API de base de datos interna' },
+                    { id: 'ag4', name: 'Bing Search Grounding', desc: 'Búsqueda web en vivo de hechos recientes' },
+                    { id: 'ag5', name: 'Azure OpenAI Synthesis', desc: 'Consolidación de contexto y respuesta final' }
+                ],
+                correctSequence: ['ag1', 'ag2', 'ag3', 'ag4', 'ag5'],
+                explanation: 'Flujo oficial de Agentes: 1. Prompt del usuario -> 2. Agent Service planifica -> 3. Invocación de Function Calling -> 4. Enriquecimiento con Bing Grounding -> 5. Síntesis fundamentada en Azure OpenAI.'
+            },
+            {
+                id: 'arch-az-3',
+                title: 'Pipeline Multimodal de Voz & NLP Clínico',
+                desc: 'Organiza la ingesta de audio, transcripción médica con diarización y extracción de entidades protegidas (PII/PHI).',
+                services: [
+                    { id: 'v1', name: 'Audio Stream / Micro', desc: 'Captura de audio de consulta médica' },
+                    { id: 'v2', name: 'Azure AI Speech (STT)', desc: 'Transcripción con diarización de doctor y paciente' },
+                    { id: 'v3', name: 'Language Studio Custom NER', desc: 'Detección de síntomas, fármacos y dosis' },
+                    { id: 'v4', name: 'PII/PHI Masking Filter', desc: 'Anonimización de datos personales sensibles' },
+                    { id: 'v5', name: 'Azure OpenAI Clinical Summary', desc: 'Generación del informe médico estructurado' }
+                ],
+                correctSequence: ['v1', 'v2', 'v3', 'v4', 'v5'],
+                explanation: 'Flujo oficial de Voz/Salud: 1. Captura de audio -> 2. Speech STT + Diarización -> 3. Language Studio NER -> 4. Anonimización PII/PHI -> 5. Resumen clínico final en Azure OpenAI.'
+            },
+            {
+                id: 'arch-az-4',
+                title: 'Evaluación y Red Teaming de Modelos en Foundry',
+                desc: 'Conecta el pipeline de benchmarking de calidad y pruebas de seguridad adversaria antes de pasar a producción.',
+                services: [
+                    { id: 'ev1', name: 'Test Golden Dataset', desc: 'Conjunto de datos de preguntas y verdad base' },
+                    { id: 'ev2', name: 'Azure AI Foundry Evaluator', desc: 'Cálculo de métricas de Groundedness y Relevancia' },
+                    { id: 'ev3', name: 'Automated Red Teaming', desc: 'Inyección de prompts adversarios y jailbreaks' },
+                    { id: 'ev4', name: 'Azure Monitor / App Insights', desc: 'Dashboard de observabilidad y alertas de drift' }
+                ],
+                correctSequence: ['ev1', 'ev2', 'ev3', 'ev4'],
+                explanation: 'Flujo oficial de Evaluación: 1. Golden Dataset -> 2. Foundry Evaluator -> 3. Red Teaming adversario -> 4. Monitoreo continuo en Azure Monitor y Application Insights.'
             }
         ],
         'databricks-genai-engineer': [
@@ -4844,6 +4947,33 @@ window.ArchitectureCanvas = {
                 ],
                 correctSequence: ['d1', 'd2', 'd3', 'd4'],
                 explanation: 'Flujo oficial: 1. Tabla Delta en UC -> 2. Índice Vector Search Delta Sync -> 3. Endpoint de Model Serving -> 4. Evaluación y trazabilidad con MLflow Tracing y Quality Lab.'
+            },
+            {
+                id: 'arch-db-2',
+                title: 'Fine-Tuning con LoRA e Inferencia Segura',
+                desc: 'Conecta el flujo de adaptación de modelos de código abierto con pesos LoRA y gobernanza en Unity Catalog.',
+                services: [
+                    { id: 'lora1', name: 'Training Delta Dataset', desc: 'Pares de instrucción-respuesta gobernados en UC' },
+                    { id: 'lora2', name: 'Databricks ML Training Run', desc: 'Entrenamiento distribuido con GPU y LoRA PEFT' },
+                    { id: 'lora3', name: 'Unity Catalog Model Registry', desc: 'Registro de modelo con firma y linaje' },
+                    { id: 'lora4', name: 'Provisioned Throughput Serving', desc: 'Despliegue con throughput garantizado' },
+                    { id: 'lora5', name: 'Databricks AI Guardrails', desc: 'Filtrado de toxicidad y alucinaciones en runtime' }
+                ],
+                correctSequence: ['lora1', 'lora2', 'lora3', 'lora4', 'lora5'],
+                explanation: 'Flujo oficial LoRA: 1. Dataset en Delta -> 2. ML Training con LoRA -> 3. Registro en UC -> 4. Despliegue en Provisioned Serving -> 5. Filtrado en tiempo real con AI Guardrails.'
+            },
+            {
+                id: 'arch-db-3',
+                title: 'Evaluación con LLM-as-a-Judge y Mosaic AI',
+                desc: 'Flujo de evaluación continua de pipelines RAG comparando respuestas de agentes con evaluadores LLM.',
+                services: [
+                    { id: 'eval1', name: 'Evaluation Ground Truth Table', desc: 'Tabla Delta con preguntas y respuestas de referencia' },
+                    { id: 'eval2', name: 'Databricks Agent Invocation', desc: 'Ejecución del pipeline RAG sobre el dataset' },
+                    { id: 'eval3', name: 'LLM Judge Evaluation Metric', desc: 'Juez automatizado evaluando exactitud y contexto' },
+                    { id: 'eval4', name: 'Mosaic AI Quality Dashboard', desc: 'Visualización de benchmarks y comparación de versiones' }
+                ],
+                correctSequence: ['eval1', 'eval2', 'eval3', 'eval4'],
+                explanation: 'Flujo oficial Mosaic AI: 1. Tabla de verdad base -> 2. Invocación de agentes -> 3. Evaluación con LLM Judge -> 4. Dashboard comparativo en Mosaic AI Quality Lab.'
             }
         ],
         'dp-600': [
@@ -4860,54 +4990,146 @@ window.ArchitectureCanvas = {
                 ],
                 correctSequence: ['f1', 'f2', 'f3', 'f4', 'f5'],
                 explanation: 'Flujo oficial Fabric: OneLake -> Bronze -> Silver -> Gold Semantic Model (V-Order) -> Direct Lake Power BI.'
+            },
+            {
+                id: 'arch-fab-2',
+                title: 'Pipeline de Machine Learning y Scoring Batch',
+                desc: 'Entrenamiento y ejecución de predicciones por lotes en Fabric con registro de modelos y alertas automáticas.',
+                services: [
+                    { id: 'ml1', name: 'Silver Delta Lakehouse', desc: 'Datos históricos limpios y agregados' },
+                    { id: 'ml2', name: 'Fabric Notebook Spark ML', desc: 'Ingeniería de características y entrenamiento' },
+                    { id: 'ml3', name: 'MLflow Model Tracking', desc: 'Registro de experimentos y mejor modelo' },
+                    { id: 'ml4', name: 'Gold Predictions Table', desc: 'Escritura de scoring por lotes con V-Order' },
+                    { id: 'ml5', name: 'Data Activator Trigger', desc: 'Detección de anomalías y disparo de alertas en Teams' }
+                ],
+                correctSequence: ['ml1', 'ml2', 'ml3', 'ml4', 'ml5'],
+                explanation: 'Flujo oficial Fabric ML: 1. Silver Lakehouse -> 2. Notebook Spark ML -> 3. Tracking en MLflow -> 4. Guardado en Gold Predictions -> 5. Alerta en Data Activator.'
+            },
+            {
+                id: 'arch-fab-3',
+                title: 'Flujo de Streaming en Tiempo Real (Eventstream & KQL)',
+                desc: 'Ingesta de eventos IoT o telemetría en tiempo real hacia una base de datos KQL con dashboards en vivo.',
+                services: [
+                    { id: 'rt1', name: 'Eventstream Real-Time Ingest', desc: 'Captura de flujo continuo de eventos' },
+                    { id: 'rt2', name: 'Eventstream Stream Transformation', desc: 'Filtrado y particionamiento en memoria' },
+                    { id: 'rt3', name: 'KQL Database (Real-Time Analytics)', desc: 'Almacenamiento e indexación para consultas Kusto' },
+                    { id: 'rt4', name: 'Real-Time Dashboard / Power BI', desc: 'Visualización interactiva con actualización automática' }
+                ],
+                correctSequence: ['rt1', 'rt2', 'rt3', 'rt4'],
+                explanation: 'Flujo oficial Real-Time: 1. Eventstream Ingest -> 2. Stream Transformation -> 3. KQL Database -> 4. Real-Time Dashboard en Power BI.'
             }
         ]
+    },
+
+    shuffleServices(services) {
+        const arr = [...services];
+        // Fisher-Yates shuffle with guarantee it doesn't match original order
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
     },
 
     render(containerEl, courseId) {
         if (!containerEl) return;
         const cid = courseId || window.currentCourseId || 'azure-ai-103';
         const caseList = this.cases[cid] || this.cases['azure-ai-103'];
-        const activeCase = caseList[this.currentCaseIndex % caseList.length];
+        const totalCases = caseList.length;
+        const activeCase = caseList[this.currentCaseIndex % totalCases];
 
-        const chipsHtml = activeCase.services.map(s => `
-            <div class="arch-service-chip" id="chip-${s.id}" data-id="${s.id}" onclick="window.ArchitectureCanvas.selectChip('${s.id}')">
+        // Shuffle services palette
+        this.shuffledServices = this.shuffleServices(activeCase.services);
+        this.selectedChip = null;
+
+        const chipsHtml = this.shuffledServices.map(s => `
+            <div class="arch-service-chip" id="chip-${s.id}" data-id="${s.id}" draggable="true" ondragstart="window.ArchitectureCanvas.onDragStart(event, '${s.id}')" onclick="window.ArchitectureCanvas.selectChip('${s.id}')">
                 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M3 9h18"/></svg>
                 <span>${s.name}</span>
             </div>
         `).join('');
 
         const slotsHtml = activeCase.services.map((_, idx) => `
-            <div class="arch-slot" id="arch-slot-${idx}" data-idx="${idx}" onclick="window.ArchitectureCanvas.placeInSlot(${idx})">
+            <div class="arch-slot" id="arch-slot-${idx}" data-idx="${idx}" ondragover="window.ArchitectureCanvas.onDragOver(event)" ondragleave="window.ArchitectureCanvas.onDragLeave(event)" ondrop="window.ArchitectureCanvas.onDrop(event, ${idx})" onclick="window.ArchitectureCanvas.placeInSlot(${idx})">
                 <span style="font-size:0.75rem; color:var(--text-muted); font-weight:700;">Paso ${idx + 1}</span>
-                <span class="slot-service-name" style="font-size:0.82rem; font-weight:700; color:var(--text-color); margin-top:4px;">(Vacío)</span>
+                <span class="slot-service-name" style="font-size:0.82rem; font-weight:700; color:var(--text-color); margin-top:4px;">(Arrastra o haz clic)</span>
             </div>
             ${idx < activeCase.services.length - 1 ? '<svg class="arch-arrow" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>' : ''}
         `).join('');
 
         containerEl.innerHTML = `
             <div class="arch-canvas-container">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
                     <div>
-                        <h3 style="margin:0; font-size:1.15rem; color:var(--text-color);">${activeCase.title}</h3>
-                        <p style="margin:2px 0 0 0; font-size:0.84rem; color:var(--text-muted);">${activeCase.desc}</p>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <span style="font-size:0.75rem; font-weight:800; padding:2px 8px; border-radius:99px; background:var(--primary-light, rgba(49, 87, 213, 0.1)); color:var(--primary-color);">Desafío ${(this.currentCaseIndex % totalCases) + 1} de ${totalCases}</span>
+                            <h3 style="margin:0; font-size:1.15rem; color:var(--text-color);">${activeCase.title}</h3>
+                        </div>
+                        <p style="margin:4px 0 0 0; font-size:0.84rem; color:var(--text-muted);">${activeCase.desc}</p>
                     </div>
-                    <button type="button" class="btn btn-sm btn-outline" onclick="window.ArchitectureCanvas.reset('${cid}')">Reiniciar</button>
+                    <div style="display:flex; gap:6px;">
+                        <button type="button" class="btn btn-sm btn-outline" onclick="window.ArchitectureCanvas.prevCase('${cid}')" title="Desafío Anterior">&larr; Anterior</button>
+                        <button type="button" class="btn btn-sm btn-outline" onclick="window.ArchitectureCanvas.nextCase('${cid}')" title="Siguiente Desafío">Siguiente &rarr;</button>
+                        <button type="button" class="btn btn-sm btn-outline" onclick="window.ArchitectureCanvas.reset('${cid}')">Reiniciar</button>
+                    </div>
                 </div>
 
-                <div style="font-size:0.78rem; font-weight:700; color:var(--primary-color); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;">1. Selecciona un Servicio:</div>
+                <div style="font-size:0.78rem; font-weight:700; color:var(--primary-color); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;">1. Componentes Disponibles (Desordenados &bull; Arrastra o selecciona):</div>
                 <div class="arch-service-palette">${chipsHtml}</div>
 
-                <div style="font-size:0.78rem; font-weight:700; color:var(--primary-color); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;">2. Conéctalo en la Posición Correspondiente del Flujo:</div>
+                <div style="font-size:0.78rem; font-weight:700; color:var(--primary-color); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;">2. Conecta la Secuencia Arquitectónica Oficial:</div>
                 <div class="arch-flow-diagram">${slotsHtml}</div>
 
                 <div id="arch-feedback-box" style="display:none; margin-top:1rem; padding:12px 14px; border-radius:var(--radius-md); border:1px solid var(--border-color); background:var(--bg-surface);"></div>
 
-                <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:1rem;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1rem;">
+                    <button type="button" class="btn btn-sm btn-outline" onclick="window.ArchitectureCanvas.nextCase('${cid}')">Cambiar de Desafío &rarr;</button>
                     <button type="button" class="btn btn-primary" onclick="window.ArchitectureCanvas.validate('${cid}')">Validar Arquitectura</button>
                 </div>
             </div>
         `;
+    },
+
+    nextCase(cid) {
+        const caseList = this.cases[cid] || this.cases['azure-ai-103'];
+        this.currentCaseIndex = (this.currentCaseIndex + 1) % caseList.length;
+        const container = document.getElementById('unir-panel-architecture');
+        if (container) this.render(container, cid);
+    },
+
+    prevCase(cid) {
+        const caseList = this.cases[cid] || this.cases['azure-ai-103'];
+        this.currentCaseIndex = (this.currentCaseIndex - 1 + caseList.length) % caseList.length;
+        const container = document.getElementById('unir-panel-architecture');
+        if (container) this.render(container, cid);
+    },
+
+    onDragStart(e, id) {
+        this.selectedChip = id;
+        if (e.dataTransfer) {
+            e.dataTransfer.setData('text/plain', id);
+        }
+        document.querySelectorAll('.arch-service-chip').forEach(c => {
+            c.classList.toggle('selected', c.getAttribute('data-id') === id);
+        });
+    },
+
+    onDragOver(e) {
+        e.preventDefault();
+        if (e.currentTarget) e.currentTarget.classList.add('drag-over');
+    },
+
+    onDragLeave(e) {
+        if (e.currentTarget) e.currentTarget.classList.remove('drag-over');
+    },
+
+    onDrop(e, slotIdx) {
+        e.preventDefault();
+        if (e.currentTarget) e.currentTarget.classList.remove('drag-over');
+        const srvId = (e.dataTransfer ? e.dataTransfer.getData('text/plain') : null) || this.selectedChip;
+        if (srvId) {
+            this.placeInSlot(slotIdx, srvId);
+        }
     },
 
     selectChip(id) {
@@ -4917,20 +5139,21 @@ window.ArchitectureCanvas = {
         });
     },
 
-    placeInSlot(idx) {
-        if (!this.selectedChip) {
-            alert('Primero selecciona un servicio de la paleta arriba.');
+    placeInSlot(idx, overrideId) {
+        const chipId = overrideId || this.selectedChip;
+        if (!chipId) {
+            alert('Primero selecciona un servicio de la paleta arriba o arrástralo hacia el slot.');
             return;
         }
         const cid = window.currentCourseId || 'azure-ai-103';
         const caseList = this.cases[cid] || this.cases['azure-ai-103'];
         const activeCase = caseList[this.currentCaseIndex % caseList.length];
-        const srv = activeCase.services.find(s => s.id === this.selectedChip);
+        const srv = activeCase.services.find(s => s.id === chipId);
         if (!srv) return;
 
         const slot = document.getElementById(`arch-slot-${idx}`);
         if (slot) {
-            slot.dataset.assigned = this.selectedChip;
+            slot.dataset.assigned = chipId;
             slot.classList.add('filled');
             const nameEl = slot.querySelector('.slot-service-name');
             if (nameEl) nameEl.textContent = srv.name;
