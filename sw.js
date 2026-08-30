@@ -13,15 +13,16 @@
 // Antigravity (Gemini 3.7 Flash) | 2026-08-30 07:30 CST | Integra Drag-and-Drop y mezclas en Architecture Canvas y expande Matrices de Decisión con tarjetas y filtros.
 // Antigravity (Gemini 3.7 Flash) | 2026-08-30 14:15 CST | Expande gamificación (16 nuevos logros, XP interactivo) y unifica recursos de estudio (DP-600, Databricks DA, GenAI, Azure AI).
 // Antigravity (Gemini 3.7 Flash) | 2026-08-30 14:30 CST | Integra suite de 7 capacidades (Casos de Estudio, Radar SVG, Pipeline Animation, Podcast Playlist con Voces, Custom Builder, Mistakes Exporter, Live Sync).
-const BUILD_TIMESTAMP = '20260830m';
-const CACHE_NAME = `simulador-v41-${BUILD_TIMESTAMP}`;
+// Antigravity (Gemini 3.7 Flash) | 2026-08-30 14:36 CST | Podcast Multi-Curso y Selector de Múltiples Episodios / Álbumes Temáticos por Examen Oficial.
+const BUILD_TIMESTAMP = '20260830n';
+const CACHE_NAME = `simulador-v42-${BUILD_TIMESTAMP}`;
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './styles.css?v=20260830m',
-  './app_i18n.js?v=20260830m',
-  './script.js?v=20260830m',
-  './features.js?v=20260830m',
+  './styles.css?v=20260830n',
+  './app_i18n.js?v=20260830n',
+  './script.js?v=20260830n',
+  './features.js?v=20260830n',
   './hero_data.js',
   './auto_restore_data.js',
   './manifest.json',
@@ -62,7 +63,7 @@ const ASSETS_TO_CACHE = [
   './conceptos_databricks.js',
   './personajes_unir_viz.js',
   './translations_databricks_es.js',
-  './translate_toggle.js?v=20260830m',
+  './translate_toggle.js?v=20260830n',
   './supabase-sync.js',
   './comandos_sql_databricks.js',
   './comandos_sql_genai.js'

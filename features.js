@@ -6066,9 +6066,11 @@ window.ExamReadinessRadar = {
 };
 
 // =============================================================================
-// F40: PODCAST PLAYLIST & VOICE SELECTOR (Continuous Hands-free Mode)
+// F40: PODCAST PLAYLIST & MULTI-EPISODE HUB (Course & Episode Series)
 // =============================================================================
 window.PodcastPlaylist = {
+    selectedCourseId: 'azure-ai-103',
+    selectedEpisodeIndex: 0,
     voices: [],
     selectedVoiceIndex: 0,
     playbackSpeed: 1.0,
@@ -6076,9 +6078,24 @@ window.PodcastPlaylist = {
     currentTrackIndex: 0,
     playlist: [],
 
+    courses: [
+        { id: 'azure-ai-103', name: 'Microsoft Azure AI-103 (AI Apps & Agents)' },
+        { id: 'databricks-genai-engineer', name: 'Databricks Generative AI Engineer Associate' },
+        { id: 'dp-600', name: 'Microsoft Fabric Analytics Engineer (DP-600)' },
+        { id: 'databricks-da', name: 'Databricks Certified Data Analyst Associate' },
+        { id: 'databricks-fundamentals', name: 'Databricks Fundamentals' },
+        { id: 'databricks-aibi', name: 'Databricks AI/BI for Data Analysts' },
+        { id: 'databricks-sql-analytics', name: 'Databricks SQL Analytics' },
+        { id: 'unir-viz-interactiva', name: 'UNIR Visualización Interactiva' },
+        { id: 'unir-herramientas-viz', name: 'UNIR Herramientas de Visualización' },
+        { id: 'unah-tesis', name: 'UNAH Tesis de Maestría' }
+    ],
+
     open() {
         const modal = document.getElementById('podcast-playlist-modal');
         if (!modal) return;
+        this.selectedCourseId = window.currentCourseId || 'azure-ai-103';
+        if (!this.courses.some(c => c.id === this.selectedCourseId)) this.selectedCourseId = 'azure-ai-103';
         this.populateVoices();
         this.loadPlaylist();
         this.render();
@@ -6090,6 +6107,42 @@ window.PodcastPlaylist = {
         if (modal) modal.classList.add('hidden');
         if (window.speechSynthesis) window.speechSynthesis.cancel();
         this.isPlaying = false;
+    },
+
+    setCourse(courseId) {
+        this.selectedCourseId = courseId;
+        this.selectedEpisodeIndex = 0;
+        this.currentTrackIndex = 0;
+        if (this.isPlaying && window.speechSynthesis) {
+            window.speechSynthesis.cancel();
+            this.isPlaying = false;
+        }
+        this.loadPlaylist();
+        this.render();
+    },
+
+    setEpisode(epIdx) {
+        this.selectedEpisodeIndex = parseInt(epIdx, 10) || 0;
+        this.currentTrackIndex = 0;
+        if (this.isPlaying && window.speechSynthesis) {
+            window.speechSynthesis.cancel();
+            this.isPlaying = false;
+        }
+        this.loadPlaylist();
+        this.render();
+    },
+
+    getEpisodesForCourse(cid) {
+        const studyTree = (window.studyData && window.studyData[cid]) || [];
+        const eps = [{ id: 'all', title: 'Álbum Completo (Todos los Módulos)' }];
+        studyTree.forEach((mod, idx) => {
+            eps.push({
+                id: `ep_${idx + 1}`,
+                title: `Episodio ${idx + 1}: ${mod.title || `Módulo ${idx + 1}`}`,
+                itemsCount: (mod.items || []).length
+            });
+        });
+        return eps;
     },
 
     populateVoices() {
@@ -6105,21 +6158,36 @@ window.PodcastPlaylist = {
     },
 
     loadPlaylist() {
-        const cid = window.currentCourseId || 'azure-ai-103';
+        const cid = this.selectedCourseId || 'azure-ai-103';
         const studyTree = (window.studyData && window.studyData[cid]) || [];
         this.playlist = [];
-        studyTree.forEach((mod, mIdx) => {
-            (mod.items || []).forEach((item, iIdx) => {
-                this.playlist.push({
-                    moduleTitle: mod.title,
-                    title: item.title,
-                    content: item.content || item.summary || ''
+
+        if (this.selectedEpisodeIndex === 0) {
+            studyTree.forEach((mod) => {
+                (mod.items || []).forEach((item) => {
+                    this.playlist.push({
+                        moduleTitle: mod.title,
+                        title: item.title,
+                        content: item.content || item.summary || ''
+                    });
                 });
             });
-        });
+        } else {
+            const targetMod = studyTree[this.selectedEpisodeIndex - 1];
+            if (targetMod) {
+                (targetMod.items || []).forEach((item) => {
+                    this.playlist.push({
+                        moduleTitle: targetMod.title,
+                        title: item.title,
+                        content: item.content || item.summary || ''
+                    });
+                });
+            }
+        }
+
         if (!this.playlist.length) {
             this.playlist = [
-                { moduleTitle: 'Módulo 1', title: 'Fundamentos de Azure AI & RAG', content: 'Azure AI Search indexa documentos vectoriales...' }
+                { moduleTitle: 'Módulo de Estudio', title: 'Conceptos y Arquitectura Oficial', content: 'Contenido técnico de preparación para la certificación oficial.' }
             ];
         }
     },
@@ -6133,7 +6201,7 @@ window.PodcastPlaylist = {
     },
 
     setVoice(idx) {
-        this.selectedVoiceIndex = idx;
+        this.selectedVoiceIndex = parseInt(idx, 10) || 0;
     },
 
     togglePlay() {
@@ -6152,8 +6220,8 @@ window.PodcastPlaylist = {
         this.currentTrackIndex = idx % this.playlist.length;
         const track = this.playlist[this.currentTrackIndex];
         
-        // Strip markdown and clean text for speech
-        const rawText = track.content.replace(/[*#`_\[\]]/g, '').replace(/<[^>]*>/g, '');
+        // Clean markdown symbols for speech synthesis
+        const rawText = (track.content || '').replace(/[*#`_\[\]]/g, '').replace(/<[^>]*>/g, '');
         const utter = new SpeechSynthesisUtterance(`${track.title}. ${rawText}`);
         utter.rate = this.playbackSpeed;
         if (this.voices[this.selectedVoiceIndex]) {
@@ -6195,62 +6263,107 @@ window.PodcastPlaylist = {
         const container = document.getElementById('podcast-playlist-body');
         if (!container) return;
 
+        // Course options
+        let courseOptionsHtml = '';
+        this.courses.forEach(c => {
+            const isSel = c.id === this.selectedCourseId;
+            courseOptionsHtml += `<option value="${c.id}" ${isSel ? 'selected' : ''}>${c.name}</option>`;
+        });
+
+        // Episode pills
+        const episodes = this.getEpisodesForCourse(this.selectedCourseId);
+        let epPillsHtml = '';
+        episodes.forEach((ep, idx) => {
+            const isSel = idx === this.selectedEpisodeIndex;
+            epPillsHtml += `
+                <button type="button" class="podcast-ep-btn ${isSel ? 'active' : ''}" onclick="window.PodcastPlaylist.setEpisode(${idx})">
+                    ${ep.title}
+                </button>
+            `;
+        });
+
+        // Voice options
         let voiceOptionsHtml = '';
         this.voices.forEach((v, idx) => {
             const isSel = idx === this.selectedVoiceIndex;
             voiceOptionsHtml += `<option value="${idx}" ${isSel ? 'selected' : ''}>${v.name} (${v.lang})</option>`;
         });
 
+        // Track items
         let listHtml = '';
-        this.playlist.slice(0, 15).forEach((t, idx) => {
+        this.playlist.forEach((t, idx) => {
             const isCurrent = idx === this.currentTrackIndex;
             listHtml += `
                 <div class="playlist-track-item ${isCurrent && this.isPlaying ? 'playing' : ''}" onclick="window.PodcastPlaylist.playTrack(${idx})" style="cursor:pointer;">
                     <div style="display:flex; align-items:center; gap:8px;">
-                        <span style="font-size:0.75rem; font-weight:700; color:var(--text-muted);">${idx + 1}</span>
+                        <span style="font-size:0.75rem; font-weight:700; color:var(--text-muted); min-width:18px;">${idx + 1}</span>
                         <div>
                             <strong style="font-size:0.86rem; color:var(--text-color); display:block;">${t.title}</strong>
                             <small style="color:var(--text-muted);">${t.moduleTitle}</small>
                         </div>
                     </div>
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="color:${isCurrent && this.isPlaying ? 'var(--primary-color)' : 'var(--text-muted)'};"><polygon points="5 3 19 12 5 21 5 3"/></svg>
                 </div>
             `;
         });
 
         container.innerHTML = `
             <div>
-                <!-- Controls Card -->
-                <div style="background:var(--bg-surface); padding:1rem; border-radius:var(--radius-md); border:1px solid var(--border-color); margin-bottom:1rem;">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                        <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted); margin:0;">Seleccionar Voz:</label>
-                        <span style="font-size:0.75rem; color:var(--primary-color); font-weight:700;">Web Speech API</span>
+                <!-- Top Series & Course Selection -->
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
+                    <div>
+                        <label style="font-size:0.78rem; font-weight:700; color:var(--text-muted); display:block; margin-bottom:4px;">1. Seleccionar Certificación / Curso:</label>
+                        <select class="voice-select-dropdown" style="margin:0;" onchange="window.PodcastPlaylist.setCourse(this.value)">
+                            ${courseOptionsHtml}
+                        </select>
                     </div>
-                    <select class="voice-select-dropdown" onchange="window.PodcastPlaylist.setVoice(this.value)">
-                        ${voiceOptionsHtml || '<option>Voz del Sistema por Defecto</option>'}
-                    </select>
+                    <div>
+                        <label style="font-size:0.78rem; font-weight:700; color:var(--text-muted); display:block; margin-bottom:4px;">2. Seleccionar Voz (Web Speech API):</label>
+                        <select class="voice-select-dropdown" style="margin:0;" onchange="window.PodcastPlaylist.setVoice(this.value)">
+                            ${voiceOptionsHtml || '<option>Voz del Sistema por Defecto</option>'}
+                        </select>
+                    </div>
+                </div>
 
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin:8px 0 4px 0;">
-                        <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted); margin:0;">Velocidad:</label>
-                        <div class="speed-btn-group" style="width:200px;">
-                            ${[0.75, 1.0, 1.25, 1.5, 2.0].map(s => `
-                                <button type="button" class="speed-btn ${this.playbackSpeed === s ? 'active' : ''}" onclick="window.PodcastPlaylist.setSpeed(${s})">${s}x</button>
-                            `).join('')}
+                <!-- Thematic Episodes / Podcasts for this exam -->
+                <div style="margin-bottom:10px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                        <label style="font-size:0.78rem; font-weight:700; color:var(--text-muted); margin:0;">3. Seleccionar Episodio Temático (${episodes.length} Disponibles):</label>
+                        <span style="font-size:0.72rem; color:var(--primary-color); font-weight:700;">Capítulos Específicos</span>
+                    </div>
+                    <div class="podcast-episodes-bar">
+                        ${epPillsHtml}
+                    </div>
+                </div>
+
+                <!-- Player Controls Card -->
+                <div style="background:var(--bg-surface); padding:0.9rem 1rem; border-radius:var(--radius-md); border:1px solid var(--border-color); margin-bottom:1rem;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <span style="font-size:0.78rem; font-weight:700; color:var(--text-muted);">Velocidad:</span>
+                            <div class="speed-btn-group" style="width:190px; margin:0;">
+                                ${[0.75, 1.0, 1.25, 1.5, 2.0].map(s => `
+                                    <button type="button" class="speed-btn ${this.playbackSpeed === s ? 'active' : ''}" onclick="window.PodcastPlaylist.setSpeed(${s})">${s}x</button>
+                                `).join('')}
+                            </div>
                         </div>
-                    </div>
 
-                    <div style="display:flex; justify-content:center; align-items:center; gap:12px; margin-top:14px;">
-                        <button type="button" class="btn btn-outline btn-sm" onclick="window.PodcastPlaylist.prev()">&larr; Anterior</button>
-                        <button type="button" class="btn btn-primary" onclick="window.PodcastPlaylist.togglePlay()" style="min-width:140px; font-weight:800;">
-                            ${this.isPlaying ? 'Pausar Audio' : 'Reproducir Módulo'}
-                        </button>
-                        <button type="button" class="btn btn-outline btn-sm" onclick="window.PodcastPlaylist.next()">Siguiente &rarr;</button>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <button type="button" class="btn btn-outline btn-sm" onclick="window.PodcastPlaylist.prev()" title="Tema Anterior">&larr; Anterior</button>
+                            <button type="button" class="btn btn-primary" onclick="window.PodcastPlaylist.togglePlay()" style="min-width:140px; font-weight:800; padding:6px 14px;">
+                                ${this.isPlaying ? 'Pausar Audio' : 'Reproducir Episodio'}
+                            </button>
+                            <button type="button" class="btn btn-outline btn-sm" onclick="window.PodcastPlaylist.next()" title="Siguiente Tema">Siguiente &rarr;</button>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Playlist Queue -->
-                <div style="font-size:0.82rem; font-weight:700; color:var(--text-muted); margin-bottom:6px;">Cola de Reproducción Continua (${this.playlist.length} Temas):</div>
-                <div style="max-height:260px; overflow-y:auto; border:1px solid var(--border-color); border-radius:var(--radius-md);">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                    <div style="font-size:0.82rem; font-weight:700; color:var(--text-muted);">Temas en este Episodio (${this.playlist.length} Pistas):</div>
+                    <span style="font-size:0.75rem; color:var(--text-muted);">Avance automático al terminar cada tema</span>
+                </div>
+                <div style="max-height:240px; overflow-y:auto; border:1px solid var(--border-color); border-radius:var(--radius-md);">
                     ${listHtml}
                 </div>
             </div>

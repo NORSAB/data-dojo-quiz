@@ -6126,7 +6126,39 @@ html, body {
   background: var(--bg-card);
   color: var(--text-color);
   font-size: 0.88rem;
-  margin: 6px 0 12px;
+  margin: 6px 0 10px;
+}
+
+.podcast-episodes-bar {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 4px 0 10px;
+  scrollbar-width: thin;
+}
+
+.podcast-ep-btn {
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 99px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.podcast-ep-btn:hover {
+  border-color: var(--primary-color);
+}
+
+.podcast-ep-btn.active {
+  background: var(--primary-color);
+  color: #ffffff;
+  border-color: var(--primary-color);
 }
 
 .speed-btn-group {

@@ -413,6 +413,15 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
 - Actualizó la PWA a `BUILD_TIMESTAMP = '20260830m'` y caché `simulador-v41-20260830m` en `sw.js` e `index.html`.
 - Ejecutó y aprobó con 0 errores las 6 suites de validación (`validate_full_application.js` con **74/74 checks pasados**, `validate_ui_palette.js` con 18 colores hex y 0 gradientes, `validate_global_language.js`, `validate_ai103_integration.js`, `validate_genai_integration.js`, `audit_code_structure.js`).
 
+### 2026-08-30 14:38 CST — Antigravity (Gemini 3.7 Flash)
+- **Evolución del Hub de Podcasts Técnicos (`window.PodcastPlaylist`) con Selector de Curso y Múltiples Episodios por Certificación**:
+  1. **Selector de Certificación / Curso**: Menú desplegable superior que permite alternar inmediatamente entre cualquiera de los cursos técnicos (Azure AI-103, Databricks GenAI, Fabric DP-600, Databricks DA, Fundamentals, AI/BI, SQL Analytics, UNIR y UNAH Tesis).
+  2. **Múltiples Episodios / Capítulos Temáticos por Examen**: Píldoras de episodios en carrusel scrollable (`.podcast-episodes-bar`, `.podcast-ep-btn`) permitiendo reproducir el *Álbum Completo* o capítulos específicos (ej. *Episodio 1: RAG & AI Search*, *Episodio 2: Agentes Autónomos*, *Episodio 3: Modelos Multimodales*, *Episodio 4: Seguridad & HIPAA*, etc.).
+  3. **Cola de Reproducción Filtrada y Dinámica**: Carga instantánea de las pistas técnicas del episodio seleccionado con soporte de avance continuo, selección de voz TTS del sistema y velocidades variables ($0.75\times$ a $2.0\times$).
+- Actualizó la PWA a `BUILD_TIMESTAMP = '20260830n'` y caché `simulador-v42-20260830n` en `sw.js` e `index.html`.
+- Verificó con 0 errores las 6 suites de validación (`validate_full_application.js` con **74/74 checks pasados**, `validate_ui_palette.js` con 18 colores hex y 0 gradientes, `validate_global_language.js`, `validate_ai103_integration.js`, `validate_genai_integration.js`, `audit_code_structure.js`).
+
+
 
 
 
