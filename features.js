@@ -6388,16 +6388,17 @@ window.PodcastPlaylist = {
         let listHtml = '';
         this.playlist.forEach((t, idx) => {
             const isCurrent = idx === this.currentTrackIndex;
+            const cleanSub = (t.moduleTitle || '').split(' / ')[0].trim();
             listHtml += `
-                <div class="playlist-track-item ${isCurrent && this.isPlaying ? 'playing' : ''}" onclick="window.PodcastPlaylist.playTrack(${idx})" style="cursor:pointer;">
-                    <div style="display:flex; align-items:center; gap:8px;">
-                        <span style="font-size:0.75rem; font-weight:700; color:var(--text-muted); min-width:18px;">${idx + 1}</span>
-                        <div>
-                            <strong style="font-size:0.86rem; color:var(--text-color); display:block;">${t.title}</strong>
-                            <small style="color:var(--text-muted);">${t.moduleTitle}</small>
+                <div class="playlist-track-item ${isCurrent && this.isPlaying ? 'playing' : ''}" onclick="window.PodcastPlaylist.playTrack(${idx})" role="button" tabindex="0" style="cursor:pointer;">
+                    <div style="display:flex; align-items:center; gap:10px; min-width:0; flex:1; overflow:hidden;">
+                        <span style="font-size:0.75rem; font-weight:700; color:var(--text-muted); min-width:20px; flex-shrink:0;">${idx + 1}</span>
+                        <div style="min-width:0; flex:1; overflow:hidden;">
+                            <strong style="font-size:0.86rem; color:var(--text-color); display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${t.title}">${t.title}</strong>
+                            <small style="color:var(--text-muted); display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${cleanSub}">${cleanSub}</small>
                         </div>
                     </div>
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="color:${isCurrent && this.isPlaying ? 'var(--primary-color)' : 'var(--text-muted)'};"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="flex-shrink:0; margin-left:8px; color:${isCurrent && this.isPlaying ? 'var(--primary-color)' : 'var(--text-muted)'};"><polygon points="5 3 19 12 5 21 5 3"/></svg>
                 </div>
             `;
         });

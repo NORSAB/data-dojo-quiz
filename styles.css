@@ -6190,10 +6190,19 @@ html, body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 10px;
+  padding: 8px 12px;
   border-radius: var(--radius-sm);
   border-bottom: 1px solid var(--border-color);
   font-size: 0.85rem;
+  gap: 10px;
+  box-sizing: border-box;
+  width: 100%;
+  overflow: hidden;
+  transition: background 0.15s ease;
+}
+
+.playlist-track-item:hover {
+  background: var(--bg-surface);
 }
 
 .playlist-track-item.playing {

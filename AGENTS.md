@@ -429,6 +429,16 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
 - Actualizó la PWA a `BUILD_TIMESTAMP = '20260830o'` y caché `simulador-v43-20260830o` en `sw.js` e `index.html`.
 - Verificó con 0 errores las 6 suites de validación (`validate_full_application.js` con **74/74 checks pasados**, `validate_ui_palette.js` con 18 colores hex y 0 gradientes, `validate_global_language.js`, `validate_ai103_integration.js`, `validate_genai_integration.js`, `audit_code_structure.js`).
 
+### 2026-08-30 14:42 CST — Antigravity (Gemini 3.7 Flash)
+- **Corrección de Layout y Desbordamiento en Pistas del Podcast (`.playlist-track-item`)**:
+  1. **Truncamiento elíptico y contención Flex**: Aplicó `min-width: 0; flex: 1; overflow: hidden;` y `text-overflow: ellipsis; white-space: nowrap;` tanto al título del tema como al subtítulo del módulo.
+  2. **Sanitización de subtítulos bilingües largos**: Los títulos con duplicidad en barra (`/`) ahora muestran únicamente el nombre primario en el listado, evitando que empujen el icono de reproducción o la barra de scroll.
+  3. **Alineación del icono de reproducción**: Asignó `flex-shrink: 0; margin-left: 8px;` al SVG para garantizar su posición fija y visible en el extremo derecho sin desbordar el contenedor.
+  4. **Dimensiones del modal**: Amplió el modal a `max-width: 740px` con `box-sizing: border-box` para un espaciado balanceado.
+- Actualizó la PWA a `BUILD_TIMESTAMP = '20260830p'` y caché `simulador-v44-20260830p` en `sw.js` e `index.html`.
+- Verificó con 0 errores las 6 suites de validación (`validate_full_application.js` con **74/74 checks pasados**, `validate_ui_palette.js` con 18 colores hex y 0 gradientes, `validate_global_language.js`, `validate_ai103_integration.js`, `validate_genai_integration.js`, `audit_code_structure.js`).
+
+
 
 
 
