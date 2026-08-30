@@ -268,3 +268,12 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
   - Actualizó `study_azure_ai103.js` con títulos y subsecciones estructurados bilingüemente (`Title EN / Title ES`) y bloques paralelos `langSection('en', ...)` / `langSection('es', ...)`.
   - Actualizó la versión PWA a `BUILD_TIMESTAMP = '20260826c'` y caché `simulador-v28-20260826c` en `sw.js` e `index.html`.
   - Validación con `node tools/validate_ai103_integration.js` y `node --check` completada al 100%.
+
+### 2026-08-30 03:36 CST — Antigravity (Gemini 3.7 Flash)
+- Mejoró la atmósfera visual de la pantalla de bienvenida (Dojo Entrance / Onboarding):
+  - Amplió el sistema de partículas ambientales de 6 a 24 elementos (`<span>`) distribuidos a lo ancho de la pantalla.
+  - Implementó variación orgánica de tamaños (5px, 7px, 9px, 11px, 13px) con sutil resplandor de profundidad (`box-shadow: 0 0 10px..20px rgba(49, 87, 213, ...)`).
+  - Diseñó dos variantes de animación con deriva lateral y pulsación (`particleDrift` y `particleDriftAlt`), con delays negativos para garantizar visibilidad y movimiento natural instantáneo.
+  - Aseguró soporte de contraste para tema claro y oscuro (`[data-theme="dark"] .onboarding-container`).
+  - Actualizó la versión PWA a `BUILD_TIMESTAMP = '20260830a'` y caché `simulador-v29-20260830a` en `sw.js` e `index.html`.
+
