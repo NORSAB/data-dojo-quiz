@@ -7,15 +7,16 @@
 // Antigravity (Gemini 3.7 Flash) | 2026-08-26 08:55 CST | Agrega certificación Microsoft Azure AI-103 con 356 Qs bilingües y centro de estudio.
 // Antigravity (Gemini 3.7 Flash) | 2026-08-30 03:40 CST | Calibra partículas ambientales a una cantidad equilibrada (12 elementos) con tamaño y resplandor óptimo.
 // Antigravity (Gemini 3.7 Flash) | 2026-08-30 03:58 CST | Elimina origen LaTeX e incorpora generador de Guías de Estudio oficiales en PDF por dominio y banco completo.
-const BUILD_TIMESTAMP = '20260830c';
-const CACHE_NAME = `simulador-v31-${BUILD_TIMESTAMP}`;
+// Antigravity (Gemini 3.7 Flash) | 2026-08-30 04:10 CST | Corrige títulos de módulos de estudio y sanitización bilingüe contra tags SVG escapados.
+const BUILD_TIMESTAMP = '20260830d';
+const CACHE_NAME = `simulador-v32-${BUILD_TIMESTAMP}`;
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './styles.css?v=20260830c',
-  './app_i18n.js?v=20260830c',
-  './script.js?v=20260830c',
-  './features.js?v=20260830c',
+  './styles.css?v=20260830d',
+  './app_i18n.js?v=20260830d',
+  './script.js?v=20260830d',
+  './features.js?v=20260830d',
   './hero_data.js',
   './auto_restore_data.js',
   './manifest.json',
@@ -39,6 +40,8 @@ const ASSETS_TO_CACHE = [
   './study_data.js',
   './study_databricks.js',
   './study_databricks_urgent.js',
+  './study_databricks_expanded.js',
+  './study_databricks_domains.js',
   './study_databricks_fundamentals.js',
   './study_unir_viz.js',
   './study_unir_herr.js',
@@ -52,9 +55,10 @@ const ASSETS_TO_CACHE = [
   './conceptos_databricks.js',
   './personajes_unir_viz.js',
   './translations_databricks_es.js',
-  './translate_toggle.js?v=20260830c',
+  './translate_toggle.js?v=20260830d',
   './supabase-sync.js',
-  './comandos_sql_databricks.js'
+  './comandos_sql_databricks.js',
+  './comandos_sql_genai.js'
 ];
 
 self.addEventListener('install', (event) => {

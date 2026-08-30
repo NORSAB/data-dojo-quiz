@@ -383,8 +383,9 @@
   }
 
   function splitBilingual(value, order = 'en-es') {
-    const parts = String(value ?? '').split(/\s+\/\s+/, 2);
-    if (parts.length < 2) return { en: String(value ?? ''), es: String(value ?? '') };
+    const cleanValue = String(value ?? '').replace(/<svg[\s\S]*?<\/svg>/gi, '').trim();
+    const parts = cleanValue.split(/\s+\/\s+/, 2);
+    if (parts.length < 2) return { en: cleanValue, es: cleanValue };
     return order === 'es-en' ? { es: parts[0], en: parts[1] } : { en: parts[0], es: parts[1] };
   }
 

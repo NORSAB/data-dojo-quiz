@@ -22,7 +22,7 @@
         // DOMAIN 0: 10 REGLAS DE ORO & MATRIZ DE DECISIÓN (CHEAT-SHEET)
         // =====================================================
         {
-            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="#3157d5" style="vertical-align:middle;margin-right:4px"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> D0. 10 Reglas de Oro y Matriz de Decisión (Cheat-Sheet)',
+            title: 'D0. 10 Reglas de Oro y Matriz de Decisión (Cheat-Sheet) / D0. 10 Golden Rules & Decision Matrix (Cheat-Sheet)',
             items: [
                 {
                     title: "0.1 Matriz de Decisión: Prompting vs RAG vs Fine-Tuning vs Pre-training",
@@ -33,29 +33,23 @@
                             </div>
                             <table class="table table-bordered">
                                 <tr class="table-header"><th>Approach</th><th>When to Choose</th><th>Cost / Complexity</th><th>Primary Advantage</th></tr>
-                                <tr><td><strong>Prompt Engineering</strong></td><td>General tasks, strict formatting, reasoning without external data</td><td>Lowest</td><td>Instant iteration, zero training cost</td></tr>
-                                <tr><td><strong>RAG (Retrieval-Augmented)</strong></td><td>Frequent factual updates, private enterprise docs, hallucination control, auditability</td><td>Medium</td><td>Grounded in verified context, real-time data access</td></tr>
-                                <tr><td><strong>Fine-Tuning</strong></td><td>Specialized style, niche domain terminology, latency/cost reduction (distilling to 7B/8B model)</td><td>High</td><td>Internalizes tone/syntax without repeating long system prompts</td></tr>
-                                <tr><td><strong>Continued Pre-training</strong></td><td>Radically new language/domain vocabulary from scratch</td><td>Highest</td><td>Fundamental model weight adaptation</td></tr>
+                                <tr><td><strong>Prompt Engineering / Few-Shot</strong></td><td>General tasks, output formatting, standard knowledge</td><td>Lowest</td><td>Zero training, instant iteration</td></tr>
+                                <tr><td><strong>RAG (Retrieval-Augmented)</strong></td><td>Domain-specific/private data, frequent updates, source attribution</td><td>Medium</td><td>Accurate citations, no retraining needed for new docs</td></tr>
+                                <tr><td><strong>Fine-Tuning</strong></td><td>Specific style/tone, highly specialized vocabulary, niche tasks</td><td>High</td><td>Model internalizes style; does NOT solve factual freshness</td></tr>
+                                <tr><td><strong>Pre-training (from scratch)</strong></td><td>Unique language/domain with massive novel corpus (rarely right answer)</td><td>Very High ($$$)</td><td>Complete ownership; almost never cost-effective for exam scenarios</td></tr>
                             </table>
-                            ${styleBox('yellow', 'Exam Golden Rule')}
-                                If the company needs <em>frequently updated facts with verifiable sources</em>, the answer is <strong>RAG</strong>, NEVER Fine-Tuning. Fine-Tuning changes behavior and style, NOT dynamic factual memory.
-                            </div>
                         `)}
                         ${langSection('es', `
                             ${styleBox('blue', 'Regla de Decisión de Arquitectura Principal')}
-                                El examen pregunta constantemente cuál es el enfoque de menor costo y complejidad que satisface los requerimientos del negocio.
+                                El examen pregunta frecuentemente cómo seleccionar el enfoque de menor costo y menor complejidad que satisfaga los requisitos del negocio.
                             </div>
                             <table class="table table-bordered">
                                 <tr class="table-header"><th>Enfoque</th><th>Cuándo Elegirlo</th><th>Costo / Complejidad</th><th>Ventaja Principal</th></tr>
-                                <tr><td><strong>Prompt Engineering</strong></td><td>Tareas generales, formato estricto, razonamiento sin datos externos</td><td>Mínimo</td><td>Iteración instantánea, costo cero de entrenamiento</td></tr>
-                                <tr><td><strong>RAG (Recuperación Aumentada)</strong></td><td>Datos que cambian frecuentemente, documentos privados de empresa, control de alucinaciones, auditabilidad</td><td>Medio</td><td>Fundamentado en contexto verificado, acceso en tiempo real</td></tr>
-                                <tr><td><strong>Fine-Tuning</strong></td><td>Estilo especializado, terminología de nicho, reducción de latencia/costo (destilar a modelo 7B/8B)</td><td>Alto</td><td>Internaliza tono/sintaxis sin repetir prompts de sistema largos</td></tr>
-                                <tr><td><strong>Pre-entrenamiento Continuo</strong></td><td>Vocabulario o idioma radicalmente nuevo desde cero</td><td>Máximo</td><td>Adaptación fundamental de pesos del modelo</td></tr>
+                                <tr><td><strong>Prompt Engineering / Few-Shot</strong></td><td>Tareas generales, formato de salida, conocimiento estándar</td><td>El más bajo</td><td>Cero entrenamiento, iteración instantánea</td></tr>
+                                <tr><td><strong>RAG (Retrieval-Augmented)</strong></td><td>Datos privados/específicos del dominio, actualizaciones frecuentes, atribución de fuentes</td><td>Medio</td><td>Citas precisas, sin reentrenar para nuevos documentos</td></tr>
+                                <tr><td><strong>Fine-Tuning</strong></td><td>Estilo/tono específico, vocabulario muy especializado, tareas de nicho</td><td>Alto</td><td>El modelo interioriza el estilo; NO resuelve frescura de hechos</td></tr>
+                                <tr><td><strong>Pre-entrenamiento (desde cero)</strong></td><td>Lenguaje/dominio único con corpus masivo nuevo (casi nunca es la respuesta)</td><td>Muy Alto ($$$)</td><td>Control total; casi nunca rentable en escenarios de examen</td></tr>
                             </table>
-                            ${styleBox('yellow', 'Regla de Oro de Examen')}
-                                Si la empresa necesita <em>hechos actualizados frecuentemente con fuentes verificables</em>, la respuesta es <strong>RAG</strong>, NUNCA Fine-Tuning. El Fine-Tuning cambia comportamiento y estilo, NO memoria factual dinámica.
-                            </div>
                         `)}
                     `
                 },
@@ -159,7 +153,7 @@
         // DOMAIN 1: DESIGN APPLICATIONS
         // =====================================================
         {
-            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="#8b5cf6" style="vertical-align:middle;margin-right:4px"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg> D1. Design Applications',
+            title: 'D1. Design Applications / D1. Diseño de Aplicaciones',
             items: [
                 {
                     title: "1.1 Prompt Engineering para Salidas con Formato Estricto",
@@ -344,7 +338,7 @@
         // DOMAIN 2: DATA PREPARATION
         // =====================================================
         {
-            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="#3b82f6" style="vertical-align:middle;margin-right:4px"><path d="M3 5h18v2H3V5zm2 5h14v2H5v-2zm4 5h6v2H9v-2z"/></svg> D2. Data Preparation',
+            title: 'D2. Data Preparation / D2. Preparación de Datos',
             items: [
                 {
                     title: "2.1 Estrategias de Chunking",
@@ -497,7 +491,7 @@
         // DOMAIN 3: APPLICATION DEVELOPMENT
         // =====================================================
         {
-            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="#22c55e" style="vertical-align:middle;margin-right:4px"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0L19.2 12l-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg> D3. Application Development',
+            title: 'D3. Application Development / D3. Desarrollo de Aplicaciones',
             items: [
                 {
                     title: "3.1 Frameworks de Orquestación (LangChain y similares)",
@@ -666,7 +660,7 @@
         // DOMAIN 4: ASSEMBLING AND DEPLOYING APPLICATIONS
         // =====================================================
         {
-            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="#f59e0b" style="vertical-align:middle;margin-right:4px"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg> D4. Assembling & Deploying Applications',
+            title: 'D4. Assembling & Deploying Applications / D4. Ensamblaje y Despliegue de Aplicaciones',
             items: [
                 {
                     title: "4.1 Codificar una Chain como Modelo PyFunc",
@@ -847,17 +841,9 @@
                             </ul>
                             <h5>User-Facing Interfaces</h5>
                             <p>Match the interface to the usage scenario: embedded <strong>Databricks Apps</strong> for internal dashboards, <strong>Slack/Teams</strong> bots for conversational workflows already living where users work.</p>
+                            <p>Match the interface to the use case: embedded <strong>Databricks Apps</strong> for internal dashboards, <strong>Slack/Teams</strong> bots for conversational workflows where users already work.</p>
                         `)}
                         ${langSection('es', `
-                            ${styleBox('red', 'CRÍTICO — Model Context Protocol (MCP)')}
-                                MCP es un <strong>protocolo estándar abierto</strong> que permite a modelos/agentes de IA descubrir, conectarse e interactuar de forma segura con fuentes de datos externas, tools y servidores empresariales mediante interfaces estandarizadas — evitando integraciones personalizadas frágiles y únicas para cada tool.
-                            </div>
-                            <ul>
-                                <li><strong>Servidores MCP administrados (managed)</strong> — hospedados/operados por Databricks o un proveedor</li>
-                                <li><strong>Servidores MCP externos</strong> — servidores de terceros a los que te conectas</li>
-                                <li><strong>Servidores MCP personalizados (custom)</strong> — construidos internamente para exponer tus propias tools/datos</li>
-                            </ul>
-                            <h5>Interfaces de Usuario</h5>
                             <p>Emparejar la interfaz con el escenario de uso: <strong>Databricks Apps</strong> embebidas para dashboards internos, bots de <strong>Slack/Teams</strong> para flujos conversacionales donde ya trabajan los usuarios.</p>
                         `)}
                     `
@@ -868,7 +854,7 @@
         // DOMAIN 5: GOVERNANCE
         // =====================================================
         {
-            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="#ef4444" style="vertical-align:middle;margin-right:4px"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg> D5. Governance',
+            title: 'D5. Governance',
             items: [
                 {
                     title: "5.1 Enmascaramiento (Masking) como Guardrail",
@@ -942,7 +928,7 @@
         // DOMAIN 6: EVALUATION AND MONITORING
         // =====================================================
         {
-            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="#14b8a6" style="vertical-align:middle;margin-right:4px"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7 14 5 12 5 9.5S7 5 9.5 5 14 7 14 9.5 12 14 9.5 14z"/></svg> D6. Evaluation & Monitoring',
+            title: 'D6. Evaluation & Monitoring',
             items: [
                 {
                     title: "6.1 Métricas Tradicionales, sus Límites, y LLM-as-a-Judge",

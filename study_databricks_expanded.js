@@ -19,7 +19,7 @@
         // DOMAIN: EXECUTING QUERIES (70 questions — was ZERO)
         // =====================================================
         {
-            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="#ef4444" style="vertical-align:middle;margin-right:4px"><path d="M12 2L1 21h22L12 2zm0 4l7.5 13h-15L12 6zm-1 5v4h2v-4h-2zm0 6v2h2v-2h-2z"/></svg> E1. Executing Queries — Window Functions & Aggregations',
+            title: 'E1. Executing Queries — Window Functions & Aggregations',
             items: [
                 {
                     title: "Window Functions: ROW_NUMBER, RANK, DENSE_RANK, LAG, LEAD",
@@ -692,7 +692,7 @@ Orden de Ejecución SQL:
         // DOMAIN: PLATFORM UNDERSTANDING (30 questions — was ZERO)
         // =====================================================
         {
-            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="#3b82f6" style="vertical-align:middle;margin-right:4px"><circle cx="12" cy="12" r="10"/></svg> E2. Platform Understanding — Lakehouse, Warehouses & Delta Lake',
+            title: 'E2. Platform Understanding — Lakehouse, Warehouses & Delta Lake',
             items: [
                 {
                     title: "Lakehouse Architecture, Medallion Pattern & Delta Lake",
@@ -878,7 +878,7 @@ Orden de Ejecución SQL:
         // DOMAIN: SECURING DATA (24 questions — was ZERO)
         // =====================================================
         {
-            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="#22c55e" style="vertical-align:middle;margin-right:4px"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg> E3. Securing Data — Governance, Permissions & PII',
+            title: 'E3. Securing Data — Governance, Permissions & PII',
             items: [
                 {
                     title: "GRANT/REVOKE, Privilege Hierarchy & Row-Level Security",
@@ -1128,7 +1128,7 @@ WHERE action_name = 'getTable'
         // DOMAIN: MANAGING DATA — EXPANDED (35 questions, was 2 items)
         // =====================================================
         {
-            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="#8b5cf6" style="vertical-align:middle;margin-right:4px"><circle cx="12" cy="12" r="10"/></svg> E4. Managing Data — VACUUM, OPTIMIZE, Time Travel & Clones',
+            title: 'E4. Managing Data — VACUUM, OPTIMIZE, Time Travel & Clones',
             items: [
                 {
                     title: "VACUUM, OPTIMIZE, Z-ORDER & Liquid Clustering",
@@ -1422,7 +1422,7 @@ ALTER TABLE ordenes SET TBLPROPERTIES ('delta.autoOptimize.optimizeWrite' = 'tru
         // DOMAIN: DASHBOARDS — EXPANDED (40 Q, was 3 items)
         // =====================================================
         {
-            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="#ec4899" style="vertical-align:middle;margin-right:4px"><circle cx="12" cy="12" r="10"/></svg> E5. Dashboards — Parameters, Sharing, Embedding & Statistics',
+            title: 'E5. Dashboards — Parameters, Sharing, Embedding & Statistics',
             items: [
                 {
                     title: "Query Parameters, Cross-Filtering & Embedding",
@@ -1604,7 +1604,7 @@ displayHTML("&lt;h1&gt;Dashboard Personalizado&lt;/h1&gt;")</code></pre>
         // DOMAIN: DATA MODELING — EXPANDED (22 Q, was 1 item)
         // =====================================================
         {
-            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="#f97316" style="vertical-align:middle;margin-right:4px"><circle cx="12" cy="12" r="10"/></svg> E6. Data Modeling — Star Schema, Views & Materialized Views',
+            title: 'E6. Data Modeling — Star Schema, Views & Materialized Views',
             items: [
                 {
                     title: "Star Schema, Keys & Gold-Layer Design",
@@ -1770,7 +1770,7 @@ FROM silver.orders GROUP BY 1;</code></pre>
         // DOMAIN: AI/BI GENIE — EXPANDED (26 Q, was 2 items)
         // =====================================================
         {
-            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="#06b6d4" style="vertical-align:middle;margin-right:4px"><circle cx="12" cy="12" r="10"/></svg> E7. AI/BI Genie — Instructions, Trusted Assets & Limits',
+            title: 'E7. AI/BI Genie — Instructions, Trusted Assets & Limits',
             items: [
                 {
                     title: "Genie Setup, Instructions & Disambiguation",
@@ -1942,7 +1942,7 @@ FROM silver.orders GROUP BY 1;</code></pre>
         // DOMAIN: ANALYZING QUERIES — EXPANDED (28 Q, was 2 items)
         // =====================================================
         {
-            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="#a855f7" style="vertical-align:middle;margin-right:4px"><circle cx="12" cy="12" r="10"/></svg> E8. Analyzing Queries — Caching, Materialized Views & Predictive Optimization',
+            title: 'E8. Analyzing Queries — Caching, Materialized Views & Predictive Optimization',
             items: [
                 {
                     title: "Caching, APPROX_COUNT_DISTINCT & Materialized View Refresh",

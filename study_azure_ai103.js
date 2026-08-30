@@ -18,7 +18,7 @@
     const azureAi103DomainSections = [
         // DOMAIN 0: CHEAT-SHEET & DECISION MATRIX
         {
-            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align:middle;margin-right:4px"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> D0. Decision Matrices & Golden Rules / D0. 10 Reglas de Oro y Matrices de Decisión (AI-103)',
+            title: 'D0. Decision Matrices & Golden Rules / D0. 10 Reglas de Oro y Matrices de Decisión (AI-103)',
             items: [
                 {
                     title: "0.1 Azure OpenAI Deployment Decision Matrix / Matriz de Despliegue de Azure OpenAI (Serverless vs PTU vs Provisioned)",
@@ -75,13 +75,33 @@
                             ${styleBox('blue', 'Guía de Selección de Herramientas para Agentes')}
                                 Elija la herramienta exacta diseñada para el requerimiento computacional o de recuperación específico.
                             </div>
+                                <tr class="table-header"><th>Tipo de Despliegue</th><th>Modelo de Facturación</th><th>Mejor Caso de Uso</th><th>Característica Clave en Examen</th></tr>
+                                <tr><td><strong>Standard / Global Standard (Serverless)</strong></td><td>Pago por token (basado en consumo)</td><td>Desarrollo, tráfico variable, volumen bajo-medio</td><td>Infraestructura compartida; escalado automático ascendente y a cero</td></tr>
+                                <tr><td><strong>Provisioned Throughput Units (PTU)</strong></td><td>Tarifa fija por hora por PTU comprometida</td><td>Producción, alto volumen predecible, SLAs de latencia</td><td>Capacidad de procesamiento dedicada; rendimiento garantizado sin throttling</td></tr>
+                                <tr><td><strong>Despliegue Fine-Tuned Personalizado</strong></td><td>Tarifa por hora de hospedaje + costo por token</td><td>Estilo de salida muy especializado o ajuste a tarea</td><td>Requiere datos de entrenamiento en JSONL; hospedado en cómputo dedicado</td></tr>
+                            </table>
+                        `)}
+                    `
+                },
+                {
+                    title: "0.2 RAG Architecture Decision Matrix / Matriz de Decisión RAG (Chunking, Vector Search & Reranking)",
+                    content: `
+                        ${langSection('en', `
+                            ${styleBox('blue', 'RAG Retrieval Optimization Matrix')}
                             <table class="table table-bordered">
-                                <tr class="table-header"><th>Herramienta de Agente</th><th>Entorno de Ejecución</th><th>Capacidades</th></tr>
-                                <tr><td><strong>Code Interpreter</strong></td><td>Entorno de ejecución Python en sandbox seguro</td><td>Análisis de datos, cálculos matemáticos, generación de gráficos, procesamiento CSV</td></tr>
-                                <tr><td><strong>File Search</strong></td><td>Análisis vectorial administrado en archivos subidos</td><td>RAG rápido en documentos pequeños subidos por el desarrollador (PDF, DOCX)</td></tr>
-                                <tr><td><strong>Azure AI Search Tool</strong></td><td>Conexión con índice de búsqueda empresarial</td><td>Búsqueda híbrida a gran escala, reranker semántico, almacén vectorial en millones de docs</td></tr>
-                                <tr><td><strong>Bing Web Search</strong></td><td>Fundamentación en búsqueda web pública</td><td>Noticias públicas de última hora en tiempo real, citas, datos web en vivo</td></tr>
-                                <tr><td><strong>OpenAPI / Function Calling</strong></td><td>Endpoints de API REST personalizados / Azure Functions</td><td>Transacciones de negocio, CRUD de base de datos, activación de flujos externos</td></tr>
+                                <tr class="table-header"><th>Optimization Strategy</th><th>Mechanism</th><th>When to Choose</th></tr>
+                                <tr><td><strong>Hybrid Search (BM25 + Dense Vectors)</strong></td><td>Executes keyword search and dense vector search in parallel, merged with RRF</td><td>Always recommended baseline for technical and domain-specific terminology</td></tr>
+                                <tr><td><strong>Semantic Reranking</strong></td><td>Uses deep neural ranking model on top 50 search results from initial query</td><td>When search precision on complex questions requires contextual understanding</td></tr>
+                                <tr><td><strong>Integrated Vectorization</strong></td><td>Azure AI Search indexer automatically computes embeddings via Azure OpenAI skill</td><td>No custom ETL pipeline needed; auto-vectorizes documents from Blob Storage</td></tr>
+                            </table>
+                        `)}
+                        ${langSection('es', `
+                            ${styleBox('blue', 'Matriz de Optimización en Recuperación RAG')}
+                            <table class="table table-bordered">
+                                <tr class="table-header"><th>Estrategia de Optimización</th><th>Mecanismo</th><th>Cuándo Elegirla</th></tr>
+                                <tr><td><strong>Búsqueda Híbrida (BM25 + Vectores Densos)</strong></td><td>Ejecuta búsqueda por palabras clave y vectores densos en paralelo, fusionados con RRF</td><td>Línea base siempre recomendada para terminología técnica y especializada</td></tr>
+                                <tr><td><strong>Reclasificación Semántica (Semantic Reranking)</strong></td><td>Usa modelo neuronal profundo para reclasificar los 50 mejores resultados</td><td>Cuando la precisión de búsqueda en preguntas complejas requiere contexto semántico</td></tr>
+                                <tr><td><strong>Vectorización Integrada</strong></td><td>El indexador de Azure AI Search calcula embeddings automáticamente con Azure OpenAI</td><td>No requiere pipeline ETL personalizado; vectoriza automáticamente desde Blob Storage</td></tr>
                             </table>
                         `)}
                     `
@@ -90,7 +110,7 @@
         },
         // DOMAIN 1
         {
-            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align:middle;margin-right:4px"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg> Domain 1: Plan and manage an Azure AI solution / Dominio 1: Planificar y administrar una solución de Azure AI (25%)',
+            title: 'Domain 1: Plan and manage an Azure AI solution / Dominio 1: Planificar y administrar una solución de Azure AI (25%)',
             items: [
                 {
                     title: "1.1 Foundry Services & Architecture / Servicios y Arquitectura de Azure AI Foundry (Hubs vs Projects)",
@@ -132,7 +152,7 @@
         },
         // DOMAIN 2
         {
-            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align:middle;margin-right:4px"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.5h-2v-2h2zm0-4h-2V7h2z"/></svg> Domain 2: Implement generative AI and agentic solutions / Dominio 2: Implementar soluciones generativas y agénticas (30%)',
+            title: 'Domain 2: Implement generative AI and agentic solutions / Dominio 2: Implementar soluciones generativas y agénticas (30%)',
             items: [
                 {
                     title: "2.1 Agent Service Lifecycle / Ciclo de Vida de Azure AI Agent Service",
@@ -176,7 +196,7 @@
         },
         // DOMAIN 3
         {
-            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align:middle;margin-right:4px"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg> Domain 3: Implement computer vision solutions / Dominio 3: Implementar soluciones de visión por computadora (10%)',
+            title: 'Domain 3: Implement computer vision solutions / Dominio 3: Implementar soluciones de visión por computadora (10%)',
             items: [
                 {
                     title: "3.1 Multimodal Vision & Content Understanding / Visión Multimodal y Azure Content Understanding",
@@ -197,7 +217,7 @@
         },
         // DOMAIN 4
         {
-            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align:middle;margin-right:4px"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/></svg> Domain 4: Implement text analysis solutions / Dominio 4: Implementar soluciones de análisis de texto (10%)',
+            title: 'Domain 4: Implement text analysis solutions / Dominio 4: Implementar soluciones de análisis de texto (10%)',
             items: [
                 {
                     title: "4.1 Language Analysis & Speech Integration / Análisis de Lenguaje e Integración de Voz",
@@ -222,7 +242,7 @@
         },
         // DOMAIN 5
         {
-            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align:middle;margin-right:4px"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg> Domain 5: Implement information extraction solutions / Dominio 5: Implementar soluciones de extracción de información (10%)',
+            title: 'Domain 5: Implement information extraction solutions / Dominio 5: Implementar soluciones de extracción de información (10%)',
             items: [
                 {
                     title: "5.1 Azure AI Search: Hybrid Search & Semantic Reranker / Búsqueda Híbrida y Reclasificador Semántico",

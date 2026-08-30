@@ -305,7 +305,13 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
 - Actualizó la PWA a `BUILD_TIMESTAMP = '20260830c'` y caché `simulador-v31-20260830c` en `sw.js`, `index.html` y suite de validación.
 - Validación de 5 suites ejecutada con 0 errores (712 preguntas AI-103, 766 preguntas GenAI, selector global de idioma, paleta de 17 colores hex / 0 gradientes y 0 duplicados estructurales).
 
-
-
-
-
+### 2026-08-30 04:12 CST — Antigravity (Gemini 3.7 Flash)
+- Solucionó la anomalía visual en los encabezados del Centro de Estudio ("Estudiar"):
+  - Eliminó todas las etiquetas `<svg>` embebidas en las propiedades `title` de todos los archivos de estudio (`study_databricks_genai.js`, `study_azure_ai103.js`, `study_databricks_domains.js`, `study_databricks_expanded.js`, `study_databricks_urgent.js`), convirtiéndolos en strings bilingües limpios (`Title EN / Title ES`).
+  - Fortaleció la función `splitBilingual` en `app_i18n.js` con sanitización automática que remueve de forma proactiva cualquier elemento SVG o HTML residual antes del renderizado y división de idiomas, impidiendo cualquier escape de etiquetas a entidades de texto visibles.
+- Realizó una validación integral de todos los cursos y módulos del sistema:
+  - Cursos de Estudio verificados: `dp-600`, `azure-ai-103`, `databricks-da`, `databricks-genai-engineer`, `databricks-fundamentals`, `unir-viz-interactiva`, `unir-herramientas-viz`, `unah-tesis`.
+  - Pestañas del Centro de Estudio verificadas: Estudiar (acordeón y navegación por temas), Términos y Competencias, Escenarios de Decisión, Flashcards interactivas, Ejemplos de Código/SDK y Logros de Certificación.
+  - Comprobó 0 tags HTML en títulos, 0 funciones duplicadas, 0 IDs HTML duplicados, 0 emojis y total compatibilidad de traducción EN/ES.
+- Actualizó la PWA a `BUILD_TIMESTAMP = '20260830d'` y caché `simulador-v32-20260830d` en `sw.js` e `index.html`.
+- Ejecutó con éxito la suite completa de 5 validadores automatizados (`validate_ai103_integration.js`, `validate_genai_integration.js`, `validate_global_language.js`, `validate_ui_palette.js`, `audit_code_structure.js`) sin ninguna advertencia ni error.

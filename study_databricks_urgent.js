@@ -21,7 +21,7 @@
         // Expanded from 3 items to 7 for exam mastery
         // =====================================================
         {
-            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="#ef4444" style="vertical-align:middle;margin-right:4px"><path d="M12 2L1 21h22L12 2zm0 4l7.5 13h-15L12 6zm-1 5v4h2v-4h-2zm0 6v2h2v-2h-2z"/></svg> U1. Importing Data — Complete Guide / Guía Completa de Importación',
+            title: 'U1. Importing Data — Complete Guide / Guía Completa de Importación',
             items: [
                 {
                     title: "1.1 COPY INTO — Batch File Ingestion (Deep Dive)",
@@ -1063,7 +1063,7 @@ Where does the data come from?
             ]
         },
         {
-            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="#ef4444" style="vertical-align:middle;margin-right:4px"><path d="M12 2L1 21h22L12 2zm0 4l7.5 13h-15L12 6zm-1 5v4h2v-4h-2zm0 6v2h2v-2h-2z"/></svg> U1.B Importing Data — Advanced Concepts (Exam Gaps)',
+            title: 'U1.B Importing Data — Advanced Concepts (Exam Gaps)',
             items: [
                 {
                     title: "1.8 INSERT OVERWRITE, Temp Views & CREATE TABLE LIKE",
@@ -1335,7 +1335,7 @@ GRANT SELECT ON TABLE prod.finanzas.presupuesto TO equipo_analistas;</code></pre
         // DOMAIN 6: DASHBOARDS & VISUALIZATIONS (57%)
         // =====================================================
         {
-            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="#ef4444" style="vertical-align:middle;margin-right:4px"><circle cx="12" cy="12" r="10"/></svg> U2. Dashboards Deep Dive / Dashboards en Profundidad',
+            title: 'U2. Dashboards Deep Dive / Dashboards en Profundidad',
             items: [
                 {
                     title: "Visualization Types & Selection Guide",
@@ -1478,7 +1478,7 @@ GRANT SELECT ON TABLE prod.finanzas.presupuesto TO equipo_analistas;</code></pre
         // DOMAIN 7: AI/BI GENIE (60%)
         // =====================================================
         {
-            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="#f59e0b" style="vertical-align:middle;margin-right:4px"><circle cx="12" cy="12" r="10"/></svg> U3. AI/BI Genie — Complete Mastery / Dominio Completo',
+            title: 'U3. AI/BI Genie — Complete Mastery / Dominio Completo',
             items: [
                 {
                     title: "Genie Space Architecture & Setup",
@@ -1580,7 +1580,7 @@ GRANT SELECT ON TABLE prod.finanzas.presupuesto TO equipo_analistas;</code></pre
         // DOMAIN 5: ANALYZING QUERIES (71%)
         // =====================================================
         {
-            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="#f59e0b" style="vertical-align:middle;margin-right:4px"><circle cx="12" cy="12" r="10"/></svg> U4. Analyzing Queries / Análisis de Queries',
+            title: 'U4. Analyzing Queries / Análisis de Queries',
             items: [
                 {
                     title: "Query Profile & Spill to Disk",
@@ -1672,7 +1672,7 @@ GRANT SELECT ON TABLE prod.finanzas.presupuesto TO equipo_analistas;</code></pre
         // DOMAIN 8: DATA MODELING (66%)
         // =====================================================
         {
-            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="#f59e0b" style="vertical-align:middle;margin-right:4px"><circle cx="12" cy="12" r="10"/></svg> U5. Data Modeling Deep Dive / Modelado en Profundidad',
+            title: 'U5. Data Modeling Deep Dive / Modelado en Profundidad',
             items: [
                 {
                     title: "SCD Type 1 & Type 2 — Slowly Changing Dimensions",
@@ -1733,7 +1733,7 @@ GRANT SELECT ON TABLE prod.finanzas.presupuesto TO equipo_analistas;</code></pre
         // DOMAIN 2: MANAGING DATA (66%)
         // =====================================================
         {
-            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="#f59e0b" style="vertical-align:middle;margin-right:4px"><circle cx="12" cy="12" r="10"/></svg> U6. Managing Data — Deep Dive / Gestión de Datos en Profundidad',
+            title: 'U6. Managing Data — Deep Dive / Gestión de Datos en Profundidad',
             items: [
                 {
                     title: "Managed vs External Tables — Complete Rules",

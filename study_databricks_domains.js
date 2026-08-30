@@ -22,7 +22,7 @@
         // Focus: Lakehouse architecture, personas, Medallion
         // =====================================================
         {
-            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="#22c55e" style="vertical-align:middle;margin-right:4px"><circle cx="12" cy="12" r="10" fill="none" stroke="#22c55e" stroke-width="2"/><path d="M9 12l2 2 4-4" fill="none" stroke="#22c55e" stroke-width="2"/></svg> D1. Databricks Platform — Architecture & Personas',
+            title: 'D1. Databricks Platform — Architecture & Personas',
             items: [
                 {
                     title: "1.1 Lakehouse Architecture — Control Plane vs Data Plane",
@@ -494,7 +494,7 @@ VACUUM ventas RETAIN 0 HOURS; -- ¡Peligroso!</code></pre>
         //        SQL syntax, NULLs, window functions
         // =====================================================
         {
-            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="#f59e0b" style="vertical-align:middle;margin-right:4px"><circle cx="12" cy="12" r="10" fill="none" stroke="#f59e0b" stroke-width="2"/><path d="M9 12l2 2 4-4" fill="none" stroke="#f59e0b" stroke-width="2"/></svg> D4. Executing Queries — SQL Warehouses & SQL Syntax (70 Questions!)',
+            title: 'D4. Executing Queries — SQL Warehouses & SQL Syntax (70 Questions!)',
             items: [
                 {
                     title: "4.1 SQL Warehouse Types — Classic vs Pro vs Serverless",
@@ -1191,7 +1191,7 @@ ALTER TABLE gold.sales CLUSTER BY (region, product_category);</code></pre>
         // performance analysis, caching, built-in functions
         // =====================================================
         {
-            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="#f59e0b" style="vertical-align:middle;margin-right:4px"><circle cx="12" cy="12" r="10" fill="none" stroke="#f59e0b" stroke-width="2"/><path d="M12 8v4l3 3" fill="none" stroke="#f59e0b" stroke-width="2"/></svg> D5. Analyzing Queries — Query History & Performance (Expanded)',
+            title: 'D5. Analyzing Queries — Query History & Performance (Expanded)',
             items: [
                 {
                     title: "5.1 Query History — The Single Source of Truth",
@@ -1356,7 +1356,7 @@ SELECT EXTRACT(MONTH FROM '2024-06-15');   -- 6</code></pre>
         // visualization types, parameters, cross-filtering
         // =====================================================
         {
-            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="#ef4444" style="vertical-align:middle;margin-right:4px"><path d="M3 3v18h18" fill="none" stroke="#ef4444" stroke-width="2"/><path d="M7 14l4-4 4 4 4-8" fill="none" stroke="#ef4444" stroke-width="2"/></svg> D6. Dashboards & Visualizations — Complete Guide (Expanded)',
+            title: 'D6. Dashboards & Visualizations — Complete Guide (Expanded)',
             items: [
                 {
                     title: "6.1 Dashboard Creation, Widgets & Markdown",
@@ -1598,7 +1598,7 @@ GROUP BY region, product;</code></pre>
         // accuracy improvement, permissions, metadata
         // =====================================================
         {
-            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="#ef4444" style="vertical-align:middle;margin-right:4px"><path d="M12 2a7 7 0 017 7c0 2.5-1.5 4.5-3 6v2H8v-2c-1.5-1.5-3-3.5-3-6a7 7 0 017-7z" fill="none" stroke="#ef4444" stroke-width="2"/><path d="M9 21h6M10 17h4" fill="none" stroke="#ef4444" stroke-width="2"/></svg> D7. AI/BI Genie Spaces — Natural Language Analytics (Expanded)',
+            title: 'D7. AI/BI Genie Spaces — Natural Language Analytics (Expanded)',
             items: [
                 {
                     title: "7.1 Genie Space Setup & Configuration Hierarchy",
@@ -1803,7 +1803,7 @@ Ejemplo de Domain Instructions:
         // Medallion, SCD types, MERGE patterns
         // =====================================================
         {
-            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="#f59e0b" style="vertical-align:middle;margin-right:4px"><path d="M4 5h16M4 12h16M4 19h16" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round"/></svg> D8. Data Modeling — Star Schema, Views & SCDs (Expanded)',
+            title: 'D8. Data Modeling — Star Schema, Views & SCDs (Expanded)',
             items: [
                 {
                     title: "8.1 Star Schema vs Snowflake — The Gold Layer Blueprint",
@@ -2107,7 +2107,7 @@ FROM staging_customer;</code></pre>
         // Unity Catalog, ownership, UNDROP
         // =====================================================
         {
-            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="#f59e0b" style="vertical-align:middle;margin-right:4px"><path d="M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z" fill="none" stroke="#f59e0b" stroke-width="2"/><path d="M12 8v8M8 12h8" fill="none" stroke="#f59e0b" stroke-width="2"/></svg> D2. Managing Data — Tables, Metadata & Ownership (Expanded)',
+            title: 'D2. Managing Data — Tables, Metadata & Ownership (Expanded)',
             items: [
                 {
                     title: "2.1 DESCRIBE EXTENDED — Metadata Deep Dive",
@@ -2379,7 +2379,7 @@ ALTER TABLE sales SET OWNER TO analytics_team;</code></pre>
         // column masking, USAGE chain, dynamic views
         // =====================================================
         {
-            title: '<svg viewBox="0 0 24 24" width="16" height="16" fill="#22c55e" style="vertical-align:middle;margin-right:4px"><path d="M12 2L3 7v6c0 5.5 3.8 10.7 9 12 5.2-1.3 9-6.5 9-12V7l-9-5z" fill="none" stroke="#22c55e" stroke-width="2"/><path d="M9 12l2 2 4-4" fill="none" stroke="#22c55e" stroke-width="2"/></svg> D9. Securing Data — Permissions, Masking & Row Filters (Expanded)',
+            title: 'D9. Securing Data — Permissions, Masking & Row Filters (Expanded)',
             items: [
                 {
                     title: "9.1 The USAGE Chain — Most Tested Security Concept",
