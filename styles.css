@@ -5713,4 +5713,214 @@ html, body {
   font-weight: 700;
 }
 
+/* =============================================================================
+   ARCHITECTURE CANVAS (VISUAL SYSTEM BUILDER)
+   ============================================================================= */
+.arch-canvas-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  margin: 1rem 0;
+}
+
+.arch-service-palette {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 10px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  margin-bottom: 1rem;
+}
+
+.arch-service-chip {
+  padding: 6px 12px;
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-color);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.arch-service-chip:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.arch-service-chip.selected {
+  border-color: var(--primary-color);
+  background: var(--primary-light, rgba(49, 87, 213, 0.1));
+  color: var(--primary-color);
+}
+
+.arch-flow-diagram {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 1.5rem 0.5rem;
+}
+
+.arch-slot {
+  flex: 1;
+  min-width: 130px;
+  min-height: 80px;
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.arch-slot.filled {
+  border-style: solid;
+  border-color: var(--primary-color);
+  background: var(--bg-card);
+}
+
+.arch-slot.correct {
+  border-color: var(--success-color);
+  background: var(--bg-card);
+}
+
+.arch-slot.incorrect {
+  border-color: var(--danger-color);
+  background: var(--bg-card);
+}
+
+.arch-arrow {
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+/* =============================================================================
+   SURVIVAL TIME-ATTACK MODE
+   ============================================================================= */
+.survival-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
+.survival-hearts-row {
+  display: flex;
+  gap: 6px;
+}
+
+.survival-heart {
+  color: var(--danger-color);
+  transition: all 0.3s ease;
+}
+
+.survival-heart.lost {
+  opacity: 0.2;
+  transform: scale(0.85);
+}
+
+.survival-timer-badge {
+  font-family: monospace;
+  font-size: 1.1rem;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 6px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+}
+
+.survival-combo-badge {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--primary-color);
+  padding: 2px 8px;
+  border-radius: 99px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+}
+
+/* =============================================================================
+   LLM PARAMETERS & PROMPT PLAYGROUND
+   ============================================================================= */
+.llm-playground-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  margin: 1rem 0;
+}
+
+.llm-slider-row {
+  margin-bottom: 1.25rem;
+}
+
+.llm-slider-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  font-size: 0.85rem;
+}
+
+.llm-slider-input {
+  width: 100%;
+  accent-color: var(--primary-color);
+  cursor: pointer;
+}
+
+.llm-presets-bar {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.llm-preset-btn {
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 99px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.llm-preset-btn.active,
+.llm-preset-btn:hover {
+  background: var(--primary-color);
+  color: #ffffff;
+  border-color: var(--primary-color);
+}
+
+.llm-curve-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--text-color);
+}
+
+
 

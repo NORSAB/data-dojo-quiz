@@ -3979,6 +3979,12 @@ function renderReview(questions, finalPct, passed) {
             <button type="button" class="unir-tab" id="unir-tab-cli-terminal" role="tab" aria-selected="false" aria-controls="unir-panel-cli-terminal" tabindex="-1" onclick="window._unirSwitchTab('cli-terminal')">
               ${svgIcon('M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8h16v10zm-2-1h-6v-2h6v2zM7.5 17l-1.4-1.4 2.1-2.1-2.1-2.1L7.5 10l3.5 3.5-3.5 3.5z', 15)} ${localizedMarkup('Terminal CLI', 'Terminal CLI')}
             </button>
+            <button type="button" class="unir-tab" id="unir-tab-architecture" role="tab" aria-selected="false" aria-controls="unir-panel-architecture" tabindex="-1" onclick="window._unirSwitchTab('architecture')">
+              ${svgIcon('M3 3h7v7H3zm11 0h7v7h-7zM3 14h7v7H3zm11 0h7v7h-7z', 15)} ${localizedMarkup('Architecture', 'Arquitectura')}
+            </button>
+            <button type="button" class="unir-tab" id="unir-tab-llm-params" role="tab" aria-selected="false" aria-controls="unir-panel-llm-params" tabindex="-1" onclick="window._unirSwitchTab('llm-params')">
+              ${svgIcon('M12 2a10 10 0 100 20 10 10 0 000-20zm1 14.93V17a1 1 0 11-2 0v-.07A7.003 7.003 0 015.07 11H5a1 1 0 010-2h.07A7.003 7.003 0 0111 5.07V5a1 1 0 112 0v.07A7.003 7.003 0 0118.93 11H19a1 1 0 010 2h-.07A7.003 7.003 0 0113 16.93z', 15)} ${localizedMarkup('LLM Playground', 'Playground LLM')}
+            </button>
             <button type="button" class="unir-tab" id="unir-tab-achievements" role="tab" aria-selected="false" aria-controls="unir-panel-achievements" tabindex="-1" onclick="window._unirSwitchTab('achievements')">
               ${svgIcon(SVG.trophy, 15)} ${localizedMarkup('Achievements', 'Logros')}
             </button>
@@ -4017,10 +4023,16 @@ function renderReview(questions, finalPct, passed) {
           ${hasFlashcards ? '<div class="unir-panel" id="unir-panel-flashcards" role="tabpanel" aria-labelledby="unir-tab-flashcards" hidden></div>' : ''}
 
           <!-- PANEL: SQL Sandbox -->
-          <div class="unir-panel" id="unir-panel-sql-sandbox" role="tabpanel" aria-labelledby="unir-tab-sql-sandbox" hidden></div>
+          <div class="unir-panel" id="unir-panel-sql-sandbox" role="tabpanel" aria-labelledby="unir-panel-sql-sandbox" hidden></div>
 
           <!-- PANEL: CLI Terminal Simulator -->
           <div class="unir-panel" id="unir-panel-cli-terminal" role="tabpanel" aria-labelledby="unir-tab-cli-terminal" hidden></div>
+
+          <!-- PANEL: Architecture Canvas -->
+          <div class="unir-panel" id="unir-panel-architecture" role="tabpanel" aria-labelledby="unir-tab-architecture" hidden></div>
+
+          <!-- PANEL: LLM Parameters Playground -->
+          <div class="unir-panel" id="unir-panel-llm-params" role="tabpanel" aria-labelledby="unir-tab-llm-params" hidden></div>
 
           <!-- PANEL: Achievements -->
           <div class="unir-panel" id="unir-panel-achievements" role="tabpanel" aria-labelledby="unir-tab-achievements" hidden></div>
@@ -4040,6 +4052,8 @@ function renderReview(questions, finalPct, passed) {
       if (hasFlashcards) allTabs.push('flashcards');
       allTabs.push('sql-sandbox');
       allTabs.push('cli-terminal');
+      allTabs.push('architecture');
+      allTabs.push('llm-params');
       allTabs.push('achievements');
       window._unirSwitchTab = function(tab) {
         allTabs.forEach(t => {
@@ -4056,6 +4070,8 @@ function renderReview(questions, finalPct, passed) {
         if (tab === 'flashcards') renderFlashcardMode();
         if (tab === 'sql-sandbox' && window.SQLSandbox) window.SQLSandbox.render(document.getElementById('unir-panel-sql-sandbox'));
         if (tab === 'cli-terminal' && window.CliSimulator) window.CliSimulator.renderTerminal(document.getElementById('unir-panel-cli-terminal'), courseId);
+        if (tab === 'architecture' && window.ArchitectureCanvas) window.ArchitectureCanvas.render(document.getElementById('unir-panel-architecture'), courseId);
+        if (tab === 'llm-params' && window.PromptPlayground) window.PromptPlayground.render(document.getElementById('unir-panel-llm-params'));
         if (tab === 'achievements') renderAchievements();
         if (tab === 'personajes') renderPersonajes();
         if (tab === 'conceptos') renderConceptos();

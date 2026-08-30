@@ -4806,6 +4806,447 @@ window.OralExamMode = {
     }
 };
 
+// =============================================================================
+// F33: INTERACTIVE ARCHITECTURE CANVAS ("CONECTA LOS SERVICIOS")
+// =============================================================================
+window.ArchitectureCanvas = {
+    selectedChip: null,
+    currentCaseIndex: 0,
+
+    cases: {
+        'azure-ai-103': [
+            {
+                id: 'arch-az-1',
+                title: 'Arquitectura RAG Segura con Búsqueda Híbrida',
+                desc: 'Organiza y conecta el flujo de datos para un asistente RAG empresarial con ingesta multimodal, búsqueda híbrida y seguridad de contenido.',
+                services: [
+                    { id: 's1', name: 'Azure Blob Storage', desc: 'Almacén de PDFs y documentos fuente' },
+                    { id: 's2', name: 'Document Intelligence', desc: 'Extracción de tablas, texto y jerarquía' },
+                    { id: 's3', name: 'Azure OpenAI Embeddings', desc: 'Vectorización (text-embedding-3)' },
+                    { id: 's4', name: 'Azure AI Search Hybrid Index', desc: 'Índice con HNSW + Semantic Re-ranker' },
+                    { id: 's5', name: 'Azure AI Content Safety', desc: 'Prompt Shields y detección de jailbreaks' },
+                    { id: 's6', name: 'Azure OpenAI GPT-4o', desc: 'Generación final fundamentada (Grounded)' }
+                ],
+                correctSequence: ['s1', 's2', 's3', 's4', 's5', 's6'],
+                explanation: 'Flujo oficial: 1. Ingesta en Blob -> 2. Extracción con Document Intelligence -> 3. Embeddings -> 4. Indexación Híbrida en AI Search -> 5. Filtrado con Content Safety Prompt Shield -> 6. Inferencia final fundamentada en GPT-4o.'
+            }
+        ],
+        'databricks-genai-engineer': [
+            {
+                id: 'arch-db-1',
+                title: 'Pipeline RAG en Databricks Lakehouse',
+                desc: 'Diseña el flujo integral de RAG en Unity Catalog con sincronización continua y observabilidad.',
+                services: [
+                    { id: 'd1', name: 'Delta Lake Table (UC)', desc: 'Tabla fuente gobernada en Unity Catalog' },
+                    { id: 'd2', name: 'Vector Search Delta Sync', desc: 'Sincronización automática de embeddings' },
+                    { id: 'd3', name: 'Model Serving Endpoint', desc: 'Inferencia de Foundation Models' },
+                    { id: 'd4', name: 'MLflow Tracing / Quality Lab', desc: 'Evaluación con LLM-as-a-Judge' }
+                ],
+                correctSequence: ['d1', 'd2', 'd3', 'd4'],
+                explanation: 'Flujo oficial: 1. Tabla Delta en UC -> 2. Índice Vector Search Delta Sync -> 3. Endpoint de Model Serving -> 4. Evaluación y trazabilidad con MLflow Tracing y Quality Lab.'
+            }
+        ],
+        'dp-600': [
+            {
+                id: 'arch-fab-1',
+                title: 'Arquitectura Medallion Direct Lake en Microsoft Fabric',
+                desc: 'Conecta el flujo de datos desde el OneLake hasta el reporte analítico sin duplicación de memoria.',
+                services: [
+                    { id: 'f1', name: 'OneLake Ingestion', desc: 'Carga de datos brutos' },
+                    { id: 'f2', name: 'Delta Bronze Lakehouse', desc: 'Almacenamiento crudo en formato Parquet' },
+                    { id: 'f3', name: 'Delta Silver (Cleaned)', desc: 'Limpieza y transformación con Spark/Dataflow' },
+                    { id: 'f4', name: 'Delta Gold Semantic Model', desc: 'Modelo dimensional en estrella optimizado con V-Order' },
+                    { id: 'f5', name: 'Power BI Direct Lake', desc: 'Consumo analítico en memoria sin refrescos' }
+                ],
+                correctSequence: ['f1', 'f2', 'f3', 'f4', 'f5'],
+                explanation: 'Flujo oficial Fabric: OneLake -> Bronze -> Silver -> Gold Semantic Model (V-Order) -> Direct Lake Power BI.'
+            }
+        ]
+    },
+
+    render(containerEl, courseId) {
+        if (!containerEl) return;
+        const cid = courseId || window.currentCourseId || 'azure-ai-103';
+        const caseList = this.cases[cid] || this.cases['azure-ai-103'];
+        const activeCase = caseList[this.currentCaseIndex % caseList.length];
+
+        const chipsHtml = activeCase.services.map(s => `
+            <div class="arch-service-chip" id="chip-${s.id}" data-id="${s.id}" onclick="window.ArchitectureCanvas.selectChip('${s.id}')">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M3 9h18"/></svg>
+                <span>${s.name}</span>
+            </div>
+        `).join('');
+
+        const slotsHtml = activeCase.services.map((_, idx) => `
+            <div class="arch-slot" id="arch-slot-${idx}" data-idx="${idx}" onclick="window.ArchitectureCanvas.placeInSlot(${idx})">
+                <span style="font-size:0.75rem; color:var(--text-muted); font-weight:700;">Paso ${idx + 1}</span>
+                <span class="slot-service-name" style="font-size:0.82rem; font-weight:700; color:var(--text-color); margin-top:4px;">(Vacío)</span>
+            </div>
+            ${idx < activeCase.services.length - 1 ? '<svg class="arch-arrow" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>' : ''}
+        `).join('');
+
+        containerEl.innerHTML = `
+            <div class="arch-canvas-container">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                    <div>
+                        <h3 style="margin:0; font-size:1.15rem; color:var(--text-color);">${activeCase.title}</h3>
+                        <p style="margin:2px 0 0 0; font-size:0.84rem; color:var(--text-muted);">${activeCase.desc}</p>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline" onclick="window.ArchitectureCanvas.reset('${cid}')">Reiniciar</button>
+                </div>
+
+                <div style="font-size:0.78rem; font-weight:700; color:var(--primary-color); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;">1. Selecciona un Servicio:</div>
+                <div class="arch-service-palette">${chipsHtml}</div>
+
+                <div style="font-size:0.78rem; font-weight:700; color:var(--primary-color); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;">2. Conéctalo en la Posición Correspondiente del Flujo:</div>
+                <div class="arch-flow-diagram">${slotsHtml}</div>
+
+                <div id="arch-feedback-box" style="display:none; margin-top:1rem; padding:12px 14px; border-radius:var(--radius-md); border:1px solid var(--border-color); background:var(--bg-surface);"></div>
+
+                <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:1rem;">
+                    <button type="button" class="btn btn-primary" onclick="window.ArchitectureCanvas.validate('${cid}')">Validar Arquitectura</button>
+                </div>
+            </div>
+        `;
+    },
+
+    selectChip(id) {
+        this.selectedChip = id;
+        document.querySelectorAll('.arch-service-chip').forEach(c => {
+            c.classList.toggle('selected', c.getAttribute('data-id') === id);
+        });
+    },
+
+    placeInSlot(idx) {
+        if (!this.selectedChip) {
+            alert('Primero selecciona un servicio de la paleta arriba.');
+            return;
+        }
+        const cid = window.currentCourseId || 'azure-ai-103';
+        const caseList = this.cases[cid] || this.cases['azure-ai-103'];
+        const activeCase = caseList[this.currentCaseIndex % caseList.length];
+        const srv = activeCase.services.find(s => s.id === this.selectedChip);
+        if (!srv) return;
+
+        const slot = document.getElementById(`arch-slot-${idx}`);
+        if (slot) {
+            slot.dataset.assigned = this.selectedChip;
+            slot.classList.add('filled');
+            const nameEl = slot.querySelector('.slot-service-name');
+            if (nameEl) nameEl.textContent = srv.name;
+        }
+    },
+
+    validate(cid) {
+        const caseList = this.cases[cid] || this.cases['azure-ai-103'];
+        const activeCase = caseList[this.currentCaseIndex % caseList.length];
+        let allCorrect = true;
+
+        activeCase.correctSequence.forEach((correctId, idx) => {
+            const slot = document.getElementById(`arch-slot-${idx}`);
+            if (slot) {
+                const assigned = slot.dataset.assigned;
+                if (assigned === correctId) {
+                    slot.className = 'arch-slot filled correct';
+                } else {
+                    slot.className = 'arch-slot filled incorrect';
+                    allCorrect = false;
+                }
+            }
+        });
+
+        const fb = document.getElementById('arch-feedback-box');
+        if (fb) {
+            fb.style.display = 'block';
+            if (allCorrect) {
+                fb.innerHTML = `
+                    <div style="font-weight:800; color:var(--success-color); font-size:1rem; margin-bottom:4px;">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;"><polyline points="20 6 9 17 4 12"/></svg>
+                        ¡Arquitectura Validada Correctamente! (+30 XP)
+                    </div>
+                    <div style="font-size:0.85rem; color:var(--text-muted);">${activeCase.explanation}</div>
+                `;
+                if (typeof addXP === 'function') addXP(30);
+            } else {
+                fb.innerHTML = `
+                    <div style="font-weight:800; color:var(--danger-color); font-size:1rem; margin-bottom:4px;">
+                        Secuencia o Conexiones Incorrectas
+                    </div>
+                    <div style="font-size:0.85rem; color:var(--text-muted);">Revisa los pasos marcados en rojo y consulta el flujo oficial.</div>
+                `;
+            }
+        }
+    },
+
+    reset(cid) {
+        const container = document.getElementById('unir-panel-architecture');
+        if (container) this.render(container, cid);
+    }
+};
+
+// =============================================================================
+// F34: SURVIVAL TIME-ATTACK MODE (3 Lives, Dynamic Clock & Combos)
+// =============================================================================
+window.SurvivalMode = {
+    lives: 3,
+    timeLeft: 30,
+    timerInterval: null,
+    score: 0,
+    combo: 1,
+    currentQuestion: null,
+    missedQuestions: [],
+
+    start() {
+        const modal = document.getElementById('survival-mode-modal');
+        if (!modal) return;
+        modal.classList.remove('hidden');
+        this.lives = 3;
+        this.timeLeft = 30;
+        this.score = 0;
+        this.combo = 1;
+        this.missedQuestions = [];
+        this.updateHearts();
+        this.nextQuestion();
+        this.startTimer();
+    },
+
+    close() {
+        clearInterval(this.timerInterval);
+        const modal = document.getElementById('survival-mode-modal');
+        if (modal) modal.classList.add('hidden');
+    },
+
+    startTimer() {
+        clearInterval(this.timerInterval);
+        const timerEl = document.getElementById('survival-timer-badge');
+        this.timerInterval = setInterval(() => {
+            this.timeLeft--;
+            if (timerEl) timerEl.textContent = `${this.timeLeft}s`;
+            if (this.timeLeft <= 0) {
+                this.loseLife('timeout');
+            }
+        }, 1000);
+    },
+
+    updateHearts() {
+        const hearts = document.querySelectorAll('.survival-heart');
+        hearts.forEach((h, idx) => {
+            h.classList.toggle('lost', idx >= this.lives);
+        });
+    },
+
+    nextQuestion() {
+        const cid = window.currentCourseId || 'azure-ai-103';
+        const lang = window.AppI18n ? window.AppI18n.getLanguage() : 'es';
+        const allQuestions = (window.questionsData || []).filter(q => (q.courseId === cid) && (q.lang === lang || !q.lang) && q.options && q.options.length >= 2);
+
+        if (allQuestions.length === 0) return;
+        this.currentQuestion = allQuestions[Math.floor(Math.random() * allQuestions.length)];
+
+        const promptEl = document.getElementById('survival-question-prompt');
+        const optsContainer = document.getElementById('survival-options-container');
+
+        if (promptEl) promptEl.textContent = this.currentQuestion.prompt;
+        if (optsContainer) {
+            optsContainer.innerHTML = this.currentQuestion.options.map((opt, idx) => `
+                <div class="option-item" onclick="window.SurvivalMode.selectAnswer('${opt.id}', this)">
+                    <span class="option-key-badge">${['A','B','C','D'][idx] || idx+1}</span>
+                    <div class="option-content-wrapper">${opt.text}</div>
+                </div>
+            `).join('');
+        }
+    },
+
+    selectAnswer(optId, el) {
+        if (!this.currentQuestion) return;
+        const isCorrect = this.currentQuestion.correctIds.includes(optId);
+
+        if (isCorrect) {
+            el.classList.add('correct');
+            this.score += 10 * this.combo;
+            this.combo = Math.min(4, this.combo + 0.5);
+            this.timeLeft = Math.min(60, this.timeLeft + 10);
+            const scoreEl = document.getElementById('survival-score-val');
+            const comboEl = document.getElementById('survival-combo-badge');
+            if (scoreEl) scoreEl.textContent = this.score;
+            if (comboEl) comboEl.textContent = `${this.combo}x Combo`;
+            setTimeout(() => this.nextQuestion(), 500);
+        } else {
+            el.classList.add('incorrect');
+            this.missedQuestions.push(this.currentQuestion);
+            this.combo = 1;
+            this.loseLife('wrong');
+        }
+    },
+
+    loseLife(reason) {
+        this.lives--;
+        this.updateHearts();
+        if (this.lives <= 0) {
+            this.gameOver();
+        } else {
+            if (reason === 'timeout') {
+                this.timeLeft = 25;
+            }
+            setTimeout(() => this.nextQuestion(), 600);
+        }
+    },
+
+    gameOver() {
+        clearInterval(this.timerInterval);
+        const container = document.getElementById('survival-game-body');
+        if (!container) return;
+        const xpGained = Math.round(this.score * 0.5);
+        if (typeof addXP === 'function') addXP(xpGained);
+
+        container.innerHTML = `
+            <div style="text-align:center; padding:1.5rem;">
+                <div style="font-size:2.5rem; font-weight:800; color:var(--danger-color); margin-bottom:6px;">GAME OVER</div>
+                <div style="font-size:1.2rem; font-weight:700; color:var(--text-color); margin-bottom:4px;">Puntaje Final: ${this.score} pts (+${xpGained} XP)</div>
+                <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:1.25rem;">Preguntas falladas en la ronda: ${this.missedQuestions.length}</p>
+                <div style="display:flex; justify-content:center; gap:8px;">
+                    <button type="button" class="btn btn-outline" onclick="window.SurvivalMode.close()">Salir</button>
+                    <button type="button" class="btn btn-primary" onclick="window.SurvivalMode.start()">Jugar Otra Vez</button>
+                </div>
+            </div>
+        `;
+    }
+};
+
+// =============================================================================
+// F35: SMART ERROR RESCUE FLASHCARDS (Baraja de Rescate Instantáneo)
+// =============================================================================
+window.ErrorRescueCards = {
+    openRescueDeck() {
+        const history = JSON.parse(localStorage.getItem('quizHistory') || '[]');
+        const latest = history[history.length - 1];
+        const missedIds = latest ? (latest.missedIds || []) : [];
+        const cid = window.currentCourseId || 'azure-ai-103';
+        const lang = window.AppI18n ? window.AppI18n.getLanguage() : 'es';
+        const allQuestions = (window.questionsData || []).filter(q => (q.courseId === cid) && (q.lang === lang || !q.lang));
+
+        let missedQuestions = allQuestions.filter(q => missedIds.includes(q.id));
+        if (missedQuestions.length === 0) {
+            missedQuestions = allQuestions.slice(0, 5);
+        }
+
+        const flashcards = missedQuestions.map(q => {
+            const correctOpt = (q.options || []).find(o => (q.correctIds || []).includes(o.id));
+            return {
+                tema: q.domain || 'Rescate de Error',
+                front: q.prompt,
+                back: `<strong>Respuesta Correcta:</strong> ${correctOpt ? correctOpt.text : 'Oficial'}<br><br><strong>Regla de Oro:</strong> ${q.explanation ? q.explanation.slice(0, 200) + '...' : 'Revisar documentación oficial.'}`
+            };
+        });
+
+        if (typeof window.openStudyCenterTab === 'function') {
+            window.openStudyCenterTab('flashcards');
+        }
+    }
+};
+
+// =============================================================================
+// F36: LLM PARAMETERS & PROMPT PLAYGROUND (Temperature, Top_P, Penalties)
+// =============================================================================
+window.PromptPlayground = {
+    presets: {
+        'code': { temp: 0.0, topP: 0.1, freq: 0.0, pres: 0.0, json: true, name: 'Generación de Código Determinista', desc: 'Temperatura 0.0 garantiza salidas reproducibles sin variabilidad ni alucinaciones.' },
+        'json': { temp: 0.1, topP: 0.2, freq: 0.0, pres: 0.0, json: true, name: 'Extracción Estructurada de Datos (JSON)', desc: 'Temperatura baja + response_format: json_object para esquemas estrictos de bases de datos.' },
+        'creative': { temp: 0.8, topP: 0.9, freq: 0.5, pres: 0.4, json: false, name: 'Chatbot Conversacional Creativo', desc: 'Mayor temperatura y top_p permiten variedad léxica sin caer en incoherencias.' },
+        'summary': { temp: 0.2, topP: 0.3, freq: 0.2, pres: 0.0, json: false, name: 'Resumen Estricto de Documentos (Sin Alucinación)', desc: 'Evita invenciones de hechos adhiriéndose estrictamente al contexto recuperado en RAG.' }
+    },
+
+    render(containerEl) {
+        if (!containerEl) return;
+        containerEl.innerHTML = `
+            <div class="llm-playground-card">
+                <div style="margin-bottom:1rem;">
+                    <h3 style="margin:0; font-size:1.15rem; color:var(--text-color);">Playground de Parámetros de Inferencia LLM</h3>
+                    <p style="margin:2px 0 0 0; font-size:0.84rem; color:var(--text-muted);">Calibra y experimenta con los parámetros evaluados en las certificaciones de Azure AI y Databricks GenAI.</p>
+                </div>
+
+                <div style="font-size:0.78rem; font-weight:700; color:var(--primary-color); margin-bottom:6px; text-transform:uppercase;">Escenarios Oficiales de Examen:</div>
+                <div class="llm-presets-bar">
+                    <button type="button" class="llm-preset-btn active" onclick="window.PromptPlayground.applyPreset('code', this)">Código Determinista</button>
+                    <button type="button" class="llm-preset-btn" onclick="window.PromptPlayground.applyPreset('json', this)">Extracción JSON</button>
+                    <button type="button" class="llm-preset-btn" onclick="window.PromptPlayground.applyPreset('creative', this)">Agente Creativo</button>
+                    <button type="button" class="llm-preset-btn" onclick="window.PromptPlayground.applyPreset('summary', this)">Resumen RAG Estricto</button>
+                </div>
+
+                <div class="llm-slider-row">
+                    <div class="llm-slider-header">
+                        <strong>Temperature (Aleatoriedad): <span id="val-temp" style="color:var(--primary-color);">0.0</span></strong>
+                        <span style="font-size:0.75rem; color:var(--text-muted);">0.0 (Determinista) &mdash; 2.0 (Creativo/Caótico)</span>
+                    </div>
+                    <input type="range" id="slider-temp" class="llm-slider-input" min="0" max="2" step="0.1" value="0.0" oninput="window.PromptPlayground.onSliderChange()">
+                </div>
+
+                <div class="llm-slider-row">
+                    <div class="llm-slider-header">
+                        <strong>Top_p / Nucleus Sampling (Corte de Probabilidad): <span id="val-topp" style="color:var(--primary-color);">0.1</span></strong>
+                        <span style="font-size:0.75rem; color:var(--text-muted);">Corta el % acumulado de tokens más probables</span>
+                    </div>
+                    <input type="range" id="slider-topp" class="llm-slider-input" min="0" max="1" step="0.05" value="0.1" oninput="window.PromptPlayground.onSliderChange()">
+                </div>
+
+                <div class="llm-slider-row">
+                    <div class="llm-slider-header">
+                        <strong>Frequency Penalty (Evitar Repetición): <span id="val-freq" style="color:var(--primary-color);">0.0</span></strong>
+                        <span style="font-size:0.75rem; color:var(--text-muted);">-2.0 a 2.0 (Penaliza tokens por frecuencia)</span>
+                    </div>
+                    <input type="range" id="slider-freq" class="llm-slider-input" min="-2" max="2" step="0.1" value="0.0" oninput="window.PromptPlayground.onSliderChange()">
+                </div>
+
+                <div class="llm-slider-row">
+                    <div class="llm-slider-header">
+                        <strong>Presence Penalty (Introducir Nuevos Temas): <span id="val-pres" style="color:var(--primary-color);">0.0</span></strong>
+                        <span style="font-size:0.75rem; color:var(--text-muted);">-2.0 a 2.0 (Incentiva nuevos conceptos)</span>
+                    </div>
+                    <input type="range" id="slider-pres" class="llm-slider-input" min="-2" max="2" step="0.1" value="0.0" oninput="window.PromptPlayground.onSliderChange()">
+                </div>
+
+                <div class="llm-curve-card" id="llm-explanation-card">
+                    <strong>Regla de Examen:</strong> Para generación de código SQL o extracción estructurada en Azure OpenAI y Databricks Foundation Models, se recomienda <code>temperature: 0.0</code> y <code>response_format: {"type": "json_object"}</code> asegurando incluir la palabra 'JSON' en el system prompt.
+                </div>
+            </div>
+        `;
+    },
+
+    applyPreset(key, btn) {
+        const p = this.presets[key];
+        if (!p) return;
+        document.querySelectorAll('.llm-preset-btn').forEach(b => b.classList.remove('active'));
+        if (btn) btn.classList.add('active');
+
+        document.getElementById('slider-temp').value = p.temp;
+        document.getElementById('slider-topp').value = p.topP;
+        document.getElementById('slider-freq').value = p.freq;
+        document.getElementById('slider-pres').value = p.pres;
+
+        document.getElementById('val-temp').textContent = p.temp;
+        document.getElementById('val-topp').textContent = p.topP;
+        document.getElementById('val-freq').textContent = p.freq;
+        document.getElementById('val-pres').textContent = p.pres;
+
+        const exp = document.getElementById('llm-explanation-card');
+        if (exp) {
+            exp.innerHTML = `<strong>${p.name}:</strong> ${p.desc}`;
+        }
+    },
+
+    onSliderChange() {
+        const temp = document.getElementById('slider-temp').value;
+        const topp = document.getElementById('slider-topp').value;
+        const freq = document.getElementById('slider-freq').value;
+        const pres = document.getElementById('slider-pres').value;
+
+        document.getElementById('val-temp').textContent = temp;
+        document.getElementById('val-topp').textContent = topp;
+        document.getElementById('val-freq').textContent = freq;
+        document.getElementById('val-pres').textContent = pres;
+    }
+};
+
 // Initialize Spotlight Search on load
 if (typeof document !== 'undefined') {
     if (document.readyState === 'loading') {
@@ -4814,6 +5255,7 @@ if (typeof document !== 'undefined') {
         window.SpotlightSearch.init();
     }
 }
+
 
 
 
