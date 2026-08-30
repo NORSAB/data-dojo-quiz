@@ -6214,15 +6214,110 @@ window.PodcastPlaylist = {
         }
     },
 
+    cleanForNaturalSpeech(title, content) {
+        if (!content) return title || '';
+        let text = (title ? title + '. ' : '') + content;
+
+        // 0. Clean numeric/domain prefixes
+        text = text.replace(/^D[0-9]+\.\s*/i, '');
+
+        // 1. Remove only real HTML tags (preserve < and <= comparison operators)
+        text = text.replace(/<\/?(?:div|span|p|a|b|i|u|strong|em|code|pre|h[1-6]|ul|ol|li|table|tr|td|th|tbody|thead|br|hr|img|svg|path|button|label|select|option)[^>]*>/gi, ' ');
+        text = text.replace(/&nbsp;/gi, ' ');
+        text = text.replace(/&amp;/gi, ' y ');
+        text = text.replace(/&lt;/gi, ' menor que ');
+        text = text.replace(/&gt;/gi, ' mayor que ');
+
+        // 2. Clean LaTeX math environments and formulas
+        text = text.replace(/\\\((.*?)\\\)/g, ' $1 ');
+        text = text.replace(/\\\[(.*?)\\\]/g, ' $1 ');
+        text = text.replace(/\\text\{([^}]*)\}/g, ' $1 ');
+        text = text.replace(/\\mathbf\{([^}]*)\}/g, ' $1 ');
+        text = text.replace(/\\times/g, ' multiplicado por ');
+        text = text.replace(/\\ge/g, ' mayor o igual ');
+        text = text.replace(/\\le/g, ' menor o igual ');
+        text = text.replace(/\\approx/g, ' aproximadamente ');
+        text = text.replace(/\\neq/g, ' no es igual a ');
+        text = text.replace(/\\frac\{([^}]*)\}\{([^}]*)\}/g, ' $1 entre $2 ');
+        text = text.replace(/\\pm/g, ' más o menos ');
+        text = text.replace(/\\quad|\\qquad/g, ' ');
+        text = text.replace(/\\%/g, ' por ciento ');
+        text = text.replace(/\\\$|\$/g, ' ');
+        text = text.replace(/\\/g, ' ');
+
+        // 3. Clean Markdown tables & dividers
+        text = text.replace(/\|[\s-:]+\|/g, ' ');
+        text = text.replace(/\|/g, '. ');
+        text = text.replace(/^[\s-*_]{3,}$/gm, ' ');
+
+        // 4. Clean Markdown links & images
+        text = text.replace(/!\[([^\]]*)\]\([^)]*\)/g, ' $1 ');
+        text = text.replace(/\[([^\]]*)\]\([^)]*\)/g, ' $1 ');
+
+        // 5. Clean Code Blocks and Inline Code (conversational)
+        text = text.replace(/```[a-zA-Z0-9_-]*\n([\s\S]*?)```/g, function(m, code) {
+            return ' En código: ' + code.replace(/[\n;]/g, ', ') + '. ';
+        });
+        text = text.replace(/`([^`]+)`/g, ' $1 ');
+
+        // 6. Clean logic, comparisons and arrow operators
+        text = text.replace(/===|==/g, ' es igual a ');
+        text = text.replace(/!==|!=|<>/g, ' es diferente de ');
+        text = text.replace(/>=/g, ' mayor o igual a ');
+        text = text.replace(/<=/g, ' menor o igual a ');
+        text = text.replace(/-->|->|=>|==>/g, ' pasa a ');
+        text = text.replace(/&&/g, ' y ');
+        text = text.replace(/\|\|/g, ' o ');
+
+        // 7. Clean Markdown formatting & headers
+        text = text.replace(/^#+\s+/gm, '');
+        text = text.replace(/\*\*([^*]+)\*\*/g, ' $1 ');
+        text = text.replace(/\*([^*]+)\*/g, ' $1 ');
+        text = text.replace(/__([^_]+)__/g, ' $1 ');
+
+        // 8. Clean bullets and dashes so TTS does NOT say 'guión' or 'menos'
+        text = text.replace(/^[\s]*[-*+•]\s+/gm, '. ');
+        text = text.replace(/\s+-\s+/g, ', ');
+        text = text.replace(/--|—|–/g, ', ');
+
+        // 9. Clean underscores in variable names (e.g. delta_sync -> delta sync)
+        text = text.replace(/([a-zA-Z0-9])_([a-zA-Z0-9])/g, '$1 $2');
+        text = text.replace(/_/g, ' ');
+
+        // 10. Clean brackets, braces, quotes and syntax noise
+        text = text.replace(/[{}[\]()\"']/g, ' ');
+        text = text.replace(/\s*\/\s*/g, ' o ');
+
+        // 11. Normalize technical units & terms for smooth voice
+        text = text.replace(/\b(\d+)\s*ms\b/gi, '$1 milisegundos');
+        text = text.replace(/\b(\d+)\s*s\b/gi, '$1 segundos');
+        text = text.replace(/\b(\d+)\s*min\b/gi, '$1 minutos');
+        text = text.replace(/\b(\d+)\s*GB\b/gi, '$1 gigabytes');
+        text = text.replace(/\b(\d+)\s*TB\b/gi, '$1 terabytes');
+        text = text.replace(/\b(\d+)\s*MB\b/gi, '$1 megabytes');
+        text = text.replace(/\bQPS\b/g, 'Q P S');
+        text = text.replace(/\bLLM\b/g, 'modelos L L M');
+        text = text.replace(/\bLLMs\b/g, 'modelos L L M');
+
+        // 12. Normalize punctuation, commas, dots and whitespace
+        text = text.replace(/\s*,\s*,+/g, ',');
+        text = text.replace(/\s*\.\s*\.+/g, '.');
+        text = text.replace(/\s*,\s*\./g, '.');
+        text = text.replace(/\s*\.\s*,/g, '.');
+        text = text.replace(/\s+/g, ' ').trim();
+
+        return text;
+    },
+
     playTrack(idx) {
         if (!window.speechSynthesis || !this.playlist.length) return;
         window.speechSynthesis.cancel();
         this.currentTrackIndex = idx % this.playlist.length;
         const track = this.playlist[this.currentTrackIndex];
         
-        // Clean markdown symbols for speech synthesis
-        const rawText = (track.content || '').replace(/[*#`_\[\]]/g, '').replace(/<[^>]*>/g, '');
-        const utter = new SpeechSynthesisUtterance(`${track.title}. ${rawText}`);
+        // Clean markdown, LaTeX, and code syntax into natural conversational speech
+        const naturalText = this.cleanForNaturalSpeech(track.title, track.content);
+        const utter = new SpeechSynthesisUtterance(naturalText);
         utter.rate = this.playbackSpeed;
         if (this.voices[this.selectedVoiceIndex]) {
             utter.voice = this.voices[this.selectedVoiceIndex];

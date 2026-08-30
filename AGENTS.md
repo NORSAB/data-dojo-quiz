@@ -421,6 +421,15 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
 - Actualizó la PWA a `BUILD_TIMESTAMP = '20260830n'` y caché `simulador-v42-20260830n` en `sw.js` e `index.html`.
 - Verificó con 0 errores las 6 suites de validación (`validate_full_application.js` con **74/74 checks pasados**, `validate_ui_palette.js` con 18 colores hex y 0 gradientes, `validate_global_language.js`, `validate_ai103_integration.js`, `validate_genai_integration.js`, `audit_code_structure.js`).
 
+### 2026-08-30 14:40 CST — Antigravity (Gemini 3.7 Flash)
+- **Speech Humanizer & Naturalizador de Locución en Podcasts (`cleanForNaturalSpeech`)**:
+  1. **Supresión total de artefactos de sintaxis técnica**: Elimina lecturas mecánicas de etiquetas LaTeX (`\times`, `\ge`, `\le`, `\frac`, `\$`), delimitadores de Markdown (`**`, `#`, `_`, `` ` ``), llaves, corchetes y comillas.
+  2. **Traducción natural de operadores y guiones**: Transforma viñetas y guiones aislados en pausas/puntos (evitando que la voz diga la palabra *"guión"* o *"menos"*), reemplaza guiones bajos de variables (`delta_sync` &rarr; `delta sync`) y traduce operadores lógicos (`<=` &rarr; *"menor o igual a"*, `->` &rarr; *"pasa a"*, `&&` &rarr; *"y"*).
+  3. **Conversión de bloques de código a narrativa fluida**: Normaliza bloques de código técnico a expresiones conversacionales legibles sin deletrear caracteres especiales.
+- Actualizó la PWA a `BUILD_TIMESTAMP = '20260830o'` y caché `simulador-v43-20260830o` en `sw.js` e `index.html`.
+- Verificó con 0 errores las 6 suites de validación (`validate_full_application.js` con **74/74 checks pasados**, `validate_ui_palette.js` con 18 colores hex y 0 gradientes, `validate_global_language.js`, `validate_ai103_integration.js`, `validate_genai_integration.js`, `audit_code_structure.js`).
+
+
 
 
 
