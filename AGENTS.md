@@ -447,6 +447,16 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
 - Actualizó la PWA a `BUILD_TIMESTAMP = '20260830q'` y caché `simulador-v45-20260830q` en `sw.js` e `index.html`.
 - Verificó con 0 errores las 6 suites de validación (`validate_full_application.js` con **74/74 checks pasados**, `validate_ui_palette.js` con 18 colores hex y 0 gradientes, `validate_global_language.js`, `validate_ai103_integration.js`, `validate_genai_integration.js`, `audit_code_structure.js`).
 
+### 2026-08-30 14:53 CST — Antigravity (Gemini 3.7 Flash)
+- **Evolución a Matriz de 4 Selectores Dropdown Independientes en el Hub de Podcast**:
+  1. **Dropdown de Episodios Temáticos**: Reemplazó la barra de píldoras horizontales por un menú `<select>` nativo y ordenado (`2. Episodio / Capítulo`), permitiendo seleccionar cualquier capítulo técnico sin scrollbars ni cortes de texto.
+  2. **Dropdown de Velocidad de Locución**: Convirtió el grupo de botones de velocidad en un menú `<select>` independiente (`4. Velocidad de Locución`) con descripciones claras (`0.75x — Ritmo Pausado / Detallado`, `1.0x — Velocidad Normal (Estándar)`, `1.25x — Ritmo Dinámico`, `1.5x — Estudio Acelerado`, `2.0x — Repaso Ultra Rápido`).
+  3. **Distribución en Cuadrícula 2x2 Bien Separada**: Organizó los 4 controles en un grid responsive (`grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px;`) con `.podcast-field-label` destacado.
+  4. **Tarjeta de Reproductor Centralizada**: Consolidó los botones principales de reproducción (`Anterior`, `▶ Reproducir Episodio`, `Siguiente`) y el estado de avance automático en un bloque limpio y espacioso.
+- Actualizó la PWA a `BUILD_TIMESTAMP = '20260830r'` y caché `simulador-v46-20260830r` en `sw.js` e `index.html`.
+- Verificó con 0 errores las 6 suites de validación (`validate_full_application.js` con **74/74 checks pasados**, `validate_ui_palette.js` con 18 colores hex y 0 gradientes, `validate_global_language.js`, `validate_ai103_integration.js`, `validate_genai_integration.js`, `audit_code_structure.js`).
+
+
 
 
 

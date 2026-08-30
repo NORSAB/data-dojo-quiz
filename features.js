@@ -6202,7 +6202,7 @@ window.PodcastPlaylist = {
     },
 
     setSpeed(spd) {
-        this.playbackSpeed = spd;
+        this.playbackSpeed = parseFloat(spd) || 1.0;
         this.render();
         if (this.isPlaying) {
             this.playTrack(this.currentTrackIndex);
@@ -6367,30 +6367,40 @@ window.PodcastPlaylist = {
         const container = document.getElementById('podcast-playlist-body');
         if (!container) return;
 
-        // Course options
+        // 1. Course options
         let courseOptionsHtml = '';
         this.courses.forEach(c => {
             const isSel = c.id === this.selectedCourseId;
             courseOptionsHtml += `<option value="${c.id}" ${isSel ? 'selected' : ''}>${c.name}</option>`;
         });
 
-        // Episode pills
+        // 2. Episode options
         const episodes = this.getEpisodesForCourse(this.selectedCourseId);
-        let epPillsHtml = '';
+        let epOptionsHtml = '';
         episodes.forEach((ep, idx) => {
             const isSel = idx === this.selectedEpisodeIndex;
-            epPillsHtml += `
-                <button type="button" class="podcast-ep-btn ${isSel ? 'active' : ''}" onclick="window.PodcastPlaylist.setEpisode(${idx})">
-                    ${ep.title}
-                </button>
-            `;
+            epOptionsHtml += `<option value="${idx}" ${isSel ? 'selected' : ''}>${ep.title}</option>`;
         });
 
-        // Voice options
+        // 3. Voice options
         let voiceOptionsHtml = '';
         this.voices.forEach((v, idx) => {
             const isSel = idx === this.selectedVoiceIndex;
             voiceOptionsHtml += `<option value="${idx}" ${isSel ? 'selected' : ''}>${v.name} (${v.lang})</option>`;
+        });
+
+        // 4. Speed options
+        const speeds = [
+            { val: 0.75, label: '0.75x — Ritmo Pausado / Detallado' },
+            { val: 1.0,  label: '1.0x — Velocidad Normal (Estándar)' },
+            { val: 1.25, label: '1.25x — Ritmo Dinámico' },
+            { val: 1.5,  label: '1.5x — Estudio Acelerado' },
+            { val: 2.0,  label: '2.0x — Repaso Ultra Rápido' }
+        ];
+        let speedOptionsHtml = '';
+        speeds.forEach(s => {
+            const isSel = Math.abs(this.playbackSpeed - s.val) < 0.05;
+            speedOptionsHtml += `<option value="${s.val}" ${isSel ? 'selected' : ''}>${s.label}</option>`;
         });
 
         // Track items
@@ -6414,67 +6424,73 @@ window.PodcastPlaylist = {
 
         container.innerHTML = `
             <div>
-                <!-- Top Series & Course Selection -->
-                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:12px; margin-bottom:12px;">
+                <!-- Top 4 Configuration Dropdowns (2x2 Grid) -->
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:14px; margin-bottom:16px;">
                     <div>
-                        <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted); display:block; margin-bottom:4px;">1. Seleccionar Certificación / Examen:</label>
-                        <select class="voice-select-dropdown" style="margin:0; width:100%; box-sizing:border-box;" onchange="window.PodcastPlaylist.setCourse(this.value)">
+                        <label class="podcast-field-label">1. Certificación / Examen Oficial:</label>
+                        <select class="voice-select-dropdown" onchange="window.PodcastPlaylist.setCourse(this.value)">
                             ${courseOptionsHtml}
                         </select>
                     </div>
                     <div>
-                        <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted); display:block; margin-bottom:4px;">2. Seleccionar Voz (Web Speech API):</label>
-                        <select class="voice-select-dropdown" style="margin:0; width:100%; box-sizing:border-box;" onchange="window.PodcastPlaylist.setVoice(this.value)">
+                        <label class="podcast-field-label">2. Episodio / Capítulo (${episodes.length} Disponibles):</label>
+                        <select class="voice-select-dropdown" onchange="window.PodcastPlaylist.setEpisode(this.value)">
+                            ${epOptionsHtml}
+                        </select>
+                    </div>
+                    <div>
+                        <label class="podcast-field-label">3. Voz del Sistema (Web Speech API):</label>
+                        <select class="voice-select-dropdown" onchange="window.PodcastPlaylist.setVoice(this.value)">
                             ${voiceOptionsHtml || '<option>Voz del Sistema por Defecto</option>'}
+                        </select>
+                    </div>
+                    <div>
+                        <label class="podcast-field-label">4. Velocidad de Locución:</label>
+                        <select class="voice-select-dropdown" onchange="window.PodcastPlaylist.setSpeed(this.value)">
+                            ${speedOptionsHtml}
                         </select>
                     </div>
                 </div>
 
-                <!-- Thematic Episodes / Podcasts for this exam -->
-                <div style="margin-bottom:12px;">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                        <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted); margin:0;">3. Seleccionar Episodio Temático (${episodes.length} Disponibles):</label>
-                        <span style="font-size:0.75rem; color:var(--primary-color); font-weight:700;">Capítulos Específicos</span>
-                    </div>
-                    <div class="podcast-episodes-bar">
-                        ${epPillsHtml}
-                    </div>
-                </div>
-
                 <!-- Player Controls Card -->
-                <div style="background:var(--bg-surface); padding:1rem 1.2rem; border-radius:var(--radius-md); border:1px solid var(--border-color); margin-bottom:1rem;">
-                    <div style="display:flex; flex-direction:column; gap:10px;">
+                <div style="background:var(--bg-surface); padding:1.1rem 1.4rem; border-radius:var(--radius-md); border:1px solid var(--border-color); margin-bottom:1.2rem;">
+                    <div style="display:flex; flex-direction:column; gap:12px;">
                         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
-                            <span style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">Velocidad de Locución:</span>
-                            <div class="speed-btn-group" style="width:200px; margin:0;">
-                                ${[0.75, 1.0, 1.25, 1.5, 2.0].map(s => `
-                                    <button type="button" class="speed-btn ${this.playbackSpeed === s ? 'active' : ''}" onclick="window.PodcastPlaylist.setSpeed(${s})">${s}x</button>
-                                `).join('')}
+                            <div style="display:flex; align-items:center; gap:8px; font-size:0.85rem; font-weight:700; color:var(--text-color);">
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--primary-color)" stroke-width="2"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+                                <span>${this.isPlaying ? `Reproduciendo pista ${this.currentTrackIndex + 1} de ${this.playlist.length}` : `En Pausa • ${this.playlist.length} pistas en lista`}</span>
                             </div>
+                            <span style="font-size:0.75rem; color:var(--primary-color); font-weight:700; background:rgba(49, 87, 213, 0.1); padding:4px 10px; border-radius:99px;">
+                                Avance Automático Continuo
+                            </span>
                         </div>
 
-                        <div style="display:flex; justify-content:center; align-items:center; gap:12px; padding-top:4px;">
-                            <button type="button" class="btn btn-outline btn-sm" onclick="window.PodcastPlaylist.prev()" title="Tema Anterior" style="padding:6px 14px;">&larr; Anterior</button>
-                            <button type="button" class="btn btn-primary" onclick="window.PodcastPlaylist.togglePlay()" style="min-width:160px; font-weight:800; padding:8px 18px;">
+                        <div style="display:flex; justify-content:center; align-items:center; gap:14px; padding-top:4px;">
+                            <button type="button" class="btn btn-outline" onclick="window.PodcastPlaylist.prev()" title="Tema Anterior" style="padding:8px 18px; font-weight:700;">
+                                &larr; Anterior
+                            </button>
+                            <button type="button" class="btn btn-primary" onclick="window.PodcastPlaylist.togglePlay()" style="min-width:180px; font-weight:800; padding:10px 22px; font-size:0.95rem;">
                                 ${this.isPlaying ? 'Pausar Audio' : '▶ Reproducir Episodio'}
                             </button>
-                            <button type="button" class="btn btn-outline btn-sm" onclick="window.PodcastPlaylist.next()" title="Siguiente Tema" style="padding:6px 14px;">Siguiente &rarr;</button>
+                            <button type="button" class="btn btn-outline" onclick="window.PodcastPlaylist.next()" title="Siguiente Tema" style="padding:8px 18px; font-weight:700;">
+                                Siguiente &rarr;
+                            </button>
                         </div>
                     </div>
                 </div>
 
                 <!-- Playlist Queue -->
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                    <div style="font-size:0.82rem; font-weight:700; color:var(--text-muted);">Temas en este Episodio (${this.playlist.length} Pistas):</div>
-                    <span style="font-size:0.75rem; color:var(--text-muted);">Avance automático continuo</span>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <div style="font-size:0.84rem; font-weight:700; color:var(--text-color);">Temas en este Episodio (${this.playlist.length} Pistas):</div>
+                    <span style="font-size:0.75rem; color:var(--text-muted);">Toca cualquier tema para saltar a él</span>
                 </div>
-                <div style="max-height:230px; overflow-y:auto; border:1px solid var(--border-color); border-radius:var(--radius-md); box-sizing:border-box;">
+                <div style="max-height:240px; overflow-y:auto; border:1px solid var(--border-color); border-radius:var(--radius-md); box-sizing:border-box;">
                     ${listHtml}
                 </div>
 
                 <!-- Bottom Modal Footer -->
-                <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:1rem; padding-top:0.75rem; border-top:1px solid var(--border-color);">
-                    <button type="button" class="btn btn-outline" onclick="window.PodcastPlaylist.close()" style="font-weight:700;">
+                <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:1.2rem; padding-top:0.85rem; border-top:1px solid var(--border-color);">
+                    <button type="button" class="btn btn-outline" onclick="window.PodcastPlaylist.close()" style="font-weight:700; padding:8px 20px;">
                         Volver al Panel
                     </button>
                 </div>

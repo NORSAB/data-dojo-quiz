@@ -6122,16 +6122,29 @@ html, body {
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
-  padding: 8px 12px;
+  padding: 9px 12px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--border-color);
   background: var(--bg-card);
   color: var(--text-color);
   font-size: 0.88rem;
-  margin: 6px 0 10px;
+  margin: 0;
   text-overflow: ellipsis;
   outline: none;
   cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+.voice-select-dropdown:focus {
+  border-color: var(--primary-color);
+}
+
+.podcast-field-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  display: block;
+  margin-bottom: 6px;
 }
 
 .modal-close-btn {
