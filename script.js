@@ -2145,11 +2145,20 @@ const badgesConfig = [
         return;
     }
     // -----------------------------
+        const splitBtn = document.getElementById("split-pane-toggle-btn");
+        const hasScenario = Boolean(q.scenarioText || (q.prompt && q.prompt.length > 280) || q.type === 'scenario');
         if (q.scenarioText) {
           scenarioBlock.textContent = q.scenarioText;
           scenarioBlock.classList.remove("hidden");
         } else {
           scenarioBlock.classList.add("hidden");
+        }
+        if (splitBtn) {
+          if (hasScenario) {
+            splitBtn.classList.remove("hidden");
+          } else {
+            splitBtn.classList.add("hidden");
+          }
         }
     
         // Type Instruction
@@ -2704,6 +2713,17 @@ const badgesConfig = [
   }
   window.toggleFlagCurrentQuestion = toggleFlagCurrentQuestion;
 
+  function toggleSplitPaneView() {
+    const card = document.getElementById("question-card");
+    const btn = document.getElementById("split-pane-toggle-btn");
+    if (!card) return;
+    const isActive = card.classList.toggle("split-pane-active");
+    if (btn) {
+      btn.classList.toggle("active", isActive);
+    }
+  }
+  window.toggleSplitPaneView = toggleSplitPaneView;
+
   function updateFlagButtonUI() {
     const flagBtn = document.getElementById("flag-question-btn");
     if (!flagBtn) return;
@@ -3157,6 +3177,26 @@ const badgesConfig = [
             } else {
                 domainBreakdownContainer.classList.add("hidden");
             }
+        }
+
+        // Diagnostic Mode Gap Analysis
+        if (window.isDiagnosticMode && window.DiagnosticMode) {
+            let gapBox = document.getElementById("diagnostic-gap-analysis-container");
+            if (!gapBox) {
+                gapBox = document.createElement("div");
+                gapBox.id = "diagnostic-gap-analysis-container";
+                if (domainBreakdownContainer) {
+                    domainBreakdownContainer.insertAdjacentElement('afterend', gapBox);
+                } else if (resultsScreen) {
+                    resultsScreen.appendChild(gapBox);
+                }
+            }
+            window.DiagnosticMode.renderGapAnalysis(gapBox, userAnswers, currentQuizQuestions, window.currentCourseId);
+            window.isDiagnosticMode = false;
+        }
+
+        if (window.DailyQuickDrill) {
+            window.DailyQuickDrill.markCompletedToday();
         }
 
         // --- Generate Review (Refactored) ---
@@ -3815,6 +3855,9 @@ function renderReview(questions, finalPct, passed) {
             ${hasFlashcards ? `<button type="button" class="unir-tab" id="unir-tab-flashcards" role="tab" aria-selected="false" aria-controls="unir-panel-flashcards" tabindex="-1" onclick="window._unirSwitchTab('flashcards')">
               ${svgIcon(SVG.flip, 15)} Flashcards <span class="unir-tab-count">${flashcards.length}</span>
             </button>` : ''}
+            <button type="button" class="unir-tab" id="unir-tab-decisions" role="tab" aria-selected="false" aria-controls="unir-panel-decisions" tabindex="-1" onclick="window._unirSwitchTab('decisions')">
+              ${svgIcon('M9 18h6M10 22h4M12 2a7 7 0 00-4 12.74V16h8v-1.26A7 7 0 0012 2z', 15)} ${localizedMarkup('Decisions', 'Decisiones')}
+            </button>
             <button type="button" class="unir-tab" id="unir-tab-sql-sandbox" role="tab" aria-selected="false" aria-controls="unir-panel-sql-sandbox" tabindex="-1" onclick="window._unirSwitchTab('sql-sandbox')">
               ${svgIcon('M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z', 15)} ${localizedMarkup('SQL Sandbox', 'Sandbox SQL')}
             </button>
@@ -3849,6 +3892,9 @@ function renderReview(questions, finalPct, passed) {
 
           ${hasGenAIPatterns ? '<div class="unir-panel" id="unir-panel-patterns" role="tabpanel" aria-labelledby="unir-tab-patterns" hidden></div>' : ''}
 
+          <!-- PANEL: Decisions -->
+          <div class="unir-panel" id="unir-panel-decisions" role="tabpanel" aria-labelledby="unir-tab-decisions" hidden></div>
+
           <!-- PANEL: Flashcards -->
           ${hasFlashcards ? '<div class="unir-panel" id="unir-panel-flashcards" role="tabpanel" aria-labelledby="unir-tab-flashcards" hidden></div>' : ''}
 
@@ -3869,6 +3915,7 @@ function renderReview(questions, finalPct, passed) {
       if (hasConceptos) allTabs.push('conceptos');
       if (hasComandosSQL) allTabs.push('comandos');
       if (hasGenAIPatterns) allTabs.push('patterns');
+      allTabs.push('decisions');
       if (hasFlashcards) allTabs.push('flashcards');
       allTabs.push('sql-sandbox');
       allTabs.push('achievements');
@@ -3891,6 +3938,7 @@ function renderReview(questions, finalPct, passed) {
         if (tab === 'conceptos') renderConceptos();
         if (tab === 'comandos') renderComandosSQL();
         if (tab === 'patterns') renderGenAIPatterns();
+        if (tab === 'decisions' && window.DecisionNavigator) window.DecisionNavigator.renderMatrix(document.getElementById('unir-panel-decisions'), courseId);
       };
 
       // Codex (GPT-5) | 2026-08-23 21:55 CST | Controla el nivel intermedio para que cada subsección de estudio inicie contraída.
@@ -4861,6 +4909,14 @@ function renderReview(questions, finalPct, passed) {
               break;
           case "ArrowLeft":
               navigate(-1);
+              break;
+          case "f":
+          case "F":
+              toggleFlagCurrentQuestion();
+              break;
+          case "v":
+          case "V":
+              toggleSplitPaneView();
               break;
           case "1":
           case "2":

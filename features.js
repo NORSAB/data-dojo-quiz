@@ -3223,44 +3223,51 @@ window.StudyGuidePDF = {
         const scopeSelect = document.getElementById('pdf-guide-scope');
         const domainSelect = document.getElementById('pdf-guide-domain');
         const langSelect = document.getElementById('pdf-guide-lang');
+        const typeSelect = document.getElementById('pdf-guide-type');
         if (!courseSelect) return;
 
         const cid = courseSelect.value;
         const scope = scopeSelect ? scopeSelect.value : 'all';
         const selectedDomain = domainSelect ? domainSelect.value : '';
         const lang = langSelect ? langSelect.value : 'es';
+        const isCheatSheet = typeSelect ? typeSelect.value === 'cheat_sheet' : false;
         const courseTitle = this.courseTitles[cid] || cid;
 
-        const allQuestions = window.questionsData || [];
-        const scoped = allQuestions.filter(q => q.courseId === cid);
-        const localized = scoped.filter(q => q.lang === lang);
-        let questions = localized.length > 0 ? localized : scoped;
+        let html = '';
+        if (isCheatSheet) {
+            html = this.buildCheatSheetHTML({ courseTitle, cid, lang });
+        } else {
+            const allQuestions = window.questionsData || [];
+            const scoped = allQuestions.filter(q => q.courseId === cid);
+            const localized = scoped.filter(q => q.lang === lang);
+            let questions = localized.length > 0 ? localized : scoped;
 
-        if (scope === 'single' && selectedDomain) {
-            questions = questions.filter(q => q.domain === selectedDomain);
+            if (scope === 'single' && selectedDomain) {
+                questions = questions.filter(q => q.domain === selectedDomain);
+            }
+
+            if (questions.length === 0) {
+                alert('No se encontraron preguntas para los filtros seleccionados.');
+                return;
+            }
+
+            // Group questions by domain
+            const domainMap = new Map();
+            questions.forEach(q => {
+                const dom = q.domain || (lang === 'es' ? 'Dominio General' : 'General Domain');
+                if (!domainMap.has(dom)) domainMap.set(dom, []);
+                domainMap.get(dom).push(q);
+            });
+
+            // Build Document HTML
+            html = this.buildDocumentHTML({
+                courseTitle,
+                cid,
+                lang,
+                totalQuestions: questions.length,
+                domainMap
+            });
         }
-
-        if (questions.length === 0) {
-            alert('No se encontraron preguntas para los filtros seleccionados.');
-            return;
-        }
-
-        // Group questions by domain
-        const domainMap = new Map();
-        questions.forEach(q => {
-            const dom = q.domain || (lang === 'es' ? 'Dominio General' : 'General Domain');
-            if (!domainMap.has(dom)) domainMap.set(dom, []);
-            domainMap.get(dom).push(q);
-        });
-
-        // Build Document HTML
-        const html = this.buildDocumentHTML({
-            courseTitle,
-            cid,
-            lang,
-            totalQuestions: questions.length,
-            domainMap
-        });
 
         this.closeModal();
 
@@ -3274,6 +3281,82 @@ window.StudyGuidePDF = {
             // Fallback: render overlay in active document if popup blocked
             this.renderPrintOverlay(html);
         }
+    },
+
+    buildCheatSheetHTML({ courseTitle, cid, lang }) {
+        const dateStr = new Date().toLocaleDateString(lang === 'es' ? 'es-ES' : 'en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        const matrices = window.DecisionNavigator ? (window.DecisionNavigator.matrices[cid] || window.DecisionNavigator.matrices['azure-ai-103']) : [];
+        const matrixRows = matrices.map(m => `
+            <div style="margin-bottom:8px;padding:6px;border:1px solid #e2e8f0;border-radius:4px;background:#f8fafc;">
+                <div style="font-weight:700;color:#1e293b;font-size:11px;">[${m.category}] ${m.decision}</div>
+                <div style="font-size:10px;color:#334155;margin-top:2px;">${m.whenToUse}</div>
+            </div>
+        `).join('');
+
+        return `<!DOCTYPE html>
+<html lang="${lang}">
+<head>
+  <meta charset="UTF-8">
+  <title>Cheat-Sheet & Reglas de Oro — ${this.escapeHtml(courseTitle)}</title>
+  <style>
+    @page { size: A4 portrait; margin: 12mm; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 10px; line-height: 1.35; color: #0f172a; margin: 0; padding: 0; }
+    .sheet-header { border-bottom: 2px solid #3157d5; padding-bottom: 8px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: flex-end; }
+    .sheet-title { font-size: 15px; font-weight: 800; color: #0f172a; margin: 0; }
+    .sheet-sub { font-size: 10px; color: #64748b; margin-top: 2px; }
+    .two-col { column-count: 2; column-gap: 16px; }
+    .box { break-inside: avoid; border: 1px solid #cbd5e1; border-radius: 6px; padding: 8px 10px; margin-bottom: 12px; background: #ffffff; }
+    .box-title { font-size: 11px; font-weight: 800; color: #3157d5; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; margin-bottom: 6px; }
+    ul, ol { margin: 0; padding-left: 14px; }
+    li { margin-bottom: 4px; }
+    @media print { .no-print { display: none; } }
+  </style>
+</head>
+<body>
+  <div class="no-print" style="background:#f1f5f9;padding:10px;text-align:center;border-bottom:1px solid #cbd5e1;margin-bottom:12px;">
+    <button onclick="window.print()" style="background:#3157d5;color:#fff;border:none;padding:6px 16px;border-radius:4px;font-weight:700;cursor:pointer;">Imprimir / Guardar PDF</button>
+  </div>
+  <header class="sheet-header">
+    <div>
+      <h1 class="sheet-title">Hoja de Reglas de Oro & Decisiones Clave</h1>
+      <div class="sheet-sub">${this.escapeHtml(courseTitle)} &bull; Candidato: <strong>Norman Reynaldo Sabillon Castro</strong></div>
+    </div>
+    <div style="text-align:right;font-size:9px;color:#64748b;">
+      The Data Dojo &bull; ${dateStr}
+    </div>
+  </header>
+  <div class="two-col">
+    <div class="box">
+      <div class="box-title">1. Principios Inquebrantables del Examen</div>
+      <ul>
+        <li><strong>Arquitectura RAG Óptima:</strong> La búsqueda híbrida (Vector + BM25) combinada con Semantic Re-ranker (L2) proporciona la máxima precisión y recall.</li>
+        <li><strong>Model Serving & SLAs:</strong> Usa Provisioned Throughput para latencias garantizadas y Foundation Model APIs para variabilidad y prototipado.</li>
+        <li><strong>Evaluación con Groundedness:</strong> Mide si la respuesta generada por el LLM está 100% respaldada por los fragmentos recuperados para evitar alucinaciones.</li>
+        <li><strong>Gobernanza Unificada:</strong> Todo recurso (datos, modelos, funciones y vectores) debe gobernarse mediante catálogo centralizado y control de acceso RBAC.</li>
+      </ul>
+    </div>
+
+    <div class="box">
+      <div class="box-title">2. Matrices de Decisión ("¿Cuándo usar cuál?")</div>
+      ${matrixRows}
+    </div>
+
+    <div class="box">
+      <div class="box-title">3. Trampas Comunes y Palabras Clave (Pitfalls)</div>
+      <ul>
+        <li><strong>Fine-Tuning vs RAG:</strong> Nunca uses fine-tuning para enseñar hechos nuevos o datos que cambian frecuentemente; usa RAG. Usa fine-tuning para formato, estilo o dialectos.</li>
+        <li><strong>HNSW vs KNN Exhaustivo:</strong> HNSW es aproximado y veloz para millones de vectores; KNN exhaustivo solo para conjuntos diminutos (<1,000) que exijan recall del 100%.</li>
+        <li><strong>Redacción de PII:</strong> Aplica redacción antes de almacenar en logs o pasar a modelos públicos de terceros.</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>`;
     },
 
     buildDocumentHTML({ courseTitle, cid, lang, totalQuestions, domainMap }) {
@@ -3687,6 +3770,506 @@ window.StudyGuidePDF = {
         doc.open();
         doc.write(html);
         doc.close();
+    },
+
+    onTypeChange() {
+        const typeSelect = document.getElementById('pdf-guide-type');
+        const scopeGroup = document.getElementById('pdf-guide-scope')?.parentElement;
+        const domainGroup = document.getElementById('pdf-guide-domain-group');
+        if (!typeSelect) return;
+        const isCheatSheet = typeSelect.value === 'cheat_sheet';
+        if (scopeGroup) scopeGroup.style.display = isCheatSheet ? 'none' : 'block';
+        if (domainGroup) domainGroup.style.display = isCheatSheet ? 'none' : (document.getElementById('pdf-guide-scope')?.value === 'single' ? 'block' : 'none');
+        this.updateStats();
     }
 };
+
+// =============================================================================
+// F26: SPOTLIGHT UNIVERSAL SEARCH ENGINE (Ctrl + K)
+// =============================================================================
+window.SpotlightSearch = {
+    activeCategory: 'all',
+    selectedIndex: 0,
+    currentResults: [],
+
+    init() {
+        window.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K')) {
+                e.preventDefault();
+                this.open();
+            }
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('spotlight-search-modal');
+                if (modal && !modal.classList.contains('hidden')) {
+                    this.close();
+                }
+            }
+        });
+
+        const input = document.getElementById('spotlight-input');
+        if (input) {
+            input.addEventListener('input', () => this.onInput());
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    this.navigate(1);
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    this.navigate(-1);
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    this.selectCurrent();
+                }
+            });
+        }
+    },
+
+    open() {
+        const modal = document.getElementById('spotlight-search-modal');
+        const input = document.getElementById('spotlight-input');
+        if (!modal) return;
+        modal.classList.remove('hidden');
+        if (input) {
+            input.value = '';
+            input.focus();
+        }
+        this.selectedIndex = 0;
+        this.activeCategory = 'all';
+        this.renderInitialResults();
+    },
+
+    close() {
+        const modal = document.getElementById('spotlight-search-modal');
+        if (modal) modal.classList.add('hidden');
+    },
+
+    setCategory(cat) {
+        this.activeCategory = cat;
+        document.querySelectorAll('.spotlight-cat-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.getAttribute('data-cat') === cat);
+        });
+        this.onInput();
+    },
+
+    onInput() {
+        const input = document.getElementById('spotlight-input');
+        const query = input ? input.value.trim().toLowerCase() : '';
+        if (!query) {
+            this.renderInitialResults();
+            return;
+        }
+        this.search(query);
+    },
+
+    search(query) {
+        const results = [];
+        const allQuestions = window.questionsData || [];
+        const lang = window.AppI18n ? window.AppI18n.getLanguage() : 'es';
+
+        // 1. Search Questions
+        if (this.activeCategory === 'all' || this.activeCategory === 'questions') {
+            allQuestions.filter(q => q.lang === lang || !q.lang).forEach(q => {
+                const promptMatch = (q.prompt || '').toLowerCase().includes(query);
+                const explMatch = (q.explanation || '').toLowerCase().includes(query);
+                const domainMatch = (q.domain || '').toLowerCase().includes(query);
+                if (promptMatch || explMatch || domainMatch) {
+                    results.push({
+                        type: 'question',
+                        badge: 'Pregunta',
+                        title: q.prompt ? (q.prompt.length > 90 ? q.prompt.slice(0, 90) + '...' : q.prompt) : `Pregunta ${q.id}`,
+                        desc: `${q.domain || 'General'} &bull; ${q.courseId || ''}`,
+                        action: () => {
+                            this.close();
+                            if (typeof window.startSingleQuestionPractice === 'function') {
+                                window.startSingleQuestionPractice(q);
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        // 2. Search Terms / Concepts
+        if (this.activeCategory === 'all' || this.activeCategory === 'terms') {
+            const azureTerms = window.studyAzureAi103Resources?.terms || [];
+            const genAiTerms = window.studyGenAiResources?.terms || [];
+            const databricksTerms = window.conceptosDatabricks || [];
+            const combinedTerms = [...azureTerms, ...genAiTerms, ...databricksTerms];
+
+            combinedTerms.forEach(cat => {
+                (cat.items || cat.conceptos || []).forEach(item => {
+                    const term = item.term || item.title || item.concepto || '';
+                    const def = item.def || item.definition || item.desc || '';
+                    if (term.toLowerCase().includes(query) || def.toLowerCase().includes(query)) {
+                        results.push({
+                            type: 'term',
+                            badge: 'Término',
+                            title: term,
+                            desc: def.length > 100 ? def.slice(0, 100) + '...' : def,
+                            action: () => {
+                                this.close();
+                                if (typeof window.openStudyCenterTab === 'function') {
+                                    window.openStudyCenterTab('conceptos');
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+        }
+
+        // 3. Search Study Modules
+        if (this.activeCategory === 'all' || this.activeCategory === 'study') {
+            const studyData = window.studyData || {};
+            Object.keys(studyData).forEach(cid => {
+                const modules = studyData[cid] || [];
+                modules.forEach(mod => {
+                    if ((mod.title || '').toLowerCase().includes(query)) {
+                        results.push({
+                            type: 'study',
+                            badge: 'Estudio',
+                            title: mod.title,
+                            desc: `Módulo oficial &bull; ${cid}`,
+                            action: () => {
+                                this.close();
+                                if (typeof window.openStudyMode === 'function') {
+                                    window.openStudyMode(cid);
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+        }
+
+        // Limit results
+        this.currentResults = results.slice(0, 25);
+        this.selectedIndex = 0;
+        this.renderResults();
+    },
+
+    renderInitialResults() {
+        const container = document.getElementById('spotlight-results');
+        if (!container) return;
+        container.innerHTML = `
+            <div style="padding: 24px; text-align: center; color: var(--text-muted); font-size: 0.88rem;">
+                <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 8px; opacity: 0.6;"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                <div style="font-weight: 600; color: var(--text-color);">Búsqueda Instantánea en Todo The Data Dojo</div>
+                <div style="font-size: 0.8rem; margin-top: 4px;">Escribe palabras clave como "Vector Search", "Document Intelligence", "Direct Lake", etc.</div>
+            </div>
+        `;
+    },
+
+    renderResults() {
+        const container = document.getElementById('spotlight-results');
+        if (!container) return;
+
+        if (this.currentResults.length === 0) {
+            container.innerHTML = `
+                <div style="padding: 20px; text-align: center; color: var(--text-muted); font-size: 0.88rem;">
+                    No se encontraron resultados para los términos ingresados.
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = this.currentResults.map((res, idx) => `
+            <div class="spotlight-item ${idx === this.selectedIndex ? 'selected' : ''}" onclick="window.SpotlightSearch.selectIndex(${idx})">
+                <span class="spotlight-item-badge">${res.badge}</span>
+                <div class="spotlight-item-content">
+                    <div class="spotlight-item-title">${this.escapeHtml(res.title)}</div>
+                    <div class="spotlight-item-desc">${res.desc}</div>
+                </div>
+            </div>
+        `).join('');
+    },
+
+    navigate(delta) {
+        if (this.currentResults.length === 0) return;
+        this.selectedIndex = (this.selectedIndex + delta + this.currentResults.length) % this.currentResults.length;
+        this.renderResults();
+        const selectedEl = document.querySelectorAll('.spotlight-item')[this.selectedIndex];
+        if (selectedEl) selectedEl.scrollIntoView({ block: 'nearest' });
+    },
+
+    selectIndex(idx) {
+        this.selectedIndex = idx;
+        this.selectCurrent();
+    },
+
+    selectCurrent() {
+        const item = this.currentResults[this.selectedIndex];
+        if (item && typeof item.action === 'function') {
+            item.action();
+        }
+    },
+
+    escapeHtml(str) {
+        if (!str) return '';
+        return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+};
+
+// =============================================================================
+// F27: DAILY QUICK DRILL (Dosis Diaria de 10 Preguntas con SM-2)
+// =============================================================================
+window.DailyQuickDrill = {
+    isCompletedToday() {
+        const today = new Date().toISOString().slice(0, 10);
+        return localStorage.getItem('dojo_daily_drill_date') === today;
+    },
+
+    startDrill() {
+        const cid = window.currentCourseId || 'azure-ai-103';
+        const lang = window.AppI18n ? window.AppI18n.getLanguage() : 'es';
+        const allQuestions = (window.questionsData || []).filter(q => (q.courseId === cid) && (q.lang === lang || !q.lang));
+        const history = JSON.parse(localStorage.getItem('quizHistory') || '[]');
+
+        // Collect missed IDs
+        const missedSet = new Set();
+        history.filter(h => h.courseCheck === cid).forEach(h => {
+            (h.missedIds || []).forEach(id => missedSet.add(id));
+        });
+
+        const missedPool = allQuestions.filter(q => missedSet.has(q.id));
+        const freshPool = allQuestions.filter(q => !missedSet.has(q.id));
+
+        // Shuffle arrays
+        const shuffle = arr => [...arr].sort(() => 0.5 - Math.random());
+        const selectedMissed = shuffle(missedPool).slice(0, 5);
+        const selectedFresh = shuffle(freshPool).slice(0, 10 - selectedMissed.length);
+
+        let drillQuestions = shuffle([...selectedMissed, ...selectedFresh]);
+        if (drillQuestions.length === 0) drillQuestions = shuffle(allQuestions).slice(0, 10);
+
+        if (typeof window.startCustomQuizWithQuestions === 'function') {
+            window.startCustomQuizWithQuestions(drillQuestions, 'Dosis Diaria (10 Preguntas Críticas)');
+        }
+    },
+
+    markCompletedToday() {
+        const today = new Date().toISOString().slice(0, 10);
+        localStorage.setItem('dojo_daily_drill_date', today);
+        const badge = document.getElementById('daily-drill-badge');
+        const subtitle = document.getElementById('daily-drill-subtitle');
+        if (badge) {
+            badge.textContent = 'COMPLETADO';
+            badge.style.color = 'var(--success-color, #28a745)';
+        }
+        if (subtitle) {
+            subtitle.textContent = '¡Excelente! Dosis de hoy completada (+50 XP).';
+        }
+    }
+};
+
+// =============================================================================
+// F28: DIAGNOSTIC BENCHMARK & GAP ANALYSIS ENGINE
+// =============================================================================
+window.DiagnosticMode = {
+    startDiagnostic(courseId) {
+        const cid = courseId || window.currentCourseId || 'azure-ai-103';
+        const lang = window.AppI18n ? window.AppI18n.getLanguage() : 'es';
+        const allQuestions = (window.questionsData || []).filter(q => (q.courseId === cid) && (q.lang === lang || !q.lang));
+
+        if (allQuestions.length === 0) {
+            alert('No hay preguntas disponibles para el diagnóstico de este curso.');
+            return;
+        }
+
+        // Group by domains and sample evenly up to 25 Qs
+        const domainMap = new Map();
+        allQuestions.forEach(q => {
+            const d = q.domain || 'General';
+            if (!domainMap.has(d)) domainMap.set(d, []);
+            domainMap.get(d).push(q);
+        });
+
+        const selected = [];
+        const perDomain = Math.max(2, Math.floor(25 / Math.max(1, domainMap.size)));
+        domainMap.forEach((qList) => {
+            const shuffled = [...qList].sort(() => 0.5 - Math.random());
+            selected.push(...shuffled.slice(0, perDomain));
+        });
+
+        const finalSample = selected.sort(() => 0.5 - Math.random()).slice(0, 25);
+        window.isDiagnosticMode = true;
+
+        if (typeof window.startCustomQuizWithQuestions === 'function') {
+            window.startCustomQuizWithQuestions(finalSample, `Test Diagnóstico de Preparación (${cid})`);
+        }
+    },
+
+    renderGapAnalysis(containerEl, userAnswers, currentQuestions, courseId) {
+        if (!containerEl) return;
+        const cid = courseId || window.currentCourseId || 'azure-ai-103';
+
+        // Calculate score per domain
+        const domainStats = {};
+        currentQuestions.forEach((q, idx) => {
+            const d = q.domain || 'General';
+            if (!domainStats[d]) domainStats[d] = { total: 0, correct: 0 };
+            domainStats[d].total += 1;
+            const ans = userAnswers[idx];
+            if (ans && ans.isCorrect) {
+                domainStats[d].correct += 1;
+            }
+        });
+
+        const domains = Object.keys(domainStats);
+        if (domains.length === 0) return;
+
+        const rowsHtml = domains.map(d => {
+            const stat = domainStats[d];
+            const pct = Math.round((stat.correct / stat.total) * 100);
+            let color = 'var(--danger-color, #dc3545)';
+            let statusText = 'Brecha Crítica (<70%)';
+            if (pct >= 85) {
+                color = 'var(--success-color, #28a745)';
+                statusText = 'Dominado (Listo)';
+            } else if (pct >= 70) {
+                color = '#d97706';
+                statusText = 'Reforzar (70-84%)';
+            }
+
+            return `
+                <div class="gap-domain-row">
+                    <div class="gap-domain-header">
+                        <span>${d}</span>
+                        <span style="color:${color}; font-weight:700;">${pct}% (${stat.correct}/${stat.total}) &bull; ${statusText}</span>
+                    </div>
+                    <div class="gap-domain-bar">
+                        <div class="gap-domain-fill" style="width:${pct}%; background:${color};"></div>
+                    </div>
+                    <div class="gap-domain-actions">
+                        <button type="button" class="gap-action-btn" onclick="window.openStudyMode && window.openStudyMode('${cid}')">Repasar en Estudio</button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        containerEl.innerHTML = `
+            <div class="gap-analysis-card">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--primary-color)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                        <strong style="font-size:1rem; color:var(--text-color);">Análisis de Brechas por Dominio (Gap Analysis)</strong>
+                    </div>
+                    <span style="font-size:0.75rem; color:var(--text-muted);">Calibración Oficial</span>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:8px;">
+                    ${rowsHtml}
+                </div>
+            </div>
+        `;
+    }
+};
+
+// =============================================================================
+// F29: HIGH-YIELD TECHNICAL DECISION MATRICES ("¿CUÁNDO USAR CUÁL?")
+// =============================================================================
+window.DecisionNavigator = {
+    matrices: {
+        'azure-ai-103': [
+            {
+                category: 'Modelos de IA',
+                decision: 'Azure OpenAI (GPT-4o / o1) vs Document Intelligence',
+                whenToUse: 'Usa <strong>Document Intelligence</strong> para facturas, recibos, IDs y formularios estructurados con coordenadas exactas. Usa <strong>Azure OpenAI</strong> para razonamiento general, redacción y extracción de texto libre no restringido.'
+            },
+            {
+                category: 'Modelos de IA',
+                decision: 'Language Studio vs Speech vs Vision',
+                whenToUse: 'Usa <strong>Language Studio</strong> para CLU, PII y Custom NER. Usa <strong>Azure AI Speech</strong> para transcripción STT con diarización de hablantes. Usa <strong>Azure AI Vision</strong> para OCR de markdown y dense captioning.'
+            },
+            {
+                category: 'Búsqueda & RAG',
+                decision: 'HNSW Vector vs Hybrid Search vs Semantic Re-ranker',
+                whenToUse: '<strong>Hybrid Search (Vector + BM25)</strong> es la mejor base. Añade <strong>Semantic Re-ranker (L2)</strong> para máxima precisión contextual en los 50 mejores resultados.'
+            },
+            {
+                category: 'Agentes',
+                decision: 'Azure AI Agent Service vs Semantic Kernel vs AutoGen',
+                whenToUse: 'Usa <strong>Agent Service</strong> para agentes gestionados en la nube con Code Interpreter y Bing. Usa <strong>Semantic Kernel</strong> para desarrollo en código C#/Python con plugins corporativos.'
+            },
+            {
+                category: 'Seguridad',
+                decision: 'Groundedness Detection vs Prompt Shield',
+                whenToUse: '<strong>Prompt Shield</strong> bloquea ataques de inyección y jailbreaks. <strong>Groundedness Detection</strong> detecta alucinaciones comparando la respuesta del LLM con los documentos fuente.'
+            }
+        ],
+        'databricks-genai-engineer': [
+            {
+                category: 'Model Serving',
+                decision: 'Pay-per-token vs Provisioned Throughput vs Custom PyFunc',
+                whenToUse: 'Usa <strong>Pay-per-token</strong> para prototipado rápido y volumen variable. Usa <strong>Provisioned Throughput</strong> para SLAs estrictos de latencia y alto QPS. Usa <strong>Custom PyFunc</strong> para pipelines RAG personalizados con LoRA.'
+            },
+            {
+                category: 'Vector Search',
+                decision: 'Delta Sync (Continuous vs Triggered) vs Direct Access',
+                whenToUse: 'Usa <strong>Continuous</strong> para sincronización en segundos con streaming. Usa <strong>Triggered</strong> para lotes programados de bajo costo. Usa <strong>Direct Access</strong> para inserciones directas vía REST sin tabla Delta.'
+            },
+            {
+                category: 'Adaptación LLM',
+                decision: 'Prompt Engineering vs RAG vs LoRA Fine-Tuning',
+                whenToUse: 'Usa <strong>RAG</strong> para datos dinámicos y gobernanza Unity Catalog. Usa <strong>LoRA/PEFT</strong> para cambiar formato, estilo y terminología especializada con menor latencia.'
+            }
+        ],
+        'dp-600': [
+            {
+                category: 'Almacenamiento & Cómputo',
+                decision: 'Lakehouse (Delta) vs Warehouse (T-SQL Relational)',
+                whenToUse: 'Usa <strong>Lakehouse</strong> para Spark, Data Engineering y archivos no estructurados/Parquet. Usa <strong>Warehouse</strong> para SQL analítico tradicional con transacciones ACID completas y sintaxis T-SQL estándar.'
+            },
+            {
+                category: 'Modos Power BI',
+                decision: 'Direct Lake vs Import vs DirectQuery',
+                whenToUse: '<strong>Direct Lake</strong> es el modo óptimo en Fabric: lee directamente Delta Parquet desde OneLake sin duplicar datos ni traducir consultas a SQL.'
+            }
+        ]
+    },
+
+    renderMatrix(containerEl, courseId) {
+        if (!containerEl) return;
+        const cid = courseId || window.currentCourseId || 'azure-ai-103';
+        const list = this.matrices[cid] || this.matrices['azure-ai-103'];
+
+        const rows = list.map(item => `
+            <tr>
+                <td style="width: 140px;"><span class="decision-tag">${item.category}</span></td>
+                <td style="width: 220px; font-weight:700;">${item.decision}</td>
+                <td>${item.whenToUse}</td>
+            </tr>
+        `).join('');
+
+        containerEl.innerHTML = `
+            <div style="margin-bottom: 12px; display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                    <h3 style="margin:0; font-size:1.15rem; color:var(--text-color);">Matrices de Decisión Técnica ("¿Cuándo usar cuál?")</h3>
+                    <p style="margin:3px 0 0 0; font-size:0.84rem; color:var(--text-muted);">Criterios de decisión rápida para las preguntas de arquitectura más recurrentes del examen.</p>
+                </div>
+            </div>
+            <table class="decision-matrix-table">
+                <thead>
+                    <tr>
+                        <th>Categoría</th>
+                        <th>Dilema Técnico</th>
+                        <th>Criterio y Decisión Óptima</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${rows}
+                </tbody>
+            </table>
+        `;
+    }
+};
+
+// Initialize Spotlight Search on load
+if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => window.SpotlightSearch.init());
+    } else {
+        window.SpotlightSearch.init();
+    }
+}
+
 

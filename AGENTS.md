@@ -340,7 +340,18 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
       - **Fila 1**: [ Modo Examen Real ] | [ Modo Contrarreloj (Time-Attack 60s) ]
       - **Fila 2**: [ Orden de Preguntas: Aleatorio / Secuencial ] (`#config-order-card`) | [ Modo Ataque a Debilidades ] (`#config-weakness-container`).
     - Manejo dinámico para cuando Ataque a Debilidades está oculto: `#config-order-card` se expande a las 2 columnas con `:has(#config-weakness-container.hidden)` manteniendo el balance visual.
-- Actualizó la PWA a `BUILD_TIMESTAMP = '20260830f'` y caché `simulador-v34-20260830f` en `sw.js` e `index.html`.
-- Verificó con 0 fallos las 5 suites de validación (`validate_ui_palette.js`, `validate_global_language.js`, `validate_ai103_integration.js`, `validate_genai_integration.js`, `audit_code_structure.js`).
+### 2026-08-30 04:45 CST — Antigravity (Gemini 3.7 Flash)
+- Implementó e integró las **8 mejoras de alto impacto** orientadas al estudio y preparación de certificaciones:
+  1. **Banderas de Revisión (`Flag for Review`) & Modal Pre-entrega**: Marcado rápido de preguntas con botón SVG y atajo `F`, estado visual en el mapa de preguntas y pantalla de resumen interactiva pre-entrega (`openExamReviewModal()`) con KPIs (respondidas, pendientes, marcadas), filtros y salto directo.
+  2. **Simulador de Casos de Estudio en Pantalla Dividida (`Split-Pane`)**: Detección automática de preguntas de escenario extenso con botón de toggle `[ Vista Dividida ]` (Atajo: `V`), panel izquierdo fijo con contexto técnico/arquitectura y panel derecho con interacción fluida.
+  3. **Examen Diagnóstico con Análisis de Brechas (`Gap Analysis`)**: Test calibrado de 25 preguntas ponderado por dominios oficiales (`window.DiagnosticMode.startDiagnostic`) con reporte visual de semáforo (🟢 Listo >85%, 🟡 Reforzar 70-84%, 🔴 Brecha <70%) y acceso directo a estudiar el dominio.
+  4. **Dosis Diaria de 5 Minutos (`Daily Quick Drill`)**: Acceso directo en Dashboard (`window.DailyQuickDrill.startDrill`) con selección inteligente de 10 preguntas críticas basada en repetición espaciada (SM-2) y tasa de error previa.
+  5. **Radar de Maestría y Tendencia Histórica**: Métricas y visualizaciones SVG nativas de rendimiento histórico por dominio.
+  6. **Buscador Global Rápido (`Spotlight / Ctrl + K`)**: Modal `#spotlight-search-modal` accesible mediante `Ctrl+K` o botón en cabecera, indexando en vivo preguntas, módulos de estudio, términos técnicos, escenarios, flashcards y fragmentos SDK con navegación completa por teclado.
+  7. **Navegador Interactivo de Decisiones Técnicas ("¿Cuándo usar cuál?")**: Pestaña dedicada en el Centro de Estudio (`unir-tab-decisions` / `window.DecisionNavigator`) con matrices comparativas de Azure AI-103, Databricks GenAI y Fabric DP-600.
+  8. **Exportación de Cheat-Sheet de Reglas de Oro en PDF**: Selector en `#pdf-guide-modal` para generar una hoja imprimible de alta densidad en 2 columnas con los 10 principios clave, matrices de decisión y trampas de examen.
+- Actualizó la PWA a `BUILD_TIMESTAMP = '20260830g'` y caché `simulador-v35-20260830g` en `sw.js` e `index.html`.
+- Verificó con 0 errores las 5 suites de validación (`validate_ui_palette.js`, `validate_global_language.js`, `validate_ai103_integration.js`, `validate_genai_integration.js`, `audit_code_structure.js`).
+
 
 

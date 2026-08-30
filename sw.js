@@ -10,15 +10,16 @@
 // Antigravity (Gemini 3.7 Flash) | 2026-08-30 04:10 CST | Corrige títulos de módulos de estudio y sanitización bilingüe contra tags SVG escapados.
 // Antigravity (Gemini 3.7 Flash) | 2026-08-30 04:25 CST | Rediseño espacioso y organizado en 2 columnas del modal de configuración del examen con presets rápidos.
 // Antigravity (Gemini 3.7 Flash) | 2026-08-30 04:30 CST | Maximiza altura del filtrado de dominios y organiza opciones inferiores en matriz 2x2.
-const BUILD_TIMESTAMP = '20260830f';
-const CACHE_NAME = `simulador-v34-${BUILD_TIMESTAMP}`;
+// Antigravity (Gemini 3.7 Flash) | 2026-08-30 04:45 CST | Implementa Spotlight Universal Search (Ctrl+K), Dosis Diaria SM-2, Gap Analysis, Decision Matrices, Split-Pane y Cheat-Sheets PDF.
+const BUILD_TIMESTAMP = '20260830g';
+const CACHE_NAME = `simulador-v35-${BUILD_TIMESTAMP}`;
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './styles.css?v=20260830f',
-  './app_i18n.js?v=20260830f',
-  './script.js?v=20260830f',
-  './features.js?v=20260830f',
+  './styles.css?v=20260830g',
+  './app_i18n.js?v=20260830g',
+  './script.js?v=20260830g',
+  './features.js?v=20260830g',
   './hero_data.js',
   './auto_restore_data.js',
   './manifest.json',
@@ -57,7 +58,7 @@ const ASSETS_TO_CACHE = [
   './conceptos_databricks.js',
   './personajes_unir_viz.js',
   './translations_databricks_es.js',
-  './translate_toggle.js?v=20260830f',
+  './translate_toggle.js?v=20260830g',
   './supabase-sync.js',
   './comandos_sql_databricks.js',
   './comandos_sql_genai.js'
