@@ -277,3 +277,10 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
   - Aseguró soporte de contraste para tema claro y oscuro (`[data-theme="dark"] .onboarding-container`).
   - Actualizó la versión PWA a `BUILD_TIMESTAMP = '20260830a'` y caché `simulador-v29-20260830a` en `sw.js` e `index.html`.
 
+### 2026-08-30 03:41 CST — Antigravity (Gemini 3.7 Flash)
+- Calibró la cantidad de partículas ambientales en la pantalla de bienvenida a un nivel óptimo y equilibrado (12 elementos flotantes):
+  - Redujo de 24 a 12 partículas para evitar sobrecarga visual manteniendo la distribución espacial por todo el ancho de pantalla.
+  - Conservó la escala armónica de tamaños (6px a 11px) con suave resplandor de profundidad y movimiento de oscilación lateral.
+  - Actualizó la versión PWA a `BUILD_TIMESTAMP = '20260830b'` y caché `simulador-v30-20260830b` en `sw.js` e `index.html`.
+
+

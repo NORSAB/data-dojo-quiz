@@ -1541,7 +1541,7 @@ html[data-theme="dark"] .modal-content,
   animation: particleDrift 14s infinite ease-in-out;
 }
 
-/* Varied particle sizes: standard, medium, and prominent luminous motes */
+/* Varied particle sizes: standard (6px), medium (7-9px), and prominent motes (11px) */
 .dojo-particles span:nth-child(2n) {
   width: 7px;
   height: 7px;
@@ -1557,37 +1557,20 @@ html[data-theme="dark"] .modal-content,
   height: 11px;
   box-shadow: 0 0 16px rgba(49, 87, 213, 0.6);
 }
-.dojo-particles span:nth-child(7n) {
-  width: 13px;
-  height: 13px;
-  box-shadow: 0 0 20px rgba(49, 87, 213, 0.65);
-}
 
-/* Staggered distribution, durations, and negative delays for immediate natural movement */
-.dojo-particles span:nth-child(1)  { left: 4%;  animation-delay: -2s;  animation-duration: 13s; }
-.dojo-particles span:nth-child(2)  { left: 9%;  animation-delay: -7s;  animation-duration: 16s; animation-name: particleDriftAlt; }
-.dojo-particles span:nth-child(3)  { left: 14%; animation-delay: -11s; animation-duration: 11s; }
-.dojo-particles span:nth-child(4)  { left: 19%; animation-delay: -4s;  animation-duration: 15s; animation-name: particleDriftAlt; }
-.dojo-particles span:nth-child(5)  { left: 25%; animation-delay: -9s;  animation-duration: 12s; }
-.dojo-particles span:nth-child(6)  { left: 31%; animation-delay: -1s;  animation-duration: 18s; animation-name: particleDriftAlt; }
-.dojo-particles span:nth-child(7)  { left: 37%; animation-delay: -14s; animation-duration: 14s; }
-.dojo-particles span:nth-child(8)  { left: 43%; animation-delay: -6s;  animation-duration: 10s; animation-name: particleDriftAlt; }
-.dojo-particles span:nth-child(9)  { left: 49%; animation-delay: -12s; animation-duration: 17s; }
-.dojo-particles span:nth-child(10) { left: 54%; animation-delay: -3s;  animation-duration: 13s; animation-name: particleDriftAlt; }
-.dojo-particles span:nth-child(11) { left: 60%; animation-delay: -8s;  animation-duration: 15s; }
-.dojo-particles span:nth-child(12) { left: 66%; animation-delay: -13s; animation-duration: 11s; animation-name: particleDriftAlt; }
-.dojo-particles span:nth-child(13) { left: 72%; animation-delay: -5s;  animation-duration: 16s; }
-.dojo-particles span:nth-child(14) { left: 78%; animation-delay: -10s; animation-duration: 12s; animation-name: particleDriftAlt; }
-.dojo-particles span:nth-child(15) { left: 83%; animation-delay: -2s;  animation-duration: 18s; }
-.dojo-particles span:nth-child(16) { left: 88%; animation-delay: -7s;  animation-duration: 14s; animation-name: particleDriftAlt; }
-.dojo-particles span:nth-child(17) { left: 93%; animation-delay: -12s; animation-duration: 10s; }
-.dojo-particles span:nth-child(18) { left: 7%;  animation-delay: -4s;  animation-duration: 15s; animation-name: particleDriftAlt; }
-.dojo-particles span:nth-child(19) { left: 22%; animation-delay: -9s;  animation-duration: 13s; }
-.dojo-particles span:nth-child(20) { left: 46%; animation-delay: -1s;  animation-duration: 16s; animation-name: particleDriftAlt; }
-.dojo-particles span:nth-child(21) { left: 62%; animation-delay: -6s;  animation-duration: 12s; }
-.dojo-particles span:nth-child(22) { left: 75%; animation-delay: -11s; animation-duration: 17s; animation-name: particleDriftAlt; }
-.dojo-particles span:nth-child(23) { left: 86%; animation-delay: -3s;  animation-duration: 14s; }
-.dojo-particles span:nth-child(24) { left: 96%; animation-delay: -8s;  animation-duration: 11s; animation-name: particleDriftAlt; }
+/* Balanced 12-particle distribution across the viewport */
+.dojo-particles span:nth-child(1)  { left: 8%;  animation-delay: -2s;  animation-duration: 13s; }
+.dojo-particles span:nth-child(2)  { left: 17%; animation-delay: -7s;  animation-duration: 16s; animation-name: particleDriftAlt; }
+.dojo-particles span:nth-child(3)  { left: 26%; animation-delay: -11s; animation-duration: 11s; }
+.dojo-particles span:nth-child(4)  { left: 35%; animation-delay: -4s;  animation-duration: 15s; animation-name: particleDriftAlt; }
+.dojo-particles span:nth-child(5)  { left: 44%; animation-delay: -9s;  animation-duration: 12s; }
+.dojo-particles span:nth-child(6)  { left: 53%; animation-delay: -1s;  animation-duration: 18s; animation-name: particleDriftAlt; }
+.dojo-particles span:nth-child(7)  { left: 62%; animation-delay: -14s; animation-duration: 14s; }
+.dojo-particles span:nth-child(8)  { left: 71%; animation-delay: -6s;  animation-duration: 10s; animation-name: particleDriftAlt; }
+.dojo-particles span:nth-child(9)  { left: 80%; animation-delay: -12s; animation-duration: 17s; }
+.dojo-particles span:nth-child(10) { left: 89%; animation-delay: -3s;  animation-duration: 13s; animation-name: particleDriftAlt; }
+.dojo-particles span:nth-child(11) { left: 20%; animation-delay: -8s;  animation-duration: 15s; }
+.dojo-particles span:nth-child(12) { left: 75%; animation-delay: -13s; animation-duration: 11s; animation-name: particleDriftAlt; }
 
 @keyframes particleDrift {
   0% {
