@@ -283,4 +283,12 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
   - Conservó la escala armónica de tamaños (6px a 11px) con suave resplandor de profundidad y movimiento de oscilación lateral.
   - Actualizó la versión PWA a `BUILD_TIMESTAMP = '20260830b'` y caché `simulador-v30-20260830b` en `sw.js` e `index.html`.
 
+### 2026-08-30 03:42 CST — Antigravity (Gemini 3.7 Flash)
+- Simplificó y alineó el selector de idioma global (`#global-language-toggle`) en la cabecera:
+  - Eliminó el icono superior (`<svg>`) dejando exclusivamente el texto interactivo de los idiomas (`ES / EN`).
+  - Centró vertical y horizontalmente la pastilla de idiomas dentro del botón, calibrando altura (`42px`) y padding para alineación perfecta con los botones adyacentes (ZEN, INICIO, PERFIL, LOGROS, STATS, ESTUDIAR, ADMIN, TEMA).
+  - Conservó intactas las etiquetas de texto de todos los botones de la barra de navegación.
+  - Validación con `node tools/validate_global_language.js` y `node tools/validate_ai103_integration.js` completadas al 100%.
+
+
 
