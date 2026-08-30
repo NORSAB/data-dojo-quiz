@@ -17,7 +17,7 @@
     <title>Quiz Simulator</title>
     <link rel="manifest" href="manifest.json" />
     <meta name="theme-color" content="#3157d5" />
-    <link rel="stylesheet" href="styles.css?v=20260830b" />
+    <link rel="stylesheet" href="styles.css?v=20260830c" />
     <style>
       /* =======================================================================
          TRUE 100% FULL-WIDTH FLUID RESPONSIVE SYSTEM
@@ -540,6 +540,20 @@
               </div>
           </button>
 
+          <!-- F25: PDF STUDY GUIDE LAUNCHER BUTTON -->
+          <button id="pdf-guide-launcher-btn" type="button" class="btn-quick-quiz" onclick="window.StudyGuidePDF.openModal()" style="margin-top: 10px; background: var(--bg-surface); border: 1px solid var(--border-color);">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--primary-color)" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                  <line x1="16" y1="13" x2="8" y2="13"/>
+                  <line x1="16" y1="17" x2="8" y2="17"/>
+              </svg>
+              <div>
+                  <strong style="color:var(--primary-color);">Guía de Estudio en PDF (Por Dominios o Completa)</strong>
+                  <small>Genera un documento imprimible con preguntas, respuestas correctas y explicaciones</small>
+              </div>
+          </button>
+
           <!-- F21: STUDY RECOMMENDATION + COURSE READINESS -->
           <div id="study-coach-panel" class="study-coach-panel" style="display:none;">
               <div class="study-coach-grid">
@@ -1046,12 +1060,26 @@
             <button
               id="study-back-btn"
               class="btn btn-outline btn-sm"
-              style="margin-bottom: 1rem"
+              style="margin-bottom: 0.5rem"
             >
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                 <path d="M19 12H5M12 19l-7-7 7-7" />
               </svg>
               Volver al menú
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline btn-sm"
+              style="margin-bottom: 1rem; width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px;"
+              onclick="window.StudyGuidePDF.openModal(window.currentCourseId)"
+            >
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+              </svg>
+              <span>Exportar Guía a PDF</span>
             </button>
             <h3 id="study-course-title">Estudio</h3>
             <div id="study-toc" class="study-toc">
@@ -1443,17 +1471,6 @@
             <div id="feedback-area" class="feedback-section hidden" role="alert" aria-live="assertive">
               <h4 id="feedback-title">Result</h4>
               <p id="feedback-explanation">Explanation...</p>
-              <div
-                class="latex-code"
-                style="
-                  margin-top: 0.5rem;
-                  font-family: monospace;
-                  font-size: 0.8rem;
-                  opacity: 0.7;
-                "
-              >
-                <strong>LaTeX Source:</strong> <span id="latex-source"></span>
-              </div>
             </div>
 
             <!-- Control Bar -->
@@ -2135,6 +2152,70 @@
       </div>
     </div>
 
+    <!-- F25: PDF STUDY GUIDE GENERATOR MODAL -->
+    <div id="pdf-guide-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="pdf-modal-title" style="z-index: 2200;">
+      <div class="modal-card" style="max-width: 580px;">
+        <div class="modal-header">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--primary-color)" stroke-width="2">
+              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+            </svg>
+            <h3 id="pdf-modal-title" style="margin:0;font-size:1.15rem;font-weight:700;">Generador de Guía de Estudio (PDF)</h3>
+          </div>
+          <button type="button" class="modal-close-btn" onclick="window.StudyGuidePDF.closeModal()" aria-label="Cerrar">&times;</button>
+        </div>
+        <div class="modal-body" style="padding:18px 24px;display:flex;flex-direction:column;gap:14px;">
+          <p style="margin:0;font-size:0.88rem;color:var(--text-muted);">
+            Genera un documento técnico listo para imprimir o guardar como PDF con preguntas, opciones, respuesta correcta destacada y explicación detallada por dominios.
+          </p>
+
+          <div class="form-group">
+            <label for="pdf-guide-course" style="font-weight:700;font-size:0.85rem;display:block;margin-bottom:6px;">Certificación / Curso:</label>
+            <select id="pdf-guide-course" onchange="window.StudyGuidePDF.onCourseChange()" style="width:100%;padding:9px 12px;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-surface);color:var(--text-color);font-size:0.9rem;">
+              <!-- Populated dynamically -->
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="pdf-guide-scope" style="font-weight:700;font-size:0.85rem;display:block;margin-bottom:6px;">Alcance del Documento:</label>
+            <select id="pdf-guide-scope" onchange="window.StudyGuidePDF.onScopeChange()" style="width:100%;padding:9px 12px;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-surface);color:var(--text-color);font-size:0.9rem;">
+              <option value="all">Banco Completo (Organizado por todos los Dominios)</option>
+              <option value="single">Por Dominio Específico</option>
+            </select>
+          </div>
+
+          <div id="pdf-guide-domain-group" class="form-group" style="display:none;">
+            <label for="pdf-guide-domain" style="font-weight:700;font-size:0.85rem;display:block;margin-bottom:6px;">Seleccionar Dominio:</label>
+            <select id="pdf-guide-domain" onchange="window.StudyGuidePDF.updateStats()" style="width:100%;padding:9px 12px;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-surface);color:var(--text-color);font-size:0.9rem;">
+              <!-- Populated dynamically -->
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="pdf-guide-lang" style="font-weight:700;font-size:0.85rem;display:block;margin-bottom:6px;">Idioma de la Guía:</label>
+            <select id="pdf-guide-lang" onchange="window.StudyGuidePDF.onCourseChange()" style="width:100%;padding:9px 12px;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-surface);color:var(--text-color);font-size:0.9rem;">
+              <option value="es">Español (ES)</option>
+              <option value="en">English (EN)</option>
+            </select>
+          </div>
+
+          <div id="pdf-guide-stats" style="padding:10px 14px;border-radius:8px;background:rgba(49,87,213,0.06);border:1px solid rgba(49,87,213,0.2);font-size:0.85rem;color:var(--text-color);">
+            <!-- Summary dynamically calculated -->
+          </div>
+        </div>
+        <div class="modal-footer" style="padding:14px 24px;display:flex;justify-content:flex-end;gap:10px;border-top:1px solid var(--border-color);">
+          <button type="button" class="btn btn-outline" onclick="window.StudyGuidePDF.closeModal()">Cancelar</button>
+          <button type="button" class="btn btn-primary" onclick="window.StudyGuidePDF.generateAndOpen()" style="display:inline-flex;align-items:center;gap:6px;">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>
+            <span>Generar Guía / Imprimir a PDF</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
     <script src="marked.min.js"></script>
     <script src="questions.js"></script>
     <script src="questions_databricks.js"></script>
@@ -2178,14 +2259,14 @@
     <script src="flashcards_unah_tesis.js"></script>
     <!-- Auto Restore Master Data -->
     <script src="auto_restore_data.js"></script>
-    <script src="app_i18n.js?v=20260830b"></script>
-    <script src="script.js?v=20260830b"></script>
-    <script src="features.js?v=20260830b"></script>
+    <script src="app_i18n.js?v=20260830c"></script>
+    <script src="script.js?v=20260830c"></script>
+    <script src="features.js?v=20260830c"></script>
     <!-- Supabase Cloud Backup -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-sync.js"></script>
     <!-- Databricks Spanish Translation Toggle -->
     <script src="translations_databricks_es.js"></script>
-    <script src="translate_toggle.js?v=20260830b"></script>
+    <script src="translate_toggle.js?v=20260830c"></script>
   </body>
 </html>

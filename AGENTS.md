@@ -289,6 +289,23 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
   - Normalizó la paleta de diseño a 17 colores hex únicos (`styles.css`), 0 gradientes decorativos y tokens semánticos nativos (`var(--primary-color)`, `var(--success-color)`, `var(--warning-color)`, `var(--danger-color)`).
   - Verificación de suites de prueba completada exitosamente: `validate_ai103_integration.js`, `validate_genai_integration.js`, `validate_global_language.js`, `validate_ui_palette.js` y `audit_code_structure.js`.
 
+### 2026-08-30 04:00 CST — Antigravity (Gemini 3.7 Flash)
+- Eliminó por completo el bloque y visualización de origen "LaTeX Source" de la vista de preguntas (`index.html` y `script.js`).
+- Diseñó e implementó el **Generador Oficial de Guías de Estudio en PDF** (`window.StudyGuidePDF` en `features.js` / F25):
+  - Soporta exportación por **Dominio individual** o del **Banco completo organizado por dominios**.
+  - Opciones de idioma: **Español (ES)** e **Inglés (EN)**.
+  - Estructura del documento optimizada para impresión profesional y exportación directa a PDF con `window.print()`:
+    - Encabezado con título de certificación, fecha, resumen de preguntas y nombre del candidato (`Norman Reynaldo Sabillon Castro / NorSab`).
+    - Índice de dominios oficiales con recuento de preguntas.
+    - Secciones por dominio con preguntas numeradas, enunciados, escenarios y código fuente.
+    - Opciones de respuesta con la opción correcta claramente resaltada en verde, negrita y con distintivo `[CORRECTA / CORRECT]`.
+    - Bloque de **Explicación Técnica Oficial** detallada.
+    - Hoja de estilos de impresión `@media print` con control de salto de página por dominio (`page-break-before: always`) y protección contra fractura de preguntas (`break-inside: avoid`).
+  - Accesible desde el menú principal (botón `#pdf-guide-launcher-btn`), desde la barra lateral del Centro de Estudio y vía modal interactivo `#pdf-guide-modal`.
+- Actualizó la PWA a `BUILD_TIMESTAMP = '20260830c'` y caché `simulador-v31-20260830c` en `sw.js`, `index.html` y suite de validación.
+- Validación de 5 suites ejecutada con 0 errores (712 preguntas AI-103, 766 preguntas GenAI, selector global de idioma, paleta de 17 colores hex / 0 gradientes y 0 duplicados estructurales).
+
+
 
 
 

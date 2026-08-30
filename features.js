@@ -3112,3 +3112,581 @@ window.AICoach = {
         container.style.display = isHidden ? 'block' : 'none';
     }
 };
+
+// ===========================================================================
+// F25: GENERADOR OFICIAL DE GUÍA DE ESTUDIO Y PDF POR DOMINIO / BANCO COMPLETO
+// ===========================================================================
+window.StudyGuidePDF = {
+    courseTitles: {
+        'azure-ai-103': 'Microsoft Certified: Azure AI Apps and Agents Developer Associate (AI-103)',
+        'databricks-genai-engineer': 'Databricks Certified Generative AI Engineer Associate',
+        'dp-600': 'Microsoft Certified: Fabric Analytics Engineer Associate (DP-600)',
+        'databricks-da': 'Databricks Certified Data Analyst Associate',
+        'databricks-fundamentals': 'Databricks Fundamentals',
+        'databricks-aibi': 'Databricks AI/BI for Data Analysts',
+        'databricks-sql-analytics': 'Databricks SQL Analytics',
+        'unir-viz-interactiva': 'UNIR — Visualización Interactiva de la Información',
+        'unir-herramientas-viz': 'UNIR — Herramientas de Visualización de Datos',
+        'unah-tesis': 'UNAH — Tesis Doctoral Modelo Híbrido'
+    },
+
+    openModal(preferredCourseId) {
+        const modal = document.getElementById('pdf-guide-modal');
+        if (!modal) return;
+        
+        const courseSelect = document.getElementById('pdf-guide-course');
+        const langSelect = document.getElementById('pdf-guide-lang');
+        const currentLang = window.AppI18n ? window.AppI18n.getLanguage() : 'es';
+        if (langSelect) langSelect.value = currentLang;
+
+        // Populate courses
+        if (courseSelect) {
+            const allQuestions = window.questionsData || [];
+            const courseIds = [...new Set(allQuestions.map(q => q.courseId).filter(Boolean))];
+            courseSelect.innerHTML = courseIds.map(cid => {
+                const title = this.courseTitles[cid] || cid;
+                return `<option value="${cid}">${title}</option>`;
+            }).join('');
+
+            const selectedCid = preferredCourseId || window.currentCourseId || (courseIds.includes('azure-ai-103') ? 'azure-ai-103' : courseIds[0]);
+            if (selectedCid) courseSelect.value = selectedCid;
+        }
+
+        this.onCourseChange();
+        modal.classList.remove('hidden');
+    },
+
+    closeModal() {
+        const modal = document.getElementById('pdf-guide-modal');
+        if (modal) modal.classList.add('hidden');
+    },
+
+    onCourseChange() {
+        const courseSelect = document.getElementById('pdf-guide-course');
+        const domainSelect = document.getElementById('pdf-guide-domain');
+        const langSelect = document.getElementById('pdf-guide-lang');
+        if (!courseSelect || !domainSelect) return;
+
+        const cid = courseSelect.value;
+        const lang = langSelect ? langSelect.value : 'es';
+        const allQuestions = window.questionsData || [];
+        const scoped = allQuestions.filter(q => q.courseId === cid);
+        const localized = scoped.filter(q => q.lang === lang);
+        const questions = localized.length > 0 ? localized : scoped;
+
+        const domains = [...new Set(questions.map(q => q.domain).filter(Boolean))];
+        domainSelect.innerHTML = domains.map(d => {
+            const count = questions.filter(q => q.domain === d).length;
+            return `<option value="${d}">${d} (${count} preguntas)</option>`;
+        }).join('');
+
+        this.updateStats();
+    },
+
+    onScopeChange() {
+        const scopeSelect = document.getElementById('pdf-guide-scope');
+        const domainGroup = document.getElementById('pdf-guide-domain-group');
+        if (!scopeSelect || !domainGroup) return;
+
+        domainGroup.style.display = scopeSelect.value === 'single' ? 'block' : 'none';
+        this.updateStats();
+    },
+
+    updateStats() {
+        const statsEl = document.getElementById('pdf-guide-stats');
+        const courseSelect = document.getElementById('pdf-guide-course');
+        const scopeSelect = document.getElementById('pdf-guide-scope');
+        const domainSelect = document.getElementById('pdf-guide-domain');
+        const langSelect = document.getElementById('pdf-guide-lang');
+        if (!statsEl || !courseSelect) return;
+
+        const cid = courseSelect.value;
+        const scope = scopeSelect ? scopeSelect.value : 'all';
+        const selectedDomain = domainSelect ? domainSelect.value : '';
+        const lang = langSelect ? langSelect.value : 'es';
+
+        const allQuestions = window.questionsData || [];
+        const scoped = allQuestions.filter(q => q.courseId === cid);
+        const localized = scoped.filter(q => q.lang === lang);
+        let questions = localized.length > 0 ? localized : scoped;
+
+        if (scope === 'single' && selectedDomain) {
+            questions = questions.filter(q => q.domain === selectedDomain);
+        }
+
+        const uniqueDomains = [...new Set(questions.map(q => q.domain).filter(Boolean))];
+        statsEl.innerHTML = `<strong>Resumen a generar:</strong> ${questions.length} preguntas en ${uniqueDomains.length} dominio(s) &bull; Idioma: <strong>${lang.toUpperCase()}</strong> &bull; Candidato: <strong>Norman Reynaldo Sabillon Castro</strong>`;
+    },
+
+    generateAndOpen() {
+        const courseSelect = document.getElementById('pdf-guide-course');
+        const scopeSelect = document.getElementById('pdf-guide-scope');
+        const domainSelect = document.getElementById('pdf-guide-domain');
+        const langSelect = document.getElementById('pdf-guide-lang');
+        if (!courseSelect) return;
+
+        const cid = courseSelect.value;
+        const scope = scopeSelect ? scopeSelect.value : 'all';
+        const selectedDomain = domainSelect ? domainSelect.value : '';
+        const lang = langSelect ? langSelect.value : 'es';
+        const courseTitle = this.courseTitles[cid] || cid;
+
+        const allQuestions = window.questionsData || [];
+        const scoped = allQuestions.filter(q => q.courseId === cid);
+        const localized = scoped.filter(q => q.lang === lang);
+        let questions = localized.length > 0 ? localized : scoped;
+
+        if (scope === 'single' && selectedDomain) {
+            questions = questions.filter(q => q.domain === selectedDomain);
+        }
+
+        if (questions.length === 0) {
+            alert('No se encontraron preguntas para los filtros seleccionados.');
+            return;
+        }
+
+        // Group questions by domain
+        const domainMap = new Map();
+        questions.forEach(q => {
+            const dom = q.domain || (lang === 'es' ? 'Dominio General' : 'General Domain');
+            if (!domainMap.has(dom)) domainMap.set(dom, []);
+            domainMap.get(dom).push(q);
+        });
+
+        // Build Document HTML
+        const html = this.buildDocumentHTML({
+            courseTitle,
+            cid,
+            lang,
+            totalQuestions: questions.length,
+            domainMap
+        });
+
+        this.closeModal();
+
+        // Open in new printable window
+        const printWin = window.open('', '_blank');
+        if (printWin) {
+            printWin.document.open();
+            printWin.document.write(html);
+            printWin.document.close();
+        } else {
+            // Fallback: render overlay in active document if popup blocked
+            this.renderPrintOverlay(html);
+        }
+    },
+
+    buildDocumentHTML({ courseTitle, cid, lang, totalQuestions, domainMap }) {
+        const dateStr = new Date().toLocaleDateString(lang === 'es' ? 'es-ES' : 'en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        const isEs = lang === 'es';
+        let domainIndexHtml = '';
+        let domainContentHtml = '';
+
+        let globalIndex = 1;
+        let domainNumber = 1;
+
+        domainMap.forEach((qs, domainName) => {
+            domainIndexHtml += `
+                <li style="margin-bottom:6px;">
+                    <strong>${domainName}</strong> &mdash; <span>${qs.length} ${isEs ? 'preguntas' : 'questions'}</span>
+                </li>
+            `;
+
+            let questionsHtml = '';
+            qs.forEach((q) => {
+                const options = Array.isArray(q.options) ? q.options : [];
+                const correctIdx = typeof q.correct === 'number' ? q.correct : 0;
+
+                const optionsHtml = options.map((opt, oIdx) => {
+                    const letter = String.fromCharCode(65 + oIdx);
+                    const isCorrect = oIdx === correctIdx;
+                    return `
+                        <div class="option-row ${isCorrect ? 'correct' : ''}">
+                            <span class="option-key">${letter})</span>
+                            <span class="option-text">${opt}</span>
+                            ${isCorrect ? `<span class="correct-tag">${isEs ? 'CORRECTA' : 'CORRECT'}</span>` : ''}
+                        </div>
+                    `;
+                }).join('');
+
+                const codeSnippet = q.code ? `<pre class="code-block">${this.escapeHtml(q.code)}</pre>` : '';
+                const scenarioSnippet = q.scenario ? `<div class="scenario-box"><strong>${isEs ? 'Escenario:' : 'Scenario:'}</strong> ${this.escapeHtml(q.scenario)}</div>` : '';
+                const subdomainLabel = q.subdomain ? `<span class="subdomain-tag">${this.escapeHtml(q.subdomain)}</span>` : '';
+
+                questionsHtml += `
+                    <div class="question-card">
+                        <div class="question-header">
+                            <span class="question-badge">${isEs ? 'Pregunta' : 'Question'} #${globalIndex}</span>
+                            ${subdomainLabel}
+                            <span class="qid-tag">ID: ${q.id}</span>
+                        </div>
+                        ${scenarioSnippet}
+                        ${codeSnippet}
+                        <div class="question-prompt">${q.prompt || ''}</div>
+                        <div class="options-list">
+                            ${optionsHtml}
+                        </div>
+                        <div class="explanation-box">
+                            <strong>${isEs ? 'Explicación Técnica Oficial:' : 'Official Technical Explanation:'}</strong>
+                            <div>${q.explanation || ''}</div>
+                        </div>
+                    </div>
+                `;
+                globalIndex++;
+            });
+
+            domainContentHtml += `
+                <section class="domain-block">
+                    <div class="domain-header">
+                        <h2 class="domain-title">${domainName}</h2>
+                        <div class="domain-count">${qs.length} ${isEs ? 'preguntas de práctica oficial' : 'official practice questions'}</div>
+                    </div>
+                    ${questionsHtml}
+                </section>
+            `;
+            domainNumber++;
+        });
+
+        return `<!DOCTYPE html>
+<html lang="${lang}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guía de Estudio — ${this.escapeHtml(courseTitle)}</title>
+  <style>
+    @page {
+      margin: 14mm 16mm;
+      size: A4 portrait;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      color: #172033;
+      background: #ffffff;
+      margin: 0;
+      padding: 0;
+      font-size: 13px;
+      line-height: 1.5;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .no-print-bar {
+      position: sticky;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: #111827;
+      color: #ffffff;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 9999;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .print-btn {
+      background: #3157d5;
+      color: #ffffff;
+      border: none;
+      padding: 9px 20px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .print-btn:hover { background: #2447b8; }
+    .close-btn {
+      background: transparent;
+      color: #a7b0c0;
+      border: 1px solid #374151;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .close-btn:hover { color: #fff; border-color: #fff; }
+    .document-container {
+      max-width: 860px;
+      margin: 24px auto 40px;
+      padding: 0 20px;
+    }
+    @media print {
+      .no-print-bar { display: none !important; }
+      .document-container { margin: 0; padding: 0; max-width: 100%; }
+      .domain-block { page-break-before: always; }
+      .domain-block:first-of-type { page-break-before: avoid; }
+      .question-card { break-inside: avoid; page-break-inside: avoid; }
+    }
+    .doc-header {
+      border-bottom: 3px solid #3157d5;
+      padding-bottom: 18px;
+      margin-bottom: 24px;
+    }
+    .doc-eyebrow {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #3157d5;
+      margin-bottom: 4px;
+    }
+    .doc-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #111827;
+      margin: 0 0 6px 0;
+      line-height: 1.25;
+    }
+    .doc-subtitle {
+      font-size: 13px;
+      color: #667085;
+      margin: 0 0 14px 0;
+    }
+    .doc-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 8px;
+      font-size: 12px;
+      background: #f4f6f8;
+      padding: 10px 14px;
+      border-radius: 6px;
+      border: 1px solid #d9dee7;
+    }
+    .doc-meta-item strong { color: #111827; }
+    .toc-card {
+      background: #f4f6f8;
+      border: 1px solid #d9dee7;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-bottom: 28px;
+    }
+    .toc-title {
+      font-size: 14px;
+      font-weight: 700;
+      margin: 0 0 10px 0;
+      color: #111827;
+    }
+    .toc-list {
+      margin: 0;
+      padding-left: 20px;
+      font-size: 12.5px;
+      color: #374151;
+    }
+    .domain-header {
+      background: #f4f6f8;
+      border-left: 4px solid #3157d5;
+      padding: 12px 16px;
+      margin: 28px 0 16px 0;
+      border-radius: 0 8px 8px 0;
+    }
+    .domain-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: #111827;
+      margin: 0;
+    }
+    .domain-count {
+      font-size: 12px;
+      color: #667085;
+      margin-top: 2px;
+    }
+    .question-card {
+      border: 1px solid #d9dee7;
+      border-radius: 8px;
+      padding: 16px 18px;
+      margin-bottom: 18px;
+      background: #ffffff;
+    }
+    .question-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+    .question-badge {
+      font-size: 11px;
+      font-weight: 800;
+      color: #3157d5;
+      background: rgba(49,87,213,0.08);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    .subdomain-tag {
+      font-size: 11px;
+      color: #667085;
+      background: #f4f6f8;
+      border: 1px solid #d9dee7;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    .qid-tag {
+      margin-left: auto;
+      font-size: 11px;
+      font-family: monospace;
+      color: #a7b0c0;
+    }
+    .scenario-box {
+      font-size: 12.5px;
+      background: rgba(49,87,213,0.04);
+      border-left: 3px solid #3157d5;
+      padding: 8px 12px;
+      border-radius: 0 6px 6px 0;
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+    .question-prompt {
+      font-weight: 700;
+      font-size: 13.5px;
+      color: #111827;
+      margin-bottom: 12px;
+      line-height: 1.45;
+    }
+    .code-block {
+      font-family: 'JetBrains Mono', Consolas, monospace;
+      font-size: 11.5px;
+      background: #172033;
+      color: #f4f6f8;
+      padding: 10px 12px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      white-space: pre-wrap;
+      overflow-x: auto;
+    }
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+    .option-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      font-size: 12.5px;
+    }
+    .option-row.correct {
+      background: rgba(22, 121, 74, 0.08);
+      border-color: rgba(22, 121, 74, 0.35);
+      color: #16794a;
+      font-weight: 600;
+    }
+    .option-key {
+      font-weight: 800;
+      font-family: monospace;
+      min-width: 22px;
+    }
+    .option-text {
+      flex: 1;
+    }
+    .correct-tag {
+      margin-left: auto;
+      font-size: 10.5px;
+      font-weight: 800;
+      color: #16794a;
+      background: rgba(22, 121, 74, 0.15);
+      padding: 2px 7px;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+    .explanation-box {
+      background: #f4f6f8;
+      border-left: 3px solid #3157d5;
+      padding: 10px 12px;
+      border-radius: 0 6px 6px 0;
+      font-size: 12px;
+      color: #374151;
+      line-height: 1.45;
+    }
+    .explanation-box strong {
+      color: #3157d5;
+    }
+  </style>
+</head>
+<body>
+  <div class="no-print-bar">
+    <div style="font-weight:700;font-size:14px;display:flex;align-items:center;gap:8px;">
+      <span>The Data Dojo &bull; Guía Oficial de Estudio</span>
+      <span style="font-size:12px;opacity:0.7;">(${totalQuestions} preguntas)</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <button type="button" class="print-btn" onclick="window.print()">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>
+        <span>Imprimir / Guardar como PDF</span>
+      </button>
+      <button type="button" class="close-btn" onclick="window.close()">Cerrar</button>
+    </div>
+  </div>
+
+  <div class="document-container">
+    <header class="doc-header">
+      <div class="doc-eyebrow">The Data Dojo &bull; Guía Técnica de Certificación</div>
+      <h1 class="doc-title">${this.escapeHtml(courseTitle)}</h1>
+      <p class="doc-subtitle">Banco estructurado por dominios oficiales con preguntas, opciones, respuestas correctas y explicaciones técnicas completas.</p>
+      
+      <div class="doc-meta-grid">
+        <div class="doc-meta-item"><strong>Candidato:</strong> Norman Reynaldo Sabillon Castro (NorSab)</div>
+        <div class="doc-meta-item"><strong>Total Preguntas:</strong> ${totalQuestions}</div>
+        <div class="doc-meta-item"><strong>Fecha de Emisión:</strong> ${dateStr}</div>
+        <div class="doc-meta-item"><strong>Idioma:</strong> ${isEs ? 'Español (ES)' : 'English (EN)'}</div>
+      </div>
+    </header>
+
+    <div class="toc-card">
+      <h3 class="toc-title">Índice de Dominios Oficiales</h3>
+      <ol class="toc-list">
+        ${domainIndexHtml}
+      </ol>
+    </div>
+
+    <main>
+      ${domainContentHtml}
+    </main>
+
+    <footer style="margin-top:40px;padding-top:16px;border-top:1px solid #d9dee7;text-align:center;color:#667085;font-size:11px;">
+      &copy; 2026 The Data Dojo &mdash; Documento de estudio personal para certificaciones técnicas oficiales.
+    </footer>
+  </div>
+</body>
+</html>`;
+    },
+
+    escapeHtml(str) {
+        if (!str) return '';
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    },
+
+    renderPrintOverlay(html) {
+        const iframe = document.createElement('iframe');
+        iframe.style.position = 'fixed';
+        iframe.style.top = '0';
+        iframe.style.left = '0';
+        iframe.style.width = '100vw';
+        iframe.style.height = '100vh';
+        iframe.style.zIndex = '99999';
+        iframe.style.border = 'none';
+        iframe.style.background = '#fff';
+        document.body.appendChild(iframe);
+
+        const doc = iframe.contentWindow.document;
+        doc.open();
+        doc.write(html);
+        doc.close();
+    }
+};
+
