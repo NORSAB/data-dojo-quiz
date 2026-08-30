@@ -315,3 +315,28 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
   - Comprobó 0 tags HTML en títulos, 0 funciones duplicadas, 0 IDs HTML duplicados, 0 emojis y total compatibilidad de traducción EN/ES.
 - Actualizó la PWA a `BUILD_TIMESTAMP = '20260830d'` y caché `simulador-v32-20260830d` en `sw.js` e `index.html`.
 - Ejecutó con éxito la suite completa de 5 validadores automatizados (`validate_ai103_integration.js`, `validate_genai_integration.js`, `validate_global_language.js`, `validate_ui_palette.js`, `audit_code_structure.js`) sin ninguna advertencia ni error.
+
+### 2026-08-30 04:25 CST — Antigravity (Gemini 3.7 Flash)
+- Rediseñó por completo la interfaz del **Modal de Configuración del Examen** (`#quiz-config-modal`):
+  - **Estructura espaciosa y ergonómica**: Se amplió el ancho del modal de 520px a un layout amplio de 840px (`quiz-config-modal-content`) con grid de 2 columnas en desktop y colapso fluido en dispositivos móviles, eliminando el amontonamiento y permitiendo una lectura limpia de todo el contenido.
+  - **Columna Izquierda (Volumen, Rango y Búsqueda)**:
+    - Selector de cantidad de preguntas con slider de rango estilizado y número destacado en badge (`config-count-display`).
+    - **Presets Rápidos**: Botones de acceso directo (10, 25, 50, 100, Todas) que configuran el slider y recuento con 1 clic (`window.setQuizConfigPreset`).
+    - Tarjeta de selección de rango numérico (`config-range-start`, `config-range-end`) con badge de límites reales del banco.
+    - Tarjeta de búsqueda por palabra clave (`config-search`) con icono SVG integrado.
+  - **Columna Derecha (Filtrado por Dominios)**:
+    - Contenedor de lista de dominios con altura cómoda (`max-height: 250px`), scrolling fluido, tipografía legible sin truncamiento artificial con puntos suspensivos (`.config-domain-item`), checkboxes alineados y badges de recuento de preguntas por área.
+  - **Fila Inferior (Modos de Examen y Opciones)**:
+    - Grid de 3 tarjetas interactivas (`quiz-config-mode-card`): Modo Examen Real (sin feedback inmediato), Modo Contrarreloj Time-Attack (60s/pregunta con icono SVG) y Orden de Preguntas (Aleatorio vs Secuencial).
+    - Tarjeta destacada de Modo Ataque a Debilidades (`config-weakness-container`) cuando existen fallos previos en el historial.
+  - **Encabezado y Acciones**:
+    - Header moderno con icono de configuración SVG, título, subtítulo explicativo y botón de cierre (`X`).
+    - Pie de acciones con botón "Cancelar" y botón principal "Comenzar Examen" con icono de Play SVG.
+- Actualizó la PWA a `BUILD_TIMESTAMP = '20260830e'` y caché `simulador-v33-20260830e` en `sw.js` e `index.html`.
+- Validó con éxito las 5 suites automatizadas:
+  - `validate_ui_palette.js`: 17 colores hex únicos, 0 gradientes decorativos, compatibilidad total en temas claro y oscuro.
+  - `validate_global_language.js`: Integración de selector global y versión PWA 20260830e.
+  - `validate_ai103_integration.js`: 712 preguntas (356 EN + 356 ES) y recursos completos AI-103.
+  - `validate_genai_integration.js`: 766 preguntas (383 EN + 383 ES), 6 dominios, 65 subdominios y sync Supabase.
+  - `audit_code_structure.js`: 0 funciones duplicadas, 0 IDs HTML duplicados.
+

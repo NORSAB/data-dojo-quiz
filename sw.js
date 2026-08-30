@@ -8,15 +8,16 @@
 // Antigravity (Gemini 3.7 Flash) | 2026-08-30 03:40 CST | Calibra partículas ambientales a una cantidad equilibrada (12 elementos) con tamaño y resplandor óptimo.
 // Antigravity (Gemini 3.7 Flash) | 2026-08-30 03:58 CST | Elimina origen LaTeX e incorpora generador de Guías de Estudio oficiales en PDF por dominio y banco completo.
 // Antigravity (Gemini 3.7 Flash) | 2026-08-30 04:10 CST | Corrige títulos de módulos de estudio y sanitización bilingüe contra tags SVG escapados.
-const BUILD_TIMESTAMP = '20260830d';
-const CACHE_NAME = `simulador-v32-${BUILD_TIMESTAMP}`;
+// Antigravity (Gemini 3.7 Flash) | 2026-08-30 04:25 CST | Rediseño espacioso y organizado en 2 columnas del modal de configuración del examen con presets rápidos.
+const BUILD_TIMESTAMP = '20260830e';
+const CACHE_NAME = `simulador-v33-${BUILD_TIMESTAMP}`;
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './styles.css?v=20260830d',
-  './app_i18n.js?v=20260830d',
-  './script.js?v=20260830d',
-  './features.js?v=20260830d',
+  './styles.css?v=20260830e',
+  './app_i18n.js?v=20260830e',
+  './script.js?v=20260830e',
+  './features.js?v=20260830e',
   './hero_data.js',
   './auto_restore_data.js',
   './manifest.json',
@@ -55,7 +56,7 @@ const ASSETS_TO_CACHE = [
   './conceptos_databricks.js',
   './personajes_unir_viz.js',
   './translations_databricks_es.js',
-  './translate_toggle.js?v=20260830d',
+  './translate_toggle.js?v=20260830e',
   './supabase-sync.js',
   './comandos_sql_databricks.js',
   './comandos_sql_genai.js'

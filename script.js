@@ -1735,15 +1735,28 @@ const badgesConfig = [
         uniqueDomains.forEach(d => {
             const count = domainCounts[d];
             const label = document.createElement("label");
-            label.style.cssText = "display: flex; align-items: center; gap: 8px; font-size: 0.88rem; cursor: pointer; user-select: none; color: var(--text-color); margin: 0;";
+            label.className = "config-domain-item";
             label.innerHTML = `
-              <input type="checkbox" class="config-domain-cb" value="${d.replace(/"/g, '&quot;')}" checked style="width: 16px; height: 16px; cursor: pointer;" />
-              <span style="flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${d}</span>
-              <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); background: var(--bg-card); padding: 2px 6px; border-radius: 6px; border: 1px solid var(--border-color);">${count}</span>
+              <input type="checkbox" class="config-domain-cb" value="${d.replace(/"/g, '&quot;')}" checked style="width: 16px; height: 16px; cursor: pointer; flex-shrink: 0;" />
+              <span class="domain-name">${d}</span>
+              <span class="quiz-config-card-badge">${count}</span>
             `;
             domainCheckboxesContainer.appendChild(label);
         });
     }
+
+    // Helper for quick question presets (10, 25, 50, 100, Todas)
+    window.setQuizConfigPreset = function(preset) {
+        const slider = document.getElementById("config-slider");
+        const countDisplay = document.getElementById("config-count-display");
+        if (!slider) return;
+        const maxVal = parseInt(slider.max) || 1;
+        const targetVal = preset === "max" ? maxVal : Math.min(parseInt(preset) || 10, maxVal);
+        slider.value = Math.max(1, targetVal);
+        if (countDisplay) countDisplay.textContent = slider.value;
+        slider.dispatchEvent(new Event("input"));
+        slider.dispatchEvent(new Event("change"));
+    };
 
     let allDomainsSelected = true;
     if (domainToggleAllBtn) {
