@@ -17,7 +17,7 @@
     <title>Quiz Simulator</title>
     <link rel="manifest" href="manifest.json" />
     <meta name="theme-color" content="#3157d5" />
-    <link rel="stylesheet" href="styles.css?v=20260830l" />
+    <link rel="stylesheet" href="styles.css?v=20260830m" />
     <style>
       /* =======================================================================
          TRUE 100% FULL-WIDTH FLUID RESPONSIVE SYSTEM
@@ -296,6 +296,19 @@
             <span class="global-language-divider">/</span>
             <span class="global-language-option" data-language="en">EN</span>
           </span>
+        </button>
+
+        <!-- Live Sync Status Indicator -->
+        <button
+          id="sync-status-btn"
+          class="sync-status-pill"
+          type="button"
+          onclick="window.LiveSyncStatus && window.LiveSyncStatus.togglePopover()"
+          title="Estado de Sincronización en la Nube"
+          style="margin-right: 4px;"
+        >
+          <span id="sync-status-dot" class="sync-dot"></span>
+          <span id="sync-status-text">Sincronizado</span>
         </button>
 
         <!-- Spotlight Search Trigger Button (Ctrl + K) -->
@@ -590,6 +603,48 @@
                   <span style="font-size: 0.7rem; font-weight: 700; background: var(--bg-card); border: 1px solid var(--border-color); padding: 1px 6px; border-radius: 4px; color: var(--danger-color);">3 VIDAS</span>
                 </div>
                 <small style="display: block; color: var(--text-muted); font-size: 0.78rem; margin-top: 2px;">Desafío contra el reloj: +10s por acierto y combos de XP</small>
+              </div>
+            </div>
+
+            <!-- Card 4: Multi-stage Case Study Simulator -->
+            <div id="case-study-card" class="dojo-feature-card" onclick="window.CaseStudySimulator && window.CaseStudySimulator.open()" style="cursor: pointer; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; transition: all 0.15s ease;">
+              <div style="width: 38px; height: 38px; border-radius: 8px; background: rgba(49, 87, 213, 0.1); border: 1px solid rgba(49, 87, 213, 0.25); display: flex; align-items: center; justify-content: center; color: var(--primary-color); flex-shrink: 0;">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+              </div>
+              <div style="flex: 1;">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <strong style="font-size: 0.92rem; color: var(--text-color);">Casos de Estudio</strong>
+                  <span style="font-size: 0.7rem; font-weight: 700; background: var(--bg-card); border: 1px solid var(--border-color); padding: 1px 6px; border-radius: 4px; color: var(--primary-color);">REAL EXAM</span>
+                </div>
+                <small style="display: block; color: var(--text-muted); font-size: 0.78rem; margin-top: 2px;">Arquitecturas empresariales con preguntas encadenadas</small>
+              </div>
+            </div>
+
+            <!-- Card 5: Exam Readiness Radar -->
+            <div id="readiness-radar-card" class="dojo-feature-card" onclick="window.ExamReadinessRadar && window.ExamReadinessRadar.open()" style="cursor: pointer; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; transition: all 0.15s ease;">
+              <div style="width: 38px; height: 38px; border-radius: 8px; background: rgba(49, 87, 213, 0.1); border: 1px solid rgba(49, 87, 213, 0.25); display: flex; align-items: center; justify-content: center; color: var(--primary-color); flex-shrink: 0;">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/></svg>
+              </div>
+              <div style="flex: 1;">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <strong style="font-size: 0.92rem; color: var(--text-color);">Radar de Preparación</strong>
+                  <span style="font-size: 0.7rem; font-weight: 700; background: var(--bg-card); border: 1px solid var(--border-color); padding: 1px 6px; border-radius: 4px; color: var(--primary-color);">% PROBABILIDAD</span>
+                </div>
+                <small style="display: block; color: var(--text-muted); font-size: 0.78rem; margin-top: 2px;">Métricas predictivas y radar por dominio oficial</small>
+              </div>
+            </div>
+
+            <!-- Card 6: Hands-free Podcast Playlist -->
+            <div id="podcast-playlist-card" class="dojo-feature-card" onclick="window.PodcastPlaylist && window.PodcastPlaylist.open()" style="cursor: pointer; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; transition: all 0.15s ease;">
+              <div style="width: 38px; height: 38px; border-radius: 8px; background: rgba(49, 87, 213, 0.1); border: 1px solid rgba(49, 87, 213, 0.25); display: flex; align-items: center; justify-content: center; color: var(--primary-color); flex-shrink: 0;">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+              </div>
+              <div style="flex: 1;">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <strong style="font-size: 0.92rem; color: var(--text-color);">Podcast Playlist</strong>
+                  <span style="font-size: 0.7rem; font-weight: 700; background: var(--bg-card); border: 1px solid var(--border-color); padding: 1px 6px; border-radius: 4px; color: var(--primary-color);">MANOS LIBRES</span>
+                </div>
+                <small style="display: block; color: var(--text-muted); font-size: 0.78rem; margin-top: 2px;">Escucha módulos continuos con selector de voces y velocidad</small>
               </div>
             </div>
           </div>
@@ -1337,6 +1392,32 @@
                   <input type="text" id="config-search" placeholder="Ej. Vector Search, Delta Live Tables..." />
                 </div>
               </div>
+
+              <!-- Card 4: Advanced Category & History Filters -->
+              <div class="quiz-config-section-card">
+                <div class="quiz-config-card-header">
+                  <span>Filtros Avanzados</span>
+                  <span style="font-size: 0.72rem; color: var(--text-muted); font-weight: 500;">Quirúrgico</span>
+                </div>
+                <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px;">
+                  <label class="filter-chip-checkbox" id="chip-filter-missed-label">
+                    <input type="checkbox" id="chip-filter-missed" style="display:none;" onchange="this.parentElement.classList.toggle('checked', this.checked); window.updateConfigQuestionCount && window.updateConfigQuestionCount();" />
+                    <span>Falladas</span>
+                  </label>
+                  <label class="filter-chip-checkbox" id="chip-filter-unseen-label">
+                    <input type="checkbox" id="chip-filter-unseen" style="display:none;" onchange="this.parentElement.classList.toggle('checked', this.checked); window.updateConfigQuestionCount && window.updateConfigQuestionCount();" />
+                    <span>No Vistas</span>
+                  </label>
+                  <label class="filter-chip-checkbox" id="chip-filter-code-label">
+                    <input type="checkbox" id="chip-filter-code" style="display:none;" onchange="this.parentElement.classList.toggle('checked', this.checked); window.updateConfigQuestionCount && window.updateConfigQuestionCount();" />
+                    <span>Con Código/SDK</span>
+                  </label>
+                  <label class="filter-chip-checkbox" id="chip-filter-order-label">
+                    <input type="checkbox" id="chip-filter-order" style="display:none;" onchange="this.parentElement.classList.toggle('checked', this.checked); window.updateConfigQuestionCount && window.updateConfigQuestionCount();" />
+                    <span>Ordenación</span>
+                  </label>
+                </div>
+              </div>
             </div>
 
             <!-- Right Column: Domains / Areas -->
@@ -1723,6 +1804,10 @@
           <button id="error-rescue-deck-btn" class="btn btn-outline" onclick="window.ErrorRescueCards.openRescueDeck()" type="button" style="border-color: var(--primary-color); color: var(--primary-color); font-weight: 700;">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 6px;"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
             Repasar Errores en Flashcards
+          </button>
+          <button id="export-mistakes-md-btn" class="btn btn-outline" onclick="window.MistakesExporter && window.MistakesExporter.exportMarkdown()" type="button" title="Descargar errores en Markdown para Obsidian / Notion">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 6px;"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            Errores .MD / Anki
           </button>
           <button id="export-history-csv-btn" class="btn btn-outline" onclick="window.exportPerformanceReport('csv')" type="button" title="Descargar historial en CSV">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 6px;"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
@@ -2372,6 +2457,78 @@
       </div>
     </div>
 
+    <!-- Case Study Simulator Modal -->
+    <div id="case-study-modal" class="modal-overlay hidden" role="dialog" aria-labelledby="case-study-title" aria-modal="true" style="z-index: 2500;">
+      <div class="modal-content" style="max-width: 960px; width: 95%; max-height: 90vh; overflow-y: auto;">
+        <div class="modal-header-custom" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--primary-color)" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            <h3 id="case-study-title" style="margin: 0; font-size: 1.15rem; font-weight: 800; color: var(--text-color);">Simulador de Casos de Estudio</h3>
+          </div>
+          <button type="button" class="btn-icon-modern" onclick="window.CaseStudySimulator && window.CaseStudySimulator.close()" aria-label="Cerrar">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+        <div id="case-study-body" style="padding-top: 1rem;">
+          <!-- Injected dynamically by CaseStudySimulator -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Exam Readiness Radar Modal -->
+    <div id="readiness-radar-modal" class="modal-overlay hidden" role="dialog" aria-labelledby="readiness-radar-title" aria-modal="true" style="z-index: 2500;">
+      <div class="modal-content" style="max-width: 820px; width: 95%; max-height: 90vh; overflow-y: auto;">
+        <div class="modal-header-custom" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--primary-color)" stroke-width="2"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/></svg>
+            <h3 id="readiness-radar-title" style="margin: 0; font-size: 1.15rem; font-weight: 800; color: var(--text-color);">Radar de Preparación para Certificación</h3>
+          </div>
+          <button type="button" class="btn-icon-modern" onclick="window.ExamReadinessRadar && window.ExamReadinessRadar.close()" aria-label="Cerrar">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+        <div id="readiness-radar-body" style="padding-top: 1rem;">
+          <!-- Injected dynamically by ExamReadinessRadar -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Podcast Playlist Modal -->
+    <div id="podcast-playlist-modal" class="modal-overlay hidden" role="dialog" aria-labelledby="podcast-playlist-title" aria-modal="true" style="z-index: 2500;">
+      <div class="modal-content" style="max-width: 680px; width: 95%; max-height: 90vh; overflow-y: auto;">
+        <div class="modal-header-custom" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--primary-color)" stroke-width="2"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+            <h3 id="podcast-playlist-title" style="margin: 0; font-size: 1.15rem; font-weight: 800; color: var(--text-color);">Podcast Playlist & Audio Manos Libres</h3>
+          </div>
+          <button type="button" class="btn-icon-modern" onclick="window.PodcastPlaylist && window.PodcastPlaylist.close()" aria-label="Cerrar">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+        <div id="podcast-playlist-body" style="padding-top: 1rem;">
+          <!-- Injected dynamically by PodcastPlaylist -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Sync Popover Modal -->
+    <div id="sync-popover-modal" class="modal-overlay hidden" role="dialog" aria-labelledby="sync-popover-title" aria-modal="true" style="z-index: 2500;">
+      <div class="modal-content" style="max-width: 460px; width: 90%;">
+        <div class="modal-header-custom" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span id="sync-popover-dot" class="sync-dot"></span>
+            <h3 id="sync-popover-title" style="margin: 0; font-size: 1.05rem; font-weight: 800; color: var(--text-color);">Estado de Sincronización</h3>
+          </div>
+          <button type="button" class="btn-icon-modern" onclick="window.LiveSyncStatus && window.LiveSyncStatus.closePopover()" aria-label="Cerrar">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+        <div id="sync-popover-body" style="padding-top: 1rem;">
+          <!-- Injected dynamically by LiveSyncStatus -->
+        </div>
+      </div>
+    </div>
+
     <script src="marked.min.js"></script>
     <script src="questions.js"></script>
     <script src="questions_databricks.js"></script>
@@ -2417,14 +2574,14 @@
     <script src="flashcards_unah_tesis.js"></script>
     <!-- Auto Restore Master Data -->
     <script src="auto_restore_data.js"></script>
-    <script src="app_i18n.js?v=20260830l"></script>
-    <script src="script.js?v=20260830l"></script>
-    <script src="features.js?v=20260830l"></script>
+    <script src="app_i18n.js?v=20260830m"></script>
+    <script src="script.js?v=20260830m"></script>
+    <script src="features.js?v=20260830m"></script>
     <!-- Supabase Cloud Backup -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-sync.js"></script>
     <!-- Databricks Spanish Translation Toggle -->
     <script src="translations_databricks_es.js"></script>
-    <script src="translate_toggle.js?v=20260830l"></script>
+    <script src="translate_toggle.js?v=20260830m"></script>
   </body>
 </html>

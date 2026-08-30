@@ -5984,5 +5984,259 @@ html, body {
   color: var(--text-color);
 }
 
+/* =============================================================================
+   F37: CASE STUDY SIMULATOR (Multi-stage Case Studies)
+   ============================================================================= */
+.case-study-split-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 1.25rem;
+  margin-top: 1rem;
+}
+
+@media (max-width: 860px) {
+  .case-study-split-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.case-study-left-pane {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  overflow-y: auto;
+  max-height: 520px;
+}
+
+.case-study-right-pane {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+}
+
+.case-study-tab-btn {
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.case-study-tab-btn.active {
+  background: var(--primary-color);
+  color: #ffffff;
+  border-color: var(--primary-color);
+}
+
+.case-study-step-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 99px;
+  background: rgba(49, 87, 213, 0.15);
+  color: var(--primary-color);
+}
+
+/* =============================================================================
+   F38: EXAM READINESS RADAR & ANALYTICS
+   ============================================================================= */
+.radar-chart-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  margin: 1rem 0;
+}
+
+.readiness-score-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 1.15rem;
+  font-weight: 800;
+  padding: 6px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid;
+}
+
+.readiness-score-high {
+  background: rgba(22, 121, 74, 0.12);
+  color: var(--success-color);
+  border-color: var(--success-color);
+}
+
+.readiness-score-mid {
+  background: rgba(154, 103, 0, 0.12);
+  color: var(--warning-color);
+  border-color: var(--warning-color);
+}
+
+.readiness-score-low {
+  background: rgba(180, 35, 24, 0.12);
+  color: var(--danger-color);
+  border-color: var(--danger-color);
+}
+
+/* =============================================================================
+   F39: PIPELINE EXECUTION & INSPECTOR IN ARCHITECTURE CANVAS
+   ============================================================================= */
+.pipeline-inspector-drawer {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  margin-top: 1rem;
+  display: none;
+}
+
+.pipeline-payload-pre {
+  background: var(--dark-bg);
+  color: var(--light-bg);
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  font-family: monospace;
+  font-size: 0.82rem;
+  overflow-x: auto;
+  margin: 6px 0;
+}
+
+.arch-slot.pulse-active {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(49, 87, 213, 0.3);
+  transform: scale(1.04);
+}
+
+/* =============================================================================
+   F40: PODCAST PLAYLIST, VOICE SELECTOR & SPEED CONTROLS
+   ============================================================================= */
+.voice-select-dropdown {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-color);
+  font-size: 0.88rem;
+  margin: 6px 0 12px;
+}
+
+.speed-btn-group {
+  display: flex;
+  gap: 4px;
+  margin: 6px 0;
+}
+
+.speed-btn {
+  flex: 1;
+  padding: 4px 8px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-color);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.speed-btn.active {
+  background: var(--primary-color);
+  color: #ffffff;
+  border-color: var(--primary-color);
+}
+
+.playlist-track-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.85rem;
+}
+
+.playlist-track-item.playing {
+  background: rgba(49, 87, 213, 0.12);
+  color: var(--primary-color);
+  font-weight: 700;
+}
+
+/* =============================================================================
+   F41: CUSTOM QUIZ BUILDER FILTERS
+   ============================================================================= */
+.filter-chip-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  padding: 6px 12px;
+  border-radius: 99px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-color);
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.15s ease;
+}
+
+.filter-chip-checkbox.checked {
+  background: rgba(49, 87, 213, 0.15);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  font-weight: 700;
+}
+
+/* =============================================================================
+   F42: LIVE SYNC & ONLINE STATUS PILL IN HEADER
+   ============================================================================= */
+.sync-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 99px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-color);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.sync-status-pill:hover {
+  border-color: var(--primary-color);
+}
+
+.sync-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--success-color);
+}
+
+.sync-dot.offline {
+  background: var(--warning-color);
+}
+
+.sync-dot.syncing {
+  background: var(--primary-color);
+  animation: pulseSync 1s infinite alternate;
+}
+
+@keyframes pulseSync {
+  from { opacity: 0.4; }
+  to { opacity: 1; }
+}
+
 
 

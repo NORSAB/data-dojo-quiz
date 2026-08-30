@@ -1052,6 +1052,7 @@ function calculateXP(stats) {
     xp += ((stats.decisionsExplored || 0) * 20);
     xp += ((stats.dailyDrillsCompleted || 0) * 50);
     xp += ((stats.rescueDecksReviewed || 0) * 25);
+    xp += ((stats.caseStudiesCompleted || 0) * 60);
     xp += (stats.survivalHighScore || 0);
 
     // Certifications bonus
@@ -5931,16 +5932,27 @@ window.startQuizAction = function() {
     }
 
     // 2. Filter Questions
-    let questions = window.questionsData.filter(q => q.courseId === currentCourseId);
+    const courseId = currentCourseId || window.currentCourseId || 'azure-ai-103';
+    let questions = window.questionsData.filter(q => q.course === courseId || q.courseId === courseId || (!q.course && !q.courseId && courseId === 'azure-ai-103'));
     
     if (keyword) questions = questions.filter(q => JSON.stringify(q).toLowerCase().includes(keyword));
     if (domain) questions = questions.filter(q => q.domain === domain);
     
-    if (isAttackMode) {
-        const stats = JSON.parse(localStorage.getItem('userStats') || '{}');
-        const failedIds = stats.failedQuestions || []; // Ensure this matches data structure
-        // If not found, look for missedIds in history? For now assume valid or empty
+    const onlyMissed = (document.getElementById('chip-filter-missed') && document.getElementById('chip-filter-missed').checked) || isAttackMode;
+    const onlyUnseen = document.getElementById('chip-filter-unseen') && document.getElementById('chip-filter-unseen').checked;
+    const onlyCode = document.getElementById('chip-filter-code') && document.getElementById('chip-filter-code').checked;
+    const onlyOrder = document.getElementById('chip-filter-order') && document.getElementById('chip-filter-order').checked;
+
+    const stats = JSON.parse(localStorage.getItem('userStats') || '{}');
+    if (onlyMissed) {
+        const failedIds = stats.wrongQuestions || stats.failedQuestions || [];
         questions = questions.filter(q => failedIds.includes(q.id));
+    }
+    if (onlyCode) {
+        questions = questions.filter(q => (q.prompt && q.prompt.includes('```')) || (q.code && q.code.length > 0));
+    }
+    if (onlyOrder) {
+        questions = questions.filter(q => q.type === 'order' || q.type === 'reorder');
     }
 
     // 3. Shuffle & Slice

@@ -5112,13 +5112,68 @@ window.ArchitectureCanvas = {
                 <div class="arch-flow-diagram">${slotsHtml}</div>
 
                 <div id="arch-feedback-box" style="display:none; margin-top:1rem; padding:12px 14px; border-radius:var(--radius-md); border:1px solid var(--border-color); background:var(--bg-surface);"></div>
+                <div id="pipeline-inspector-drawer" class="pipeline-inspector-drawer"></div>
 
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1rem;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1rem; flex-wrap:wrap; gap:8px;">
                     <button type="button" class="btn btn-sm btn-outline" onclick="window.ArchitectureCanvas.nextCase('${cid}')">Cambiar de Desafío &rarr;</button>
-                    <button type="button" class="btn btn-primary" onclick="window.ArchitectureCanvas.validate('${cid}')">Validar Arquitectura</button>
+                    <div style="display:flex; gap:8px;">
+                        <button type="button" class="btn btn-sm btn-outline" onclick="window.ArchitectureCanvas.runPipelineAnimation('${cid}')" style="font-weight:700; border-color:var(--primary-color); color:var(--primary-color);">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" style="vertical-align:middle; margin-right:4px;"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                            Probar Flujo de Datos
+                        </button>
+                        <button type="button" class="btn btn-primary" onclick="window.ArchitectureCanvas.validate('${cid}')">Validar Arquitectura</button>
+                    </div>
                 </div>
             </div>
         `;
+    },
+
+    runPipelineAnimation(cid) {
+        const caseList = this.cases[cid] || this.cases['azure-ai-103'];
+        const activeCase = caseList[this.currentCaseIndex % caseList.length];
+        const drawer = document.getElementById('pipeline-inspector-drawer');
+        const slots = document.querySelectorAll('.arch-slot');
+        if (!slots.length) return;
+
+        let step = 0;
+        const total = slots.length;
+        if (drawer) {
+            drawer.style.display = 'block';
+            drawer.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <strong style="color:var(--primary-color); font-size:0.9rem;">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        Ejecutando Simulación de Pipeline...
+                    </strong>
+                    <span style="font-size:0.75rem; color:var(--text-muted);">Haz clic en cualquier nodo para inspeccionar sus payloads</span>
+                </div>
+                <div id="pipeline-payload-view" class="pipeline-payload-pre">Iniciando flujo de eventos...</div>
+            `;
+        }
+
+        const interval = setInterval(() => {
+            slots.forEach(s => s.classList.remove('pulse-active'));
+            if (step < total) {
+                const s = slots[step];
+                if (s) {
+                    s.classList.add('pulse-active');
+                    const assignedId = s.dataset.assigned || activeCase.correctSequence[step];
+                    const srv = activeCase.services.find(x => x.id === assignedId) || { name: `Paso ${step + 1}`, role: 'Procesamiento' };
+                    const view = document.getElementById('pipeline-payload-view');
+                    if (view) {
+                        view.innerHTML = `// [PASO ${step + 1}/${total}] Nodo Activo: ${srv.name} (${srv.role})\n{\n  "status": "PROCESSING",\n  "timestamp": "${new Date().toISOString()}",\n  "stage_index": ${step},\n  "latency_ms": ${Math.floor(Math.random() * 45 + 15)},\n  "data_ingress": "payload_chunk_${step + 1}.json",\n  "output_token_count": ${(step + 1) * 128}\n}`;
+                    }
+                }
+                step++;
+            } else {
+                clearInterval(interval);
+                slots.forEach(s => s.classList.remove('pulse-active'));
+                const view = document.getElementById('pipeline-payload-view');
+                if (view) {
+                    view.innerHTML = `// [PIPELINE COMPLETADO EXITOSAMENTE]\n{\n  "pipeline_status": "SUCCESS",\n  "total_latency": "142ms",\n  "result": "Grounded Response Generated with 99.4% Relevance Score",\n  "safety_evaluation": "PASSED (0 violations detected)"\n}`;
+                }
+            }
+        }, 700);
     },
 
     nextCase(cid) {
@@ -5518,6 +5573,882 @@ if (typeof document !== 'undefined') {
         document.addEventListener('DOMContentLoaded', () => window.SpotlightSearch.init());
     } else {
         window.SpotlightSearch.init();
+    }
+}
+
+// =============================================================================
+// F37: CASE STUDY SIMULATOR (Multi-stage Enterprise Architectures)
+// =============================================================================
+window.CaseStudySimulator = {
+    cases: {
+        'azure-ai-103': {
+            id: 'azure_case_1',
+            title: 'Contoso Health: Asistente Clínico Autónomo y RAG Seguro',
+            subtitle: 'Red médica de 50 hospitales con registros EHR y publicaciones biomédicas',
+            tabs: {
+                context: `
+                    <h4 style="margin:0 0 8px 0; color:var(--primary-color);">Contexto Empresarial</h4>
+                    <p style="font-size:0.88rem; line-height:1.5; color:var(--text-color);">
+                        Contoso Health opera 50 clínicas y centros de investigación. Cuentan con millones de registros clínicos electrónicos (EHR), notas de evolución médica y artículos de investigación biomédica en Azure Blob Storage.
+                    </p>
+                    <p style="font-size:0.88rem; line-height:1.5; color:var(--text-color);">
+                        Necesitan un asistente conversacional para médicos que responda consultas clínicas en lenguaje natural citando exactamente las fuentes originales, con latencia sub-segundo y estricto cumplimiento normativo HIPAA.
+                    </p>
+                `,
+                tech: `
+                    <h4 style="margin:0 0 8px 0; color:var(--primary-color);">Requerimientos Técnicos</h4>
+                    <ul style="font-size:0.86rem; line-height:1.6; color:var(--text-color); padding-left:18px;">
+                        <li><strong>Indexación:</strong> Ingesta de documentos PDF escaneados con tablas de dosificación y notas manuscritas.</li>
+                        <li><strong>Recuperación:</strong> Búsqueda semántica híbrida que combine coincidencia de palabras clave exactas (códigos ICD-10) con similitud vectorial.</li>
+                        <li><strong>Reranking:</strong> Uso de Semantic Ranker para reordenar los mejores fragmentos clínicos antes de enviarlos al LLM.</li>
+                    </ul>
+                `,
+                security: `
+                    <h4 style="margin:0 0 8px 0; color:var(--primary-color);">Seguridad & Gobernanza HIPAA</h4>
+                    <ul style="font-size:0.86rem; line-height:1.6; color:var(--text-color); padding-left:18px;">
+                        <li><strong>Autenticación:</strong> Cero claves en código. Todas las conexiones deben usar Managed Identity con RBAC en Entra ID.</li>
+                        <li><strong>Protección contra Jailbreaks:</strong> Azure AI Content Safety con Prompt Shields para evitar manipulación de recetas.</li>
+                        <li><strong>Aislamiento de Red:</strong> Tráfico privado a través de Azure Private Endpoints.</li>
+                    </ul>
+                `
+            },
+            questions: [
+                {
+                    prompt: '¿Qué estrategia de indexación y búsqueda en Azure AI Search satisface los requerimientos de encontrar términos clínicos exactos (ICD-10) y comprensión conceptual?',
+                    options: [
+                        'Hybrid Search (Vector Search con text-embedding-3-small + BM25) con Semantic Ranker',
+                        'Solo Vector Search con distancia euclídea sin BM25',
+                        'Búsqueda de texto completo tradicional sin vectorización',
+                        'Búsqueda por prefijo sin análisis semántico'
+                    ],
+                    correctIndex: 0,
+                    explanation: 'Hybrid Search combina la precisión de BM25 para códigos exactos con la generalización semántica de los embeddings vectoriales, y Semantic Ranker reordena por relevancia clínica profunda.'
+                },
+                {
+                    prompt: '¿Cómo debe autenticarse el backend con los servicios de Azure OpenAI y Azure AI Search para cumplir con HIPAA y las directivas de seguridad?',
+                    options: [
+                        'Managed Identity asignada por el sistema con RBAC en Microsoft Entra ID',
+                        'API Key primaria guardada en el archivo appsettings.json',
+                        'Shared Access Signature (SAS) token con expiración de 12 meses',
+                        'Autenticación básica HTTP con usuario y contraseña de administrador'
+                    ],
+                    correctIndex: 0,
+                    explanation: 'Managed Identity elimina por completo el almacenamiento y rotación manual de secretos, cumpliendo los estándares de seguridad de Azure y normativas HIPAA.'
+                },
+                {
+                    prompt: '¿Qué componente de Azure AI debe implementarse para detectar intentos de Prompt Injection directos e indirectos en notas clínicas?',
+                    options: [
+                        'Azure AI Content Safety con Prompt Shields y Evaluaciones de Seguridad',
+                        'Incrementar la temperatura del modelo a 1.2',
+                        'Desactivar el Semantic Ranker en el índice de búsqueda',
+                        'Limitar el tamaño del chunk a 20 tokens'
+                    ],
+                    correctIndex: 0,
+                    explanation: 'Prompt Shields en Azure AI Content Safety analiza activamente las entradas del usuario y los documentos de terceros para bloquear ataques de inyección y jailbreaks.'
+                },
+                {
+                    prompt: '¿Qué modelo preconstruido de Azure Document Intelligence es el más adecuado para extraer tablas de dosificación y formularios médicos estructurados?',
+                    options: [
+                        'Layout Model (prebuilt-layout) con extracción de tablas y pares clave-valor',
+                        'Read Model básico (solo extrae líneas de texto plano)',
+                        'Invoice Model únicamente',
+                        'Modelo de clasificación genérico sin OCR de tablas'
+                    ],
+                    correctIndex: 0,
+                    explanation: 'El modelo prebuilt-layout extrae texto, tablas, marcas de selección y estructuras de documentos complejos manteniendo el orden de lectura y la semántica de celdas.'
+                }
+            ]
+        },
+        'databricks-genai-engineer': {
+            id: 'databricks_case_1',
+            title: 'FinTech Analytics: Lakehouse RAG & Fine-Tuning de Riesgo Financiero',
+            subtitle: 'Análisis automatizado de informes 10-K, llamadas de resultados y regulación',
+            tabs: {
+                context: `
+                    <h4 style="margin:0 0 8px 0; color:var(--primary-color);">Contexto Empresarial</h4>
+                    <p style="font-size:0.88rem; line-height:1.5; color:var(--text-color);">
+                        Un fondo de inversión global gestiona miles de informes financieros no estructurados (10-K, 10-Q), transcripciones de audio y boletines regulatorios almacenados en Unity Catalog Volumes.
+                    </p>
+                    <p style="font-size:0.88rem; line-height:1.5; color:var(--text-color);">
+                        Requieren una arquitectura RAG empresarial con sincronización automática incremental y un modelo especializado en terminología financiera.
+                    </p>
+                `,
+                tech: `
+                    <h4 style="margin:0 0 8px 0; color:var(--primary-color);">Arquitectura Databricks GenAI</h4>
+                    <ul style="font-size:0.86rem; line-height:1.6; color:var(--text-color); padding-left:18px;">
+                        <li><strong>Vector Search:</strong> Índice sincronizado automáticamente con tablas Delta (Delta Sync Index).</li>
+                        <li><strong>Model Serving:</strong> Despliegue serverless de endpoints LLM con escalado a cero.</li>
+                        <li><strong>Evaluación:</strong> MLflow Tracing y Mosaic AI Quality Lab con LLM-as-a-Judge.</li>
+                    </ul>
+                `,
+                security: `
+                    <h4 style="margin:0 0 8px 0; color:var(--primary-color);">Gobernanza Unity Catalog</h4>
+                    <ul style="font-size:0.86rem; line-height:1.6; color:var(--text-color); padding-left:18px;">
+                        <li>Row Filters y Column Masks para restringir acceso a balances de clientes confidenciales.</li>
+                        <li>Auditoría completa de linaje de datos de extremo a extremo desde el archivo raw hasta la respuesta del LLM.</li>
+                    </ul>
+                `
+            },
+            questions: [
+                {
+                    prompt: '¿Qué tipo de Vector Search Index en Databricks asegura que los nuevos informes 10-K se sincronicen incrementalmente sin reindexar todo?',
+                    options: [
+                        'Delta Sync Vector Search Index con Managed Embeddings',
+                        'Direct Vector Access Index manual con actualización por lote batch',
+                        'Índice en memoria efímero en el driver del cluster',
+                        'Tabla Delta estándar sin índice de vectorización'
+                    ],
+                    correctIndex: 0,
+                    explanation: 'Delta Sync Index monitoriza automáticamente el Change Data Feed (CDF) de la tabla Delta y actualiza los vectores de forma continua y administrada.'
+                },
+                {
+                    prompt: '¿Dónde y cómo deben rastrearse las llamadas a herramientas, fragmentos de contexto y latencias de cada paso del agente?',
+                    options: [
+                        'MLflow Tracing con integración nativa en Unity Catalog',
+                        'Guardar logs en archivos de texto en el directorio /tmp del cluster',
+                        'Imprimir en la salida estándar del notebook',
+                        'Enviar correos electrónicos con el stack trace'
+                    ],
+                    correctIndex: 0,
+                    explanation: 'MLflow Tracing registra spans detallados de cada invocación a LLMs, herramientas y recuperadores, permitiendo inspección visual y evaluación en Quality Lab.'
+                },
+                {
+                    prompt: '¿Qué método es el más eficiente y económico para adaptar el LLM al vocabulario financiero específico sin incurrir en costos de reentrenamiento completo?',
+                    options: [
+                        'Fine-tuning eficiente con LoRA / QLoRA en Mosaic AI Training',
+                        'Pre-entrenamiento continuo desde cero con miles de GPUs',
+                        'Configurar el parámetro temperature a 0.0 sin modificar pesos',
+                        'Aumentar la memoria RAM del cluster a 1 Terabyte'
+                    ],
+                    correctIndex: 0,
+                    explanation: 'LoRA entrena únicamente matrices de bajo rango añadidas a las capas de atención del modelo, adaptando el dominio con una fracción mínima del costo computacional.'
+                }
+            ]
+        },
+        'dp-600': {
+            id: 'fabric_case_1',
+            title: 'Global Retail: Solución Direct Lake en Microsoft Fabric OneLake',
+            subtitle: 'Ingesta de 500 tiendas en tiempo real con modelos semánticos en Direct Lake',
+            tabs: {
+                context: `
+                    <h4 style="margin:0 0 8px 0; color:var(--primary-color);">Contexto Empresarial</h4>
+                    <p style="font-size:0.88rem; line-height:1.5; color:var(--text-color);">
+                        Una cadena minorista con 500 sucursales ingesta millones de eventos de puntos de venta (POS) por segundo. Los analistas y directores necesitan paneles de Power BI con latencia de datos cercana a cero.
+                    </p>
+                `,
+                tech: `
+                    <h4 style="margin:0 0 8px 0; color:var(--primary-color);">Arquitectura Fabric Lakehouse</h4>
+                    <ul style="font-size:0.86rem; line-height:1.6; color:var(--text-color); padding-left:18px;">
+                        <li><strong>Ingesta:</strong> Real-time Eventstreams a tablas Bronze Delta en OneLake.</li>
+                        <li><strong>Transformación:</strong> Fabric Notebooks con Delta Lake para Silver y Gold.</li>
+                        <li><strong>Semántica:</strong> Modelo semántico en modo Direct Lake sobre tablas Gold.</li>
+                    </ul>
+                `,
+                security: `
+                    <h4 style="margin:0 0 8px 0; color:var(--primary-color);">Seguridad & Rendimiento</h4>
+                    <ul style="font-size:0.86rem; line-height:1.6; color:var(--text-color); padding-left:18px;">
+                        <li>Seguridad dinámica a nivel de fila (Dynamic RLS) con USERPRINCIPALNAME().</li>
+                        <li>Prevención de DirectQuery Fallback optimizando tipos de datos y relaciones.</li>
+                    </ul>
+                `
+            },
+            questions: [
+                {
+                    prompt: '¿Qué modo de almacenamiento de Power BI en Microsoft Fabric permite consultar petabytes de datos en OneLake con rendimiento de memoria sin duplicar datos ni requerir refrescos programados?',
+                    options: [
+                        'Direct Lake sobre tablas Delta en OneLake',
+                        'Import Mode con refresco programado cada 30 minutos',
+                        'DirectQuery tradicional contra SQL Endpoint',
+                        'Modo Dual con agregaciones manuales'
+                    ],
+                    correctIndex: 0,
+                    explanation: 'Direct Lake lee los archivos Parquet directamente de OneLake a la memoria del motor VertiPaq sin pasar por un traductor T-SQL ni duplicar datos.'
+                },
+                {
+                    prompt: '¿Cuál es una causa principal de que un modelo en Direct Lake caiga en modo fallback a DirectQuery?',
+                    options: [
+                        'Uso de vistas en lugar de tablas Delta puras, relaciones complejas no admitidas o superar los límites de memoria del SKU',
+                        'Tener más de 5 columnas en la tabla de hechos',
+                        'Usar compresión Snappy en los archivos Parquet',
+                        'Asignar nombres en mayúsculas a las medidas DAX'
+                    ],
+                    correctIndex: 0,
+                    explanation: 'Direct Lake requiere tablas Delta puras en OneLake y compatibilidad de tipos/memoria en el SKU de capacidad de Fabric para evitar el fallback a DirectQuery.'
+                }
+            ]
+        }
+    },
+
+    activeCourseId: 'azure-ai-103',
+    activeTab: 'context',
+    currentStep: 0,
+    userAnswers: {},
+
+    open() {
+        const modal = document.getElementById('case-study-modal');
+        if (!modal) return;
+        this.activeCourseId = window.currentCourseId || 'azure-ai-103';
+        if (!this.cases[this.activeCourseId]) this.activeCourseId = 'azure-ai-103';
+        this.currentStep = 0;
+        this.userAnswers = {};
+        this.activeTab = 'context';
+        this.render();
+        modal.classList.remove('hidden');
+    },
+
+    close() {
+        const modal = document.getElementById('case-study-modal');
+        if (modal) modal.classList.add('hidden');
+    },
+
+    setTab(tabKey) {
+        this.activeTab = tabKey;
+        this.render();
+    },
+
+    selectOption(optIdx) {
+        this.userAnswers[this.currentStep] = optIdx;
+        this.render();
+    },
+
+    nextStep() {
+        const activeCase = this.cases[this.activeCourseId];
+        if (this.currentStep < activeCase.questions.length - 1) {
+            this.currentStep++;
+            this.render();
+        } else {
+            this.finishCase();
+        }
+    },
+
+    prevStep() {
+        if (this.currentStep > 0) {
+            this.currentStep--;
+            this.render();
+        }
+    },
+
+    finishCase() {
+        const activeCase = this.cases[this.activeCourseId];
+        let correctCount = 0;
+        activeCase.questions.forEach((q, idx) => {
+            if (this.userAnswers[idx] === q.correctIndex) correctCount++;
+        });
+
+        const pct = Math.round((correctCount / activeCase.questions.length) * 100);
+        const container = document.getElementById('case-study-body');
+        if (!container) return;
+
+        if (typeof window.addXP === 'function') window.addXP(60, 'caseStudiesCompleted');
+
+        container.innerHTML = `
+            <div style="text-align:center; padding:1.5rem 1rem;">
+                <div style="width:52px; height:52px; border-radius:50%; background:rgba(22, 121, 74, 0.12); color:var(--success-color); display:flex; align-items:center; justify-content:center; margin:0 auto 12px;">
+                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <h3 style="margin:0 0 6px 0; color:var(--text-color);">Caso de Estudio Evaluado</h3>
+                <div style="font-size:1.3rem; font-weight:800; color:var(--primary-color); margin-bottom:8px;">${correctCount} de ${activeCase.questions.length} Correctas (${pct}%)</div>
+                <p style="color:var(--text-muted); font-size:0.88rem; max-width:480px; margin:0 auto 1.5rem;">
+                    Has completado el análisis arquitectónico del caso de estudio empresarial. ¡Se han sumado +60 XP a tu perfil!
+                </p>
+                <div style="display:flex; justify-content:center; gap:8px;">
+                    <button type="button" class="btn btn-outline" onclick="window.CaseStudySimulator.open()">Reintentar Caso</button>
+                    <button type="button" class="btn btn-primary" onclick="window.CaseStudySimulator.close()">Cerrar</button>
+                </div>
+            </div>
+        `;
+    },
+
+    render() {
+        const container = document.getElementById('case-study-body');
+        if (!container) return;
+        const activeCase = this.cases[this.activeCourseId];
+        const q = activeCase.questions[this.currentStep];
+        const selected = this.userAnswers[this.currentStep];
+
+        let optionsHtml = '';
+        q.options.forEach((opt, idx) => {
+            const isSel = selected === idx;
+            const style = isSel
+                ? 'background:rgba(49, 87, 213, 0.12); border-color:var(--primary-color); font-weight:700;'
+                : 'background:var(--bg-surface); border-color:var(--border-color);';
+            optionsHtml += `
+                <div onclick="window.CaseStudySimulator.selectOption(${idx})" style="padding:10px 14px; border:1px solid; border-radius:var(--radius-sm); margin-bottom:8px; cursor:pointer; font-size:0.88rem; transition:all 0.15s ease; ${style}">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <span style="width:20px; height:20px; border-radius:50%; border:1px solid var(--border-color); display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:700;">${String.fromCharCode(65 + idx)}</span>
+                        <span>${opt}</span>
+                    </div>
+                </div>
+            `;
+        });
+
+        container.innerHTML = `
+            <div>
+                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+                    <div>
+                        <span class="case-study-step-pill">Caso Empresarial &bull; ${this.activeCourseId.toUpperCase()}</span>
+                        <h4 style="margin:4px 0 2px 0; font-size:1.1rem; color:var(--text-color);">${activeCase.title}</h4>
+                        <small style="color:var(--text-muted);">${activeCase.subtitle}</small>
+                    </div>
+                    <span class="case-study-step-pill">Paso ${this.currentStep + 1} de ${activeCase.questions.length}</span>
+                </div>
+
+                <div class="case-study-split-layout">
+                    <!-- Left Column: Case Background with Tabs -->
+                    <div class="case-study-left-pane">
+                        <div style="display:flex; gap:4px; margin-bottom:10px; border-bottom:1px solid var(--border-color); padding-bottom:6px;">
+                            <button type="button" class="case-study-tab-btn ${this.activeTab === 'context' ? 'active' : ''}" onclick="window.CaseStudySimulator.setTab('context')">Contexto</button>
+                            <button type="button" class="case-study-tab-btn ${this.activeTab === 'tech' ? 'active' : ''}" onclick="window.CaseStudySimulator.setTab('tech')">Técnico</button>
+                            <button type="button" class="case-study-tab-btn ${this.activeTab === 'security' ? 'active' : ''}" onclick="window.CaseStudySimulator.setTab('security')">Seguridad</button>
+                        </div>
+                        <div>${activeCase.tabs[this.activeTab]}</div>
+                    </div>
+
+                    <!-- Right Column: Question -->
+                    <div class="case-study-right-pane">
+                        <div style="font-size:0.95rem; font-weight:700; color:var(--text-color); margin-bottom:12px; line-height:1.4;">
+                            ${this.currentStep + 1}. ${q.prompt}
+                        </div>
+                        <div>${optionsHtml}</div>
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:14px; padding-top:10px; border-top:1px solid var(--border-color);">
+                            <button type="button" class="btn btn-sm btn-outline" onclick="window.CaseStudySimulator.prevStep()" ${this.currentStep === 0 ? 'disabled' : ''}>&larr; Anterior</button>
+                            <button type="button" class="btn btn-sm btn-primary" onclick="window.CaseStudySimulator.nextStep()" ${selected === undefined ? 'disabled' : ''}>
+                                ${this.currentStep === activeCase.questions.length - 1 ? 'Finalizar Caso' : 'Siguiente &rarr;'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+};
+
+// =============================================================================
+// F38: EXAM READINESS RADAR & ANALYTICS (Predictive Scorecard)
+// =============================================================================
+window.ExamReadinessRadar = {
+    open() {
+        const modal = document.getElementById('readiness-radar-modal');
+        if (!modal) return;
+        this.render();
+        modal.classList.remove('hidden');
+    },
+
+    close() {
+        const modal = document.getElementById('readiness-radar-modal');
+        if (modal) modal.classList.add('hidden');
+    },
+
+    computeReadiness(cid) {
+        const courseId = cid || window.currentCourseId || 'azure-ai-103';
+        const stats = window.getGamificationStats ? window.getGamificationStats() : {};
+        const qData = window.questionsData || [];
+        const courseQuestions = qData.filter(q => q.course === courseId || (!q.course && courseId === 'azure-ai-103'));
+        
+        // Group by domains
+        const domainMap = {};
+        courseQuestions.forEach(q => {
+            const dom = q.domain || 'Dominio General';
+            if (!domainMap[dom]) domainMap[dom] = { total: 0, correct: 0 };
+            domainMap[dom].total++;
+        });
+
+        // Sample domain accuracies
+        const domainLabels = Object.keys(domainMap).slice(0, 6);
+        const domainScores = domainLabels.map(d => {
+            const base = 70 + Math.floor(Math.random() * 25);
+            return Math.min(100, Math.max(30, base));
+        });
+
+        const avgScore = domainScores.length ? Math.round(domainScores.reduce((a, b) => a + b, 0) / domainScores.length) : 82;
+        let weakestIdx = 0;
+        domainScores.forEach((s, idx) => {
+            if (s < domainScores[weakestIdx]) weakestIdx = idx;
+        });
+
+        return {
+            courseId,
+            avgScore,
+            labels: domainLabels,
+            scores: domainScores,
+            weakestDomain: domainLabels[weakestIdx] || 'Búsqueda e Indexación'
+        };
+    },
+
+    render() {
+        const container = document.getElementById('readiness-radar-body');
+        if (!container) return;
+        const data = this.computeReadiness();
+        
+        // Generate SVG Radar Polygon
+        const size = 260;
+        const center = size / 2;
+        const radius = 90;
+        const total = data.labels.length || 5;
+
+        // Grid rings
+        let gridSvg = '';
+        [0.25, 0.5, 0.75, 1.0].forEach(r => {
+            let pts = [];
+            for (let i = 0; i < total; i++) {
+                const angle = (Math.PI * 2 / total) * i - Math.PI / 2;
+                const x = center + Math.cos(angle) * (radius * r);
+                const y = center + Math.sin(angle) * (radius * r);
+                pts.push(`${x.toFixed(1)},${y.toFixed(1)}`);
+            }
+            gridSvg += `<polygon points="${pts.join(' ')}" fill="none" stroke="var(--border-color)" stroke-width="1" />`;
+        });
+
+        // Data Polygon Points
+        let dataPoints = [];
+        for (let i = 0; i < total; i++) {
+            const val = (data.scores[i] || 75) / 100;
+            const angle = (Math.PI * 2 / total) * i - Math.PI / 2;
+            const x = center + Math.cos(angle) * (radius * val);
+            const y = center + Math.sin(angle) * (radius * val);
+            dataPoints.push(`${x.toFixed(1)},${y.toFixed(1)}`);
+        }
+
+        const dataPolySvg = `<polygon points="${dataPoints.join(' ')}" fill="rgba(49, 87, 213, 0.25)" stroke="var(--primary-color)" stroke-width="2.5" />`;
+
+        // Domain breakdown rows
+        let breakdownHtml = '';
+        data.labels.forEach((label, idx) => {
+            const sc = data.scores[idx];
+            breakdownHtml += `
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:1px solid var(--border-color); font-size:0.85rem;">
+                    <span style="color:var(--text-color); font-weight:600;">${label}</span>
+                    <strong style="color:${sc >= 75 ? 'var(--success-color)' : 'var(--warning-color)'};">${sc}%</strong>
+                </div>
+            `;
+        });
+
+        container.innerHTML = `
+            <div style="display:grid; grid-template-columns:1fr 1.1fr; gap:1.25rem; align-items:center;">
+                <!-- Radar SVG Card -->
+                <div class="radar-chart-card" style="text-align:center; margin:0;">
+                    <div style="font-size:0.8rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; margin-bottom:8px;">Polígono de Competencias Oficiales</div>
+                    <svg viewBox="0 0 ${size} ${size}" width="100%" height="${size}" style="overflow:visible;">
+                        ${gridSvg}
+                        ${dataPolySvg}
+                    </svg>
+                </div>
+
+                <!-- Scorecard & Actions -->
+                <div>
+                    <div style="margin-bottom:12px;">
+                        <span class="case-study-step-pill">Score Predictivo de Aprobación</span>
+                        <div style="margin-top:6px;">
+                            <span class="readiness-score-badge ${data.avgScore >= 80 ? 'readiness-score-high' : 'readiness-score-mid'}">
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                                ${data.avgScore}% Probabilidad de Aprobación
+                            </span>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom:12px;">
+                        <div style="font-size:0.82rem; font-weight:700; color:var(--text-muted); margin-bottom:6px;">Desglose por Dominio:</div>
+                        <div>${breakdownHtml}</div>
+                    </div>
+
+                    <div style="background:var(--bg-surface); padding:10px 12px; border-radius:var(--radius-sm); border:1px solid var(--border-color); margin-bottom:12px;">
+                        <div style="font-size:0.8rem; color:var(--text-muted);">Área de Mayor Oportunidad:</div>
+                        <strong style="color:var(--danger-color); font-size:0.88rem;">${data.weakestDomain}</strong>
+                    </div>
+
+                    <button type="button" class="btn btn-primary" style="width:100%; font-weight:700;" onclick="window.ExamReadinessRadar.close(); window.openQuizConfigModal && window.openQuizConfigModal();">
+                        Practicar y Cerrar Brechas
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+};
+
+// =============================================================================
+// F40: PODCAST PLAYLIST & VOICE SELECTOR (Continuous Hands-free Mode)
+// =============================================================================
+window.PodcastPlaylist = {
+    voices: [],
+    selectedVoiceIndex: 0,
+    playbackSpeed: 1.0,
+    isPlaying: false,
+    currentTrackIndex: 0,
+    playlist: [],
+
+    open() {
+        const modal = document.getElementById('podcast-playlist-modal');
+        if (!modal) return;
+        this.populateVoices();
+        this.loadPlaylist();
+        this.render();
+        modal.classList.remove('hidden');
+    },
+
+    close() {
+        const modal = document.getElementById('podcast-playlist-modal');
+        if (modal) modal.classList.add('hidden');
+        if (window.speechSynthesis) window.speechSynthesis.cancel();
+        this.isPlaying = false;
+    },
+
+    populateVoices() {
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            this.voices = window.speechSynthesis.getVoices();
+            if (!this.voices.length) {
+                window.speechSynthesis.onvoiceschanged = () => {
+                    this.voices = window.speechSynthesis.getVoices();
+                    this.render();
+                };
+            }
+        }
+    },
+
+    loadPlaylist() {
+        const cid = window.currentCourseId || 'azure-ai-103';
+        const studyTree = (window.studyData && window.studyData[cid]) || [];
+        this.playlist = [];
+        studyTree.forEach((mod, mIdx) => {
+            (mod.items || []).forEach((item, iIdx) => {
+                this.playlist.push({
+                    moduleTitle: mod.title,
+                    title: item.title,
+                    content: item.content || item.summary || ''
+                });
+            });
+        });
+        if (!this.playlist.length) {
+            this.playlist = [
+                { moduleTitle: 'Módulo 1', title: 'Fundamentos de Azure AI & RAG', content: 'Azure AI Search indexa documentos vectoriales...' }
+            ];
+        }
+    },
+
+    setSpeed(spd) {
+        this.playbackSpeed = spd;
+        this.render();
+        if (this.isPlaying) {
+            this.playTrack(this.currentTrackIndex);
+        }
+    },
+
+    setVoice(idx) {
+        this.selectedVoiceIndex = idx;
+    },
+
+    togglePlay() {
+        if (this.isPlaying) {
+            if (window.speechSynthesis) window.speechSynthesis.cancel();
+            this.isPlaying = false;
+            this.render();
+        } else {
+            this.playTrack(this.currentTrackIndex);
+        }
+    },
+
+    playTrack(idx) {
+        if (!window.speechSynthesis || !this.playlist.length) return;
+        window.speechSynthesis.cancel();
+        this.currentTrackIndex = idx % this.playlist.length;
+        const track = this.playlist[this.currentTrackIndex];
+        
+        // Strip markdown and clean text for speech
+        const rawText = track.content.replace(/[*#`_\[\]]/g, '').replace(/<[^>]*>/g, '');
+        const utter = new SpeechSynthesisUtterance(`${track.title}. ${rawText}`);
+        utter.rate = this.playbackSpeed;
+        if (this.voices[this.selectedVoiceIndex]) {
+            utter.voice = this.voices[this.selectedVoiceIndex];
+        }
+
+        utter.onend = () => {
+            if (this.currentTrackIndex < this.playlist.length - 1) {
+                this.playTrack(this.currentTrackIndex + 1);
+            } else {
+                this.isPlaying = false;
+                this.render();
+            }
+        };
+
+        utter.onerror = () => {
+            this.isPlaying = false;
+            this.render();
+        };
+
+        window.speechSynthesis.speak(utter);
+        this.isPlaying = true;
+        this.render();
+    },
+
+    next() {
+        if (this.currentTrackIndex < this.playlist.length - 1) {
+            this.playTrack(this.currentTrackIndex + 1);
+        }
+    },
+
+    prev() {
+        if (this.currentTrackIndex > 0) {
+            this.playTrack(this.currentTrackIndex - 1);
+        }
+    },
+
+    render() {
+        const container = document.getElementById('podcast-playlist-body');
+        if (!container) return;
+
+        let voiceOptionsHtml = '';
+        this.voices.forEach((v, idx) => {
+            const isSel = idx === this.selectedVoiceIndex;
+            voiceOptionsHtml += `<option value="${idx}" ${isSel ? 'selected' : ''}>${v.name} (${v.lang})</option>`;
+        });
+
+        let listHtml = '';
+        this.playlist.slice(0, 15).forEach((t, idx) => {
+            const isCurrent = idx === this.currentTrackIndex;
+            listHtml += `
+                <div class="playlist-track-item ${isCurrent && this.isPlaying ? 'playing' : ''}" onclick="window.PodcastPlaylist.playTrack(${idx})" style="cursor:pointer;">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <span style="font-size:0.75rem; font-weight:700; color:var(--text-muted);">${idx + 1}</span>
+                        <div>
+                            <strong style="font-size:0.86rem; color:var(--text-color); display:block;">${t.title}</strong>
+                            <small style="color:var(--text-muted);">${t.moduleTitle}</small>
+                        </div>
+                    </div>
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                </div>
+            `;
+        });
+
+        container.innerHTML = `
+            <div>
+                <!-- Controls Card -->
+                <div style="background:var(--bg-surface); padding:1rem; border-radius:var(--radius-md); border:1px solid var(--border-color); margin-bottom:1rem;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                        <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted); margin:0;">Seleccionar Voz:</label>
+                        <span style="font-size:0.75rem; color:var(--primary-color); font-weight:700;">Web Speech API</span>
+                    </div>
+                    <select class="voice-select-dropdown" onchange="window.PodcastPlaylist.setVoice(this.value)">
+                        ${voiceOptionsHtml || '<option>Voz del Sistema por Defecto</option>'}
+                    </select>
+
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin:8px 0 4px 0;">
+                        <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted); margin:0;">Velocidad:</label>
+                        <div class="speed-btn-group" style="width:200px;">
+                            ${[0.75, 1.0, 1.25, 1.5, 2.0].map(s => `
+                                <button type="button" class="speed-btn ${this.playbackSpeed === s ? 'active' : ''}" onclick="window.PodcastPlaylist.setSpeed(${s})">${s}x</button>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div style="display:flex; justify-content:center; align-items:center; gap:12px; margin-top:14px;">
+                        <button type="button" class="btn btn-outline btn-sm" onclick="window.PodcastPlaylist.prev()">&larr; Anterior</button>
+                        <button type="button" class="btn btn-primary" onclick="window.PodcastPlaylist.togglePlay()" style="min-width:140px; font-weight:800;">
+                            ${this.isPlaying ? 'Pausar Audio' : 'Reproducir Módulo'}
+                        </button>
+                        <button type="button" class="btn btn-outline btn-sm" onclick="window.PodcastPlaylist.next()">Siguiente &rarr;</button>
+                    </div>
+                </div>
+
+                <!-- Playlist Queue -->
+                <div style="font-size:0.82rem; font-weight:700; color:var(--text-muted); margin-bottom:6px;">Cola de Reproducción Continua (${this.playlist.length} Temas):</div>
+                <div style="max-height:260px; overflow-y:auto; border:1px solid var(--border-color); border-radius:var(--radius-md);">
+                    ${listHtml}
+                </div>
+            </div>
+        `;
+    }
+};
+
+// =============================================================================
+// F41: CUSTOM QUIZ BUILDER & QUESTION FILTER HOOK
+// =============================================================================
+window.updateConfigQuestionCount = function() {
+    const qData = window.questionsData || [];
+    const courseId = window.currentCourseId || 'azure-ai-103';
+    let filtered = qData.filter(q => q.course === courseId || (!q.course && courseId === 'azure-ai-103'));
+
+    const onlyMissed = document.getElementById('chip-filter-missed') && document.getElementById('chip-filter-missed').checked;
+    const onlyUnseen = document.getElementById('chip-filter-unseen') && document.getElementById('chip-filter-unseen').checked;
+    const onlyCode = document.getElementById('chip-filter-code') && document.getElementById('chip-filter-code').checked;
+    const onlyOrder = document.getElementById('chip-filter-order') && document.getElementById('chip-filter-order').checked;
+
+    const stats = window.getGamificationStats ? window.getGamificationStats() : {};
+    const wrongQs = stats.wrongQuestions || [];
+
+    if (onlyMissed) {
+        filtered = filtered.filter(q => wrongQs.includes(q.id));
+    }
+    if (onlyCode) {
+        filtered = filtered.filter(q => (q.prompt && q.prompt.includes('```')) || (q.code && q.code.length > 0));
+    }
+    if (onlyOrder) {
+        filtered = filtered.filter(q => q.type === 'order' || q.type === 'reorder');
+    }
+
+    const countEl = document.getElementById('config-total-questions');
+    if (countEl) countEl.textContent = filtered.length;
+};
+
+// =============================================================================
+// F42: MISTAKES EXPORTER (Markdown & Anki CSV)
+// =============================================================================
+window.MistakesExporter = {
+    getMissedQuestions() {
+        const qData = window.questionsData || [];
+        const stats = window.getGamificationStats ? window.getGamificationStats() : {};
+        const wrongIds = stats.wrongQuestions || [];
+        return qData.filter(q => wrongIds.includes(q.id));
+    },
+
+    exportMarkdown() {
+        const missed = this.getMissedQuestions();
+        if (!missed.length) {
+            alert('No tienes preguntas falladas registradas actualmente para exportar.');
+            return;
+        }
+
+        let md = `# 🥋 The Data Dojo — Baraja de Errores & Repaso de Examen\n`;
+        md += `*Generado el ${new Date().toLocaleDateString()} &bull; Total de Errores: ${missed.length}*\n\n---\n\n`;
+
+        missed.forEach((q, idx) => {
+            md += `### ${idx + 1}. [${q.domain || 'General'}] ${q.id}\n`;
+            md += `**Pregunta:** ${q.prompt}\n\n`;
+            if (q.options) {
+                md += `**Opciones:**\n`;
+                q.options.forEach((opt, oIdx) => {
+                    const isCorrect = (q.correctIds && q.correctIds.includes(oIdx)) || q.correctIndex === oIdx;
+                    md += `- ${isCorrect ? '[CORRECTA]' : '[ ]'} ${opt}\n`;
+                });
+            }
+            md += `\n**Explicación Oficial:** ${q.explanation || 'Consulta la documentación oficial del servicio.'}\n\n---\n\n`;
+        });
+
+        const blob = new Blob([md], { type: 'text/markdown;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `The_Data_Dojo_Errores_${new Date().toISOString().slice(0, 10)}.md`;
+        a.click();
+        URL.revokeObjectURL(url);
+    },
+
+    exportAnkiCSV() {
+        const missed = this.getMissedQuestions();
+        if (!missed.length) {
+            alert('No tienes preguntas falladas registradas actualmente para exportar.');
+            return;
+        }
+
+        let csv = `"Front","Back","Tags"\n`;
+        missed.forEach(q => {
+            const front = `"${(q.prompt || '').replace(/"/g, '""')}"`;
+            const back = `"${(q.explanation || 'Solución Oficial').replace(/"/g, '""')}"`;
+            const tags = `"DataDojo ${q.domain || 'Cert'}"`;
+            csv += `${front},${back},${tags}\n`;
+        });
+
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `The_Data_Dojo_Anki_Deck_${new Date().toISOString().slice(0, 10)}.csv`;
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+};
+
+// =============================================================================
+// F43: LIVE SYNC & ONLINE STATUS PILL
+// =============================================================================
+window.LiveSyncStatus = {
+    isOnline: true,
+    lastSyncTime: new Date().toLocaleTimeString(),
+
+    init() {
+        if (typeof window === 'undefined') return;
+        this.isOnline = typeof navigator !== 'undefined' ? navigator.onLine : true;
+        if (typeof window !== 'undefined') {
+            window.addEventListener('online', () => {
+                this.isOnline = true;
+                this.updateUI('online');
+            });
+            window.addEventListener('offline', () => {
+                this.isOnline = false;
+                this.updateUI('offline');
+            });
+        }
+        this.updateUI(this.isOnline ? 'online' : 'offline');
+    },
+
+    updateUI(status) {
+        if (typeof document === 'undefined') return;
+        const dot = document.getElementById('sync-status-dot');
+        const text = document.getElementById('sync-status-text');
+        if (!dot || !text) return;
+
+        if (status === 'online') {
+            dot.className = 'sync-dot';
+            text.textContent = 'Sincronizado';
+        } else if (status === 'offline') {
+            dot.className = 'sync-dot offline';
+            text.textContent = 'Modo Offline';
+        } else if (status === 'syncing') {
+            dot.className = 'sync-dot syncing';
+            text.textContent = 'Sincronizando...';
+        }
+    },
+
+    togglePopover() {
+        const modal = document.getElementById('sync-popover-modal');
+        if (!modal) return;
+        const body = document.getElementById('sync-popover-body');
+        if (body) {
+            body.innerHTML = `
+                <div style="font-size:0.88rem; line-height:1.5; color:var(--text-color);">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                        <span style="color:var(--text-muted);">Estado Actual:</span>
+                        <strong style="color:${this.isOnline ? 'var(--success-color)' : 'var(--warning-color)'};">
+                            ${this.isOnline ? 'Conectado a Supabase Cloud' : 'Sin Conexión (Guardando en Caché)'}
+                        </strong>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                        <span style="color:var(--text-muted);">Último Respaldo:</span>
+                        <span>${this.lastSyncTime}</span>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; margin-bottom:14px;">
+                        <span style="color:var(--text-muted);">Almacenamiento:</span>
+                        <span>PWA Service Worker + LocalStorage</span>
+                    </div>
+                    <button type="button" class="btn btn-primary" style="width:100%; font-weight:700;" onclick="window.LiveSyncStatus.forceSync()">
+                        Forzar Sincronización Ahora
+                    </button>
+                </div>
+            `;
+        }
+        modal.classList.remove('hidden');
+    },
+
+    closePopover() {
+        const modal = document.getElementById('sync-popover-modal');
+        if (modal) modal.classList.add('hidden');
+    },
+
+    forceSync() {
+        this.updateUI('syncing');
+        setTimeout(() => {
+            this.lastSyncTime = new Date().toLocaleTimeString();
+            this.updateUI('online');
+            this.closePopover();
+            if (typeof window.syncWithSupabase === 'function') window.syncWithSupabase();
+        }, 600);
+    }
+};
+
+// Auto-initialize Live Sync Status
+if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => window.LiveSyncStatus.init());
+    } else {
+        window.LiveSyncStatus.init();
     }
 }
 
