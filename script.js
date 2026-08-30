@@ -2414,22 +2414,42 @@ const badgesConfig = [
               q.options.find((o) => o.id === id)
             );
     
-          itemsToRender.forEach((opt) => {
+          itemsToRender.forEach((opt, optIdx) => {
             const el = document.createElement("div");
-            el.className = "option-item ordering-item";
+            el.className = "option-item ordering-item ordering-item-enhanced";
             el.dataset.id = opt.id;
+            
+            const badge = document.createElement("span");
+            badge.className = "ordering-step-badge";
+            badge.textContent = optIdx + 1;
+            el.appendChild(badge);
+
+            const textWrap = document.createElement("div");
+            textWrap.style.flex = "1";
             if (window.marked) {
-                el.innerHTML = marked.parse(opt.text, { breaks: true, gfm: true }); // marked wraps in p tags
+                textWrap.innerHTML = marked.parse(opt.text, { breaks: true, gfm: true });
             } else {
-                el.textContent = opt.text;
+                textWrap.textContent = opt.text;
             }
+            el.appendChild(textWrap);
+
+            if (!isSubmitted) {
+              const actions = document.createElement("div");
+              actions.className = "ordering-actions";
+              actions.innerHTML = `
+                <button type="button" class="ordering-arrow-btn" onclick="window._moveOrderItem(this, -1)" title="Mover arriba">&#9650;</button>
+                <button type="button" class="ordering-arrow-btn" onclick="window._moveOrderItem(this, 1)" title="Mover abajo">&#9660;</button>
+              `;
+              el.appendChild(actions);
+            }
+
             el.draggable = !isSubmitted;
             if (!isSubmitted) {
               el.addEventListener("dragstart", handleDragStart);
               el.addEventListener("dragover", handleDragOver);
               el.addEventListener("drop", handleDrop);
             } else {
-              el.style.backgroundColor = "#f0f0f0";
+              el.style.backgroundColor = "var(--bg-surface)";
             }
             optionsList.appendChild(el);
           });
@@ -2759,6 +2779,31 @@ const badgesConfig = [
         btn.style.color = "";
       }, 1500);
     });
+  };
+
+  window._moveOrderItem = function(btn, dir) {
+    const item = btn.closest('.ordering-item');
+    if (!item) return;
+    const parent = item.parentElement;
+    if (dir === -1 && item.previousElementSibling && !item.previousElementSibling.classList.contains('ordering-info')) {
+      parent.insertBefore(item, item.previousElementSibling);
+    } else if (dir === 1 && item.nextElementSibling) {
+      parent.insertBefore(item.nextElementSibling, item);
+    }
+    const allItems = parent.querySelectorAll('.ordering-item');
+    allItems.forEach((it, idx) => {
+      const badge = it.querySelector('.ordering-step-badge');
+      if (badge) badge.textContent = idx + 1;
+    });
+    const currentIds = Array.from(allItems).map(it => it.dataset.id);
+    const q = currentQuizQuestions[currentQuestionIndex];
+    if (q) {
+      userAnswers[currentQuestionIndex] = {
+        selected: currentIds,
+        isCorrect: JSON.stringify(currentIds) === JSON.stringify(q.correctIds)
+      };
+      updateQuestionMap();
+    }
   };
 
   // --- Modal Elements ---
@@ -3931,6 +3976,9 @@ function renderReview(questions, finalPct, passed) {
             <button type="button" class="unir-tab" id="unir-tab-sql-sandbox" role="tab" aria-selected="false" aria-controls="unir-panel-sql-sandbox" tabindex="-1" onclick="window._unirSwitchTab('sql-sandbox')">
               ${svgIcon('M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z', 15)} ${localizedMarkup('SQL Sandbox', 'Sandbox SQL')}
             </button>
+            <button type="button" class="unir-tab" id="unir-tab-cli-terminal" role="tab" aria-selected="false" aria-controls="unir-panel-cli-terminal" tabindex="-1" onclick="window._unirSwitchTab('cli-terminal')">
+              ${svgIcon('M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8h16v10zm-2-1h-6v-2h6v2zM7.5 17l-1.4-1.4 2.1-2.1-2.1-2.1L7.5 10l3.5 3.5-3.5 3.5z', 15)} ${localizedMarkup('Terminal CLI', 'Terminal CLI')}
+            </button>
             <button type="button" class="unir-tab" id="unir-tab-achievements" role="tab" aria-selected="false" aria-controls="unir-panel-achievements" tabindex="-1" onclick="window._unirSwitchTab('achievements')">
               ${svgIcon(SVG.trophy, 15)} ${localizedMarkup('Achievements', 'Logros')}
             </button>
@@ -3971,6 +4019,9 @@ function renderReview(questions, finalPct, passed) {
           <!-- PANEL: SQL Sandbox -->
           <div class="unir-panel" id="unir-panel-sql-sandbox" role="tabpanel" aria-labelledby="unir-tab-sql-sandbox" hidden></div>
 
+          <!-- PANEL: CLI Terminal Simulator -->
+          <div class="unir-panel" id="unir-panel-cli-terminal" role="tabpanel" aria-labelledby="unir-tab-cli-terminal" hidden></div>
+
           <!-- PANEL: Achievements -->
           <div class="unir-panel" id="unir-panel-achievements" role="tabpanel" aria-labelledby="unir-tab-achievements" hidden></div>
         </div>
@@ -3988,6 +4039,7 @@ function renderReview(questions, finalPct, passed) {
       allTabs.push('decisions');
       if (hasFlashcards) allTabs.push('flashcards');
       allTabs.push('sql-sandbox');
+      allTabs.push('cli-terminal');
       allTabs.push('achievements');
       window._unirSwitchTab = function(tab) {
         allTabs.forEach(t => {
@@ -4003,6 +4055,7 @@ function renderReview(questions, finalPct, passed) {
         });
         if (tab === 'flashcards') renderFlashcardMode();
         if (tab === 'sql-sandbox' && window.SQLSandbox) window.SQLSandbox.render(document.getElementById('unir-panel-sql-sandbox'));
+        if (tab === 'cli-terminal' && window.CliSimulator) window.CliSimulator.renderTerminal(document.getElementById('unir-panel-cli-terminal'), courseId);
         if (tab === 'achievements') renderAchievements();
         if (tab === 'personajes') renderPersonajes();
         if (tab === 'conceptos') renderConceptos();

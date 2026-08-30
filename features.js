@@ -4375,6 +4375,437 @@ window.DecisionNavigator = {
     }
 };
 
+// =============================================================================
+// F31: INTERACTIVE CLI TERMINAL SIMULATOR (Azure CLI & Databricks CLI)
+// =============================================================================
+window.CliSimulator = {
+    history: [],
+    historyIndex: -1,
+    currentChallengeIndex: 0,
+
+    challenges: {
+        'azure-ai-103': [
+            {
+                id: 'az-1',
+                title: 'Crear Recurso de Azure OpenAI',
+                desc: 'Crea un recurso de Azure OpenAI llamado "aoai-norsab-prod" en el grupo de recursos "rg-ai103" en la región "eastus" con SKU "S0".',
+                expectedPattern: /az\s+cognitiveservices\s+account\s+create\s+.*--name\s+aoai-norsab-prod.*--resource-group\s+rg-ai103.*--kind\s+OpenAI/i,
+                sampleCommand: 'az cognitiveservices account create --name aoai-norsab-prod --resource-group rg-ai103 --kind OpenAI --sku S0 --location eastus --yes',
+                hint: 'Usa `az cognitiveservices account create` con `--kind OpenAI`.'
+            },
+            {
+                id: 'az-2',
+                title: 'Crear Índice en Azure AI Search',
+                desc: 'Crea un índice de búsqueda llamado "products-vector-idx" en el servicio "search-norsab" usando la definición en "schema.json".',
+                expectedPattern: /az\s+search\s+index\s+create\s+.*--name\s+products-vector-idx.*--service-name\s+search-norsab/i,
+                sampleCommand: 'az search index create --service-name search-norsab --name products-vector-idx --index-def schema.json',
+                hint: 'Usa `az search index create --service-name ... --name ...`.'
+            },
+            {
+                id: 'az-3',
+                title: 'Desplegar Modelo GPT-4o en Azure OpenAI',
+                desc: 'Despliega el modelo "gpt-4o" versión "2024-05-13" con el nombre de despliegue "gpt-4o-prod" en el recurso "aoai-norsab-prod".',
+                expectedPattern: /az\s+cognitiveservices\s+account\s+deployment\s+create\s+.*--deployment-name\s+gpt-4o-prod.*--model-name\s+gpt-4o/i,
+                sampleCommand: 'az cognitiveservices account deployment create --resource-group rg-ai103 --name aoai-norsab-prod --deployment-name gpt-4o-prod --model-name gpt-4o --model-version "2024-05-13" --model-format OpenAI --sku-capacity 30 --sku-name Standard',
+                hint: 'Usa `az cognitiveservices account deployment create` especificando `--deployment-name` y `--model-name`.'
+            }
+        ],
+        'databricks-genai-engineer': [
+            {
+                id: 'db-1',
+                title: 'Crear Índice de Vector Search en Databricks',
+                desc: 'Crea un índice Delta Sync de Vector Search llamado "prod_catalog.ai.knowledge_idx" conectado a la tabla "prod_catalog.ai.docs".',
+                expectedPattern: /databricks\s+vector-search\s+indexes\s+create\s+.*knowledge_idx/i,
+                sampleCommand: 'databricks vector-search indexes create --endpoint-name vs_endpoint --name prod_catalog.ai.knowledge_idx --primary-key id --index-type DELTA_SYNC --delta-sync-index-spec \'{"source_table": "prod_catalog.ai.docs", "pipeline_type": "TRIGGERED"}\'',
+                hint: 'Usa `databricks vector-search indexes create` con `--index-type DELTA_SYNC`.'
+            },
+            {
+                id: 'db-2',
+                title: 'Crear Endpoint de Model Serving',
+                desc: 'Crea un endpoint de serving llamado "dbrx-instruct-endpoint" sirviendo la versión 1 del modelo registrado.',
+                expectedPattern: /databricks\s+model-serving\s+endpoints\s+create\s+.*dbrx-instruct-endpoint/i,
+                sampleCommand: 'databricks model-serving endpoints create --name dbrx-instruct-endpoint --config-route \'{"served_models": [{"name": "dbrx", "model_name": "prod_catalog.models.dbrx", "model_version": "1", "workload_size": "Small", "scale_to_zero_enabled": true}]}\'',
+                hint: 'Usa `databricks model-serving endpoints create --name ...`.'
+            }
+        ],
+        'dp-600': [
+            {
+                id: 'fab-1',
+                title: 'Crear Fabric Lakehouse en Workspace',
+                desc: 'Crea un Lakehouse llamado "Sales_Lakehouse" con esquemas habilitados.',
+                expectedPattern: /fabric\s+lakehouse\s+create\s+.*Sales_Lakehouse/i,
+                sampleCommand: 'fabric lakehouse create --workspace-id ws-sales-prod --name Sales_Lakehouse --enable-schemas true',
+                hint: 'Usa `fabric lakehouse create --name Sales_Lakehouse`.'
+            }
+        ]
+    },
+
+    renderTerminal(containerEl, courseId) {
+        if (!containerEl) return;
+        const cid = courseId || window.currentCourseId || 'azure-ai-103';
+        const challengeList = this.challenges[cid] || this.challenges['azure-ai-103'];
+        const challenge = challengeList[this.currentChallengeIndex % challengeList.length];
+        const isAzure = cid.includes('azure') || cid.includes('dp-600');
+        const promptUser = isAzure ? 'norsab@azure-ai:~$ ' : 'norsab@databricks:~$ ';
+
+        containerEl.innerHTML = `
+            <div class="cli-challenge-card">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                    <strong style="color:var(--text-color); font-size:0.95rem;">Desafío CLI ${this.currentChallengeIndex + 1}/${challengeList.length}: ${challenge.title}</strong>
+                    <div style="display:flex; gap:6px;">
+                        <button type="button" class="btn btn-sm btn-outline" onclick="window.CliSimulator.showHint('${cid}')" style="padding:2px 8px; font-size:0.75rem;">Ver Pista</button>
+                        <button type="button" class="btn btn-sm btn-primary" onclick="window.CliSimulator.nextChallenge('${cid}')" style="padding:2px 8px; font-size:0.75rem;">Siguiente Desafío &rarr;</button>
+                    </div>
+                </div>
+                <div style="font-size:0.85rem; color:var(--text-muted); line-height:1.5;">${challenge.desc}</div>
+                <div id="cli-hint-box" style="display:none; margin-top:8px; font-size:0.8rem; color:var(--primary-color); background:var(--bg-card); padding:6px 10px; border-radius:4px; border:1px solid var(--border-color);"></div>
+            </div>
+
+            <div class="cli-terminal-container">
+                <div class="cli-terminal-header">
+                    <span>${isAzure ? 'Azure Cloud Shell (Bash)' : 'Databricks CLI v0.200+ (Linux)'}</span>
+                    <button type="button" onclick="window.CliSimulator.clearScreen()" style="background:transparent; border:none; color:var(--text-muted); cursor:pointer; font-size:0.75rem;">Limpiar [clear]</button>
+                </div>
+                <div class="cli-terminal-body" id="cli-terminal-output">
+                    <div style="color: #6ee7b7; margin-bottom: 8px;">Conectado a The Data Dojo CLI Sandbox. Escribe comandos oficiales de Azure / Databricks.</div>
+                    <div style="color: var(--text-muted); margin-bottom: 12px;">Comandos útiles: <code style="color:#ffffff;">help</code>, <code style="color:#ffffff;">hint</code>, <code style="color:#ffffff;">solution</code>, <code style="color:#ffffff;">clear</code>.</div>
+                </div>
+                <div class="cli-input-row" style="padding: 0 14px 14px 14px;">
+                    <span class="cli-line-prompt">${promptUser}</span>
+                    <input type="text" id="cli-terminal-input" class="cli-input-field" placeholder="Escribe un comando y presiona Enter..." autocomplete="off" spellcheck="false">
+                </div>
+            </div>
+        `;
+
+        const input = document.getElementById('cli-terminal-input');
+        if (input) {
+            input.focus();
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    this.executeCommand(input.value, cid, promptUser);
+                    input.value = '';
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    if (this.history.length > 0) {
+                        this.historyIndex = Math.min(this.historyIndex + 1, this.history.length - 1);
+                        input.value = this.history[this.history.length - 1 - this.historyIndex] || '';
+                    }
+                } else if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    if (this.historyIndex > 0) {
+                        this.historyIndex--;
+                        input.value = this.history[this.history.length - 1 - this.historyIndex] || '';
+                    } else {
+                        this.historyIndex = -1;
+                        input.value = '';
+                    }
+                } else if (e.key === 'Tab') {
+                    e.preventDefault();
+                    this.autocomplete(input);
+                }
+            });
+        }
+    },
+
+    executeCommand(cmdStr, courseId, promptUser) {
+        const raw = cmdStr.trim();
+        if (!raw) return;
+        this.history.push(raw);
+        this.historyIndex = -1;
+
+        const output = document.getElementById('cli-terminal-output');
+        if (!output) return;
+
+        const line = document.createElement('div');
+        line.innerHTML = `<span class="cli-line-prompt">${promptUser}</span><span style="color:#ffffff;">${this.escapeHtml(raw)}</span>`;
+        output.appendChild(line);
+
+        const resp = document.createElement('div');
+        resp.style.marginBottom = '8px';
+
+        const challengeList = this.challenges[courseId] || this.challenges['azure-ai-103'];
+        const challenge = challengeList[this.currentChallengeIndex % challengeList.length];
+
+        const cmdLower = raw.toLowerCase();
+
+        if (cmdLower === 'clear') {
+            output.innerHTML = '';
+            return;
+        } else if (cmdLower === 'help') {
+            resp.innerHTML = `
+                <div style="color:var(--text-muted);">Comandos disponibles en Sandbox:</div>
+                <div>&bull; <code style="color:#6ee7b7;">az search ...</code> - Comandos de Azure AI Search</div>
+                <div>&bull; <code style="color:#6ee7b7;">az cognitiveservices ...</code> - Comandos de Azure OpenAI y Servicios Cognitivos</div>
+                <div>&bull; <code style="color:#6ee7b7;">databricks vector-search ...</code> - Comandos de Vector Search</div>
+                <div>&bull; <code style="color:#6ee7b7;">databricks model-serving ...</code> - Model Serving</div>
+                <div>&bull; <code style="color:#6ee7b7;">hint</code> - Ver pista del desafío actual</div>
+                <div>&bull; <code style="color:#6ee7b7;">solution</code> - Ver solución exacta del desafío</div>
+            `;
+        } else if (cmdLower === 'hint') {
+            resp.innerHTML = `<div style="color:var(--warning-color);">Pista: ${challenge.hint}</div>`;
+        } else if (cmdLower === 'solution') {
+            resp.innerHTML = `<div style="color:var(--primary-color);">Solución: <code style="color:#ffffff;">${challenge.sampleCommand}</code></div>`;
+        } else if (challenge.expectedPattern && challenge.expectedPattern.test(raw)) {
+            resp.innerHTML = `
+                <div class="cli-terminal-success">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;"><polyline points="20 6 9 17 4 12"/></svg>
+                    <strong>¡CORRECTO! Desafío superado exitosamente (+25 XP).</strong>
+                </div>
+                <div style="color:var(--text-muted); font-size:0.8rem; margin-top:2px;">Sintaxis validada contra el esquema oficial.</div>
+            `;
+            if (typeof addXP === 'function') addXP(25);
+        } else if (cmdLower.startsWith('az ') || cmdLower.startsWith('databricks ') || cmdLower.startsWith('fabric ')) {
+            resp.innerHTML = `
+                <div class="cli-terminal-error">
+                    El comando fue ejecutado pero no cumple todos los parámetros requeridos para el desafío actual.
+                </div>
+                <div style="color:var(--text-muted); font-size:0.8rem;">Escribe <code style="color:#ffffff;">hint</code> o <code style="color:#ffffff;">solution</code> si necesitas ayuda.</div>
+            `;
+        } else {
+            resp.innerHTML = `<div class="cli-terminal-error">Comando no reconocido: "${this.escapeHtml(raw)}". Escribe <code style="color:#ffffff;">help</code> para ver comandos.</div>`;
+        }
+
+        output.appendChild(resp);
+        output.scrollTop = output.scrollHeight;
+    },
+
+    showHint(cid) {
+        const box = document.getElementById('cli-hint-box');
+        const challengeList = this.challenges[cid] || this.challenges['azure-ai-103'];
+        const challenge = challengeList[this.currentChallengeIndex % challengeList.length];
+        if (box) {
+            box.style.display = box.style.display === 'none' ? 'block' : 'none';
+            box.textContent = `Pista: ${challenge.hint} (Solución: ${challenge.sampleCommand})`;
+        }
+    },
+
+    nextChallenge(cid) {
+        const challengeList = this.challenges[cid] || this.challenges['azure-ai-103'];
+        this.currentChallengeIndex = (this.currentChallengeIndex + 1) % challengeList.length;
+        const container = document.getElementById('unir-panel-cli-terminal');
+        if (container) this.renderTerminal(container, cid);
+    },
+
+    clearScreen() {
+        const output = document.getElementById('cli-terminal-output');
+        if (output) output.innerHTML = '';
+    },
+
+    autocomplete(input) {
+        const val = input.value;
+        const candidates = [
+            'az search index create',
+            'az search skillset create',
+            'az cognitiveservices account create',
+            'az cognitiveservices account deployment create',
+            'databricks vector-search indexes create',
+            'databricks model-serving endpoints create',
+            'databricks unity-catalog catalogs list',
+            'fabric lakehouse create'
+        ];
+        const match = candidates.find(c => c.startsWith(val.toLowerCase()));
+        if (match) input.value = match;
+    },
+
+    escapeHtml(str) {
+        if (!str) return '';
+        return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+};
+
+// =============================================================================
+// F32: VOICE ORAL EXAM MODE (Web Speech API Recognition & Semantic Scoring)
+// =============================================================================
+window.OralExamMode = {
+    isRecording: false,
+    recognition: null,
+    currentTranscript: '',
+    currentIndex: 0,
+
+    questions: {
+        'azure-ai-103': [
+            {
+                scenario: 'Explica la arquitectura recomendada para implementar un sistema RAG en Azure con datos estructurados y no estructurados garantizando seguridad y re-clasificación semántica.',
+                expectedKeywords: ['azure ai search', 'vector search', 'embeddings', 'semantic ranker', 'document intelligence', 'prompt shield', 'managed identity', 'groundedness'],
+                idealExplanation: 'Se ingieren documentos con Azure Document Intelligence, se generan embeddings con Azure OpenAI text-embedding-3, se indexan en Azure AI Search con Hybrid Search + Semantic Re-ranker, y se conectan al modelo GPT-4o usando Managed Identity y Content Safety Prompt Shields.'
+            },
+            {
+                scenario: 'Describe el proceso para construir y desplegar un agente autónomo multi-herramienta con Azure AI Agent Service y Semantic Kernel.',
+                expectedKeywords: ['agent service', 'semantic kernel', 'threads', 'runs', 'code interpreter', 'file search', 'function calling'],
+                idealExplanation: 'Se instancia el agente con Azure AI Agent Service, se configuran las herramientas de File Search y Code Interpreter, se definen Function Callings y se maneja el estado conversacional mediante Threads y Runs automáticos.'
+            }
+        ],
+        'databricks-genai-engineer': [
+            {
+                scenario: 'Detalla cómo implementar y evaluar un pipeline de RAG empresarial en Databricks usando Unity Catalog y Mosaic AI.',
+                expectedKeywords: ['vector search', 'delta sync', 'mosaic ai', 'mlflow tracing', 'llm judge', 'unity catalog', 'retrieval'],
+                idealExplanation: 'Se sincronizan los documentos Delta con Vector Search en modo Triggered/Continuous, se instrumenta el pipeline con MLflow Tracing y se evalúa la fidelidad y relevancia con LLM-as-a-Judge en Mosaic AI Quality Lab.'
+            }
+        ],
+        'dp-600': [
+            {
+                scenario: 'Explica cuándo utilizar Direct Lake vs Modo Import vs DirectQuery en Microsoft Fabric y sus requisitos técnicos.',
+                expectedKeywords: ['direct lake', 'delta lake', 'onelake', 'v-order', 'framing', 'fallback directquery', 'memoria'],
+                idealExplanation: 'Direct Lake lee datos Delta en OneLake directamente en memoria sin necesidad de refresco ni duplicación, requiriendo compresión V-Order. Si el modelo supera la memoria de capacidad, hace fallback automático a DirectQuery.'
+            }
+        ]
+    },
+
+    open(courseId) {
+        const modal = document.getElementById('oral-exam-modal');
+        if (!modal) return;
+        modal.classList.remove('hidden');
+        this.currentIndex = 0;
+        this.renderQuestion(courseId || window.currentCourseId || 'azure-ai-103');
+    },
+
+    close() {
+        this.stopRecording();
+        const modal = document.getElementById('oral-exam-modal');
+        if (modal) modal.classList.add('hidden');
+    },
+
+    renderQuestion(cid) {
+        const qList = this.questions[cid] || this.questions['azure-ai-103'];
+        const q = qList[this.currentIndex % qList.length];
+        const scenarioEl = document.getElementById('oral-scenario-text');
+        const kwContainer = document.getElementById('oral-keywords-container');
+        const transcriptEl = document.getElementById('oral-transcript-text');
+        const scoreBanner = document.getElementById('oral-score-banner');
+
+        if (scenarioEl) scenarioEl.textContent = q.scenario;
+        if (transcriptEl) transcriptEl.textContent = 'Presiona el micrófono y responde por voz explicando tu solución técnica...';
+        if (scoreBanner) scoreBanner.style.display = 'none';
+
+        if (kwContainer) {
+            kwContainer.innerHTML = q.expectedKeywords.map(kw => `
+                <span class="oral-keyword-pill" data-kw="${kw}">${kw}</span>
+            `).join('');
+        }
+
+        // Read scenario aloud automatically
+        if (typeof window.speakText === 'function') {
+            window.speakText(q.scenario, window.AppI18n ? window.AppI18n.getLanguage() : 'es');
+        }
+    },
+
+    toggleRecording() {
+        if (this.isRecording) {
+            this.stopRecording();
+        } else {
+            this.startRecording();
+        }
+    },
+
+    startRecording() {
+        const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRec) {
+            alert('El reconocimiento de voz no está soportado en este navegador. Usa Google Chrome o Microsoft Edge.');
+            return;
+        }
+
+        this.recognition = new SpeechRec();
+        const lang = window.AppI18n ? window.AppI18n.getLanguage() : 'es';
+        this.recognition.lang = lang === 'es' ? 'es-ES' : 'en-US';
+        this.recognition.continuous = true;
+        this.recognition.interimResults = true;
+
+        this.isRecording = true;
+        this.currentTranscript = '';
+
+        const micBtn = document.getElementById('oral-mic-btn');
+        if (micBtn) micBtn.classList.add('recording');
+
+        const transcriptEl = document.getElementById('oral-transcript-text');
+        if (transcriptEl) transcriptEl.textContent = 'Escuchando tu respuesta...';
+
+        this.recognition.onresult = (event) => {
+            let interim = '';
+            let final = '';
+            for (let i = 0; i < event.results.length; i++) {
+                if (event.results[i].isFinal) {
+                    final += event.results[i][0].transcript + ' ';
+                } else {
+                    interim += event.results[i][0].transcript;
+                }
+            }
+            this.currentTranscript = final + interim;
+            if (transcriptEl) transcriptEl.textContent = this.currentTranscript;
+            this.evaluateSpeech(this.currentTranscript);
+        };
+
+        this.recognition.onerror = (err) => {
+            console.warn('Speech recognition error:', err);
+            this.stopRecording();
+        };
+
+        this.recognition.start();
+    },
+
+    stopRecording() {
+        this.isRecording = false;
+        const micBtn = document.getElementById('oral-mic-btn');
+        if (micBtn) micBtn.classList.remove('recording');
+        if (this.recognition) {
+            try { this.recognition.stop(); } catch(e) {}
+            this.recognition = null;
+        }
+        if (this.currentTranscript) {
+            this.evaluateSpeech(this.currentTranscript, true);
+        }
+    },
+
+    evaluateSpeech(text, isFinal = false) {
+        const cid = window.currentCourseId || 'azure-ai-103';
+        const qList = this.questions[cid] || this.questions['azure-ai-103'];
+        const q = qList[this.currentIndex % qList.length];
+        const lower = text.toLowerCase();
+
+        let foundCount = 0;
+        q.expectedKeywords.forEach(kw => {
+            const pill = document.querySelector(`.oral-keyword-pill[data-kw="${kw}"]`);
+            if (lower.includes(kw.toLowerCase())) {
+                foundCount++;
+                if (pill) pill.classList.add('found');
+            } else {
+                if (pill) pill.classList.remove('found');
+            }
+        });
+
+        const coveragePct = Math.round((foundCount / Math.max(1, q.expectedKeywords.length)) * 100);
+
+        if (isFinal) {
+            const banner = document.getElementById('oral-score-banner');
+            if (banner) {
+                banner.style.display = 'block';
+                let color = 'var(--danger-color)';
+                let msg = 'Respuesta Incompleta: Faltaron conceptos clave.';
+                if (coveragePct >= 75) {
+                    color = 'var(--success-color)';
+                    msg = '¡Excelente Dominio Oral! Cubriste los conceptos arquitectónicos esenciales.';
+                    if (typeof addXP === 'function') addXP(30);
+                } else if (coveragePct >= 50) {
+                    color = 'var(--warning-color)';
+                    msg = 'Respuesta Parcial: Buen enfoque, pero se omitieron términos clave.';
+                    if (typeof addXP === 'function') addXP(15);
+                }
+                banner.innerHTML = `
+                    <div style="font-size:1.1rem; font-weight:800; color:${color}; margin-bottom:4px;">${coveragePct}% Cobertura Conceptual &bull; ${msg}</div>
+                    <div style="font-size:0.85rem; color:var(--text-muted); margin-top:6px;"><strong>Solución Ideal:</strong> ${q.idealExplanation}</div>
+                `;
+            }
+        }
+    },
+
+    nextQuestion() {
+        this.stopRecording();
+        const cid = window.currentCourseId || 'azure-ai-103';
+        const qList = this.questions[cid] || this.questions['azure-ai-103'];
+        this.currentIndex = (this.currentIndex + 1) % qList.length;
+        this.renderQuestion(cid);
+    }
+};
+
 // Initialize Spotlight Search on load
 if (typeof document !== 'undefined') {
     if (document.readyState === 'loading') {
@@ -4383,5 +4814,6 @@ if (typeof document !== 'undefined') {
         window.SpotlightSearch.init();
     }
 }
+
 
 

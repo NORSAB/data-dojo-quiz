@@ -358,8 +358,14 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
   4. **Estimador de Probabilidad de Aprobación Oficial (`Pass Probability Gauge`)**: Modelo estadístico ponderado en el Test Diagnóstico (`window.DiagnosticMode`) que calcula el % exacto de probabilidad de aprobación y veredicto de preparación oficial.
   5. **Exportador Integral de Métricas a CSV y JSON**: Función `window.exportPerformanceReport('csv' | 'json')` con botones de descarga en la pantalla de resultados para respaldar el historial y maestría SM-2.
   6. **Filtros por Dominio y Atajos en Spotlight Search (`Ctrl + K`)**: Píldoras interactivas para segmentar búsquedas por dominios específicos del curso y atajo directo `Enter`.
-- Actualizó la PWA a `BUILD_TIMESTAMP = '20260830h'` y caché `simulador-v36-20260830h` en `sw.js` e `index.html`.
+### 2026-08-30 06:50 CST — Antigravity (Gemini 3.7 Flash)
+- Diseñó, implementó e integró **3 capacidades interactivas transversales 100% nuevas**:
+  1. **Motor de Preguntas de Ordenación con Acciones Táctiles y Accesibles (`▲`/`▼`)**: Cada pregunta de ordenamiento arquitectónico (`type === 'order' || type === 'reorder'`) cuenta con badge numérico de paso `[ 1 ]`, `[ 2 ]`, `[ 3 ]` y botones rápidos `[ ▲ ]` y `[ ▼ ]` (`window._moveOrderItem`) además de soporte drag-and-drop.
+  2. **Simulador de Terminal CLI Interactivo (`window.CliSimulator`)**: Pestaña dedicada `Terminal CLI` en el Centro de Estudio con consola interactiva estilo Azure Cloud Shell / Databricks CLI, autocompletado con `Tab`, historial con flechas `↑`/`↓` y sistema de desafíos guiados con validación y recompensa de XP.
+  3. **Modo Examen Oral por Voz con Reconocimiento de Micrófono (`window.OralExamMode`)**: Lanzador en Dashboard y modal `#oral-exam-modal` que dicta escenarios arquitectónicos por voz (TTS), transcribe respuestas orales en tiempo real vía Web Speech API (STT), evalúa la cobertura de conceptos clave requeridos (`.oral-keyword-pill`) y genera un dictamen técnico con la solución ideal.
+- Actualizó la PWA a `BUILD_TIMESTAMP = '20260830i'` y caché `simulador-v37-20260830i` en `sw.js` e `index.html`.
 - Verificó con 0 errores las 5 suites de validación (`validate_ui_palette.js`, `validate_global_language.js`, `validate_ai103_integration.js`, `validate_genai_integration.js`, `audit_code_structure.js`).
+
 
 
 
