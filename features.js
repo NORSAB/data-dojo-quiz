@@ -6075,6 +6075,7 @@ window.ExamReadinessRadar = {
 // =============================================================================
 window.PodcastPlaylist = {
     selectedCourseId: 'azure-ai-103',
+    selectedLanguage: 'es',
     selectedEpisodeIndex: 0,
     voices: [],
     selectedVoiceIndex: 0,
@@ -6101,6 +6102,7 @@ window.PodcastPlaylist = {
         if (!modal) return;
         this.selectedCourseId = window.currentCourseId || 'azure-ai-103';
         if (!this.courses.some(c => c.id === this.selectedCourseId)) this.selectedCourseId = 'azure-ai-103';
+        this.selectedLanguage = window.currentGlobalLanguage || 'es';
         this.populateVoices();
         this.loadPlaylist();
         this.render();
@@ -6126,6 +6128,18 @@ window.PodcastPlaylist = {
         this.render();
     },
 
+    setLanguage(lang) {
+        this.selectedLanguage = lang === 'en' ? 'en' : 'es';
+        this.selectedVoiceIndex = 0;
+        this.currentTrackIndex = 0;
+        if (this.isPlaying && window.speechSynthesis) {
+            window.speechSynthesis.cancel();
+            this.isPlaying = false;
+        }
+        this.loadPlaylist();
+        this.render();
+    },
+
     setEpisode(epIdx) {
         this.selectedEpisodeIndex = parseInt(epIdx, 10) || 0;
         this.currentTrackIndex = 0;
@@ -6137,17 +6151,52 @@ window.PodcastPlaylist = {
         this.render();
     },
 
+    getFilteredVoices() {
+        const isEs = this.selectedLanguage === 'es';
+        const prefix = isEs ? 'es' : 'en';
+        const matching = this.voices.filter(v => v.lang && v.lang.toLowerCase().startsWith(prefix));
+        return matching.length ? matching : this.voices;
+    },
+
+    extractLanguageContent(rawHtmlOrMarkdown, lang) {
+        if (!rawHtmlOrMarkdown) return '';
+        const isEs = lang === 'es';
+        
+        // 1. Check for <div class="lang-section" data-lang="es|en">...</div>
+        const regex = new RegExp(`<div[^>]*data-lang=["']${isEs ? 'es' : 'en'}["'][^>]*>([\\s\\S]*?)<\\/div>`, 'i');
+        const match = rawHtmlOrMarkdown.match(regex);
+        if (match && match[1]) {
+            return match[1];
+        }
+
+        // 2. Remove the other language section if present
+        const otherRegex = new RegExp(`<div[^>]*data-lang=["']${isEs ? 'en' : 'es'}["'][^>]*>[\\s\\S]*?<\\/div>`, 'gi');
+        return rawHtmlOrMarkdown.replace(otherRegex, '');
+    },
+
+    extractLanguageTitle(rawTitle, lang) {
+        if (!rawTitle) return '';
+        const isEs = lang === 'es';
+        let clean = rawTitle.replace(/^D\d+[:.]\s*/i, '');
+        clean = clean.replace(/^(?:Módulo|Dominio|Domain|Module)\s*\d+[:.]\s*/i, '');
+        clean = clean.replace(/\(Cheat-Sheet\)/gi, '').trim();
+        if (clean.includes(' / ')) {
+            const parts = clean.split(' / ');
+            return isEs ? parts[0].trim() : (parts[1] || parts[0]).trim();
+        }
+        return clean.trim();
+    },
+
     getEpisodesForCourse(cid) {
         const studyTree = (window.studyData && window.studyData[cid]) || [];
-        const eps = [{ id: 'all', title: 'Álbum Completo (Todos los Temas)' }];
+        const isEs = this.selectedLanguage === 'es';
+        const allTitle = isEs ? 'Álbum Completo (Todos los Temas)' : 'Full Album (All Topics)';
+        const eps = [{ id: 'all', title: allTitle }];
         studyTree.forEach((mod, idx) => {
-            let rawTitle = (mod.title || `Módulo ${idx + 1}`);
-            let clean = rawTitle.split(' / ')[0].trim();
-            clean = clean.replace(/^D\d+\.\s*/i, '').replace(/^(?:Módulo|Dominio)\s*\d+[:.]\s*/i, '');
-            clean = clean.replace(/\(Cheat-Sheet\)/i, '').trim();
+            const clean = this.extractLanguageTitle(mod.title || `Módulo ${idx + 1}`, this.selectedLanguage);
             eps.push({
                 id: `ep_${idx + 1}`,
-                title: `Episodio ${idx + 1}: ${clean}`,
+                title: `${isEs ? 'Episodio' : 'Episode'} ${idx + 1}: ${clean}`,
                 itemsCount: (mod.items || []).length
             });
         });
@@ -6169,14 +6218,16 @@ window.PodcastPlaylist = {
     loadPlaylist() {
         const cid = this.selectedCourseId || 'azure-ai-103';
         const studyTree = (window.studyData && window.studyData[cid]) || [];
+        const isEs = this.selectedLanguage === 'es';
         this.playlist = [];
 
         if (this.selectedEpisodeIndex === 0) {
             studyTree.forEach((mod) => {
+                const modTitle = this.extractLanguageTitle(mod.title, this.selectedLanguage);
                 (mod.items || []).forEach((item) => {
                     this.playlist.push({
-                        moduleTitle: mod.title,
-                        title: item.title,
+                        moduleTitle: modTitle,
+                        title: this.extractLanguageTitle(item.title, this.selectedLanguage),
                         content: item.content || item.summary || ''
                     });
                 });
@@ -6184,10 +6235,11 @@ window.PodcastPlaylist = {
         } else {
             const targetMod = studyTree[this.selectedEpisodeIndex - 1];
             if (targetMod) {
+                const modTitle = this.extractLanguageTitle(targetMod.title, this.selectedLanguage);
                 (targetMod.items || []).forEach((item) => {
                     this.playlist.push({
-                        moduleTitle: targetMod.title,
-                        title: item.title,
+                        moduleTitle: modTitle,
+                        title: this.extractLanguageTitle(item.title, this.selectedLanguage),
                         content: item.content || item.summary || ''
                     });
                 });
@@ -6196,7 +6248,11 @@ window.PodcastPlaylist = {
 
         if (!this.playlist.length) {
             this.playlist = [
-                { moduleTitle: 'Módulo de Estudio', title: 'Conceptos y Arquitectura Oficial', content: 'Contenido técnico de preparación para la certificación oficial.' }
+                {
+                    moduleTitle: isEs ? 'Módulo de Estudio' : 'Study Module',
+                    title: isEs ? 'Conceptos y Arquitectura Oficial' : 'Official Architecture Concepts',
+                    content: isEs ? 'Contenido técnico de preparación para la certificación oficial.' : 'Technical preparation content for the official exam.'
+                }
             ];
         }
     },
@@ -6223,92 +6279,105 @@ window.PodcastPlaylist = {
         }
     },
 
-    cleanForNaturalSpeech(title, content) {
-        if (!content) return title || '';
-        let text = (title ? title + '. ' : '') + content;
+    cleanForNaturalSpeech(title, content, lang) {
+        const isEs = lang === 'es';
+        let raw = this.extractLanguageContent(content, lang);
+        if (!raw) raw = content || '';
+        let text = (title ? title + '. ' : '') + raw;
 
         // 0. Clean numeric/domain prefixes
-        text = text.replace(/^D[0-9]+\.\s*/i, '');
+        text = text.replace(/^D\d+[:.]\s*/i, '');
 
-        // 1. Remove only real HTML tags (preserve < and <= comparison operators)
+        // 1. Convert HTML tables into natural conversational sentences
+        text = text.replace(/<tr[^>]*>([\s\S]*?)<\/tr>/gi, function(m, rowContent) {
+            if (rowContent.includes('<th')) return ' ';
+            const cells = [];
+            rowContent.replace(/<td[^>]*>([\s\S]*?)<\/td>/gi, function(m2, cell) {
+                cells.push(cell.replace(/<[^>]*>/g, '').trim());
+                return '';
+            });
+            if (cells.length >= 2) {
+                return '. ' + cells.join(', ') + '. ';
+            }
+            return ' ';
+        });
+
+        // 2. Remove real HTML tags
         text = text.replace(/<\/?(?:div|span|p|a|b|i|u|strong|em|code|pre|h[1-6]|ul|ol|li|table|tr|td|th|tbody|thead|br|hr|img|svg|path|button|label|select|option)[^>]*>/gi, ' ');
         text = text.replace(/&nbsp;/gi, ' ');
-        text = text.replace(/&amp;/gi, ' y ');
-        text = text.replace(/&lt;/gi, ' menor que ');
-        text = text.replace(/&gt;/gi, ' mayor que ');
+        text = text.replace(/&amp;/gi, isEs ? ' y ' : ' and ');
+        text = text.replace(/&lt;/gi, isEs ? ' menor que ' : ' less than ');
+        text = text.replace(/&gt;/gi, isEs ? ' mayor que ' : ' greater than ');
 
-        // 2. Clean LaTeX math environments and formulas
+        // 3. Clean LaTeX math environments and formulas
         text = text.replace(/\\\((.*?)\\\)/g, ' $1 ');
         text = text.replace(/\\\[(.*?)\\\]/g, ' $1 ');
         text = text.replace(/\\text\{([^}]*)\}/g, ' $1 ');
         text = text.replace(/\\mathbf\{([^}]*)\}/g, ' $1 ');
-        text = text.replace(/\\times/g, ' multiplicado por ');
-        text = text.replace(/\\ge/g, ' mayor o igual ');
-        text = text.replace(/\\le/g, ' menor o igual ');
-        text = text.replace(/\\approx/g, ' aproximadamente ');
-        text = text.replace(/\\neq/g, ' no es igual a ');
-        text = text.replace(/\\frac\{([^}]*)\}\{([^}]*)\}/g, ' $1 entre $2 ');
-        text = text.replace(/\\pm/g, ' más o menos ');
+        text = text.replace(/\\times/g, isEs ? ' multiplicado por ' : ' times ');
+        text = text.replace(/\\ge/g, isEs ? ' mayor o igual a ' : ' greater than or equal to ');
+        text = text.replace(/\\le/g, isEs ? ' menor o igual a ' : ' less than or equal to ');
+        text = text.replace(/\\approx/g, isEs ? ' aproximadamente ' : ' approximately ');
+        text = text.replace(/\\neq/g, isEs ? ' no es igual a ' : ' not equal to ');
+        text = text.replace(/\\frac\{([^}]*)\}\{([^}]*)\}/g, isEs ? ' $1 entre $2 ' : ' $1 over $2 ');
+        text = text.replace(/\\pm/g, isEs ? ' más o menos ' : ' plus or minus ');
         text = text.replace(/\\quad|\\qquad/g, ' ');
-        text = text.replace(/\\%/g, ' por ciento ');
+        text = text.replace(/\\%/g, isEs ? ' por ciento ' : ' percent ');
         text = text.replace(/\\\$|\$/g, ' ');
         text = text.replace(/\\/g, ' ');
 
-        // 3. Clean Markdown tables & dividers
+        // 4. Clean Markdown tables & dividers
         text = text.replace(/\|[\s-:]+\|/g, ' ');
         text = text.replace(/\|/g, '. ');
         text = text.replace(/^[\s-*_]{3,}$/gm, ' ');
 
-        // 4. Clean Markdown links & images
+        // 5. Clean Markdown links & images
         text = text.replace(/!\[([^\]]*)\]\([^)]*\)/g, ' $1 ');
         text = text.replace(/\[([^\]]*)\]\([^)]*\)/g, ' $1 ');
 
-        // 5. Clean Code Blocks and Inline Code (conversational)
+        // 6. Clean Code Blocks and Inline Code (conversational)
         text = text.replace(/```[a-zA-Z0-9_-]*\n([\s\S]*?)```/g, function(m, code) {
-            return ' En código: ' + code.replace(/[\n;]/g, ', ') + '. ';
+            return (isEs ? ' En código: ' : ' In code: ') + code.replace(/[\n;]/g, ', ') + '. ';
         });
         text = text.replace(/`([^`]+)`/g, ' $1 ');
 
-        // 6. Clean logic, comparisons and arrow operators
-        text = text.replace(/===|==/g, ' es igual a ');
-        text = text.replace(/!==|!=|<>/g, ' es diferente de ');
-        text = text.replace(/>=/g, ' mayor o igual a ');
-        text = text.replace(/<=/g, ' menor o igual a ');
-        text = text.replace(/-->|->|=>|==>/g, ' pasa a ');
-        text = text.replace(/&&/g, ' y ');
-        text = text.replace(/\|\|/g, ' o ');
+        // 7. Clean logic, comparisons and arrow operators
+        text = text.replace(/===|==/g, isEs ? ' es igual a ' : ' equals ');
+        text = text.replace(/!==|!=|<>/g, isEs ? ' es diferente de ' : ' is not equal to ');
+        text = text.replace(/>=/g, isEs ? ' mayor o igual a ' : ' greater than or equal to ');
+        text = text.replace(/<=/g, isEs ? ' menor o igual a ' : ' less than or equal to ');
+        text = text.replace(/-->|->|=>|==>/g, isEs ? ' pasa a ' : ' leads to ');
+        text = text.replace(/&&/g, isEs ? ' y ' : ' and ');
+        text = text.replace(/\|\|/g, isEs ? ' o ' : ' or ');
 
-        // 7. Clean Markdown formatting & headers
+        // 8. Clean Markdown formatting & headers
         text = text.replace(/^#+\s+/gm, '');
         text = text.replace(/\*\*([^*]+)\*\*/g, ' $1 ');
         text = text.replace(/\*([^*]+)\*/g, ' $1 ');
         text = text.replace(/__([^_]+)__/g, ' $1 ');
 
-        // 8. Clean bullets and dashes so TTS does NOT say 'guión' or 'menos'
+        // 9. Clean bullets and dashes so TTS does NOT say 'guión' or 'menos'
         text = text.replace(/^[\s]*[-*+•]\s+/gm, '. ');
         text = text.replace(/\s+-\s+/g, ', ');
         text = text.replace(/--|—|–/g, ', ');
 
-        // 9. Clean underscores in variable names (e.g. delta_sync -> delta sync)
+        // 10. Clean underscores in variable names
         text = text.replace(/([a-zA-Z0-9])_([a-zA-Z0-9])/g, '$1 $2');
         text = text.replace(/_/g, ' ');
 
-        // 10. Clean brackets, braces, quotes and syntax noise
+        // 11. Clean brackets, braces, quotes and syntax noise
         text = text.replace(/[{}[\]()\"']/g, ' ');
-        text = text.replace(/\s*\/\s*/g, ' o ');
+        text = text.replace(/\s*\/\s*/g, isEs ? ' o ' : ' or ');
 
-        // 11. Normalize technical units & terms for smooth voice
-        text = text.replace(/\b(\d+)\s*ms\b/gi, '$1 milisegundos');
-        text = text.replace(/\b(\d+)\s*s\b/gi, '$1 segundos');
-        text = text.replace(/\b(\d+)\s*min\b/gi, '$1 minutos');
+        // 12. Normalize technical units
+        text = text.replace(/\b(\d+)\s*ms\b/gi, isEs ? '$1 milisegundos' : '$1 milliseconds');
+        text = text.replace(/\b(\d+)\s*s\b/gi, isEs ? '$1 segundos' : '$1 seconds');
+        text = text.replace(/\b(\d+)\s*min\b/gi, isEs ? '$1 minutos' : '$1 minutes');
         text = text.replace(/\b(\d+)\s*GB\b/gi, '$1 gigabytes');
         text = text.replace(/\b(\d+)\s*TB\b/gi, '$1 terabytes');
         text = text.replace(/\b(\d+)\s*MB\b/gi, '$1 megabytes');
-        text = text.replace(/\bQPS\b/g, 'Q P S');
-        text = text.replace(/\bLLM\b/g, 'modelos L L M');
-        text = text.replace(/\bLLMs\b/g, 'modelos L L M');
 
-        // 12. Normalize punctuation, commas, dots and whitespace
+        // 13. Normalize punctuation, commas, dots and whitespace
         text = text.replace(/\s*,\s*,+/g, ',');
         text = text.replace(/\s*\.\s*\.+/g, '.');
         text = text.replace(/\s*,\s*\./g, '.');
@@ -6325,11 +6394,17 @@ window.PodcastPlaylist = {
         const track = this.playlist[this.currentTrackIndex];
         
         // Clean markdown, LaTeX, and code syntax into natural conversational speech
-        const naturalText = this.cleanForNaturalSpeech(track.title, track.content);
+        const naturalText = this.cleanForNaturalSpeech(track.title, track.content, this.selectedLanguage);
         const utter = new SpeechSynthesisUtterance(naturalText);
         utter.rate = this.playbackSpeed;
-        if (this.voices[this.selectedVoiceIndex]) {
-            utter.voice = this.voices[this.selectedVoiceIndex];
+        utter.lang = this.selectedLanguage === 'es' ? 'es-ES' : 'en-US';
+        
+        const filteredVoices = this.getFilteredVoices();
+        if (filteredVoices[this.selectedVoiceIndex]) {
+            utter.voice = filteredVoices[this.selectedVoiceIndex];
+            if (filteredVoices[this.selectedVoiceIndex].lang) {
+                utter.lang = filteredVoices[this.selectedVoiceIndex].lang;
+            }
         }
 
         utter.onend = () => {
@@ -6366,6 +6441,7 @@ window.PodcastPlaylist = {
     render() {
         const container = document.getElementById('podcast-playlist-body');
         if (!container) return;
+        const isEs = this.selectedLanguage === 'es';
 
         // 1. Course options
         let courseOptionsHtml = '';
@@ -6382,20 +6458,21 @@ window.PodcastPlaylist = {
             epOptionsHtml += `<option value="${idx}" ${isSel ? 'selected' : ''}>${ep.title}</option>`;
         });
 
-        // 3. Voice options
+        // 3. Filtered Voice options (matching language only)
+        const filteredVoices = this.getFilteredVoices();
         let voiceOptionsHtml = '';
-        this.voices.forEach((v, idx) => {
+        filteredVoices.forEach((v, idx) => {
             const isSel = idx === this.selectedVoiceIndex;
             voiceOptionsHtml += `<option value="${idx}" ${isSel ? 'selected' : ''}>${v.name} (${v.lang})</option>`;
         });
 
         // 4. Speed options
         const speeds = [
-            { val: 0.75, label: '0.75x — Ritmo Pausado / Detallado' },
-            { val: 1.0,  label: '1.0x — Velocidad Normal (Estándar)' },
-            { val: 1.25, label: '1.25x — Ritmo Dinámico' },
-            { val: 1.5,  label: '1.5x — Estudio Acelerado' },
-            { val: 2.0,  label: '2.0x — Repaso Ultra Rápido' }
+            { val: 0.75, label: isEs ? '0.75x — Ritmo Pausado / Detallado' : '0.75x — Slow & Detailed' },
+            { val: 1.0,  label: isEs ? '1.0x — Velocidad Normal (Estándar)' : '1.0x — Normal Speed (Standard)' },
+            { val: 1.25, label: isEs ? '1.25x — Ritmo Dinámico' : '1.25x — Dynamic Speed' },
+            { val: 1.5,  label: isEs ? '1.5x — Estudio Acelerado' : '1.5x — Fast Study' },
+            { val: 2.0,  label: isEs ? '2.0x — Repaso Ultra Rápido' : '2.0x — Ultra Fast Review' }
         ];
         let speedOptionsHtml = '';
         speeds.forEach(s => {
@@ -6407,14 +6484,13 @@ window.PodcastPlaylist = {
         let listHtml = '';
         this.playlist.forEach((t, idx) => {
             const isCurrent = idx === this.currentTrackIndex;
-            const cleanSub = (t.moduleTitle || '').split(' / ')[0].trim();
             listHtml += `
                 <div class="playlist-track-item ${isCurrent && this.isPlaying ? 'playing' : ''}" onclick="window.PodcastPlaylist.playTrack(${idx})" role="button" tabindex="0" style="cursor:pointer;">
                     <div style="display:flex; align-items:center; gap:10px; min-width:0; flex:1; overflow:hidden;">
                         <span style="font-size:0.75rem; font-weight:700; color:var(--text-muted); min-width:20px; flex-shrink:0;">${idx + 1}</span>
                         <div style="min-width:0; flex:1; overflow:hidden;">
                             <strong style="font-size:0.86rem; color:var(--text-color); display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${t.title}">${t.title}</strong>
-                            <small style="color:var(--text-muted); display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${cleanSub}">${cleanSub}</small>
+                            <small style="color:var(--text-muted); display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${t.moduleTitle}">${t.moduleTitle}</small>
                         </div>
                     </div>
                     <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="flex-shrink:0; margin-left:8px; color:${isCurrent && this.isPlaying ? 'var(--primary-color)' : 'var(--text-muted)'};"><polygon points="5 3 19 12 5 21 5 3"/></svg>
@@ -6424,28 +6500,39 @@ window.PodcastPlaylist = {
 
         container.innerHTML = `
             <div>
-                <!-- Top 4 Configuration Dropdowns (2x2 Grid) -->
-                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:14px; margin-bottom:16px;">
+                <!-- Top Configuration Dropdowns (Single Vertical Column) -->
+                <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:16px;">
                     <div>
-                        <label class="podcast-field-label">1. Certificación / Examen Oficial:</label>
+                        <label class="podcast-field-label">1. ${isEs ? 'Certificación / Examen Oficial' : 'Certification / Official Exam'}:</label>
                         <select class="voice-select-dropdown" onchange="window.PodcastPlaylist.setCourse(this.value)">
                             ${courseOptionsHtml}
                         </select>
                     </div>
+
                     <div>
-                        <label class="podcast-field-label">2. Episodio / Capítulo (${episodes.length} Disponibles):</label>
+                        <label class="podcast-field-label">2. ${isEs ? 'Idioma de Narración & Pistas' : 'Narration Language & Audio Tracks'}:</label>
+                        <select class="voice-select-dropdown" onchange="window.PodcastPlaylist.setLanguage(this.value)">
+                            <option value="es" ${isEs ? 'selected' : ''}>Español (ES) — Pistas y Contenido en Español</option>
+                            <option value="en" ${!isEs ? 'selected' : ''}>English (EN) — English Tracks & Study Content</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="podcast-field-label">3. ${isEs ? 'Episodio / Capítulo' : 'Episode / Chapter'} (${episodes.length} ${isEs ? 'Disponibles' : 'Available'}):</label>
                         <select class="voice-select-dropdown" onchange="window.PodcastPlaylist.setEpisode(this.value)">
                             ${epOptionsHtml}
                         </select>
                     </div>
+
                     <div>
-                        <label class="podcast-field-label">3. Voz del Sistema (Web Speech API):</label>
+                        <label class="podcast-field-label">4. ${isEs ? 'Voz del Sistema' : 'System Voice'} (${filteredVoices.length} ${isEs ? 'voces en Español' : 'English voices'}):</label>
                         <select class="voice-select-dropdown" onchange="window.PodcastPlaylist.setVoice(this.value)">
-                            ${voiceOptionsHtml || '<option>Voz del Sistema por Defecto</option>'}
+                            ${voiceOptionsHtml || `<option>${isEs ? 'Voz en Español por Defecto' : 'Default English Voice'}</option>`}
                         </select>
                     </div>
+
                     <div>
-                        <label class="podcast-field-label">4. Velocidad de Locución:</label>
+                        <label class="podcast-field-label">5. ${isEs ? 'Velocidad de Locución' : 'Playback Speed'}:</label>
                         <select class="voice-select-dropdown" onchange="window.PodcastPlaylist.setSpeed(this.value)">
                             ${speedOptionsHtml}
                         </select>
@@ -6458,22 +6545,22 @@ window.PodcastPlaylist = {
                         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
                             <div style="display:flex; align-items:center; gap:8px; font-size:0.85rem; font-weight:700; color:var(--text-color);">
                                 <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--primary-color)" stroke-width="2"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
-                                <span>${this.isPlaying ? `Reproduciendo pista ${this.currentTrackIndex + 1} de ${this.playlist.length}` : `En Pausa • ${this.playlist.length} pistas en lista`}</span>
+                                <span>${this.isPlaying ? `${isEs ? 'Reproduciendo pista' : 'Playing track'} ${this.currentTrackIndex + 1} ${isEs ? 'de' : 'of'} ${this.playlist.length}` : `${isEs ? 'En Pausa' : 'Paused'} • ${this.playlist.length} ${isEs ? 'pistas en lista' : 'tracks in queue'}`}</span>
                             </div>
                             <span style="font-size:0.75rem; color:var(--primary-color); font-weight:700; background:rgba(49, 87, 213, 0.1); padding:4px 10px; border-radius:99px;">
-                                Avance Automático Continuo
+                                ${isEs ? 'Avance Automático Continuo' : 'Continuous Auto-Advance'}
                             </span>
                         </div>
 
                         <div style="display:flex; justify-content:center; align-items:center; gap:14px; padding-top:4px;">
-                            <button type="button" class="btn btn-outline" onclick="window.PodcastPlaylist.prev()" title="Tema Anterior" style="padding:8px 18px; font-weight:700;">
-                                &larr; Anterior
+                            <button type="button" class="btn btn-outline" onclick="window.PodcastPlaylist.prev()" title="${isEs ? 'Tema Anterior' : 'Previous Track'}" style="padding:8px 18px; font-weight:700;">
+                                &larr; ${isEs ? 'Anterior' : 'Previous'}
                             </button>
                             <button type="button" class="btn btn-primary" onclick="window.PodcastPlaylist.togglePlay()" style="min-width:180px; font-weight:800; padding:10px 22px; font-size:0.95rem;">
-                                ${this.isPlaying ? 'Pausar Audio' : '▶ Reproducir Episodio'}
+                                ${this.isPlaying ? (isEs ? 'Pausar Audio' : 'Pause Audio') : (isEs ? '▶ Reproducir Episodio' : '▶ Play Episode')}
                             </button>
-                            <button type="button" class="btn btn-outline" onclick="window.PodcastPlaylist.next()" title="Siguiente Tema" style="padding:8px 18px; font-weight:700;">
-                                Siguiente &rarr;
+                            <button type="button" class="btn btn-outline" onclick="window.PodcastPlaylist.next()" title="${isEs ? 'Siguiente Tema' : 'Next Track'}" style="padding:8px 18px; font-weight:700;">
+                                ${isEs ? 'Siguiente' : 'Next'} &rarr;
                             </button>
                         </div>
                     </div>
@@ -6481,8 +6568,8 @@ window.PodcastPlaylist = {
 
                 <!-- Playlist Queue -->
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                    <div style="font-size:0.84rem; font-weight:700; color:var(--text-color);">Temas en este Episodio (${this.playlist.length} Pistas):</div>
-                    <span style="font-size:0.75rem; color:var(--text-muted);">Toca cualquier tema para saltar a él</span>
+                    <div style="font-size:0.84rem; font-weight:700; color:var(--text-color);">${isEs ? 'Temas en este Episodio' : 'Tracks in this Episode'} (${this.playlist.length} ${isEs ? 'Pistas' : 'Tracks'}):</div>
+                    <span style="font-size:0.75rem; color:var(--text-muted);">${isEs ? 'Toca cualquier tema para saltar a él' : 'Tap any track to jump'}</span>
                 </div>
                 <div style="max-height:240px; overflow-y:auto; border:1px solid var(--border-color); border-radius:var(--radius-md); box-sizing:border-box;">
                     ${listHtml}
@@ -6491,7 +6578,7 @@ window.PodcastPlaylist = {
                 <!-- Bottom Modal Footer -->
                 <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:1.2rem; padding-top:0.85rem; border-top:1px solid var(--border-color);">
                     <button type="button" class="btn btn-outline" onclick="window.PodcastPlaylist.close()" style="font-weight:700; padding:8px 20px;">
-                        Volver al Panel
+                        ${isEs ? 'Volver al Panel' : 'Back to Dashboard'}
                     </button>
                 </div>
             </div>

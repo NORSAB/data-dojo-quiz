@@ -18,15 +18,16 @@
 // Antigravity (Gemini 3.7 Flash) | 2026-08-30 14:42 CST | Ajuste de overflow y truncation elíptica en pistas de playlist para layout perfecto.
 // Antigravity (Gemini 3.7 Flash) | 2026-08-30 14:48 CST | Distribución limpia, botones de cierre visibles (modal-close-btn), footer Volver y escape global.
 // Antigravity (Gemini 3.7 Flash) | 2026-08-30 14:52 CST | Conversión a 4 selectores dropdown independientes en grid 2x2 (Curso, Episodio, Voz, Velocidad).
-const BUILD_TIMESTAMP = '20260830r';
-const CACHE_NAME = `simulador-v46-${BUILD_TIMESTAMP}`;
+// Antigravity (Gemini 3.7 Flash) | 2026-08-30 14:56 CST | Dropdowns en columna vertical, selector de idioma ES/EN, voces filtradas por idioma y speech cleaner sin ruido.
+const BUILD_TIMESTAMP = '20260830s';
+const CACHE_NAME = `simulador-v47-${BUILD_TIMESTAMP}`;
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './styles.css?v=20260830r',
-  './app_i18n.js?v=20260830r',
-  './script.js?v=20260830r',
-  './features.js?v=20260830r',
+  './styles.css?v=20260830s',
+  './app_i18n.js?v=20260830s',
+  './script.js?v=20260830s',
+  './features.js?v=20260830s',
   './hero_data.js',
   './auto_restore_data.js',
   './manifest.json',
@@ -67,7 +68,7 @@ const ASSETS_TO_CACHE = [
   './conceptos_databricks.js',
   './personajes_unir_viz.js',
   './translations_databricks_es.js',
-  './translate_toggle.js?v=20260830r',
+  './translate_toggle.js?v=20260830s',
   './supabase-sync.js',
   './comandos_sql_databricks.js',
   './comandos_sql_genai.js'

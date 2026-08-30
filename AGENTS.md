@@ -456,6 +456,17 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
 - Actualizó la PWA a `BUILD_TIMESTAMP = '20260830r'` y caché `simulador-v46-20260830r` en `sw.js` e `index.html`.
 - Verificó con 0 errores las 6 suites de validación (`validate_full_application.js` con **74/74 checks pasados**, `validate_ui_palette.js` con 18 colores hex y 0 gradientes, `validate_global_language.js`, `validate_ai103_integration.js`, `validate_genai_integration.js`, `audit_code_structure.js`).
 
+### 2026-08-30 14:56 CST — Antigravity (Gemini 3.7 Flash)
+- **Distribución Vertical en Columna Única, Selector de Idioma Bilingüe y Locución Fluida Natural**:
+  1. **Disposición Vertical de Dropdowns**: Migró de la cuadrícula 2x2 a una columna única vertical (`display: flex; flex-direction: column; gap: 12px;`), proporcionando a cada selector el 100% del ancho con espacio visual holgado y sin compresión.
+  2. **Selector de Idioma de Locución & Pistas (`selectedLanguage`)**: Añadió el desplegable `2. Idioma de Narración & Pistas` (`Español (ES)` / `English (EN)`), conectando la generación de pistas al idioma seleccionado.
+  3. **Extracción Lingüística Especializada (`extractLanguageContent` y `extractLanguageTitle`)**: Los módulos bilingües de `window.studyData` ahora extraen exclusivamente el bloque de idioma activo (`data-lang="es"` o `data-lang="en"`), eliminando la lectura mezclada o duplicada inglés/español.
+  4. **Filtrado Estricto de Voces por Idioma (`getFilteredVoices`)**: El desplegable de voces ahora muestra únicamente voces en Español cuando se elige Español (`es-ES`, `es-MX`, etc.) y únicamente voces en Inglés cuando se elige Inglés (`en-US`, `en-GB`, etc.), configurando automáticamente `utter.lang` para evitar lecturas robotizadas o deletreos letra por letra.
+  5. **Locución Conversacional Fluida**: Eliminó espaciados artificiales de siglas técnicas y formateó tablas y viñetas como oraciones completas y continuas.
+- Actualizó la PWA a `BUILD_TIMESTAMP = '20260830s'` y caché `simulador-v47-20260830s` en `sw.js` e `index.html`.
+- Verificó con 0 errores las 6 suites de validación (`validate_full_application.js` con **74/74 checks pasados**, `validate_ui_palette.js` con 18 colores hex y 0 gradientes, `validate_global_language.js`, `validate_ai103_integration.js`, `validate_genai_integration.js`, `audit_code_structure.js`).
+
+
 
 
 
