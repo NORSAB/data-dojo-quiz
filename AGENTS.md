@@ -389,6 +389,19 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
 - Actualizó la PWA a `BUILD_TIMESTAMP = '20260830k'` y caché `simulador-v39-20260830k` en `sw.js` e `index.html`.
 - Verificó con 0 errores las 6 suites de validación (`validate_full_application.js` con 72/72 checks, `validate_ui_palette.js`, `validate_global_language.js`, `validate_ai103_integration.js`, `validate_genai_integration.js`, `audit_code_structure.js`).
 
+### 2026-08-30 14:15 CST — Antigravity (Gemini 3.7 Flash)
+- **Expansión Completa del Sistema de Gamificación y Recompensas de XP**:
+  1. **Recompensa Directa de XP en Todos los Sistemas Interactivos**: Integró `window.addXP(amount, category)` en `ArchitectureCanvas` (+40 XP), `SurvivalMode` (hasta +50 XP y guardado de `survivalHighScore`), `CliSimulator` (+30 XP), `OralExamMode` (+40 XP), `PromptPlayground` (+15 XP), `DecisionNavigator` (+20 XP), `DailyQuickDrill` (+50 XP) y `ErrorRescueCards` (+25 XP).
+  2. **16 Nuevos Logros / Badges Oficiales con Iconografía SVG Dedicada** añadidos a `badgesConfig` y `badgeSvgIcons` en `script.js`: `arch_rookie`, `arch_master`, `arch_grandmaster`, `survival_fighter`, `survival_hero`, `survival_god`, `cli_rookie`, `cli_ninja`, `cli_guru`, `voice_debater`, `voice_orator`, `prompt_tuner`, `decision_strategist`, `error_slayer`, `daily_drill_master`, `fabric_directlake_pro`.
+  3. **Inclusión de `azure_ai103_mastery` y Cómputo Global de XP**: `calculateXP(stats)` ahora totaliza todas las actividades interactivas y cursos hacia el progreso de Cinturones del Dojo.
+- **Unificación y Equivalencia de Recursos de Estudio en Todos los Cursos Técnicos**:
+  1. Creó `study_fabric_dp600_resources.js`: 60 flashcards bilingües, 36 términos clave estructurados en 4 dominios, 12 comandos DAX/PySpark/T-SQL con desglose línea a línea, y 16 escenarios arquitectónicos.
+  2. Creó `study_databricks_da_resources.js` y vinculó `conceptos_databricks.js`, `comandos_sql_databricks.js` y `flashcards_databricks.js` para Databricks DA, Fundamentals, AI/BI y SQL Analytics.
+  3. Estandarizó las 11 pestañas del Centro de Estudio (`Estudiar`, `Términos`, `Comandos/SDK/DAX`, `Escenarios`, `Flashcards`, `Decisiones`, `Sandbox SQL`, `Terminal CLI`, `Arquitectura`, `Playground LLM`, `Logros`) con etiquetas localizadas y conteos dinámicos.
+- Actualizó la PWA a `BUILD_TIMESTAMP = '20260830l'` y caché `simulador-v40-20260830l` en `sw.js` e `index.html`.
+- Ejecutó y aprobó con 0 errores las 6 suites de validación del proyecto (`validate_full_application.js` con **74/74 checks pasados**, `validate_ui_palette.js`, `validate_global_language.js`, `validate_ai103_integration.js`, `validate_genai_integration.js`, `audit_code_structure.js`).
+
+
 
 
 

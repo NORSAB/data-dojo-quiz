@@ -858,7 +858,17 @@ function saveExamResult(score, total, passed, missedIds = [], questionIds = [], 
           comandosViewed: 0,
           // Stats v5 (Domain Mastery — Databricks 9 Domains)
           domainsStudied: 0,       // Total domain sections completed
-          domainSectionsViewed: 0   // Total items viewed across all 9 domains
+          domainSectionsViewed: 0,  // Total items viewed across all 9 domains
+          // Stats v6 (Interactive Systems & Games)
+          architecturesValidated: 0,
+          survivalHighScore: 0,
+          cliChallengesCompleted: 0,
+          oralExamsCompleted: 0,
+          promptPresetsExplored: 0,
+          decisionsExplored: 0,
+          rescueDecksReviewed: 0,
+          dailyDrillsCompleted: 0,
+          interactiveXP: 0
       };
       
       const stored = JSON.parse(localStorage.getItem("userStats") || "{}");
@@ -951,6 +961,27 @@ function saveExamResult(score, total, passed, missedIds = [], questionIds = [], 
       localStorage.setItem("userStats", JSON.stringify(stats));
   }
 
+  window.getGamificationStats = getGamificationStats;
+  window.saveGamificationStats = saveGamificationStats;
+  window.addXP = function(amount, category) {
+    try {
+      const stats = getGamificationStats();
+      stats.interactiveXP = (stats.interactiveXP || 0) + (Number(amount) || 0);
+      if (category) {
+        stats[category] = (stats[category] || 0) + 1;
+      }
+      saveGamificationStats(stats);
+      if (typeof updateGamification === 'function') {
+        updateGamification({ total: 0, score: 0, passed: false, mode: 'InteractiveXP' });
+      }
+      if (typeof window.updateGreeting === 'function') {
+        window.updateGreeting();
+      }
+    } catch (e) {
+      console.warn('addXP error:', e);
+    }
+  };
+
 
   // Helper: generate SVG belt icon from color (replaces emoji belt icons)
   window.getBeltSvgIcon = function(belt) {
@@ -994,7 +1025,7 @@ function calculateXP(stats) {
     // Consistency
     xp += (stats.maxCorrectStreak || 0) * 5;    // 5 XP per max streak point
 
-    // Study Mode XP (ALL course modules including GenAI)
+    // Study Mode XP (ALL course modules including GenAI and Azure AI-103)
     try {
         const masteryKeys = [
             'unir_viz_mastery',
@@ -1002,6 +1033,7 @@ function calculateXP(stats) {
             'databricks_da_mastery',
             'databricks_fund_mastery',
             'databricks_genai_mastery',
+            'azure_ai103_mastery',
             'dp600_mastery',
             'unah_tesis_mastery'
         ];
@@ -1010,6 +1042,17 @@ function calculateXP(stats) {
             xp += (m.xp || 0);
         });
     } catch(e) { /* ignore parse errors */ }
+
+    // Direct Interactive Systems XP
+    xp += (stats.interactiveXP || 0);
+    xp += ((stats.architecturesValidated || 0) * 40);
+    xp += ((stats.cliChallengesCompleted || 0) * 30);
+    xp += ((stats.oralExamsCompleted || 0) * 40);
+    xp += ((stats.promptPresetsExplored || 0) * 15);
+    xp += ((stats.decisionsExplored || 0) * 20);
+    xp += ((stats.dailyDrillsCompleted || 0) * 50);
+    xp += ((stats.rescueDecksReviewed || 0) * 25);
+    xp += (stats.survivalHighScore || 0);
 
     // Certifications bonus
     try {
@@ -1051,13 +1094,29 @@ const badgeSvgIcons = {
   survivor: '<svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/></svg>',
   timeattack: '<svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M15 1H9v2h6V1zm-4 13h2V8h-2v6zm8.03-6.61l1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42C16.07 4.74 14.12 4 12 4c-4.97 0-9 4.03-9 9s4.02 9 9 9 9-4.03 9-9c0-2.12-.74-4.07-1.97-5.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>',
   hacker: '<svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5z"/></svg>',
-  // Domain Mastery badges
   domain_rookie: '<svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M12 10.9c-.61 0-1.1.49-1.1 1.1s.49 1.1 1.1 1.1c.61 0 1.1-.49 1.1-1.1s-.49-1.1-1.1-1.1zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm2.19 12.19L6 18l3.81-8.19L18 6l-3.81 8.19z"/></svg>',
   domain_explorer: '<svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5z"/></svg>',
   domain_warrior: '<svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>',
   domain_master: '<svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>',
   domain_sensei: '<svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg>',
-  domain_certified: '<svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>'
+  domain_certified: '<svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>',
+  // New Interactive Badges
+  arch_rookie: '<svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M3 3h7v7H3zm11 0h7v7h-7zM3 14h7v7H3zm11 0h7v7h-7z"/></svg>',
+  arch_master: '<svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>',
+  arch_grandmaster: '<svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>',
+  survival_fighter: '<svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>',
+  survival_hero: '<svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>',
+  survival_god: '<svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>',
+  cli_rookie: '<svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8h16v10zm-2-1h-6v-2h6v2zM7.5 17l-1.4-1.4 2.1-2.1-2.1-2.1L7.5 10l3.5 3.5-3.5 3.5z"/></svg>',
+  cli_ninja: '<svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>',
+  cli_guru: '<svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>',
+  voice_debater: '<svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.91-3c-.49 0-.9.36-.98.85C16.52 14.2 14.47 16 12 16s-4.52-1.8-4.93-4.15c-.08-.49-.49-.85-.98-.85-.61 0-1.09.54-1 1.14.49 3 2.89 5.35 5.91 5.78V20c0 .55.45 1 1 1s1-.45 1-1v-2.08c3.02-.43 5.42-2.78 5.91-5.78.1-.6-.39-1.14-1-1.14z"/></svg>',
+  voice_orator: '<svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/></svg>',
+  prompt_tuner: '<svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 14.93V17a1 1 0 11-2 0v-.07A7.003 7.003 0 015.07 11H5a1 1 0 010-2h.07A7.003 7.003 0 0111 5.07V5a1 1 0 112 0v.07A7.003 7.003 0 0118.93 11H19a1 1 0 010 2h-.07A7.003 7.003 0 0113 16.93z"/></svg>',
+  decision_strategist: '<svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M9 18h6M10 22h4M12 2a7 7 0 00-4 12.74V16h8v-1.26A7 7 0 0012 2z"/></svg>',
+  error_slayer: '<svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>',
+  daily_drill_master: '<svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>',
+  fabric_directlake_pro: '<svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>'
 };
 
 // Helper to get SVG icon for a badge
@@ -1132,6 +1191,24 @@ const badgesConfig = [
       { id: "skeptic", name: "El Escéptico", icon: "question", rarity: "secret", desc: "Corrige su respuesta y acierta", secret: "Cambia una respuesta errónea por la correcta", condition: s => s.skepticCount >= 1 },
       { id: "survivor", name: "Por los pelos", icon: "smile", rarity: "secret", desc: "Aprueba con exactamente 70%", secret: "Aprueba con la nota mínima justa", condition: s => s.survivorUnlock },
       { id: "timeattack", name: "Time Attack", icon: "timer", rarity: "platinum", desc: "Examen Real >10 pgs en <2 min", condition: s => s.timeAttackUnlock },
+
+      // 10. Interactive Systems & Advanced Dojo Features
+      { id: "arch_rookie", name: "Arquitecto Aprendiz", icon: "arch_rookie", rarity: "bronze", desc: "Valida tu primera arquitectura en el Canvas", condition: s => (s.architecturesValidated || 0) >= 1, progress: s => ({cur: s.architecturesValidated || 0, max: 1}) },
+      { id: "arch_master", name: "Arquitecto de Soluciones", icon: "arch_master", rarity: "gold", desc: "Valida 5 arquitecturas correctamente", condition: s => (s.architecturesValidated || 0) >= 5, progress: s => ({cur: s.architecturesValidated || 0, max: 5}) },
+      { id: "arch_grandmaster", name: "Master Cloud Architect", icon: "arch_grandmaster", rarity: "platinum", desc: "Valida 10 arquitecturas en todos los cursos", condition: s => (s.architecturesValidated || 0) >= 10, progress: s => ({cur: s.architecturesValidated || 0, max: 10}) },
+      { id: "survival_fighter", name: "Superviviente", icon: "survival_fighter", rarity: "bronze", desc: "Alcanza 5 aciertos en Modo Supervivencia", condition: s => (s.survivalHighScore || 0) >= 5, progress: s => ({cur: s.survivalHighScore || 0, max: 5}) },
+      { id: "survival_hero", name: "Superviviente de Acero", icon: "survival_hero", rarity: "silver", desc: "Alcanza 15 aciertos en Modo Supervivencia", condition: s => (s.survivalHighScore || 0) >= 15, progress: s => ({cur: s.survivalHighScore || 0, max: 15}) },
+      { id: "survival_god", name: "Inmortal del Dojo", icon: "survival_god", rarity: "platinum", desc: "Alcanza 25 aciertos con combo 4x en Supervivencia", condition: s => (s.survivalHighScore || 0) >= 25, progress: s => ({cur: s.survivalHighScore || 0, max: 25}) },
+      { id: "cli_rookie", name: "Terminal Novice", icon: "cli_rookie", rarity: "bronze", desc: "Ejecuta tu primer comando correcto en Cloud Shell", condition: s => (s.cliChallengesCompleted || 0) >= 1, progress: s => ({cur: s.cliChallengesCompleted || 0, max: 1}) },
+      { id: "cli_ninja", name: "Terminal Ninja", icon: "cli_ninja", rarity: "silver", desc: "Completa 5 retos en el Terminal CLI", condition: s => (s.cliChallengesCompleted || 0) >= 5, progress: s => ({cur: s.cliChallengesCompleted || 0, max: 5}) },
+      { id: "cli_guru", name: "Cloud Shell Master", icon: "cli_guru", rarity: "gold", desc: "Completa 10 retos de Azure y Databricks CLI", condition: s => (s.cliChallengesCompleted || 0) >= 10, progress: s => ({cur: s.cliChallengesCompleted || 0, max: 10}) },
+      { id: "voice_debater", name: "Voz Técnica", icon: "voice_debater", rarity: "bronze", desc: "Completa tu primer examen oral por voz", condition: s => (s.oralExamsCompleted || 0) >= 1, progress: s => ({cur: s.oralExamsCompleted || 0, max: 1}) },
+      { id: "voice_orator", name: "Orador Maestro", icon: "voice_orator", rarity: "gold", desc: "Completa 5 exámenes orales con >=75% de cobertura", condition: s => (s.oralExamsCompleted || 0) >= 5, progress: s => ({cur: s.oralExamsCompleted || 0, max: 5}) },
+      { id: "prompt_tuner", name: "Prompt Engineer", icon: "prompt_tuner", rarity: "bronze", desc: "Experimenta con parámetros LLM en el Playground", condition: s => (s.promptPresetsExplored || 0) >= 3, progress: s => ({cur: s.promptPresetsExplored || 0, max: 3}) },
+      { id: "decision_strategist", name: "Estratega de Arquitectura", icon: "decision_strategist", rarity: "silver", desc: "Explora 15 dilemas en las Matrices de Decisión", condition: s => (s.decisionsExplored || 0) >= 15, progress: s => ({cur: s.decisionsExplored || 0, max: 15}) },
+      { id: "error_slayer", name: "Cazador de Errores", icon: "error_slayer", rarity: "bronze", desc: "Repasa una baraja de rescate de errores con Flashcards", condition: s => (s.rescueDecksReviewed || 0) >= 1, progress: s => ({cur: s.rescueDecksReviewed || 0, max: 1}) },
+      { id: "daily_drill_master", name: "Dosis Diaria de Éxito", icon: "daily_drill_master", rarity: "silver", desc: "Completa 5 Daily Quick Drills", condition: s => (s.dailyDrillsCompleted || 0) >= 5, progress: s => ({cur: s.dailyDrillsCompleted || 0, max: 5}) },
+      { id: "fabric_directlake_pro", name: "Fabric Mastermind", icon: "fabric_directlake_pro", rarity: "gold", desc: "Domina la arquitectura Direct Lake de Fabric", condition: s => s.fabricMasteryUnlocked }
   ];
 
   // --- CENTRAL GAMIFICATION EVENT BUS ---
@@ -3575,25 +3652,35 @@ function renderReview(questions, finalPct, passed) {
         } catch (e) { console.warn('syncToGlobal error', e); }
       }
 
-      // Codex (GPT-5) & Antigravity | 2026-08-26 | Resuelve recursos complementarios por curso sin mezclar bancos de certificaciones distintas.
+      // Codex (GPT-5) & Antigravity | 2026-08-30 | Resuelve recursos complementarios por curso sin mezclar bancos de certificaciones distintas.
       const isAzureAi103 = courseId === 'azure-ai-103';
       const isDatabricksGenAI = courseId === 'databricks-genai-engineer';
+      const isDP600 = courseId === 'dp-600';
+      const isDatabricksDA = courseId === 'databricks-da' || courseId === 'databricks-fundamentals' || courseId === 'databricks-aibi' || courseId === 'databricks-sql-analytics';
       const isGenAICourse = isDatabricksGenAI || isAzureAi103;
-      const isDatabricksCourse = courseId === 'databricks-da' || courseId === 'databricks-fundamentals' || courseId === 'dp-600' || isDatabricksGenAI;
+      const isDatabricksCourse = isDatabricksDA || isDatabricksGenAI || isDP600;
       const hasPersonajes = courseId === 'unir-viz-interactiva' && window.personajesUnirViz;
       const conceptos = isAzureAi103
         ? (window.conceptosAzureAi103 || [])
         : (isDatabricksGenAI
           ? (window.conceptosDatabricksGenAI || [])
-          : (isDatabricksCourse ? (window.conceptosDatabricks || []) : []));
+          : (isDP600
+            ? (window.conceptosDP600 || window.conceptosDatabricks || [])
+            : (isDatabricksCourse ? (window.conceptosDatabricks || []) : [])));
       const genAIPatterns = isAzureAi103
         ? (window.azureAi103Patterns || [])
-        : (isDatabricksGenAI ? (window.databricksGenAIPatterns || []) : []);
+        : (isDatabricksGenAI
+          ? (window.databricksGenAIPatterns || [])
+          : (isDP600
+            ? (window.dp600Patterns || [])
+            : (window.databricksDAPatterns || [])));
       const comandosSql = isAzureAi103
         ? (window.comandosAzureAi103 || [])
         : (isDatabricksGenAI
           ? (window.comandosSqlDatabricksGenAI || [])
-          : (!isGenAICourse && isDatabricksCourse ? (window.comandosSqlDatabricks || []) : []));
+          : (isDP600
+            ? (window.comandosFabricDP600 || window.comandosSqlDatabricks || [])
+            : (!isGenAICourse && isDatabricksCourse ? (window.comandosSqlDatabricks || []) : [])));
       const hasConceptos = conceptos.length > 0;
       const hasGenAIPatterns = genAIPatterns.length > 0;
       const hasComandosSQL = comandosSql.length > 0;
@@ -3696,7 +3783,9 @@ function renderReview(questions, finalPct, passed) {
         'unir-viz-interactiva': () => window.unirVizFlashcards,
         'databricks-da': () => window.databricksDAFlashcards,
         'databricks-fundamentals': () => window.databricksDAFlashcards,
-        'dp-600': () => window.databricksDAFlashcards,
+        'databricks-aibi': () => window.databricksDAFlashcards,
+        'databricks-sql-analytics': () => window.databricksDAFlashcards,
+        'dp-600': () => window.dp600Flashcards || window.databricksDAFlashcards,
         'databricks-genai-engineer': () => window.databricksGenAIFlashcards,
         'azure-ai-103': () => (window.studyFlashcards && window.studyFlashcards['azure-ai-103']) || [],
       };

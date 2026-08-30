@@ -11,15 +11,16 @@
 // Antigravity (Gemini 3.7 Flash) | 2026-08-30 04:25 CST | Rediseño espacioso y organizado en 2 columnas del modal de configuración del examen con presets rápidos.
 // Antigravity (Gemini 3.7 Flash) | 2026-08-30 04:30 CST | Maximiza altura del filtrado de dominios y organiza opciones inferiores en matriz 2x2.
 // Antigravity (Gemini 3.7 Flash) | 2026-08-30 07:30 CST | Integra Drag-and-Drop y mezclas en Architecture Canvas y expande Matrices de Decisión con tarjetas y filtros.
-const BUILD_TIMESTAMP = '20260830k';
-const CACHE_NAME = `simulador-v39-${BUILD_TIMESTAMP}`;
+// Antigravity (Gemini 3.7 Flash) | 2026-08-30 14:15 CST | Expande gamificación (16 nuevos logros, XP interactivo) y unifica recursos de estudio (DP-600, Databricks DA, GenAI, Azure AI).
+const BUILD_TIMESTAMP = '20260830l';
+const CACHE_NAME = `simulador-v40-${BUILD_TIMESTAMP}`;
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './styles.css?v=20260830k',
-  './app_i18n.js?v=20260830k',
-  './script.js?v=20260830k',
-  './features.js?v=20260830k',
+  './styles.css?v=20260830l',
+  './app_i18n.js?v=20260830l',
+  './script.js?v=20260830l',
+  './features.js?v=20260830l',
   './hero_data.js',
   './auto_restore_data.js',
   './manifest.json',
@@ -37,6 +38,8 @@ const ASSETS_TO_CACHE = [
   './questions_databricks_genai_es.js',
   './study_databricks_genai.js',
   './study_databricks_genai_resources.js',
+  './study_fabric_dp600_resources.js',
+  './study_databricks_da_resources.js',
   './questions_unir_viz.js',
   './questions_unir_herr.js',
   './questions_unah_tesis.js',
@@ -58,7 +61,7 @@ const ASSETS_TO_CACHE = [
   './conceptos_databricks.js',
   './personajes_unir_viz.js',
   './translations_databricks_es.js',
-  './translate_toggle.js?v=20260830k',
+  './translate_toggle.js?v=20260830l',
   './supabase-sync.js',
   './comandos_sql_databricks.js',
   './comandos_sql_genai.js'

@@ -4378,6 +4378,33 @@ window.DecisionNavigator = {
                 decision: 'V-Order Optimization vs Standard Parquet vs Z-Order',
                 whenToUse: '<strong>V-Order</strong> es la ordenación columnar nativa de Fabric que acelera lecturas en Direct Lake. <strong>Z-Order</strong> agrupa datos multidimensionales para saltar archivos durante consultas de filtrado.'
             }
+        ],
+        'databricks-da': [
+            {
+                category: 'Gobernanza & UC',
+                decision: 'Managed Tables vs External Tables en Unity Catalog',
+                whenToUse: 'Usa <strong>Managed Tables</strong> cuando Databricks gestione completamente el ciclo de vida y almacenamiento de los datos en el metastore (al hacer DROP se borran metadatos y datos). Usa <strong>External Tables</strong> cuando los datos deban persistir en un bucket S3 / ADLS Gen2 administrado por un equipo externo (al hacer DROP solo se borran los metadatos de UC).'
+            },
+            {
+                category: 'Cómputo SQL',
+                decision: 'Serverless SQL Warehouses vs Pro vs Classic',
+                whenToUse: 'Usa <strong>Serverless SQL Warehouses</strong> para arranque instantáneo (&lt;5s), auto-escalado agresivo y menor costo total por TCO sin gestionar VMs en la suscripción del cliente. Usa <strong>Pro SQL Warehouses</strong> cuando se requieran federaciones de consultas o flujos de trabajo avanzados sin soporte serverless en la región.'
+            },
+            {
+                category: 'Transformación SQL',
+                decision: 'MERGE INTO vs INSERT OVERWRITE para Ingesta CDC',
+                whenToUse: 'Usa <strong>MERGE INTO</strong> para operaciones Upsert (actualizar filas modificadas e insertar nuevas filas según clave primaria) con soporte para eliminación y SCD Tipo 2. Usa <strong>INSERT OVERWRITE</strong> solo cuando se reemplace una partición completa o la tabla entera en una carga batch idempotente.'
+            },
+            {
+                category: 'Delta Lake',
+                decision: 'Time Travel: VERSION AS OF vs TIMESTAMP AS OF',
+                whenToUse: 'Usa <strong>VERSION AS OF</strong> para auditorías reproducibles y rollbacks a un número de commit exacto del Delta Log. Usa <strong>TIMESTAMP AS OF</strong> para consultar el estado de la tabla en un momento cronológico específico (ej. 2026-08-30).'
+            },
+            {
+                category: 'Seguridad',
+                decision: 'Row Filters vs Column Masks en Unity Catalog',
+                whenToUse: 'Usa <strong>Row Filters</strong> (funciones SQL UDF) para restringir qué filas puede ver cada usuario/grupo (ej. WHERE region = current_user_region()). Usa <strong>Column Masks</strong> para ofuscar o enmascarar valores sensibles como números de tarjeta o correos (ej. hash o asteriscos).'
+            }
         ]
     },
 
@@ -4385,6 +4412,7 @@ window.DecisionNavigator = {
         this.activeCategory = category;
         document.querySelectorAll('.decision-cat-filter-btn').forEach(b => b.classList.remove('active'));
         if (btn) btn.classList.add('active');
+        if (typeof window.addXP === 'function') window.addXP(20, 'decisionsExplored');
         const cid = window.currentCourseId || 'azure-ai-103';
         const container = document.getElementById('unir-panel-decisions');
         if (container) this.renderMatrix(container, cid);
@@ -4614,7 +4642,8 @@ window.CliSimulator = {
                 </div>
                 <div style="color:var(--text-muted); font-size:0.8rem; margin-top:2px;">Sintaxis validada contra el esquema oficial.</div>
             `;
-            if (typeof addXP === 'function') addXP(25);
+            if (typeof window.addXP === 'function') window.addXP(30, 'cliChallengesCompleted');
+            else if (typeof addXP === 'function') addXP(30);
         } else if (cmdLower.startsWith('az ') || cmdLower.startsWith('databricks ') || cmdLower.startsWith('fabric ')) {
             resp.innerHTML = `
                 <div class="cli-terminal-error">
@@ -4844,11 +4873,13 @@ window.OralExamMode = {
                 if (coveragePct >= 75) {
                     color = 'var(--success-color)';
                     msg = '¡Excelente Dominio Oral! Cubriste los conceptos arquitectónicos esenciales.';
-                    if (typeof addXP === 'function') addXP(30);
+                    if (typeof window.addXP === 'function') window.addXP(40, 'oralExamsCompleted');
+                    else if (typeof addXP === 'function') addXP(40);
                 } else if (coveragePct >= 50) {
                     color = 'var(--warning-color)';
                     msg = 'Respuesta Parcial: Buen enfoque, pero se omitieron términos clave.';
-                    if (typeof addXP === 'function') addXP(15);
+                    if (typeof window.addXP === 'function') window.addXP(20, 'oralExamsCompleted');
+                    else if (typeof addXP === 'function') addXP(20);
                 }
                 banner.innerHTML = `
                     <div style="font-size:1.1rem; font-weight:800; color:${color}; margin-bottom:4px;">${coveragePct}% Cobertura Conceptual &bull; ${msg}</div>
@@ -5185,11 +5216,12 @@ window.ArchitectureCanvas = {
                 fb.innerHTML = `
                     <div style="font-weight:800; color:var(--success-color); font-size:1rem; margin-bottom:4px;">
                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;"><polyline points="20 6 9 17 4 12"/></svg>
-                        ¡Arquitectura Validada Correctamente! (+30 XP)
+                        ¡Arquitectura Validada Correctamente! (+40 XP)
                     </div>
                     <div style="font-size:0.85rem; color:var(--text-muted);">${activeCase.explanation}</div>
                 `;
-                if (typeof addXP === 'function') addXP(30);
+                if (typeof window.addXP === 'function') window.addXP(40, 'architecturesValidated');
+                else if (typeof addXP === 'function') addXP(40);
             } else {
                 fb.innerHTML = `
                     <div style="font-weight:800; color:var(--danger-color); font-size:1rem; margin-bottom:4px;">
@@ -5319,8 +5351,17 @@ window.SurvivalMode = {
         clearInterval(this.timerInterval);
         const container = document.getElementById('survival-game-body');
         if (!container) return;
-        const xpGained = Math.round(this.score * 0.5);
-        if (typeof addXP === 'function') addXP(xpGained);
+        const xpGained = Math.max(10, Math.round(this.score * 0.5));
+        if (typeof window.addXP === 'function') {
+            window.addXP(xpGained);
+            const s = window.getGamificationStats ? window.getGamificationStats() : {};
+            if ((this.score || 0) > (s.survivalHighScore || 0)) {
+                s.survivalHighScore = this.score;
+                if (window.saveGamificationStats) window.saveGamificationStats(s);
+            }
+        } else if (typeof addXP === 'function') {
+            addXP(xpGained);
+        }
 
         container.innerHTML = `
             <div style="text-align:center; padding:1.5rem;">
@@ -5455,6 +5496,7 @@ window.PromptPlayground = {
         if (exp) {
             exp.innerHTML = `<strong>${p.name}:</strong> ${p.desc}`;
         }
+        if (typeof window.addXP === 'function') window.addXP(15, 'promptPresetsExplored');
     },
 
     onSliderChange() {
