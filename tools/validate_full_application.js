@@ -195,6 +195,13 @@ assert(typeof sandbox.window.SpotlightSearch === 'object', 'window.SpotlightSear
 assert(typeof sandbox.window.DailyQuickDrill === 'object', 'window.DailyQuickDrill module loaded');
 assert(typeof sandbox.window.DiagnosticMode === 'object', 'window.DiagnosticMode module loaded');
 assert(typeof sandbox.window.StudyGuidePDF === 'object', 'window.StudyGuidePDF module loaded');
+assert(typeof sandbox.window.MemoryDecayTracker === 'object', 'window.MemoryDecayTracker module loaded');
+assert(typeof sandbox.window.MemoryDecayTracker.computeDecay === 'function', 'MemoryDecayTracker.computeDecay function ready');
+assert(typeof sandbox.window.StudyConsistencyHeatmap === 'object', 'window.StudyConsistencyHeatmap module loaded');
+assert(typeof sandbox.window.TechComparatorEngine === 'object', 'window.TechComparatorEngine module loaded');
+assert(typeof sandbox.window.PearsonVueMode === 'object', 'window.PearsonVueMode module loaded');
+assert(typeof sandbox.window.StepOrderingQuestion === 'object', 'window.StepOrderingQuestion module loaded');
+assert(typeof sandbox.window.TouchSwipeController === 'object', 'window.TouchSwipeController module loaded');
 
 console.log('\n5. Verifying PWA Service Worker Cache Consistency...');
 const swCode = fs.readFileSync(path.join(ROOT, 'sw.js'), 'utf8');

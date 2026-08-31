@@ -17,7 +17,7 @@
     <title>Quiz Simulator</title>
     <link rel="manifest" href="manifest.json" />
     <meta name="theme-color" content="#3157d5" />
-    <link rel="stylesheet" href="styles.css?v=20260830s" />
+    <link rel="stylesheet" href="styles.css?v=20260830t" />
     <style>
       /* =======================================================================
          TRUE 100% FULL-WIDTH FLUID RESPONSIVE SYSTEM
@@ -686,6 +686,31 @@
               <div>
                   <strong style="color:var(--primary-color);">Examen Oral por Voz (Micrófono)</strong>
                   <small>Escucha preguntas y responde por voz con evaluación de conceptos clave</small>
+              </div>
+          </button>
+
+          <!-- F44: RETENTION & EBBINGHAUS MEMORY MATRIX LAUNCHER -->
+          <button id="retention-matrix-launcher-btn" type="button" class="btn-quick-quiz" onclick="window.MemoryDecayTracker.openModal()" style="margin-top: 10px; background: var(--bg-surface); border: 1px solid var(--border-color);">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--primary-color)" stroke-width="2">
+                  <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+              </svg>
+              <div>
+                  <strong style="color:var(--primary-color);">Curva de Olvido & Matriz de Retención</strong>
+                  <small>Cálculo de Ebbinghaus por dominio y heatmap de consistencia diaria</small>
+              </div>
+          </button>
+
+          <!-- F46: TECH COMPARATOR LAUNCHER -->
+          <button id="tech-comparator-launcher-btn" type="button" class="btn-quick-quiz" onclick="window.TechComparatorEngine.openModal()" style="margin-top: 10px; background: var(--bg-surface); border: 1px solid var(--border-color);">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--primary-color)" stroke-width="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                  <line x1="12" y1="3" x2="12" y2="21"/>
+                  <line x1="3" y1="9" x2="21" y2="9"/>
+                  <line x1="3" y1="15" x2="21" y2="15"/>
+              </svg>
+              <div>
+                  <strong style="color:var(--primary-color);">Comparador Técnico ("¿Cuándo Usar Cuál?")</strong>
+                  <small>Matrices de decisión lado a lado (Costo, Latencia, Reglas de Examen)</small>
               </div>
           </button>
 
@@ -2542,6 +2567,42 @@
       </div>
     </div>
 
+    <!-- Retention Matrix Modal -->
+    <div id="retention-matrix-modal" class="modal-overlay hidden" role="dialog" aria-labelledby="retention-matrix-title" aria-modal="true" style="z-index: 2500;">
+      <div class="modal-content" style="max-width: 740px; width: 92%; max-height: 90vh; overflow-y: auto; box-sizing: border-box;">
+        <div class="modal-header-custom" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--primary-color)" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            <h3 id="retention-matrix-title" style="margin: 0; font-size: 1.15rem; font-weight: 800; color: var(--text-color);">Matriz de Retención & Curva de Olvido</h3>
+          </div>
+          <button type="button" class="modal-close-btn" onclick="window.MemoryDecayTracker && window.MemoryDecayTracker.closeModal()" aria-label="Cerrar">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+        <div id="retention-matrix-body" style="padding-top: 1rem;">
+          <!-- Injected dynamically by MemoryDecayTracker -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Tech Comparator Modal -->
+    <div id="tech-comparator-modal" class="modal-overlay hidden" role="dialog" aria-labelledby="tech-comparator-title" aria-modal="true" style="z-index: 2500;">
+      <div class="modal-content" style="max-width: 900px; width: 94%; max-height: 90vh; overflow-y: auto; box-sizing: border-box;">
+        <div class="modal-header-custom" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--primary-color)" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="12" y1="3" x2="12" y2="21"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/></svg>
+            <h3 id="tech-comparator-title" style="margin: 0; font-size: 1.15rem; font-weight: 800; color: var(--text-color);">Comparador Técnico ("¿Cuándo Usar Cuál?")</h3>
+          </div>
+          <button type="button" class="modal-close-btn" onclick="window.TechComparatorEngine && window.TechComparatorEngine.closeModal()" aria-label="Cerrar">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+        <div id="tech-comparator-body" style="padding-top: 1rem;">
+          <!-- Injected dynamically by TechComparatorEngine -->
+        </div>
+      </div>
+    </div>
+
     <script src="marked.min.js"></script>
     <script src="questions.js"></script>
     <script src="questions_databricks.js"></script>
@@ -2587,14 +2648,14 @@
     <script src="flashcards_unah_tesis.js"></script>
     <!-- Auto Restore Master Data -->
     <script src="auto_restore_data.js"></script>
-    <script src="app_i18n.js?v=20260830s"></script>
-    <script src="script.js?v=20260830s"></script>
-    <script src="features.js?v=20260830s"></script>
+    <script src="app_i18n.js?v=20260830t"></script>
+    <script src="script.js?v=20260830t"></script>
+    <script src="features.js?v=20260830t"></script>
     <!-- Supabase Cloud Backup -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-sync.js"></script>
     <!-- Databricks Spanish Translation Toggle -->
     <script src="translations_databricks_es.js"></script>
-    <script src="translate_toggle.js?v=20260830s"></script>
+    <script src="translate_toggle.js?v=20260830t"></script>
   </body>
 </html>

@@ -466,6 +466,19 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
 - Actualizó la PWA a `BUILD_TIMESTAMP = '20260830s'` y caché `simulador-v47-20260830s` en `sw.js` e `index.html`.
 - Verificó con 0 errores las 6 suites de validación (`validate_full_application.js` con **74/74 checks pasados**, `validate_ui_palette.js` con 18 colores hex y 0 gradientes, `validate_global_language.js`, `validate_ai103_integration.js`, `validate_genai_integration.js`, `audit_code_structure.js`).
 
+### 2026-08-30 17:28 CST — Antigravity (Gemini 3.7 Flash)
+- **Suite de Potenciación Personal y Maestría Técnica (5 Motores de Aprendizaje de Élite)**:
+  1. **Curva de Olvido de Ebbinghaus (`window.MemoryDecayTracker`)**: Motor analítico que calcula el decaimiento de retención mental por dominio ($R = 100 \times e^{-t/S}$) a partir del historial real en `localStorage`, diagnosticando temas en *Zona Óptima*, *Riesgo* o *Zona de Olvido* con botón de *"Micro-Repaso de 2 Minutos"* para reforzar áreas críticas.
+  2. **Heatmap de Consistencia Diaria (`window.StudyConsistencyHeatmap`)**: Matriz visual interactiva en SVG estilo GitHub que mapea la densidad de estudio y preguntas de las últimas 16 semanas (112 días) con tooltips de actividad y cálculo de días activos.
+  3. **Comparador Técnico Lado a Lado (`window.TechComparatorEngine`)**: Módulo interactivo con matrices de decisión profunda ("¿Cuándo Usar Cuál?") para Azure AI Search (BM25 vs Vector vs Hybrid vs Semantic Ranker), Databricks GenAI (Prompting vs RAG vs LoRA vs Pre-training), Microsoft Fabric (Direct Lake vs Import vs DirectQuery vs Dual Mode) y Azure Identity (Managed Identity vs Service Principal vs SAS).
+  4. **Modo Pearson VUE Oficial (`window.PearsonVueMode`)**: Conmutador de interfaz hiperrealista que recrea el entorno de examen oficial de certificación de Microsoft y Databricks (temporizador oficial, pantalla de revisión, marcado para repaso y navegación estándar).
+  5. **Componente de Preguntas de Ordenamiento de Pasos (`window.StepOrderingQuestion`)**: Soporte interactivo para secuencias arquitectónicas y procedimientos técnicos de examen con controles de reordenamiento paso a paso.
+  6. **Controlador Táctil de Gestos Móviles (`window.TouchSwipeController`)**: Soporte para repasar flashcards y preguntas mediante deslizamiento con el pulgar en teléfonos móviles (Swipe derecho = Dominado / Swipe izquierdo = Repasar).
+- Creó botones de acceso rápido en la pantalla principal y los modales `#retention-matrix-modal` y `#tech-comparator-modal` con botones de cierre `.modal-close-btn`, pie de modal inferior, cierre universal por tecla <kbd>ESC</kbd> y clic en backdrop.
+- Actualizó la PWA a `BUILD_TIMESTAMP = '20260830t'` y caché `simulador-v48-20260830t` en `sw.js` e `index.html`.
+- Verificó con 0 errores las 6 suites de validación (`validate_full_application.js` con **81/81 checks pasados**, `validate_ui_palette.js` con 18 colores hex y 0 gradientes, `validate_global_language.js`, `validate_ai103_integration.js`, `validate_genai_integration.js`, `audit_code_structure.js`).
+
+
 
 
 

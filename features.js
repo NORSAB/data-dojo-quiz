@@ -6780,6 +6780,496 @@ if (typeof document !== 'undefined') {
     }
 }
 
+// =============================================================================
+// F44: EBBINGHAUS MEMORY DECAY & RETENTION TRACKER (Smart Retention Matrix)
+// =============================================================================
+window.MemoryDecayTracker = {
+    computeDecay(courseId) {
+        const cid = courseId || window.currentCourseId || 'azure-ai-103';
+        const history = JSON.parse(localStorage.getItem('quizHistory') || '[]');
+        const courseHistory = history.filter(h => h.courseCheck === cid || h.courseId === cid);
+        const qData = window.questionsData || [];
+        const courseQuestions = qData.filter(q => q.courseId === cid || (!q.courseId && cid === 'azure-ai-103'));
+
+        // Group questions by domain
+        const domainMap = {};
+        courseQuestions.forEach(q => {
+            const dom = q.domain || 'Dominio General';
+            if (!domainMap[dom]) {
+                domainMap[dom] = { name: dom, totalQuestions: 0, attempts: 0, correct: 0, lastReviewed: 0 };
+            }
+            domainMap[dom].totalQuestions++;
+        });
+
+        // Scan history to calculate recency and accuracy per domain
+        const now = Date.now();
+        courseHistory.forEach(h => {
+            const ts = new Date(h.date || h.timestamp || now).getTime();
+            const qIds = h.questionIds || [];
+            const missedIds = h.missedIds || [];
+
+            qIds.forEach(id => {
+                const canonicalId = (id || '').replace(/-es$/, '');
+                const q = courseQuestions.find(cq => (cq.id || '').replace(/-es$/, '') === canonicalId);
+                if (q && domainMap[q.domain]) {
+                    const d = domainMap[q.domain];
+                    d.attempts++;
+                    if (!missedIds.includes(id)) d.correct++;
+                    if (ts > d.lastReviewed) d.lastReviewed = ts;
+                }
+            });
+        });
+
+        // Compute Ebbinghaus Retention Decay: R = 100 * exp(-days / S)
+        const domainsList = Object.values(domainMap).map(d => {
+            let daysElapsed = d.lastReviewed > 0 ? (now - d.lastReviewed) / (1000 * 60 * 60 * 24) : 21;
+            const accuracy = d.attempts > 0 ? (d.correct / d.attempts) : 0.5;
+            const strength = Math.max(3, d.attempts * 2.5) * (accuracy >= 0.8 ? 1.4 : 0.85);
+            const retention = d.lastReviewed === 0 ? 35 : Math.max(15, Math.min(100, Math.round(100 * Math.exp(-daysElapsed / strength))));
+
+            let status = 'good';
+            let statusLabel = 'Retención Óptima';
+            if (retention < 50) {
+                status = 'critical';
+                statusLabel = 'Zona de Olvido';
+            } else if (retention < 75) {
+                status = 'warning';
+                statusLabel = 'Riesgo de Decaimiento';
+            }
+
+            return {
+                ...d,
+                daysElapsed: Math.round(daysElapsed),
+                accuracyPct: Math.round(accuracy * 100),
+                retentionPct: retention,
+                status,
+                statusLabel
+            };
+        });
+
+        // Sort: lowest retention first
+        domainsList.sort((a, b) => a.retentionPct - b.retentionPct);
+        const overallRetention = domainsList.length
+            ? Math.round(domainsList.reduce((acc, curr) => acc + curr.retentionPct, 0) / domainsList.length)
+            : 70;
+
+        return {
+            courseId: cid,
+            overallRetention,
+            weakestDomain: domainsList[0] || null,
+            domains: domainsList
+        };
+    },
+
+    openModal() {
+        const modal = document.getElementById('retention-matrix-modal');
+        if (!modal) return;
+        this.render();
+        modal.classList.remove('hidden');
+    },
+
+    closeModal() {
+        const modal = document.getElementById('retention-matrix-modal');
+        if (modal) modal.classList.add('hidden');
+    },
+
+    render() {
+        const container = document.getElementById('retention-matrix-body');
+        if (!container) return;
+        const data = this.computeDecay();
+
+        let rowsHtml = '';
+        data.domains.forEach(d => {
+            const barColor = d.status === 'good' ? 'var(--success-color)' : (d.status === 'warning' ? 'var(--warning-color)' : 'var(--danger-color)');
+            rowsHtml += `
+                <div style="background:var(--bg-surface); padding:10px 14px; border-radius:var(--radius-sm); border:1px solid var(--border-color); margin-bottom:8px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                        <div>
+                            <strong style="font-size:0.88rem; color:var(--text-color);">${d.name}</strong>
+                            <small style="display:block; color:var(--text-muted); font-size:0.75rem;">Último repaso: hace ${d.daysElapsed} días &bull; Precisión: ${d.accuracyPct}%</small>
+                        </div>
+                        <div style="text-align:right;">
+                            <span style="font-size:0.85rem; font-weight:800; color:${barColor};">${d.retentionPct}% Retención</span>
+                            <span style="display:block; font-size:0.72rem; color:var(--text-muted);">${d.statusLabel}</span>
+                        </div>
+                    </div>
+                    <div style="width:100%; height:6px; background:var(--border-color); border-radius:99px; overflow:hidden;">
+                        <div style="width:${d.retentionPct}%; height:100%; background:${barColor}; border-radius:99px;"></div>
+                    </div>
+                </div>
+            `;
+        });
+
+        container.innerHTML = `
+            <div>
+                <!-- Top Summary Card -->
+                <div style="background:var(--bg-surface); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1rem 1.25rem; margin-bottom:1rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+                    <div>
+                        <span class="case-study-step-pill">Curva de Olvido de Ebbinghaus</span>
+                        <h4 style="margin:4px 0 2px 0; font-size:1.15rem; color:var(--text-color);">Índice de Retención Mental: <span style="color:var(--primary-color); font-weight:800;">${data.overallRetention}%</span></h4>
+                        <small style="color:var(--text-muted);">Cálculo basado en espaciamiento temporal, tasa de acierto y frecuencia de práctica.</small>
+                    </div>
+                    ${data.weakestDomain ? `
+                        <button type="button" class="btn btn-primary" onclick="window.MemoryDecayTracker.launchQuickDrill('${data.weakestDomain.name}')" style="font-weight:700; padding:8px 18px;">
+                            Reforzar ${data.weakestDomain.name.slice(0, 18)}... &rarr;
+                        </button>
+                    ` : ''}
+                </div>
+
+                <!-- Domain List -->
+                <div style="font-size:0.84rem; font-weight:700; color:var(--text-color); margin-bottom:8px;">Estado de Retención por Dominio Oficial:</div>
+                <div style="max-height:360px; overflow-y:auto;">
+                    ${rowsHtml}
+                </div>
+
+                <!-- Bottom Modal Footer -->
+                <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:1.2rem; padding-top:0.85rem; border-top:1px solid var(--border-color);">
+                    <button type="button" class="btn btn-outline" onclick="window.MemoryDecayTracker.closeModal()" style="font-weight:700; padding:8px 20px;">
+                        Volver al Panel
+                    </button>
+                </div>
+            </div>
+        `;
+    },
+
+    launchQuickDrill(domainName) {
+        this.closeModal();
+        if (typeof window.startQuickQuiz === 'function') {
+            window.startQuickQuiz(10, domainName);
+        } else if (typeof window.openQuizConfigModal === 'function') {
+            window.openQuizConfigModal();
+        }
+    }
+};
+
+// =============================================================================
+// F45: STUDY CONSISTENCY HEATMAP (GitHub-Style Daily Activity Grid)
+// =============================================================================
+window.StudyConsistencyHeatmap = {
+    render(containerEl) {
+        const target = containerEl || document.getElementById('study-heatmap-container');
+        if (!target) return;
+
+        const history = JSON.parse(localStorage.getItem('quizHistory') || '[]');
+        const stats = window.getGamificationStats ? window.getGamificationStats() : {};
+        const dailyCounts = {};
+
+        // Aggregate question counts per day (YYYY-MM-DD)
+        history.forEach(h => {
+            const dateStr = (h.date || h.timestamp || '').slice(0, 10);
+            if (dateStr) {
+                const count = (h.questionIds && h.questionIds.length) || (h.totalQuestions) || 10;
+                dailyCounts[dateStr] = (dailyCounts[dateStr] || 0) + count;
+            }
+        });
+
+        // Generate past 16 weeks (112 days)
+        const days = [];
+        const today = new Date();
+        for (let i = 111; i >= 0; i--) {
+            const d = new Date(today);
+            d.setDate(d.getDate() - i);
+            const dateKey = d.toISOString().slice(0, 10);
+            const questions = dailyCounts[dateKey] || 0;
+            let level = 0;
+            if (questions >= 40) level = 4;
+            else if (questions >= 20) level = 3;
+            else if (questions >= 10) level = 2;
+            else if (questions > 0) level = 1;
+
+            days.push({
+                dateKey,
+                formatted: d.toLocaleDateString('es-ES', { month: 'short', day: 'numeric' }),
+                questions,
+                level
+            });
+        }
+
+        // Render SVG Heatmap Grid
+        const cellSize = 12;
+        const gap = 3;
+        const cols = 16;
+        const rows = 7;
+        let cellsSvg = '';
+
+        days.forEach((day, idx) => {
+            const col = Math.floor(idx / 7);
+            const row = idx % 7;
+            const x = col * (cellSize + gap);
+            const y = row * (cellSize + gap);
+
+            let fill = 'var(--border-color)';
+            let opacity = '0.35';
+            if (day.level === 1) { fill = 'var(--primary-color)'; opacity = '0.4'; }
+            else if (day.level === 2) { fill = 'var(--primary-color)'; opacity = '0.65'; }
+            else if (day.level === 3) { fill = 'var(--primary-color)'; opacity = '0.85'; }
+            else if (day.level === 4) { fill = 'var(--primary-color)'; opacity = '1.0'; }
+
+            cellsSvg += `
+                <rect x="${x}" y="${y}" width="${cellSize}" height="${cellSize}" rx="2" fill="${fill}" opacity="${opacity}">
+                    <title>${day.formatted}: ${day.questions} preguntas completadas</title>
+                </rect>
+            `;
+        });
+
+        const totalActiveDays = Object.keys(dailyCounts).length;
+        const totalQuestionsAllTime = Object.values(dailyCounts).reduce((a, b) => a + b, 0);
+
+        target.innerHTML = `
+            <div style="background:var(--bg-surface); padding:1rem 1.25rem; border-radius:var(--radius-md); border:1px solid var(--border-color); margin-bottom:1rem;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
+                    <div>
+                        <strong style="font-size:0.92rem; color:var(--text-color); display:block;">Consistencia de Estudio Diario (Últimas 16 Semanas)</strong>
+                        <small style="color:var(--text-muted); font-size:0.76rem;">${totalActiveDays} días activos &bull; ${totalQuestionsAllTime} preguntas totales</small>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:4px; font-size:0.72rem; color:var(--text-muted);">
+                        <span>Menos</span>
+                        <span style="display:inline-block; width:10px; height:10px; background:var(--border-color); border-radius:2px; opacity:0.35;"></span>
+                        <span style="display:inline-block; width:10px; height:10px; background:var(--primary-color); border-radius:2px; opacity:0.4;"></span>
+                        <span style="display:inline-block; width:10px; height:10px; background:var(--primary-color); border-radius:2px; opacity:0.65;"></span>
+                        <span style="display:inline-block; width:10px; height:10px; background:var(--primary-color); border-radius:2px; opacity:0.85;"></span>
+                        <span style="display:inline-block; width:10px; height:10px; background:var(--primary-color); border-radius:2px; opacity:1.0;"></span>
+                        <span>Más</span>
+                    </div>
+                </div>
+                <div style="overflow-x:auto; padding-bottom:4px;">
+                    <svg width="${cols * (cellSize + gap)}" height="${rows * (cellSize + gap)}" style="display:block;">
+                        ${cellsSvg}
+                    </svg>
+                </div>
+            </div>
+        `;
+    }
+};
+
+// =============================================================================
+// F46: TECH COMPARATOR ENGINE ("¿CUÁNDO USAR CUÁL?")
+// =============================================================================
+window.TechComparatorEngine = {
+    comparisons: [
+        {
+            id: 'azure_search_strategy',
+            courseId: 'azure-ai-103',
+            title: 'Azure AI Search: BM25 vs Vector Search vs Hybrid Search vs Semantic Ranker',
+            description: 'Matriz oficial de selección de método de búsqueda y reranking en Azure AI Apps & Agents.',
+            headers: ['Estrategia', 'Mecanismo Clave', 'Costo / Latencia', 'Cuándo Elegirlo en Examen', 'Regla de Oro'],
+            rows: [
+                ['BM25 (Full Text)', 'Coincidencia léxica exacta por frecuencia de términos e IDF inverso', 'Más bajo / < 15ms', 'Búsqueda de códigos exactos de producto, IDs, números de serie y SKU', 'Falla en sinonimia y consultas conceptuales'],
+                ['Vector Search', 'Similitud coseno / dot product con embeddings (ej: text-embedding-3-small)', 'Medio / < 30ms', 'Búsqueda por significado, conceptos abstractos y preguntas en lenguaje natural', 'Inmune a errores ortográficos y variaciones léxicas'],
+                ['Hybrid Search', 'Combina BM25 + Vector Search usando Reciprocal Rank Fusion (RRF)', 'Medio-Alto / < 40ms', 'Mejor precisión general para RAG empresarial (términos exactos + conceptos)', 'Estándar recomendado por Microsoft para asistentes de IA'],
+                ['Semantic Ranker', 'Modelo L2 de deep learning de Bing que reordena los top 50 resultados', 'Mayor costo (por consultas L2) / +20-50ms', 'Cuando se requiere comprensión semántica profunda de contexto y fragmentos precisos', 'Siempre se aplica sobre los resultados de Hybrid/Vector, nunca solo']
+            ]
+        },
+        {
+            id: 'databricks_genai_arch',
+            courseId: 'databricks-genai-engineer',
+            title: 'Databricks GenAI: Prompting vs RAG vs LoRA Fine-Tuning vs Pre-training',
+            description: 'Árbol de decisión de menor costo y complejidad técnica en Databricks.',
+            headers: ['Enfoque', 'Datos / Reentrenamiento', 'Costo & Tiempo', 'Caso de Uso Primario', 'Regla de Oro de Examen'],
+            rows: [
+                ['Prompt Engineering', 'Cero entrenamiento; solo contexto y Few-Shot en system prompt', 'Mínimo / Instantáneo', 'Tareas generales, formato estructurado JSON y traducción de estilos', 'Primera opción a evaluar por menor costo y complejidad'],
+                ['RAG (Vector Search)', 'Vectores en Delta Sync Index sin modificar pesos del LLM', 'Bajo-Medio / Horas', 'Datos privados actualizados con frecuencia y requerimiento de citas exactas', 'Resuelve frescura factual y atribución de fuentes'],
+                ['LoRA / Fine-Tuning', 'Ajuste fino de matrices de bajo rango en capas de atención', 'Medio-Alto / Horas-Días', 'Estilo/tono altamente especializado, dialectos y salida en formatos crípticos', 'Modifica el estilo, NO resuelve frescura de datos'],
+                ['Pre-training', 'Entrenamiento desde cero con billones de tokens en miles de GPUs', 'Muy Alto ($$$) / Meses', 'Lenguajes nuevos sin representación en LLMs públicos', 'Casi NUNCA es la respuesta correcta en el examen oficial']
+            ]
+        },
+        {
+            id: 'fabric_storage_modes',
+            courseId: 'dp-600',
+            title: 'Microsoft Fabric Storage: Direct Lake vs Import Mode vs DirectQuery vs Dual Mode',
+            description: 'Comparativa de rendimiento y arquitectura semántica sobre OneLake.',
+            headers: ['Modo Semántico', 'Acceso a Datos', 'Latencia de Datos', 'Límites / Requisitos', 'Regla de Oro'],
+            rows: [
+                ['Direct Lake', 'Lee Parquet de OneLake directamente a memoria VertiPaq', 'Tiempo Real (sin refresco)', 'Tablas Delta puras en OneLake; sujeto a memoria del SKU de capacidad', 'Combina velocidad de Import con frescura de DirectQuery sin duplicar datos'],
+                ['Import Mode', 'Copia completa comprimida en archivo PBIX/Dataset', 'Depende de refresco programado', 'Límite de memoria de dataset; duplicación de almacenamiento', 'Máximo rendimiento para medidas DAX extremadamente complejas'],
+                ['DirectQuery', 'Envía consultas T-SQL en vivo al SQL Endpoint en cada clic', 'En vivo / Lento', 'Latencia de red y carga en el motor SQL de origen', 'Útil solo para datos masivos fuera de OneLake con RLS externa'],
+                ['Dual Mode', 'Híbrido: Caché en memoria para dimensiones, DirectQuery para hechos', 'Variable', 'Mayor complejidad de diseño y particionamiento', 'Usado para optimizar modelos compuestos tradicionales']
+            ]
+        },
+        {
+            id: 'azure_auth_strategy',
+            courseId: 'azure-ai-103',
+            title: 'Azure Identity: Managed Identity vs Service Principal vs SAS Token',
+            description: 'Gobernanza de credenciales e identidades seguras para servicios de Azure AI.',
+            headers: ['Mecanismo', 'Gestión de Secretos', 'Seguridad & Expiración', 'Ámbito de Aplicación', 'Regla de Oro'],
+            rows: [
+                ['System-assigned Managed Identity', 'Cero secretos; rotación 100% automática por Azure', 'Máxima seguridad; ligada al ciclo de vida del recurso', 'Comunicación entre recursos de Azure (App Service → Azure OpenAI)', 'Opción recomendada por defecto para máxima seguridad'],
+                ['User-assigned Managed Identity', 'Cero secretos; independiente del ciclo de vida de un solo recurso', 'Máxima seguridad; reutilizable en múltiples recursos', 'Múltiples instancias que acceden al mismo Azure AI Search con RBAC', 'Ideal para cargas de trabajo homogéneas compartidas'],
+                ['Service Principal (App Reg)', 'Requiere Client Secret o Certificado con rotación manual', 'Riesgo si el secreto queda en código o configuración', 'Aplicaciones externas fuera de Azure (On-premise / Multi-cloud)', 'Usar solo cuando Managed Identity no sea técnicamente viable'],
+                ['SAS Token / API Keys', 'Cadena de conexión o token con permisos delimitados', 'Riesgo de exposición si se filtra en logs o URL', 'Acceso temporal a blobs individuales de Storage', 'Nunca usar en código de producción para Azure AI Services']
+            ]
+        }
+    ],
+
+    openModal() {
+        const modal = document.getElementById('tech-comparator-modal');
+        if (!modal) return;
+        this.render();
+        modal.classList.remove('hidden');
+    },
+
+    closeModal() {
+        const modal = document.getElementById('tech-comparator-modal');
+        if (modal) modal.classList.add('hidden');
+    },
+
+    render(selectedId) {
+        const container = document.getElementById('tech-comparator-body');
+        if (!container) return;
+
+        const activeId = selectedId || this.comparisons[0].id;
+        const current = this.comparisons.find(c => c.id === activeId) || this.comparisons[0];
+
+        let selectOptions = '';
+        this.comparisons.forEach(c => {
+            selectOptions += `<option value="${c.id}" ${c.id === activeId ? 'selected' : ''}>${c.title}</option>`;
+        });
+
+        let tableHeader = current.headers.map(h => `<th style="padding:10px 12px; border:1px solid var(--border-color); background:var(--bg-surface); color:var(--text-color); font-size:0.82rem; font-weight:700; text-align:left;">${h}</th>`).join('');
+        let tableRows = current.rows.map(row => {
+            return `
+                <tr>
+                    <td style="padding:10px 12px; border:1px solid var(--border-color); font-weight:700; color:var(--primary-color); font-size:0.84rem;">${row[0]}</td>
+                    <td style="padding:10px 12px; border:1px solid var(--border-color); font-size:0.82rem; color:var(--text-color);">${row[1]}</td>
+                    <td style="padding:10px 12px; border:1px solid var(--border-color); font-size:0.82rem; color:var(--text-muted);">${row[2]}</td>
+                    <td style="padding:10px 12px; border:1px solid var(--border-color); font-size:0.82rem; color:var(--text-color); font-weight:600;">${row[3]}</td>
+                    <td style="padding:10px 12px; border:1px solid var(--border-color); font-size:0.82rem; color:var(--success-color); background:rgba(22, 121, 74, 0.04); font-weight:600;">${row[4]}</td>
+                </tr>
+            `;
+        }).join('');
+
+        container.innerHTML = `
+            <div>
+                <div style="margin-bottom:14px;">
+                    <label class="podcast-field-label">Selecciona Matriz de Decisión Oficial:</label>
+                    <select class="voice-select-dropdown" onchange="window.TechComparatorEngine.render(this.value)">
+                        ${selectOptions}
+                    </select>
+                </div>
+
+                <div style="background:var(--bg-surface); padding:10px 14px; border-radius:var(--radius-sm); border:1px solid var(--border-color); margin-bottom:14px;">
+                    <strong style="color:var(--text-color); font-size:0.9rem;">${current.title}</strong>
+                    <p style="margin:2px 0 0 0; color:var(--text-muted); font-size:0.8rem;">${current.description}</p>
+                </div>
+
+                <div style="overflow-x:auto; border:1px solid var(--border-color); border-radius:var(--radius-md);">
+                    <table style="width:100%; border-collapse:collapse; background:var(--bg-body);">
+                        <thead><tr>${tableHeader}</tr></thead>
+                        <tbody>${tableRows}</tbody>
+                    </table>
+                </div>
+
+                <div style="display:flex; justify-content:flex-end; margin-top:1.2rem; padding-top:0.85rem; border-top:1px solid var(--border-color);">
+                    <button type="button" class="btn btn-outline" onclick="window.TechComparatorEngine.closeModal()" style="font-weight:700; padding:8px 20px;">
+                        Volver al Panel
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+};
+
+// =============================================================================
+// F47: PEARSON VUE EXAM REAL VIEW TOGGLE
+// =============================================================================
+window.PearsonVueMode = {
+    isActive: false,
+
+    toggle() {
+        this.isActive = !this.isActive;
+        const quizScreen = document.getElementById('quiz-screen');
+        const toggleBtn = document.getElementById('pearson-vue-toggle-btn');
+        if (quizScreen) {
+            quizScreen.classList.toggle('pearson-vue-active', this.isActive);
+        }
+        if (toggleBtn) {
+            toggleBtn.classList.toggle('active', this.isActive);
+            toggleBtn.textContent = this.isActive ? 'Pearson VUE: ON' : 'Vista Pearson VUE';
+        }
+        if (typeof window.showToastNotification === 'function') {
+            window.showToastNotification(this.isActive ? 'Modo Pearson VUE Oficial Activado' : 'Modo Pearson VUE Desactivado');
+        }
+    }
+};
+
+// =============================================================================
+// F48: STEP ORDERING / SEQUENCE QUESTION COMPONENT
+// =============================================================================
+window.StepOrderingQuestion = {
+    currentOrder: [],
+
+    init(containerEl, items, onOrderChange) {
+        if (!containerEl || !Array.isArray(items)) return;
+        this.currentOrder = [...items];
+        this.render(containerEl, onOrderChange);
+    },
+
+    moveStep(idx, direction, containerEl, onOrderChange) {
+        const targetIdx = idx + direction;
+        if (targetIdx < 0 || targetIdx >= this.currentOrder.length) return;
+        const temp = this.currentOrder[idx];
+        this.currentOrder[idx] = this.currentOrder[targetIdx];
+        this.currentOrder[targetIdx] = temp;
+        this.render(containerEl, onOrderChange);
+        if (typeof onOrderChange === 'function') onOrderChange(this.currentOrder);
+    },
+
+    render(containerEl, onOrderChange) {
+        if (!containerEl) return;
+        let html = '';
+        this.currentOrder.forEach((step, idx) => {
+            html += `
+                <div class="step-ordering-item" style="display:flex; align-items:center; justify-content:space-between; padding:10px 14px; background:var(--bg-surface); border:1px solid var(--border-color); border-radius:var(--radius-sm); margin-bottom:8px;">
+                    <div style="display:flex; align-items:center; gap:12px; min-width:0; flex:1;">
+                        <span style="width:24px; height:24px; border-radius:50%; background:var(--primary-color); color:#ffffff; display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:800; flex-shrink:0;">${idx + 1}</span>
+                        <span style="font-size:0.88rem; color:var(--text-color); font-weight:600;">${step.text || step}</span>
+                    </div>
+                    <div style="display:flex; gap:6px; flex-shrink:0;">
+                        <button type="button" class="btn btn-sm btn-outline" onclick="window.StepOrderingQuestion.moveStep(${idx}, -1, this.closest('.step-ordering-container'), ${onOrderChange})" ${idx === 0 ? 'disabled' : ''} title="Subir Paso" style="padding:4px 8px;">
+                            &uarr;
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline" onclick="window.StepOrderingQuestion.moveStep(${idx}, 1, this.closest('.step-ordering-container'), ${onOrderChange})" ${idx === this.currentOrder.length - 1 ? 'disabled' : ''} title="Bajar Paso" style="padding:4px 8px;">
+                            &darr;
+                        </button>
+                    </div>
+                </div>
+            `;
+        });
+        containerEl.innerHTML = `<div class="step-ordering-container">${html}</div>`;
+    }
+};
+
+// =============================================================================
+// F49: TOUCH SWIPE GESTURE CONTROLLER (Mobile Thumb Learning)
+// =============================================================================
+window.TouchSwipeController = {
+    touchStartX: 0,
+    touchEndX: 0,
+    threshold: 60,
+
+    bindToElement(element, onSwipeRight, onSwipeLeft) {
+        if (!element) return;
+        element.addEventListener('touchstart', (e) => {
+            this.touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        element.addEventListener('touchend', (e) => {
+            this.touchEndX = e.changedTouches[0].screenX;
+            this.handleGesture(onSwipeRight, onSwipeLeft);
+        }, { passive: true });
+    },
+
+    handleGesture(onSwipeRight, onSwipeLeft) {
+        const diff = this.touchEndX - this.touchStartX;
+        if (Math.abs(diff) < this.threshold) return;
+        if (diff > 0 && typeof onSwipeRight === 'function') {
+            onSwipeRight();
+        } else if (diff < 0 && typeof onSwipeLeft === 'function') {
+            onSwipeLeft();
+        }
+    }
+};
+
 
 
 

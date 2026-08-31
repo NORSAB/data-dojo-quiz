@@ -6314,6 +6314,14 @@ document.addEventListener('keydown', (e) => {
       window.LiveSyncStatus.closePopover();
       return;
     }
+    if (window.MemoryDecayTracker && document.getElementById('retention-matrix-modal') && !document.getElementById('retention-matrix-modal').classList.contains('hidden')) {
+      window.MemoryDecayTracker.closeModal();
+      return;
+    }
+    if (window.TechComparatorEngine && document.getElementById('tech-comparator-modal') && !document.getElementById('tech-comparator-modal').classList.contains('hidden')) {
+      window.TechComparatorEngine.closeModal();
+      return;
+    }
     const openModals = document.querySelectorAll('.modal-overlay:not(.hidden)');
     if (openModals.length > 0) {
       openModals.forEach(m => m.classList.add('hidden'));
@@ -6433,6 +6441,10 @@ document.addEventListener('click', (e) => {
       window.SurvivalMode.close();
     } else if (modalId === 'sync-popover-modal' && window.LiveSyncStatus) {
       window.LiveSyncStatus.closePopover();
+    } else if (modalId === 'retention-matrix-modal' && window.MemoryDecayTracker) {
+      window.MemoryDecayTracker.closeModal();
+    } else if (modalId === 'tech-comparator-modal' && window.TechComparatorEngine) {
+      window.TechComparatorEngine.closeModal();
     } else {
       e.target.classList.add('hidden');
     }
