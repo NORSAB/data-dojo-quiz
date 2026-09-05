@@ -25,15 +25,15 @@
 // Claude (Opus 5) | 2026-09-05 | Podcast con voz natural: voces neuronales priorizadas, locucion por frases con prosodia y micro-pausas, y keepalive contra el corte a los 15s de Chrome.
 // Claude (Opus 5) | 2026-09-05 | Caché incremental (deja de re-bajar 6.5 MB por deploy), estado de examen por IDs (-99%), payload de sync sin duplicar, emparejamiento de dispositivos en la UI y CI de 6 suites.
 // Claude (Opus 5) | 2026-09-05 | Se retiran 7 preguntas del curso demo que tapaban a 7 reales de DP-600, se corrige una opcion duplicada en unir-herr-5-64 y se agrega validate_bank_integrity.js.
-const BUILD_TIMESTAMP = '20260905b';
-const CACHE_NAME = `simulador-v53-${BUILD_TIMESTAMP}`;
+const BUILD_TIMESTAMP = '20260905c';
+const CACHE_NAME = `simulador-v54-${BUILD_TIMESTAMP}`;
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './styles.css?v=20260905b',
-  './app_i18n.js?v=20260905b',
-  './script.js?v=20260905b',
-  './features.js?v=20260905b',
+  './styles.css?v=20260905c',
+  './app_i18n.js?v=20260905c',
+  './script.js?v=20260905c',
+  './features.js?v=20260905c',
   './hero_data.js',
   './auto_restore_data.js',
   './manifest.json',
@@ -74,8 +74,8 @@ const ASSETS_TO_CACHE = [
   './conceptos_databricks.js',
   './personajes_unir_viz.js',
   './translations_databricks_es.js',
-  './translate_toggle.js?v=20260905b',
-  './supabase-sync.js?v=20260905b',
+  './translate_toggle.js?v=20260905c',
+  './supabase-sync.js?v=20260905c',
   './comandos_sql_databricks.js',
   './comandos_sql_genai.js'
 ];
@@ -86,6 +86,14 @@ const ASSETS_TO_CACHE = [
 // no habian cambiado una sola linea. Ahora el install reutiliza del cache viejo lo que
 // sigue siendo identico (misma URL, incluida su query ?v=) y solo baja de la red lo que
 // cambio de verdad. Los archivos versionados cambian de URL, asi que se refrescan solos.
+// Claude (Opus 5) | 2026-09-05 | CORRECCION de la cache incremental del commit anterior.
+// Aquella version reutilizaba del cache viejo cualquier asset con la misma URL, lo que
+// dejaba permanentemente obsoletos los archivos SIN query ?v= (los bancos de preguntas
+// entre ellos): un cambio de contenido en questions.js no llegaba nunca al navegador.
+// Se comprobo en produccion: el servidor ya servia la correccion de DP-600 y el navegador
+// seguia con el curso demo. Ahora cada asset se revalida contra el servidor con
+// cache:'no-cache' — si no cambio, el 304 no transfiere cuerpo y el ahorro se mantiene;
+// si cambio, baja el contenido nuevo. El cache previo queda solo como respaldo offline.
 self.addEventListener('install', (event) => {
   self.skipWaiting();
   event.waitUntil((async () => {
@@ -94,27 +102,37 @@ self.addEventListener('install', (event) => {
       const oldNames = (await caches.keys()).filter(k => k !== CACHE_NAME);
       const oldCaches = await Promise.all(oldNames.map(n => caches.open(n)));
 
-      let reutilizados = 0, descargados = 0;
+      let revalidados = 0, desdeCache = 0, fallidos = 0;
 
       await Promise.all(ASSETS_TO_CACHE.map(async (url) => {
+        // Revalidacion condicional contra el servidor: si el archivo no cambio,
+        // responde 304 y el cuerpo NO viaja; si cambio, llega el contenido nuevo.
+        // Asi se conserva el ahorro de ancho de banda sin servir nada obsoleto.
+        try {
+          const res = await fetch(url, { cache: 'no-cache' });
+          if (res && res.ok) {
+            await cache.put(url, res.clone());
+            revalidados++;
+            return;
+          }
+        } catch (e) {
+          // Sin red: seguimos al respaldo de abajo
+        }
+
+        // Sin conexion o respuesta invalida: conservar la copia previa para no
+        // perder la capacidad offline de la PWA.
         for (const oc of oldCaches) {
           const hit = await oc.match(url);
           if (hit) {
             await cache.put(url, hit.clone());
-            reutilizados++;
+            desdeCache++;
             return;
           }
         }
-        try {
-          await cache.add(url);
-          descargados++;
-        } catch (e) {
-          // Un asset suelto que falle no debe abortar la instalacion entera
-          console.warn('SW: no se pudo cachear', url, e);
-        }
+        fallidos++;
       }));
 
-      console.log(`SW ${CACHE_NAME}: ${reutilizados} reutilizados de cache, ${descargados} descargados`);
+      console.log(`SW ${CACHE_NAME}: ${revalidados} revalidados, ${desdeCache} desde cache previa, ${fallidos} no disponibles`);
     } catch (err) {
       console.warn('SW cache error:', err);
     }
