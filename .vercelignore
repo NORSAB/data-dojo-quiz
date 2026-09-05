@@ -1,3 +1,4 @@
+# ─── Respaldos y trabajo temporal ──────────────────────────────────────────
 backups/
 backups_archive/
 backup_pre_modular_monolith/
@@ -5,3 +6,40 @@ scratch/
 *.bak
 *.broken_latest
 *.py
+
+# ─── Claude (Opus 5) | 2026-09-04 ──────────────────────────────────────────
+# Estos archivos se estaban sirviendo publicamente en produccion sin ser
+# usados por la app (verificado: 0 referencias en index.html, sw.js y el
+# resto del JS de aplicacion). Se excluyen del despliegue de Vercel.
+# NOTA: GitHub Pages publica desde la raiz de la rama main y NO respeta este
+# archivo — alli siguen accesibles hasta decidir que hacer con ellos.
+
+# Bitacora interna y herramientas de desarrollo
+AGENTS.md
+tools/
+graphify-out/
+
+# Artefactos intermedios de extraccion/traduccion de bancos de preguntas
+_all_questions_compact.jsonl
+_clean_data.json
+_duplicates_to_remove.json
+_extracted_data.json
+_translation_progress.json
+extracted_questions.json
+data_dojo_backup_master.json
+
+# Volcados de auditoria y analisis de dominios
+all_weak_domains.txt
+analyzing_queries_full.txt
+audit_output.txt
+dash_genie_audit.txt
+dashboards_audit.txt
+dashboards_full.txt
+data_modeling_full.txt
+executing_queries_full.txt
+genie_full.txt
+importing_audit.txt
+managing_full.txt
+platform_understanding_full.txt
+securing_data_full.txt
+supabase/

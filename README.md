@@ -8,7 +8,7 @@
 
 | Entorno | URL de Acceso | Estado |
 | :--- | :--- | :--- |
-| **Producción (Vercel)** | [https://data-dojo-quiz.vercel.app](https://data-dojo-quiz.vercel.app) | **Activo (`v20260824h`)** |
+| **Producción (Vercel)** | [https://data-dojo-quiz.vercel.app](https://data-dojo-quiz.vercel.app) | **Activo (`v20260904a`)** |
 | **GitHub Pages** | [https://norsab.github.io/data-dojo-quiz/](https://norsab.github.io/data-dojo-quiz/) | **Sincronizado** |
 | **Repositorio GitHub** | [https://github.com/NORSAB/data-dojo-quiz](https://github.com/NORSAB/data-dojo-quiz.git) | Rama `main` |
 | **Red Local Unificada** | `http://localhost:5176` o `http://datadojo.local:5176` | Puerto `5176` |

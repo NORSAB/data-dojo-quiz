@@ -48,6 +48,28 @@ D:\2026\Simulador de Preguntas\AGENTS.md
   - `updated_at` (TIMESTAMP DEFAULT NOW())
 - **Motor de sincronización:** `supabase-sync.js` — detecta cambios en `localStorage` y hace push automático a la nube; rehidrata la sesión al abrir en cualquier navegador.
 
+> ### ⚠️ ACTUALIZACIÓN 2026-09-04 — Cambio en la semántica de `device_id` (leer antes de tocar el sync)
+>
+> Hasta hoy, `getDeviceId()` **no generaba nada**: asignaba el literal fijo `device_1772569653760_xdufm320z`. Consecuencia real, verificada contra la base de producción (existía exactamente **1 fila**): cualquier visitante de las URLs públicas de Vercel o GitHub Pages leía y **sobrescribía la misma fila que Norman**.
+>
+> **A partir de `BUILD_TIMESTAMP = 20260904a`:**
+> - Cada navegador genera su propio `device_id` con `crypto.randomUUID()` (fallback a `getRandomValues` y luego a timestamp+random).
+> - **Compatibilidad total hacia atrás:** si el navegador ya tiene un `_device_id` en `localStorage`, se respeta tal cual. Ningún dispositivo existente de Norman pierde su progreso.
+> - La constante `LEGACY_MASTER_DEVICE_ID` conserva el ID histórico para poder re-vincularse a la fila maestra.
+>
+> **Cómo sincronizar dos dispositivos propios ahora (es explícito, ya no automático):**
+> ```js
+> // En el dispositivo que YA tiene el progreso bueno — consola del navegador (F12):
+> DataSync.getPairingCode()      // copia el código que imprime
+>
+> // En el dispositivo nuevo:
+> DataSync.pairWith("device_...")   // pega el código; restaura desde la nube
+>
+> // Atajo para volver al respaldo maestro histórico de Norman:
+> DataSync.restoreMasterBackup()
+> ```
+> `DataSync` queda expuesto en `window` justamente para esto.
+
 ---
 
 ## 3. 👤 Perfil y Progreso Maestro del Usuario
@@ -493,4 +515,17 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
 
 
 
-
+### 2026-09-04 22:19 CST — Claude (Opus 5)
+- **Auditoría de despliegue end-to-end y blindaje de la capa de sincronización Supabase.**
+- **Estado verificado de los tres orígenes (todo sano, 0 fallos):**
+  - **Vercel** (`prj_4VsJb11Fab5M4j2axPhNaF0mACbb`, cuenta personal Hobby): 19 deployments visibles, **todos `● Ready`**, 4–6 s de build, sin protección de acceso. Producción respondiendo HTTP 200.
+  - **GitHub Pages** (build legacy, source `main` `/`): últimos 3 builds `built`, sin errores. El único workflow es el automático `pages-build-deployment` — **no hay CI propio, ni tests ni lint como gate previo al deploy**.
+  - **Sincronía**: hashes SHA-256 de `index.html`, `script.js`, `features.js`, `styles.css`, `supabase-sync.js` y `sw.js` **idénticos** en Vercel, en Pages y en `git HEAD`. Los 49 assets del service worker responden 200 en producción.
+- **Hallazgo crítico corregido — ID de dispositivo compartido (`supabase-sync.js`):** `getDeviceId()` asignaba el literal fijo `device_1772569653760_xdufm320z` en lugar de generar un ID. Presente desde el primer commit del archivo. Cualquier visitante del sitio público leía y sobrescribía la fila de Norman (la base tenía exactamente 1 fila). Ahora cada navegador genera su ID con `crypto.randomUUID()`, **respetando el `_device_id` ya guardado** para no romper dispositivos existentes. Ver el bloque de ACTUALIZACIÓN en la sección 2.
+- **Hallazgo corregido — el guardado final al cerrar la pestaña nunca llegaba:** el `beforeunload` usaba `navigator.sendBeacon`, que **no puede fijar cabeceras**, así que el POST salía sin `apikey`/`Authorization` y Supabase lo rechazaba con **401 en silencio**. Sustituido por `fetch({ keepalive: true })` con cabeceras completas y `Prefer: resolution=merge-duplicates`, disparado en `pagehide` y en `visibilitychange` (fiables también en móviles iOS/Android).
+- **Nueva API de emparejamiento manual** (`DataSync.getPairingCode()`, `DataSync.pairWith(code)`, `DataSync.restoreMasterBackup()`), expuesta en `window.DataSync`. Reemplaza la sincronización multi-dispositivo "gratis" que daba el ID fijo, ahora de forma explícita y sin exponer la fila a terceros.
+- **Higiene de archivos publicados:** 7+ archivos internos se estaban sirviendo públicamente en producción (`AGENTS.md` 70 KB, `_translation_progress.json` 344 KB, `_extracted_data.json`, `audit_output.txt`, `all_weak_domains.txt`, `data_dojo_backup_master.json`, `graphify-out/graph.json`). Se amplió `.vercelignore` con 20 entradas, tras verificar **0 referencias** a cada una desde `index.html`, `sw.js` y el resto del JS de aplicación. `questions_mapping_missing.js` **sí está en uso** y quedó explícitamente excluido de la exclusión. ⚠️ **GitHub Pages publica desde la raíz de `main` y NO respeta `.vercelignore`** — ahí siguen accesibles.
+- **⛔ PENDIENTE, NO APLICADO — RLS abierto en `quiz_progress`:** un `GET` a `/rest/v1/quiz_progress` usando solo la anon key pública devolvió **HTTP 200 con las filas completas**. La lectura anónima está abierta y, por simetría con el `upsert` de la app, también la escritura. **No se pudo automatizar**: el conector MCP de Supabase de esta sesión está autorizado sobre otro proyecto (`slygqlropwqizhhdysov`, "data-dojo", creado 2026-03-03, estado **INACTIVE** — ni resuelve el DNS), no sobre el real (`suplwoyiviapsnowzfcb`); tampoco hay `service_role` key ni CLI de Supabase en el entorno. Se dejó la migración lista para pegar en el SQL Editor: **`supabase/migrations/20260904_harden_quiz_progress_rls.sql`** — activa RLS, deja políticas explícitas y **bloquea `DELETE`/`TRUNCATE`** (hoy un tercero podría vaciar la tabla). Incluye una FASE 2 opcional documentada (columna `device_secret` + cabecera `x-device-secret`) para aislamiento real por dispositivo.
+- **Pruebas:** banco aislado de 6 casos sobre la lógica de ID (dispositivo existente conserva su fila, visitante nuevo no hereda el ID maestro, dos visitantes obtienen IDs distintos, formato válido, estabilidad entre llamadas) — **6/6 pasadas**. `node --check` limpio en `supabase-sync.js` y `sw.js`.
+- Actualizó la PWA a `BUILD_TIMESTAMP = '20260904a'` y caché `simulador-v49-20260904a` en `sw.js` e `index.html`. Además **versionó `supabase-sync.js` con `?v=20260904a`** (antes se cargaba sin query string, así que el fix habría quedado atrapado en la caché HTTP de los navegadores existentes) tanto en `index.html` como en `ASSETS_TO_CACHE`.
+- Verificó con 0 errores las 6 suites de validación (`validate_full_application.js` con **81/81 checks pasados**, `validate_ui_palette.js` con 18 colores hex y 0 gradientes, `validate_global_language.js`, `validate_ai103_integration.js`, `validate_genai_integration.js`, `audit_code_structure.js`).

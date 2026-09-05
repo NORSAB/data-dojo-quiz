@@ -11,11 +11,33 @@
 const SUPABASE_URL = 'https://suplwoyiviapsnowzfcb.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN1cGx3b3lpdmlhcHNub3d6ZmNiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc1MTcwODgsImV4cCI6MjEwMzA5MzA4OH0._hoJOBXHwQvd_gdCJgKC2pzOwhDT81pCP3HAzV2Gm8Q';
 
+// Claude (Opus 5) | 2026-09-04 | El ID ya no es un literal compartido: cada dispositivo genera el suyo.
+// Fila maestra historica de Norman. Se conserva para poder re-emparejar dispositivos propios
+// mediante DataSync.restoreMasterBackup(), nunca como ID por defecto de un visitante nuevo.
+const LEGACY_MASTER_DEVICE_ID = 'device_1772569653760_xdufm320z';
+
+// Genera un identificador unico e irrepetible por navegador/dispositivo.
+function generateDeviceId() {
+  try {
+    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+      return 'device_' + crypto.randomUUID();
+    }
+    if (typeof crypto !== 'undefined' && typeof crypto.getRandomValues === 'function') {
+      const buf = new Uint8Array(16);
+      crypto.getRandomValues(buf);
+      return 'device_' + Array.from(buf, b => b.toString(16).padStart(2, '0')).join('');
+    }
+  } catch (e) { /* fallback abajo */ }
+  return 'device_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 12);
+}
+
 // Unique device identifier (persisted in localStorage)
+// Compatibilidad: si el navegador ya tiene un _device_id guardado (incluida la fila maestra
+// historica), se respeta tal cual — ningun dispositivo existente pierde su progreso.
 function getDeviceId() {
   let deviceId = localStorage.getItem('_device_id');
   if (!deviceId) {
-    deviceId = 'device_1772569653760_xdufm320z';
+    deviceId = generateDeviceId();
     localStorage.setItem('_device_id', deviceId);
   }
   return deviceId;
@@ -210,8 +232,46 @@ const DataSync = {
       this.saveToCloud();
       localStorage.setItem('_last_sync', String(Date.now()));
     }, this.DEBOUNCE_MS);
+  },
+
+  // ==========================================================================
+  //  Claude (Opus 5) | 2026-09-04 | EMPAREJAMIENTO MANUAL DE DISPOSITIVOS
+  //  Antes, el ID fijo daba sincronizacion multi-dispositivo "gratis" pero a
+  //  costa de compartir la misma fila con cualquier visitante del sitio publico.
+  //  Ahora cada dispositivo es independiente y el emparejamiento es explicito.
+  // ==========================================================================
+
+  /** Devuelve el codigo de este dispositivo, para copiarlo en otro navegador. */
+  getPairingCode() {
+    const code = this.deviceId || getDeviceId();
+    console.log('[DataSync] Codigo de este dispositivo:', code);
+    console.log('[DataSync] En tu otro dispositivo ejecuta: DataSync.pairWith("' + code + '")');
+    return code;
+  },
+
+  /** Vincula ESTE navegador a la fila de otro dispositivo y restaura su progreso. */
+  async pairWith(code) {
+    if (!code || typeof code !== 'string' || !code.trim()) {
+      console.error('[DataSync] pairWith requiere un codigo de dispositivo valido.');
+      return false;
+    }
+    const target = code.trim();
+    localStorage.setItem('_device_id', target);
+    localStorage.setItem('_last_sync', '0');   // fuerza que la nube gane
+    this.deviceId = target;
+    console.log('[DataSync] Emparejado con', target, '— restaurando desde la nube...');
+    await this.loadFromCloud();
+    return true;
+  },
+
+  /** Atajo: re-vincula este navegador al respaldo maestro historico de Norman. */
+  async restoreMasterBackup() {
+    return this.pairWith(LEGACY_MASTER_DEVICE_ID);
   }
 };
+
+// Expuesto para poder emparejar dispositivos desde la consola del navegador.
+window.DataSync = DataSync;
 
 // ============================================================================
 //  AUTO-SYNC: Intercept localStorage changes
@@ -243,12 +303,47 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Also save before user leaves
-window.addEventListener('beforeunload', () => {
-  if (DataSync.isConfigured) {
-    try {
-      const payload = DataSync.buildPayload();
-      const url = `${SUPABASE_URL}/rest/v1/quiz_progress`;
-      navigator.sendBeacon(url, new Blob([JSON.stringify(payload)], { type: 'application/json' }));
-    } catch(e) {}
+// Claude (Opus 5) | 2026-09-04 | navigator.sendBeacon NO puede fijar cabeceras, asi que el POST
+// salia sin apikey/Authorization y Supabase lo rechazaba con 401 en silencio: el guardado final
+// al cerrar la pestana nunca llegaba. Se sustituye por fetch({keepalive:true}) con cabeceras
+// completas, disparado en pagehide y visibilitychange (fiables tambien en moviles iOS/Android).
+const FLUSH_MIN_INTERVAL_MS = 5000;
+let lastFlushAt = 0;
+
+function flushOnExit() {
+  if (!DataSync.isConfigured) return;
+
+  // visibilitychange dispara en cada cambio de pestana y el payload lleva todo el
+  // localStorage. Solo se envia si hay cambios sin guardar (pendingSync) o si ya
+  // paso el intervalo minimo, para no saturar Supabase con upserts identicos.
+  const now = Date.now();
+  if (!DataSync.pendingSync && (now - lastFlushAt) < FLUSH_MIN_INTERVAL_MS) return;
+  lastFlushAt = now;
+
+  // El guardado diferido ya no aplica: se envia ahora mismo, sincronamente.
+  if (DataSync.pendingSync) {
+    clearTimeout(DataSync.pendingSync);
+    DataSync.pendingSync = null;
   }
+
+  try {
+    const payload = DataSync.buildPayload();
+    fetch(`${SUPABASE_URL}/rest/v1/quiz_progress?on_conflict=device_id`, {
+      method: 'POST',
+      keepalive: true,
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'resolution=merge-duplicates,return=minimal'
+      },
+      body: JSON.stringify(payload)
+    }).catch(() => {});
+    localStorage.setItem('_last_sync', String(Date.now()));
+  } catch (e) { /* nunca bloquear el cierre de la pestana */ }
+}
+
+window.addEventListener('pagehide', flushOnExit);
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden') flushOnExit();
 });
