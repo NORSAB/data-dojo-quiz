@@ -21,15 +21,16 @@
 // Antigravity (Gemini 3.7 Flash) | 2026-08-30 14:56 CST | Dropdowns en columna vertical, selector de idioma ES/EN, voces filtradas por idioma y speech cleaner sin ruido.
 // Antigravity (Gemini 3.7 Flash) | 2026-08-30 17:25 CST | Curva de Olvido Ebbinghaus, Heatmap de Consistencia, Tech Comparator, Pearson Vue Mode y Step Ordering.
 // Claude (Opus 5) | 2026-09-04 03:10 CST | ID de dispositivo unico por navegador, guardado final por fetch keepalive (el sendBeacon salia sin apikey y moria en 401) y saneo de archivos internos publicados.
-const BUILD_TIMESTAMP = '20260904a';
-const CACHE_NAME = `simulador-v49-${BUILD_TIMESTAMP}`;
+// Claude (Opus 5) | 2026-09-04 22:45 CST | Corrige la perdida de categorias activas: 'hiddenCategories' no disparaba sync y el restore de la nube no avisaba a la UI, que sobrescribia el valor bueno.
+const BUILD_TIMESTAMP = '20260904b';
+const CACHE_NAME = `simulador-v50-${BUILD_TIMESTAMP}`;
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './styles.css?v=20260904a',
-  './app_i18n.js?v=20260904a',
-  './script.js?v=20260904a',
-  './features.js?v=20260904a',
+  './styles.css?v=20260904b',
+  './app_i18n.js?v=20260904b',
+  './script.js?v=20260904b',
+  './features.js?v=20260904b',
   './hero_data.js',
   './auto_restore_data.js',
   './manifest.json',
@@ -70,8 +71,8 @@ const ASSETS_TO_CACHE = [
   './conceptos_databricks.js',
   './personajes_unir_viz.js',
   './translations_databricks_es.js',
-  './translate_toggle.js?v=20260904a',
-  './supabase-sync.js?v=20260904a',
+  './translate_toggle.js?v=20260904b',
+  './supabase-sync.js?v=20260904b',
   './comandos_sql_databricks.js',
   './comandos_sql_genai.js'
 ];

@@ -1641,6 +1641,33 @@ const badgesConfig = [
   let hiddenCategories = JSON.parse(localStorage.getItem('hiddenCategories') || '[]');
   let certifiedCourses = JSON.parse(localStorage.getItem('certifiedCourses') || '[]');
 
+  // Claude (Opus 5) | 2026-09-04 | Estas dos variables se leian una unica vez, al cargar.
+  // La restauracion desde Supabase llega ~500 ms despues por red y solo escribia en
+  // localStorage: la UI se quedaba con el valor viejo y, al guardar el Modulo
+  // Administrativo, ese valor viejo sobrescribia el bueno en la nube. Aqui se re-leen.
+  window.addEventListener('datasync:restored', () => {
+    try {
+      const restoredHidden = JSON.parse(localStorage.getItem('hiddenCategories') || '[]');
+      const restoredCerts = JSON.parse(localStorage.getItem('certifiedCourses') || '[]');
+      const hiddenChanged = JSON.stringify(restoredHidden) !== JSON.stringify(hiddenCategories);
+      const certsChanged = JSON.stringify(restoredCerts) !== JSON.stringify(certifiedCourses);
+      if (!hiddenChanged && !certsChanged) return;
+
+      hiddenCategories = restoredHidden;
+      certifiedCourses = restoredCerts;
+      console.log('[Admin] Configuracion de categorias re-sincronizada desde la nube.');
+
+      if (typeof renderCategories === 'function') renderCategories();
+      if (typeof currentProviderId !== 'undefined' && currentProviderId &&
+          !hiddenCategories.includes(currentProviderId) &&
+          typeof selectCategory === 'function') {
+        selectCategory(currentProviderId);
+      }
+    } catch (e) {
+      console.warn('[Admin] No se pudo re-sincronizar la configuracion:', e);
+    }
+  });
+
   function openAdmin() {
     // Tab switching
     document.querySelectorAll('.admin-tab').forEach(tab => {

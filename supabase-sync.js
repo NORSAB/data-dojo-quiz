@@ -212,6 +212,15 @@ const DataSync = {
 
           localStorage.setItem('_last_sync', String(cloudTime));
           console.log('[DataSync] Cloud data restored successfully!');
+
+          // Claude (Opus 5) | 2026-09-04 | script.js lee hiddenCategories/certifiedCourses
+          // UNA sola vez al cargar, en variables de modulo. Este restore corre ~500 ms
+          // despues por red, asi que dejaba localStorage correcto pero la UI con el valor
+          // viejo — y el siguiente guardado del Modulo Administrativo escribia ese valor
+          // viejo encima del bueno. Se avisa para que la UI vuelva a leer.
+          window.dispatchEvent(new CustomEvent('datasync:restored', {
+            detail: { keys: Object.keys(data.full_backup || {}) }
+          }));
         } else {
           console.log('[DataSync] Local data is up to date with cloud.');
         }
@@ -281,12 +290,17 @@ localStorage.setItem = function(key, value) {
   _originalSetItem(key, value);
   
   // Trigger cloud sync for all progress, mastery, quiz, and profile keys
+  // Claude (Opus 5) | 2026-09-04 | 'hiddenCategories' (visibilidad de categorias del
+  // Modulo Administrativo) no coincidia con ningun patron, asi que un cambio de
+  // categorias no programaba sincronizacion propia: solo viajaba a la nube de rebote,
+  // si algo mas se guardaba despues. Se agrega 'Categories' a la lista.
   if (
     key.includes('Profile') ||
     key.includes('Stats') ||
     key.includes('progress') ||
     key.includes('mastery') ||
     key.includes('certified') ||
+    key.includes('Categories') ||
     key.includes('Modules') ||
     key.includes('quiz') ||
     key.includes('Streak')
