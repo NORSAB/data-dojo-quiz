@@ -21,3 +21,6 @@ archive/
 __pycache__/
 .genai_translation_work/
 translation_cache*.json
+
+# Artefactos de sesiones de Playwright MCP (snapshots y logs de consola)
+.playwright-mcp/
