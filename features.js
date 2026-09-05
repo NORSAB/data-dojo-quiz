@@ -6113,6 +6113,8 @@ window.PodcastPlaylist = {
         const modal = document.getElementById('podcast-playlist-modal');
         if (modal) modal.classList.add('hidden');
         if (window.speechSynthesis) window.speechSynthesis.cancel();
+        this._speechGen = (this._speechGen || 0) + 1;
+        clearInterval(this._keepAlive);
         this.isPlaying = false;
     },
 
@@ -6122,6 +6124,8 @@ window.PodcastPlaylist = {
         this.currentTrackIndex = 0;
         if (this.isPlaying && window.speechSynthesis) {
             window.speechSynthesis.cancel();
+            this._speechGen = (this._speechGen || 0) + 1;
+            clearInterval(this._keepAlive);
             this.isPlaying = false;
         }
         this.loadPlaylist();
@@ -6134,6 +6138,8 @@ window.PodcastPlaylist = {
         this.currentTrackIndex = 0;
         if (this.isPlaying && window.speechSynthesis) {
             window.speechSynthesis.cancel();
+            this._speechGen = (this._speechGen || 0) + 1;
+            clearInterval(this._keepAlive);
             this.isPlaying = false;
         }
         this.loadPlaylist();
@@ -6145,17 +6151,55 @@ window.PodcastPlaylist = {
         this.currentTrackIndex = 0;
         if (this.isPlaying && window.speechSynthesis) {
             window.speechSynthesis.cancel();
+            this._speechGen = (this._speechGen || 0) + 1;
+            clearInterval(this._keepAlive);
             this.isPlaying = false;
         }
         this.loadPlaylist();
         this.render();
     },
 
+    // Claude (Opus 5) | 2026-09-04 | Antes se devolvian las voces en el orden crudo del
+    // sistema operativo y selectedVoiceIndex arrancaba en 0, asi que por defecto sonaba
+    // la primera voz SAPI/eSpeak local — la mas robotica. Ahora se puntuan y se ordenan:
+    // las neuronales/online (Microsoft Natural, Google) quedan primero, y el indice 0
+    // pasa a ser automaticamente la mejor voz disponible en ese equipo.
+    scoreVoice(v) {
+        const name = (v.name || '').toLowerCase();
+        const isEs = this.selectedLanguage === 'es';
+        let score = 0;
+
+        if (/natural|neural/.test(name)) score += 100;   // Microsoft "Online (Natural)"
+        if (/google/.test(name)) score += 70;            // voces de Google, muy fluidas
+        if (v.localService === false) score += 60;       // sintesis en la nube
+        if (/online/.test(name)) score += 30;
+        if (/premium|enhanced|siri/.test(name)) score += 25;  // macOS/iOS
+        if (/desktop|espeak|compact|pico/.test(name)) score -= 40;  // las mas metalicas
+
+        // Acento preferido segun idioma activo
+        const lang = (v.lang || '').toLowerCase();
+        if (isEs && /^es-(es|mx|us)/.test(lang)) score += 15;
+        if (!isEs && /^en-(us|gb)/.test(lang)) score += 15;
+
+        return score;
+    },
+
     getFilteredVoices() {
         const isEs = this.selectedLanguage === 'es';
         const prefix = isEs ? 'es' : 'en';
         const matching = this.voices.filter(v => v.lang && v.lang.toLowerCase().startsWith(prefix));
-        return matching.length ? matching : this.voices;
+        const pool = matching.length ? matching.slice() : this.voices.slice();
+        return pool.sort((a, b) => this.scoreVoice(b) - this.scoreVoice(a));
+    },
+
+    /** Etiqueta legible de calidad, para que se vea cual conviene en el desplegable. */
+    voiceQualityLabel(v) {
+        const score = this.scoreVoice(v);
+        const isEs = this.selectedLanguage === 'es';
+        if (score >= 100) return isEs ? '★ Natural' : '★ Natural';
+        if (score >= 60) return isEs ? '◆ Fluida' : '◆ Fluent';
+        if (score < 0) return isEs ? '· Básica' : '· Basic';
+        return '';
     },
 
     extractLanguageContent(rawHtmlOrMarkdown, lang) {
@@ -6272,6 +6316,8 @@ window.PodcastPlaylist = {
     togglePlay() {
         if (this.isPlaying) {
             if (window.speechSynthesis) window.speechSynthesis.cancel();
+            this._speechGen = (this._speechGen || 0) + 1;
+            clearInterval(this._keepAlive);
             this.isPlaying = false;
             this.render();
         } else {
@@ -6387,43 +6433,146 @@ window.PodcastPlaylist = {
         return text;
     },
 
+    // ========================================================================
+    //  Claude (Opus 5) | 2026-09-04 | LOCUCION NATURAL POR FRASES
+    //  Antes todo el episodio se mandaba como UNA sola SpeechSynthesisUtterance.
+    //  Eso produce lectura plana y sin respiraciones, y ademas Chrome corta la
+    //  sintesis a los ~15 s en un enunciado largo. Ahora el texto se parte en
+    //  frases, cada una con su micro-pausa y una variacion minima de tono y ritmo,
+    //  que es lo que el oido interpreta como alguien hablando y no como un lector.
+    // ========================================================================
+
+    /** Parte el texto en frases con la pausa que corresponde a cada final. */
+    buildSpeechChunks(text) {
+        const MAX = 240;   // trozos cortos: evitan el corte a los ~15 s de Chrome
+        const MIN = 25;    // fragmentos muy cortos se pegan al anterior
+        const chunks = [];
+
+        (text || '').split(/\n{2,}/).forEach((para, pIdx, paras) => {
+            const sentences = para
+                .replace(/\s+/g, ' ')
+                .trim()
+                .split(/(?<=[.!?…])\s+/)
+                .filter(Boolean);
+
+            sentences.forEach((sentence, sIdx) => {
+                let piece = sentence.trim();
+                if (!piece) return;
+
+                // Pega los fragmentos demasiado cortos al anterior ("Es decir.", "Ojo.")
+                if (piece.length < MIN && chunks.length) {
+                    chunks[chunks.length - 1].text += ' ' + piece;
+                    return;
+                }
+
+                // Trocea frases kilometricas por comas, sin partir palabras
+                while (piece.length > MAX) {
+                    let cut = piece.lastIndexOf(',', MAX);
+                    if (cut < MIN) cut = piece.lastIndexOf(' ', MAX);
+                    if (cut < MIN) cut = MAX;
+                    chunks.push({ text: piece.slice(0, cut + 1).trim(), pause: 90 });
+                    piece = piece.slice(cut + 1).trim();
+                }
+
+                const isLastOfPara = sIdx === sentences.length - 1;
+                const isLastOfAll = isLastOfPara && pIdx === paras.length - 1;
+                chunks.push({
+                    text: piece,
+                    // Respiracion: corta entre frases, mas larga al cambiar de idea
+                    pause: isLastOfAll ? 0 : (isLastOfPara ? 420 : 180)
+                });
+            });
+        });
+
+        return chunks.filter(c => c.text && /[a-zA-ZÀ-ɏ0-9]/.test(c.text));
+    },
+
+    /** Reproduce una cola de frases encadenadas, con prosodia y sin cortes. */
+    speakChunks(chunks, onDone) {
+        this._speechGen = (this._speechGen || 0) + 1;
+        const gen = this._speechGen;
+        const voice = this.getFilteredVoices()[this.selectedVoiceIndex] || null;
+        const baseLang = this.selectedLanguage === 'es' ? 'es-ES' : 'en-US';
+        let i = 0;
+
+        // Chrome detiene la sintesis en enunciados largos si no se le "toca" cada
+        // pocos segundos. Este latido la mantiene viva mientras dure el episodio.
+        clearInterval(this._keepAlive);
+        this._keepAlive = setInterval(() => {
+            if (gen !== this._speechGen || !this.isPlaying) { clearInterval(this._keepAlive); return; }
+            if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
+                window.speechSynthesis.pause();
+                window.speechSynthesis.resume();
+            }
+        }, 9000);
+
+        const speakNext = () => {
+            // Cualquier cancel() externo invalida la generacion o apaga isPlaying
+            if (gen !== this._speechGen || !this.isPlaying) { clearInterval(this._keepAlive); return; }
+            if (i >= chunks.length) { clearInterval(this._keepAlive); onDone(); return; }
+
+            const chunk = chunks[i++];
+            const u = new SpeechSynthesisUtterance(chunk.text);
+            u.lang = (voice && voice.lang) || baseLang;
+            if (voice) u.voice = voice;
+
+            // Prosodia: variacion minima y deliberada. Exagerarla suena peor que el
+            // monotono, asi que se mantiene por debajo del umbral consciente.
+            const jitter = ((i * 37) % 13 - 6) / 100;          // -0.06 .. +0.06, determinista
+            const isQuestion = /[?？]\s*$/.test(chunk.text);
+            const isSetup = /[:;]\s*$/.test(chunk.text);       // presenta una lista
+
+            u.pitch = Math.min(1.4, Math.max(0.7, 1.0 + jitter + (isQuestion ? 0.10 : 0)));
+            u.rate = Math.min(2.5, Math.max(0.5,
+                this.playbackSpeed * (1 + jitter / 3) * (isSetup ? 0.95 : 1)));
+            u.volume = 1;
+
+            u.onend = () => {
+                if (gen !== this._speechGen || !this.isPlaying) return;
+                // La pausa se acorta al subir la velocidad: a 2x nadie quiere esperar
+                const wait = chunk.pause / Math.max(0.5, this.playbackSpeed);
+                wait > 0 ? setTimeout(speakNext, wait) : speakNext();
+            };
+            u.onerror = () => { if (gen === this._speechGen && this.isPlaying) speakNext(); };
+
+            window.speechSynthesis.speak(u);
+        };
+
+        speakNext();
+    },
+
     playTrack(idx) {
         if (!window.speechSynthesis || !this.playlist.length) return;
         window.speechSynthesis.cancel();
+        this._speechGen = (this._speechGen || 0) + 1;
         this.currentTrackIndex = idx % this.playlist.length;
         const track = this.playlist[this.currentTrackIndex];
-        
+
         // Clean markdown, LaTeX, and code syntax into natural conversational speech
         const naturalText = this.cleanForNaturalSpeech(track.title, track.content, this.selectedLanguage);
-        const utter = new SpeechSynthesisUtterance(naturalText);
-        utter.rate = this.playbackSpeed;
-        utter.lang = this.selectedLanguage === 'es' ? 'es-ES' : 'en-US';
-        
-        const filteredVoices = this.getFilteredVoices();
-        if (filteredVoices[this.selectedVoiceIndex]) {
-            utter.voice = filteredVoices[this.selectedVoiceIndex];
-            if (filteredVoices[this.selectedVoiceIndex].lang) {
-                utter.lang = filteredVoices[this.selectedVoiceIndex].lang;
-            }
-        }
+        const chunks = this.buildSpeechChunks(naturalText);
 
-        utter.onend = () => {
+        if (!chunks.length) {
             if (this.currentTrackIndex < this.playlist.length - 1) {
                 this.playTrack(this.currentTrackIndex + 1);
+            }
+            return;
+        }
+
+        this.isPlaying = true;
+        this.render();
+
+        this.speakChunks(chunks, () => {
+            if (this.currentTrackIndex < this.playlist.length - 1) {
+                // Silencio entre pistas: el respiro que separa dos temas
+                setTimeout(() => {
+                    if (this.isPlaying) this.playTrack(this.currentTrackIndex + 1);
+                }, 650 / Math.max(0.5, this.playbackSpeed));
             } else {
                 this.isPlaying = false;
                 this.render();
             }
-        };
-
-        utter.onerror = () => {
-            this.isPlaying = false;
-            this.render();
-        };
-
-        window.speechSynthesis.speak(utter);
-        this.isPlaying = true;
-        this.render();
+        });
     },
 
     next() {
@@ -6463,7 +6612,10 @@ window.PodcastPlaylist = {
         let voiceOptionsHtml = '';
         filteredVoices.forEach((v, idx) => {
             const isSel = idx === this.selectedVoiceIndex;
-            voiceOptionsHtml += `<option value="${idx}" ${isSel ? 'selected' : ''}>${v.name} (${v.lang})</option>`;
+            // Las voces vienen ordenadas de mas a menos natural; la etiqueta lo hace visible.
+            const tag = this.voiceQualityLabel(v);
+            const label = `${tag ? tag + '  ' : ''}${v.name} (${v.lang})`;
+            voiceOptionsHtml += `<option value="${idx}" ${isSel ? 'selected' : ''}>${label}</option>`;
         });
 
         // 4. Speed options
