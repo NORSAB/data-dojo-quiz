@@ -23,15 +23,16 @@
 // Claude (Opus 5) | 2026-09-04 03:10 CST | ID de dispositivo unico por navegador, guardado final por fetch keepalive (el sendBeacon salia sin apikey y moria en 401) y saneo de archivos internos publicados.
 // Claude (Opus 5) | 2026-09-04 22:45 CST | Corrige la perdida de categorias activas: 'hiddenCategories' no disparaba sync y el restore de la nube no avisaba a la UI, que sobrescribia el valor bueno.
 // Claude (Opus 5) | 2026-09-05 | Podcast con voz natural: voces neuronales priorizadas, locucion por frases con prosodia y micro-pausas, y keepalive contra el corte a los 15s de Chrome.
-const BUILD_TIMESTAMP = '20260904c';
-const CACHE_NAME = `simulador-v51-${BUILD_TIMESTAMP}`;
+// Claude (Opus 5) | 2026-09-05 | Caché incremental (deja de re-bajar 6.5 MB por deploy), estado de examen por IDs (-99%), payload de sync sin duplicar, emparejamiento de dispositivos en la UI y CI de 6 suites.
+const BUILD_TIMESTAMP = '20260905a';
+const CACHE_NAME = `simulador-v52-${BUILD_TIMESTAMP}`;
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './styles.css?v=20260904c',
-  './app_i18n.js?v=20260904c',
-  './script.js?v=20260904c',
-  './features.js?v=20260904c',
+  './styles.css?v=20260905a',
+  './app_i18n.js?v=20260905a',
+  './script.js?v=20260905a',
+  './features.js?v=20260905a',
   './hero_data.js',
   './auto_restore_data.js',
   './manifest.json',
@@ -72,19 +73,51 @@ const ASSETS_TO_CACHE = [
   './conceptos_databricks.js',
   './personajes_unir_viz.js',
   './translations_databricks_es.js',
-  './translate_toggle.js?v=20260904c',
-  './supabase-sync.js?v=20260904c',
+  './translate_toggle.js?v=20260905a',
+  './supabase-sync.js?v=20260905a',
   './comandos_sql_databricks.js',
   './comandos_sql_genai.js'
 ];
 
+// Claude (Opus 5) | 2026-09-05 | Antes cada bump de BUILD_TIMESTAMP creaba un CACHE_NAME
+// nuevo y 'activate' borraba el anterior entero, asi que TODOS los assets se volvian a
+// descargar: ~7.9 MB por despliegue, de los cuales ~6.5 MB son bancos de preguntas que
+// no habian cambiado una sola linea. Ahora el install reutiliza del cache viejo lo que
+// sigue siendo identico (misma URL, incluida su query ?v=) y solo baja de la red lo que
+// cambio de verdad. Los archivos versionados cambian de URL, asi que se refrescan solos.
 self.addEventListener('install', (event) => {
   self.skipWaiting();
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => cache.addAll(ASSETS_TO_CACHE))
-      .catch(err => console.warn('SW cache error:', err))
-  );
+  event.waitUntil((async () => {
+    try {
+      const cache = await caches.open(CACHE_NAME);
+      const oldNames = (await caches.keys()).filter(k => k !== CACHE_NAME);
+      const oldCaches = await Promise.all(oldNames.map(n => caches.open(n)));
+
+      let reutilizados = 0, descargados = 0;
+
+      await Promise.all(ASSETS_TO_CACHE.map(async (url) => {
+        for (const oc of oldCaches) {
+          const hit = await oc.match(url);
+          if (hit) {
+            await cache.put(url, hit.clone());
+            reutilizados++;
+            return;
+          }
+        }
+        try {
+          await cache.add(url);
+          descargados++;
+        } catch (e) {
+          // Un asset suelto que falle no debe abortar la instalacion entera
+          console.warn('SW: no se pudo cachear', url, e);
+        }
+      }));
+
+      console.log(`SW ${CACHE_NAME}: ${reutilizados} reutilizados de cache, ${descargados} descargados`);
+    } catch (err) {
+      console.warn('SW cache error:', err);
+    }
+  })());
 });
 
 self.addEventListener('activate', (event) => {

@@ -97,6 +97,10 @@ const DataSync = {
       const key = localStorage.key(i);
       if (key) {
         const val = localStorage.getItem(key);
+        // Claude (Opus 5) | 2026-09-05 | quizAppState ya viaja en la columna app_state.
+        // Incluirlo tambien aqui duplicaba el dato mas pesado del payload en cada sync.
+        if (key === 'quizAppState') continue;
+
         try {
           const parsed = JSON.parse(val);
           fullBackup[key] = parsed;
@@ -208,6 +212,11 @@ const DataSync = {
               localStorage.setItem(`${courseId}_mastery`, JSON.stringify(mastery));
             });
             if (data.theme) localStorage.setItem('theme', data.theme);
+          }
+
+          // quizAppState se excluye de full_backup para no duplicarlo: se repone aqui.
+          if (data.app_state && Object.keys(data.app_state).length) {
+            localStorage.setItem('quizAppState', JSON.stringify(data.app_state));
           }
 
           localStorage.setItem('_last_sync', String(cloudTime));

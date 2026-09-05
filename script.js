@@ -477,13 +477,22 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   
   // --- Exam Persistence ---
+  // Claude (Opus 5) | 2026-09-05 | saveState() serializaba currentQuizQuestions COMPLETO
+  // (enunciados, opciones, explicaciones y ambos idiomas). Medido contra la fila real de
+  // Supabase, eso hacia que quizAppState pesara 134 KB, el 45% del payload de sync — y
+  // como la clave contiene "quiz", cada respuesta disparaba una subida de ~295 KB cada
+  // 1.5 s durante todo el examen. Ahora se guardan solo los IDs y loadState() rehidrata
+  // desde los bancos, que ya estan cargados en memoria. Pasa de ~134 KB a ~2 KB.
+  const QUIZ_STATE_VERSION = 2;
+
   function saveState() {
       // Only save if a quiz is active
       if (quizUI.classList.contains("hidden")) return;
-      
+
       const state = {
+          v: QUIZ_STATE_VERSION,
           courseId: currentCourseId,
-          questions: currentQuizQuestions,
+          questionIds: (currentQuizQuestions || []).map(q => q && q.id).filter(Boolean),
           index: currentQuestionIndex,
           answers: userAnswers,
           timer: totalSeconds,
@@ -491,24 +500,50 @@ document.addEventListener("DOMContentLoaded", () => {
       };
       localStorage.setItem("quizAppState", JSON.stringify(state));
   }
-  
+
   function clearState() {
       localStorage.removeItem("quizAppState");
   }
-  
+
   function loadState() {
       const stored = localStorage.getItem("quizAppState");
       if (!stored) return false;
-      
+
       try {
           const state = JSON.parse(stored);
-          if (!state.questions || state.questions.length === 0) return false;
+
+          // Formato v1 (anterior): traia los objetos completos incrustados.
+          // Se sigue aceptando para no invalidar un examen guardado antes del cambio.
+          if (Array.isArray(state.questions) && state.questions.length) return state;
+
+          if (!Array.isArray(state.questionIds) || !state.questionIds.length) return false;
+
+          // Formato v2: rehidratar por ID desde el banco en memoria.
+          const bank = window.questionsData || [];
+          const byId = new Map(bank.map(q => [q.id, q]));
+          const questions = state.questionIds.map(id => byId.get(id)).filter(Boolean);
+
+          // Si el banco de ese curso no esta cargado, o alguna pregunta ya no existe,
+          // es preferible descartar el estado que reanudar un examen incompleto.
+          if (questions.length !== state.questionIds.length) {
+              console.warn(
+                  `[Estado] Se descarta el examen guardado: se recuperaron ${questions.length} ` +
+                  `de ${state.questionIds.length} preguntas.`
+              );
+              return false;
+          }
+
+          state.questions = questions;
           return state;
       } catch (e) {
           console.error("Error parsing saved state", e);
           return false;
       }
   }
+
+  // Expuesto para poder reanudar un examen desde la consola mientras no exista
+  // un boton en la interfaz: window.DojoExamState.load()
+  window.DojoExamState = { save: saveState, load: loadState, clear: clearState };
 
   // Codex (GPT-5) | 2026-08-23 20:35 CST | Conservado como referencia; la implementación activa está más abajo.
   function finishQuizLegacy(questions) {

@@ -6901,6 +6901,35 @@ window.LiveSyncStatus = {
                     <button type="button" class="btn btn-primary" style="width:100%; font-weight:700;" onclick="window.LiveSyncStatus.forceSync()">
                         Forzar Sincronización Ahora
                     </button>
+
+                    <!-- Claude (Opus 5) | 2026-09-05 | Vincular dispositivos propios sin consola.
+                         Antes el ID era un literal fijo compartido con cualquier visitante del
+                         sitio publico; al hacerlo unico por dispositivo, la sincronizacion entre
+                         los equipos de Norman paso a necesitar un paso explicito. Esto es ese paso. -->
+                    <div style="margin-top:16px; padding-top:14px; border-top:1px solid var(--border-color);">
+                        <div style="font-weight:800; margin-bottom:6px;">Vincular otro dispositivo mío</div>
+                        <p style="margin:0 0 10px; font-size:0.8rem; color:var(--text-muted); line-height:1.45;">
+                            Copiá este código y pegalo en el otro equipo para que comparta el mismo progreso.
+                        </p>
+
+                        <label for="pairing-code-input" style="font-size:0.75rem; color:var(--text-muted);">Código de este dispositivo</label>
+                        <div style="display:flex; gap:6px; margin:4px 0 12px;">
+                            <input id="pairing-code-input" type="text" readonly
+                                value="${(window.DataSync && window.DataSync.deviceId) || localStorage.getItem('_device_id') || ''}"
+                                style="flex:1; min-width:0; font-family:monospace; font-size:0.72rem; padding:8px; border:1px solid var(--border-color); border-radius:6px; background:var(--bg-subtle, transparent); color:var(--text-color);" />
+                            <button type="button" class="btn" style="font-weight:700; white-space:nowrap;"
+                                onclick="window.LiveSyncStatus.copyPairingCode()">Copiar</button>
+                        </div>
+
+                        <label for="pairing-code-target" style="font-size:0.75rem; color:var(--text-muted);">Pegar el código de mi otro dispositivo</label>
+                        <div style="display:flex; gap:6px; margin-top:4px;">
+                            <input id="pairing-code-target" type="text" placeholder="device_..."
+                                style="flex:1; min-width:0; font-family:monospace; font-size:0.72rem; padding:8px; border:1px solid var(--border-color); border-radius:6px; background:transparent; color:var(--text-color);" />
+                            <button type="button" class="btn btn-primary" style="font-weight:700; white-space:nowrap;"
+                                onclick="window.LiveSyncStatus.applyPairing()">Vincular</button>
+                        </div>
+                        <div id="pairing-feedback" style="margin-top:8px; font-size:0.78rem; min-height:1.1em;"></div>
+                    </div>
                 </div>
             `;
         }
@@ -6910,6 +6939,57 @@ window.LiveSyncStatus = {
     closePopover() {
         const modal = document.getElementById('sync-popover-modal');
         if (modal) modal.classList.add('hidden');
+    },
+
+    /** Copia al portapapeles el codigo de este dispositivo. */
+    copyPairingCode() {
+        const input = document.getElementById('pairing-code-input');
+        const fb = document.getElementById('pairing-feedback');
+        if (!input || !input.value) return;
+        const done = (ok) => {
+            if (!fb) return;
+            fb.style.color = ok ? 'var(--success-color)' : 'var(--warning-color)';
+            fb.textContent = ok ? 'Código copiado.' : 'No se pudo copiar: seleccionalo y copialo a mano.';
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(input.value).then(() => done(true), () => done(false));
+        } else {
+            try { input.select(); document.execCommand('copy'); done(true); } catch (e) { done(false); }
+        }
+    },
+
+    /** Vincula este navegador al dispositivo cuyo codigo se pego, y restaura su progreso. */
+    async applyPairing() {
+        const target = document.getElementById('pairing-code-target');
+        const fb = document.getElementById('pairing-feedback');
+        const say = (msg, color) => { if (fb) { fb.style.color = color; fb.textContent = msg; } };
+
+        const code = (target && target.value || '').trim();
+        if (!code) { say('Pegá primero el código del otro dispositivo.', 'var(--warning-color)'); return; }
+        if (!window.DataSync || typeof window.DataSync.pairWith !== 'function') {
+            say('La sincronización todavía no está lista. Probá en unos segundos.', 'var(--warning-color)');
+            return;
+        }
+        if (code === (window.DataSync.deviceId || '')) {
+            say('Ese ya es el código de este dispositivo.', 'var(--text-muted)');
+            return;
+        }
+
+        // Vincular reemplaza el progreso local por el del otro dispositivo: se confirma antes.
+        const ok = confirm(
+            'Este dispositivo va a adoptar el progreso del código pegado.\n\n' +
+            'Lo que tengas guardado solo en este equipo será reemplazado. ¿Continuar?'
+        );
+        if (!ok) { say('Vinculación cancelada.', 'var(--text-muted)'); return; }
+
+        say('Vinculando y restaurando desde la nube...', 'var(--text-muted)');
+        try {
+            await window.DataSync.pairWith(code);
+            say('Listo. Progreso restaurado desde el otro dispositivo.', 'var(--success-color)');
+            this.lastSyncTime = new Date().toLocaleTimeString();
+        } catch (e) {
+            say('No se pudo vincular: ' + e, 'var(--warning-color)');
+        }
     },
 
     forceSync() {
