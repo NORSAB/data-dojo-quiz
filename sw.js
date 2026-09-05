@@ -24,15 +24,16 @@
 // Claude (Opus 5) | 2026-09-04 22:45 CST | Corrige la perdida de categorias activas: 'hiddenCategories' no disparaba sync y el restore de la nube no avisaba a la UI, que sobrescribia el valor bueno.
 // Claude (Opus 5) | 2026-09-05 | Podcast con voz natural: voces neuronales priorizadas, locucion por frases con prosodia y micro-pausas, y keepalive contra el corte a los 15s de Chrome.
 // Claude (Opus 5) | 2026-09-05 | Caché incremental (deja de re-bajar 6.5 MB por deploy), estado de examen por IDs (-99%), payload de sync sin duplicar, emparejamiento de dispositivos en la UI y CI de 6 suites.
-const BUILD_TIMESTAMP = '20260905a';
-const CACHE_NAME = `simulador-v52-${BUILD_TIMESTAMP}`;
+// Claude (Opus 5) | 2026-09-05 | Se retiran 7 preguntas del curso demo que tapaban a 7 reales de DP-600, se corrige una opcion duplicada en unir-herr-5-64 y se agrega validate_bank_integrity.js.
+const BUILD_TIMESTAMP = '20260905b';
+const CACHE_NAME = `simulador-v53-${BUILD_TIMESTAMP}`;
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './styles.css?v=20260905a',
-  './app_i18n.js?v=20260905a',
-  './script.js?v=20260905a',
-  './features.js?v=20260905a',
+  './styles.css?v=20260905b',
+  './app_i18n.js?v=20260905b',
+  './script.js?v=20260905b',
+  './features.js?v=20260905b',
   './hero_data.js',
   './auto_restore_data.js',
   './manifest.json',
@@ -73,8 +74,8 @@ const ASSETS_TO_CACHE = [
   './conceptos_databricks.js',
   './personajes_unir_viz.js',
   './translations_databricks_es.js',
-  './translate_toggle.js?v=20260905a',
-  './supabase-sync.js?v=20260905a',
+  './translate_toggle.js?v=20260905b',
+  './supabase-sync.js?v=20260905b',
   './comandos_sql_databricks.js',
   './comandos_sql_genai.js'
 ];

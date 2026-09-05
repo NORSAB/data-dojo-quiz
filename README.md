@@ -8,7 +8,7 @@
 
 | Entorno | URL de Acceso | Estado |
 | :--- | :--- | :--- |
-| **Producción (Vercel)** | [https://data-dojo-quiz.vercel.app](https://data-dojo-quiz.vercel.app) | **Activo (`v20260904a`)** |
+| **Producción (Vercel)** | [https://data-dojo-quiz.vercel.app](https://data-dojo-quiz.vercel.app) | **Activo (`v20260905b`)** |
 | **GitHub Pages** | [https://norsab.github.io/data-dojo-quiz/](https://norsab.github.io/data-dojo-quiz/) | **Sincronizado** |
 | **Repositorio GitHub** | [https://github.com/NORSAB/data-dojo-quiz](https://github.com/NORSAB/data-dojo-quiz.git) | Rama `main` |
 | **Red Local Unificada** | `http://localhost:5176` o `http://datadojo.local:5176` | Puerto `5176` |
@@ -20,7 +20,7 @@
 La aplicación cuenta con bancos de preguntas categorizados, balanceados y bilingües (Inglés / Español), acompañados de módulos de estudio teórico interactivos:
 
 ```
-DATA DOJO ECOSYSTEM (1,744 Preguntas | 167 Temas de Estudio)
+DATA DOJO ECOSYSTEM (2,449 Preguntas | 167 Temas de Estudio)
 ├── 🧠 Inteligencia Artificial
 │   └── Databricks Certified Generative AI Engineer Associate (383 Qs Bilingües EN/ES)
 ├── 📊 Analítica y Lakehouse
@@ -41,7 +41,7 @@ DATA DOJO ECOSYSTEM (1,744 Preguntas | 167 Temas de Estudio)
 ## 🚀 Modos de Entrenamiento y Funcionalidades
 
 ### 1. Simulador de Examen Dinámico
-- **Buscador Global (`Ctrl+K` Finder):** Modal de búsqueda rápida en tiempo real sobre los 1,744 reactivos de todas las certificaciones, con resaltado dinámico de texto, filtrado por curso y botón de práctica directa (*"Practicar con estos resultados"*).
+- **Buscador Global (`Ctrl+K` Finder):** Modal de búsqueda rápida en tiempo real sobre los 2,449 reactivos de todas las certificaciones, con resaltado dinámico de texto, filtrado por curso y botón de práctica directa (*"Practicar con estos resultados"*).
 - **Pantalla Interactiva de Revisión Pre-Entrega (Pearson VUE style):** Reemplazo del modal de confirmación por una grilla completa con KPIs en vivo de preguntas *Respondidas*, *Sin Responder* y *Marcadas para Revisión (Flag)*, pestañas de filtrado rápido y navegación por salto directo al hacer clic en el número de pregunta.
 - **Filtro Multidominio por Checkboxes:** Selección flexible de dominios específicos o combinados para enfocar el estudio.
 - **Modo Contrarreloj (*Time-Attack 60s*):** Temporizador dinámico por pregunta con barra de progreso animada y alerta visual por código de colores.
@@ -100,7 +100,7 @@ DATA DOJO ECOSYSTEM (1,744 Preguntas | 167 Temas de Estudio)
 - **Autor / Agente:** Antigravity (Google DeepMind)
 - **Archivos Modificados:** `index.html`, `script.js`, `sw.js`, `README.md`, `tools/validate_bank.js`.
 - **Mejoras Implementadas:**
-  1. **Buscador Global de Preguntas y Conceptos (`Ctrl+K` Finder):** Modal de búsqueda rápida en tiempo real sobre los 1,744 reactivos de todas las certificaciones, con resaltado dinámico de texto, filtrado por curso y botón de práctica directa (*"Practicar con estos resultados"*).
+  1. **Buscador Global de Preguntas y Conceptos (`Ctrl+K` Finder):** Modal de búsqueda rápida en tiempo real sobre los 2,449 reactivos de todas las certificaciones, con resaltado dinámico de texto, filtrado por curso y botón de práctica directa (*"Practicar con estos resultados"*).
   2. **Pantalla Interactiva de Revisión Pre-Entrega (Pearson VUE style):** Reemplazo del modal de confirmación simple por una grilla completa con KPIs en vivo de preguntas *Respondidas*, *Sin Responder* y *Marcadas para Revisión (Flag)*, pestañas de filtrado rápido y navegación por salto directo al hacer clic en el número de pregunta.
   3. **Motor de Lectura por Voz (TTS Engine):** Integración nativa de `SpeechSynthesis` con botones de audio en las explicaciones de respuestas (`checkAnswer`) y en el frente y reverso de las Flashcards de estudio con detección automática de idioma (`es-ES` / `en-US`).
   4. **Validador Automatizado de Integridad (`tools/validate_bank.js`):** Script CLI en Node.js que valida al 100% los esquemas de preguntas, unicidad de IDs por curso/idioma, bloques SQL y cobertura de explicaciones en todos los bancos de datos (1,744 preguntas validadas con 0 errores).
