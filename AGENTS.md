@@ -789,3 +789,22 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
   - Se agregaron 2 nuevas categorías y ejemplos ejecutables de código SDK en `study_azure_ai103_resources.js` (OpenTelemetry Tracing y Content Safety Groundedness API).
   - PWA actualizada a `BUILD_TIMESTAMP = '20260922b'`, caché `simulador-v62-20260922b` en `sw.js` e `index.html`.
   - Superadas al 100% las 8 suites de validación (`node tools/validate_ui_palette.js`, `node tools/validate_ai103_integration.js`, `node tools/validate_bank_integrity.js`, `node tools/validate_full_application.js` con 81/81 checks).
+
+### 2026-09-22 15:25 CST — Antigravity (Advanced Agentic Coding)
+- **Ordenamiento Estricto por Dominios, Deduplicación Exhaustiva y Sincronización Bilingüe de AI-103 (`AI-103.pdf`):**
+  - **Preguntas del PDF como Primeras en el Banco (`num: 1..133`):** Se ubicaron las 133 preguntas oficiales del dump al inicio absoluto de la colección para asegurar que el usuario las practique de primero. Las 356 preguntas previas fueron renumeradas secuencialmente a `134..489`.
+  - **Agrupamiento Estricto por Dominios Oficiales de Certificación:** Se clasificaron y ordenaron secuencialmente las 133 preguntas en los 5 dominios de Microsoft AI-103:
+    1. **Domain 1: Plan and manage an Azure AI solution** (17 preguntas, `num: 1..17`)
+    2. **Domain 2: Implement generative AI and agent solutions** (64 preguntas, `num: 18..81`)
+    3. **Domain 3: Implement computer vision solutions** (18 preguntas, `num: 82..99`)
+    4. **Domain 4: Implement natural language processing solutions** (9 preguntas, `num: 100..108`)
+    5. **Domain 5: Implement document intelligence solutions** (25 preguntas, `num: 109..133`)
+  - **Deduplicación y Corrección de Opciones Técnicas:**
+    1. Se resolvió la colisión entre `ai103-pdf-38` y `ai103-pdf-98` restaurando la verdadera pregunta 98/101 del PDF (`ai103-pdf-98`: método de prueba interactivo para análisis de logotipos con *Azure Vision in Foundry Tools*, evaluando afirmaciones de umbral de confianza $\ge 0.75$ y coordenadas de cuadro delimitador $X, Y, W, H$). Verificado: **0 enunciados duplicados en todo el banco de 489 preguntas**.
+    2. Se corrigieron 25 preguntas Hotspot eliminando la opción de relleno `"Explanation:"` y los distractores genéricos, reemplazándolos por opciones técnicas reales y verificadas contra las explicaciones del PDF oficial (ej. `DefaultAzureCredential` + `client.responses.create`, roles RBAC `Storage Blob Data Reader`, filtros `IPromptRenderFilter`, proyecciones de Knowledge Store `Object projection` vs `Table projection`, etc.).
+  - **Fidelidad y Paridad Bilingüe en `questions_azure_ai103_es.js`:**
+    - Se aplicó exactamente el mismo ordenamiento por dominio y renumeración a las preguntas gemelas en español (`-es`).
+    - Traducciones técnicas íntegras sin acortar ni alterar el contenido original, manteniendo paridad 1:1 en `correctIds`, opciones e interactividades.
+  - **Validación y Actualización PWA:**
+    - PWA actualizada a `BUILD_TIMESTAMP = '20260922c'`, caché `simulador-v63-20260922c` en `sw.js` e `index.html`.
+    - Aprobadas al 100% todas las suites: `validate_ui_palette.js` (18 hex, 0 gradientes), `validate_ai103_integration.js` (489 EN + 489 ES), `validate_bank_integrity.js` (2,715 preguntas deduplicadas) y `validate_full_application.js` (81/81 checks).
