@@ -25,15 +25,18 @@
 // Claude (Opus 5) | 2026-09-05 | Podcast con voz natural: voces neuronales priorizadas, locucion por frases con prosodia y micro-pausas, y keepalive contra el corte a los 15s de Chrome.
 // Claude (Opus 5) | 2026-09-05 | Caché incremental (deja de re-bajar 6.5 MB por deploy), estado de examen por IDs (-99%), payload de sync sin duplicar, emparejamiento de dispositivos en la UI y CI de 6 suites.
 // Claude (Opus 5) | 2026-09-05 | Se retiran 7 preguntas del curso demo que tapaban a 7 reales de DP-600, se corrige una opcion duplicada en unir-herr-5-64 y se agrega validate_bank_integrity.js.
-const BUILD_TIMESTAMP = '20260905c';
-const CACHE_NAME = `simulador-v54-${BUILD_TIMESTAMP}`;
+// Codex (GPT-5) | 2026-09-16 20:24 CST | Actualiza la caché para el examen completo Agentic Applications.
+// Antigravity (Advanced Agentic) | 2026-09-22 14:15 CST | Integra 133 preguntas oficiales del examen AI-103 2026 (Case Studies, Hotspots, Matrix Statements, Ordering) y renumera banco a 489 preguntas bilingües.
+const BUILD_TIMESTAMP = '20260922a';
+const CACHE_NAME = `simulador-v61-${BUILD_TIMESTAMP}`;
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './styles.css?v=20260905c',
-  './app_i18n.js?v=20260905c',
-  './script.js?v=20260905c',
-  './features.js?v=20260905c',
+  './styles.css?v=20260922a',
+  './app_i18n.js?v=20260922a',
+  './script.js?v=20260922a',
+  './features.js?v=20260922a',
+  './quiz_style.css?v=20260922a',
   './hero_data.js',
   './auto_restore_data.js',
   './manifest.json',
@@ -74,10 +77,24 @@ const ASSETS_TO_CACHE = [
   './conceptos_databricks.js',
   './personajes_unir_viz.js',
   './translations_databricks_es.js',
-  './translate_toggle.js?v=20260905c',
-  './supabase-sync.js?v=20260905c',
+  './translate_toggle.js?v=20260922a',
+  './supabase-sync.js?v=20260922a',
   './comandos_sql_databricks.js',
-  './comandos_sql_genai.js'
+  './comandos_sql_genai.js',
+  './centro_quizzes_genai.html',
+  './quiz_catalog.html',
+  './Building%20Agentic%20Applications%20on%20Databricks/quiz_interactivo.html',
+  './Building%20Agentic%20Applications%20on%20Databricks/respuestas_cuestionario.md',
+  './Evaluacion%20de%20agentes%20en%20Databricks/quiz_interactivo.html',
+  './Deploying%20and%20Monitoring%20Agent%20Applications%20on%20Databricks/quiz_interactivo.html',
+  './Deploying%20and%20Monitoring%20Agent%20Applications%20on%20Databricks/literal_en.js',
+  './Deploying%20and%20Monitoring%20Agent%20Applications%20on%20Databricks/literal_es.js'
+  ,'./Get%20Started%20with%20Databricks%20for%20Generative%20AI/quiz_interactivo.html'
+  ,'./Get%20Started%20with%20Databricks%20for%20Generative%20AI/questions_en.js'
+  ,'./Get%20Started%20with%20Databricks%20for%20Generative%20AI/questions_es.js'
+  ,'./AI%20Agent%20Fundamentals%20Accreditation/quiz_interactivo.html'
+  ,'./AI%20Agent%20Fundamentals%20Accreditation/questions_en.js'
+  ,'./AI%20Agent%20Fundamentals%20Accreditation/questions_es.js'
 ];
 
 // Claude (Opus 5) | 2026-09-05 | Antes cada bump de BUILD_TIMESTAMP creaba un CACHE_NAME

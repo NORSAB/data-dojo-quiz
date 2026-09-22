@@ -2235,6 +2235,8 @@ const badgesConfig = [
                 type_tf: "Seleccione Verdadero o Falso.",
                 type_order: "Organice los elementos en el orden correcto.",
                 type_scenario: "Lea el escenario y responda.",
+                type_matrix: "Para cada declaración, seleccione Sí o No.",
+                type_case_study: "Analice el caso de estudio y responda.",
                 needs_review: "Revisar",
               }
             : {
@@ -2262,6 +2264,8 @@ const badgesConfig = [
                 type_tf: "Select True or False.",
                 type_order: "Arrange the items in the correct order.",
                 type_scenario: "Read the scenario and answer.",
+                type_matrix: "For each statement, select Yes or No.",
+                type_case_study: "Analyze the case study and answer.",
                 needs_review: "In Review",
               };
     
@@ -2310,6 +2314,12 @@ const badgesConfig = [
     
     if (pt) {
         pt.textContent = `${lbls.q} ${index + 1} ${lbls.of} ${currentQuizQuestions.length}`;
+        if (q && q.isLatest) {
+            const badgeSpan = document.createElement("span");
+            badgeSpan.className = "badge-latest";
+            badgeSpan.textContent = q.badge || (lang === "es" ? "NUEVA 2026" : "NEW 2026");
+            pt.appendChild(badgeSpan);
+        }
     } else {
         alert("CRITICAL ERROR: 'progress-text' element not found!");
     }
@@ -2340,6 +2350,37 @@ const badgesConfig = [
           }
         }
     
+        let csBox = document.getElementById("case-study-box");
+        if (!csBox && questionText && questionText.parentElement) {
+            csBox = document.createElement("div");
+            csBox.id = "case-study-box";
+            questionText.parentElement.insertBefore(csBox, questionText);
+        }
+        if (csBox) {
+            if (q.caseStudy) {
+                csBox.classList.remove("hidden");
+                const csTitle = q.caseStudy.title || (lang === 'es' ? 'Caso de Estudio: Contoso, Ltd' : 'Case Study: Contoso, Ltd');
+                const csBtn = lang === 'es' ? 'Ver contexto de empresa' : 'View enterprise context';
+                csBox.innerHTML = `
+                  <div class="case-study-card">
+                    <div class="case-study-header" onclick="this.closest('.case-study-card').classList.toggle('expanded')">
+                      <div class="case-study-title">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                        <span>${csTitle}</span>
+                      </div>
+                      <button type="button" class="case-study-toggle-btn">${csBtn}</button>
+                    </div>
+                    <div class="case-study-body">
+                      ${window.marked ? marked.parse(q.caseStudy.scenario || q.caseStudy.text || '', { breaks: true, gfm: true }) : (q.caseStudy.scenario || '')}
+                    </div>
+                  </div>
+                `;
+            } else {
+                csBox.classList.add("hidden");
+                csBox.innerHTML = "";
+            }
+        }
+
         // Type Instruction
         let instructionText = "";
         switch (q.type) {
@@ -2357,6 +2398,12 @@ const badgesConfig = [
             break;
           case "scenario":
             instructionText = lbls.type_scenario;
+            break;
+          case "matrix_statements":
+            instructionText = lbls.type_matrix;
+            break;
+          case "case_study":
+            instructionText = lbls.type_case_study;
             break;
           default:
             instructionText = lbls.type_single;
@@ -2540,8 +2587,94 @@ const badgesConfig = [
 
         optionsList.innerHTML = "";
 
+        if (q.type === "matrix_statements" && q.statements && q.statements.length > 0) {
+          const tableWrap = document.createElement("div");
+          tableWrap.className = "matrix-statements-container";
 
-        if (q.type === "ordering") {
+          const selections = (answeredData && answeredData.matrixSelections) ? answeredData.matrixSelections : {};
+
+          const table = document.createElement("table");
+          table.className = "matrix-statements-table";
+          table.innerHTML = `
+            <thead>
+              <tr>
+                <th class="matrix-th-stmt">${lang === 'es' ? 'Declaración' : 'Statement'}</th>
+                <th class="matrix-th-choice">${lang === 'es' ? 'Sí' : 'Yes'}</th>
+                <th class="matrix-th-choice">No</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          `;
+          const tbody = table.querySelector("tbody");
+          q.statements.forEach((stmt) => {
+            const tr = document.createElement("tr");
+            tr.className = "matrix-row";
+            tr.dataset.stmtId = stmt.id;
+
+            const userChoice = selections[stmt.id];
+            const isYes = userChoice === 'Yes';
+            const isNo = userChoice === 'No';
+
+            let yesClass = isYes ? 'matrix-pill selected' : 'matrix-pill';
+            let noClass = isNo ? 'matrix-pill selected' : 'matrix-pill';
+
+            if (isSubmitted) {
+              const correctVal = stmt.correct; // 'Yes' or 'No'
+              if (correctVal === 'Yes') {
+                yesClass += isYes ? ' is-correct' : ' should-be-correct';
+                if (isNo) noClass += ' is-incorrect';
+              } else {
+                noClass += isNo ? ' is-correct' : ' should-be-correct';
+                if (isYes) yesClass += ' is-incorrect';
+              }
+            }
+
+            tr.innerHTML = `
+              <td class="matrix-td-text">
+                <div class="matrix-stmt-text">${window.marked ? marked.parse(stmt.text, { breaks: true, gfm: true }) : stmt.text}</div>
+                ${isSubmitted && stmt.explanation ? `<div class="matrix-stmt-exp">${stmt.explanation}</div>` : ''}
+              </td>
+              <td class="matrix-td-btn">
+                <button type="button" class="${yesClass}" data-val="Yes" ${isSubmitted ? 'disabled' : ''}>${lang === 'es' ? 'Sí' : 'Yes'}</button>
+              </td>
+              <td class="matrix-td-btn">
+                <button type="button" class="${noClass}" data-val="No" ${isSubmitted ? 'disabled' : ''}>No</button>
+              </td>
+            `;
+
+            if (!isSubmitted) {
+              tr.querySelectorAll(".matrix-pill").forEach(btn => {
+                btn.onclick = () => {
+                  const val = btn.dataset.val;
+                  if (!userAnswers[currentQuestionIndex]) {
+                    userAnswers[currentQuestionIndex] = { selected: [], matrixSelections: {}, isCorrect: false, submitted: false };
+                  }
+                  if (!userAnswers[currentQuestionIndex].matrixSelections) {
+                    userAnswers[currentQuestionIndex].matrixSelections = {};
+                  }
+                  userAnswers[currentQuestionIndex].matrixSelections[stmt.id] = val;
+
+                  let allCorrect = true;
+                  let answeredCount = 0;
+                  q.statements.forEach(s => {
+                    const ch = userAnswers[currentQuestionIndex].matrixSelections[s.id];
+                    if (ch) answeredCount++;
+                    if (ch !== s.correct) allCorrect = false;
+                  });
+                  userAnswers[currentQuestionIndex].isCorrect = allCorrect && (answeredCount === q.statements.length);
+                  userAnswers[currentQuestionIndex].selected = Object.entries(userAnswers[currentQuestionIndex].matrixSelections).map(([k, v]) => `${k}:${v}`);
+
+                  tr.querySelectorAll(".matrix-pill").forEach(b => b.classList.remove("selected"));
+                  btn.classList.add("selected");
+                  updateQuestionMap();
+                };
+              });
+            }
+            tbody.appendChild(tr);
+          });
+          tableWrap.appendChild(table);
+          optionsList.appendChild(tableWrap);
+        } else if (q.type === "ordering") {
           const info = document.createElement("div");
           info.style.fontStyle = "italic";
           info.setAttribute("aria-label", lbls.drag);
@@ -2774,6 +2907,16 @@ const badgesConfig = [
     const q = currentQuizQuestions[currentQuestionIndex];
     if (q && q.type === 'ordering' && !userAnswers[currentQuestionIndex]) {
          selectOption(null, 'ordering');
+    }
+    if (q && q.type === 'matrix_statements' && userAnswers[currentQuestionIndex]) {
+         const selections = userAnswers[currentQuestionIndex].matrixSelections || {};
+         let allCorrect = true;
+         let answeredCount = 0;
+         (q.statements || []).forEach(s => {
+             if (selections[s.id]) answeredCount++;
+             if (selections[s.id] !== s.correct) allCorrect = false;
+         });
+         userAnswers[currentQuestionIndex].isCorrect = allCorrect && (answeredCount === (q.statements || []).length);
     }
     // If empty/timed-out, create submission record
     if (!userAnswers[currentQuestionIndex]) {

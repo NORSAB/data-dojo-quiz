@@ -60,6 +60,8 @@
         true_false: 'Seleccione Verdadero o Falso.',
         ordering: 'Organice los elementos en el orden correcto.',
         scenario: 'Lea el escenario y responda.',
+        matrix_statements: 'Para cada declaración, seleccione Sí o No.',
+        case_study: 'Analice el caso de estudio y responda.',
       },
       en: {
         single_choice: 'Select one correct answer.',
@@ -67,6 +69,8 @@
         true_false: 'Select True or False.',
         ordering: 'Arrange the items in the correct order.',
         scenario: 'Read the scenario and answer.',
+        matrix_statements: 'For each statement, select Yes or No.',
+        case_study: 'Analyze the case study and answer.',
       },
     };
     instruction.textContent = labels[language][question.type] || labels[language].single_choice;
@@ -91,6 +95,32 @@
       renderMarkdown(questionText, sourceQuestion.prompt);
     }
     renderOptions(sourceQuestion, originalQuestion);
+
+    // Update Case Study if present
+    const csBox = document.getElementById('case-study-box');
+    if (csBox && sourceQuestion.caseStudy) {
+      const csTitleEl = csBox.querySelector('.case-study-title span');
+      const csBtnEl = csBox.querySelector('.case-study-toggle-btn');
+      const csBodyEl = csBox.querySelector('.case-study-body');
+      if (csTitleEl) csTitleEl.textContent = sourceQuestion.caseStudy.title || (language === 'es' ? 'Caso de Estudio: Contoso, Ltd' : 'Case Study: Contoso, Ltd');
+      if (csBtnEl) csBtnEl.textContent = language === 'es' ? 'Ver contexto de empresa' : 'View enterprise context';
+      if (csBodyEl) renderMarkdown(csBodyEl, sourceQuestion.caseStudy.scenario || sourceQuestion.caseStudy.text || '');
+    }
+
+    // Update Matrix Statements if present
+    if (sourceQuestion.type === 'matrix_statements' && Array.isArray(sourceQuestion.statements)) {
+      const rows = document.querySelectorAll('.matrix-row');
+      rows.forEach(row => {
+        const stmtId = row.dataset.stmtId;
+        const stmtObj = sourceQuestion.statements.find(s => s.id === stmtId);
+        if (stmtObj) {
+          const textEl = row.querySelector('.matrix-stmt-text');
+          if (textEl) renderMarkdown(textEl, stmtObj.text);
+          const expEl = row.querySelector('.matrix-stmt-exp');
+          if (expEl && stmtObj.explanation) expEl.textContent = stmtObj.explanation;
+        }
+      });
+    }
 
     const scenario = document.getElementById('scenario-block');
     if (scenario && sourceQuestion.scenarioText) scenario.textContent = sourceQuestion.scenarioText;

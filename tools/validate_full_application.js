@@ -222,7 +222,7 @@ if (assetMatches) {
   let allAssetsExist = true;
   for (const asset of rawList) {
     if (asset === './') continue;
-    const cleanPath = asset.replace(/^\.\//, '').split('?')[0];
+    const cleanPath = decodeURIComponent(asset.replace(/^\.\//, '').split('?')[0]);
     const exists = fs.existsSync(path.join(ROOT, cleanPath));
     if (!exists) {
       allAssetsExist = false;

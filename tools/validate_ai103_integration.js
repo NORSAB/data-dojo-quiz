@@ -36,8 +36,8 @@ console.log(`Total questions for azure-ai-103: ${allQuestions.length}`);
 console.log(`English questions: ${enQuestions.length}`);
 console.log(`Spanish questions: ${esQuestions.length}`);
 
-if (enQuestions.length !== 356 || esQuestions.length !== 356) {
-  console.error(`FAIL: Expected 356 EN and 356 ES, got ${enQuestions.length} and ${esQuestions.length}`);
+if (enQuestions.length !== 489 || esQuestions.length !== 489) {
+  console.error(`FAIL: Expected 489 EN and 489 ES, got ${enQuestions.length} and ${esQuestions.length}`);
   process.exit(1);
 }
 
@@ -71,8 +71,8 @@ if (studySections.length < 5) {
 // Verify Study Resources
 const flashcards = sandbox.window.studyFlashcards['azure-ai-103'] || [];
 console.log(`Study flashcards: ${flashcards.length}`);
-if (flashcards.length !== 356) {
-  console.error(`FAIL: Expected 356 flashcards for AI-103, found ${flashcards.length}`);
+if (flashcards.length !== 489) {
+  console.error(`FAIL: Expected 489 flashcards for AI-103, found ${flashcards.length}`);
   process.exit(1);
 }
 
@@ -90,4 +90,4 @@ if (conceptos.length === 0 || patterns.length === 0 || comandos.length === 0) {
   process.exit(1);
 }
 
-console.log('SUCCESS: All 356 EN + 356 ES questions and dedicated Azure AI study resources validated perfectly!');
+console.log('SUCCESS: All 489 EN + 489 ES questions and dedicated Azure AI study resources validated perfectly!');

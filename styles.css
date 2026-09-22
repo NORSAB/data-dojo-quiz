@@ -6349,5 +6349,193 @@ html, body {
   border-color: var(--primary-color);
 }
 
+/* =============================================================================
+   CASE STUDY CARDS (COLLAPSIBLE SCENARIOS)
+   ============================================================================= */
+.case-study-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  margin-bottom: 1.25rem;
+  overflow: hidden;
+  transition: border-color 0.2s ease;
+}
 
+.case-study-card:hover {
+  border-color: var(--primary-color);
+}
 
+.case-study-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.85rem 1.15rem;
+  cursor: pointer;
+  user-select: none;
+  background: var(--card-bg, var(--bg-surface));
+}
+
+.case-study-title {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text-color);
+}
+
+.case-study-title svg {
+  color: var(--primary-color);
+  flex-shrink: 0;
+}
+
+.case-study-toggle-btn {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  background: transparent;
+  border: 1px solid var(--primary-color);
+  border-radius: var(--radius-full);
+  padding: 0.25rem 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.case-study-toggle-btn:hover {
+  background: var(--primary-color);
+  color: var(--text-on-primary, #ffffff);
+}
+
+.case-study-body {
+  display: none;
+  padding: 1.15rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--text-color);
+}
+
+.case-study-card.expanded .case-study-body {
+  display: block;
+}
+
+/* =============================================================================
+   MATRIX STATEMENTS (HOTSPOT YES / NO TABLES)
+   ============================================================================= */
+.matrix-statements-container {
+  width: 100%;
+  margin-top: 0.75rem;
+  margin-bottom: 1.5rem;
+  overflow-x: auto;
+}
+
+.matrix-statements-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.matrix-statements-table th {
+  padding: 0.75rem 1rem;
+  background: var(--bg-body);
+  border-bottom: 1px solid var(--border-color);
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: var(--text-color);
+  text-align: left;
+}
+
+.matrix-th-choice {
+  text-align: center !important;
+  width: 90px;
+}
+
+.matrix-row {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.matrix-row:last-child {
+  border-bottom: none;
+}
+
+.matrix-td-text {
+  padding: 0.85rem 1rem;
+  font-size: 0.92rem;
+  color: var(--text-color);
+  line-height: 1.5;
+}
+
+.matrix-td-btn {
+  text-align: center;
+  padding: 0.75rem 0.5rem;
+  vertical-align: middle;
+}
+
+.matrix-pill {
+  min-width: 65px;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-color);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.matrix-pill:hover:not(:disabled) {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.matrix-pill.selected {
+  background: var(--primary-color);
+  color: var(--text-on-primary, #ffffff);
+  border-color: var(--primary-color);
+}
+
+.matrix-pill.is-correct {
+  background: var(--success-color) !important;
+  color: var(--text-on-primary, #ffffff) !important;
+  border-color: var(--success-color) !important;
+}
+
+.matrix-pill.should-be-correct {
+  border: 2px dashed var(--success-color) !important;
+  color: var(--success-color) !important;
+}
+
+.matrix-pill.is-incorrect {
+  background: var(--danger-color) !important;
+  color: var(--text-on-primary, #ffffff) !important;
+  border-color: var(--danger-color) !important;
+}
+
+.matrix-stmt-exp {
+  margin-top: 0.5rem;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* =============================================================================
+   NEWEST 2026 BADGE
+   ============================================================================= */
+.badge-latest {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  background: var(--bg-surface);
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+  margin-left: 0.5rem;
+  vertical-align: middle;
+}

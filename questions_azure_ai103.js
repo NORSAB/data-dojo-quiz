@@ -1,9 +1,5292 @@
-// Microsoft Certified: Azure AI Apps and Agents Developer Associate (AI-103) - 356 Practice Questions (EN)
+// Microsoft Certified: Azure AI Apps and Agents Developer Associate (AI-103) - Practice Questions (EN)
+// Total questions: 489 (includes 133 newest 2026 exam dump questions at index 0-132)
 (function() {
   const azureAi103Questions = [
   {
-    "id": "ai103-q1",
+    "id": "ai103-pdf-1",
     "num": 1,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "case_study",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "The finance department at Contoso reports that vendor invoices must be reviewed manually to ensure that the invoices match the terms defined in the vendor contracts. The invoices contain tables, logos, and varied layouts that make the documents difficult to process consistently.\n\nWhat should you configure? To answer, select the appropriate options in the answer area.\nNOTE: Each correct selection is worth one point.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Deployment Type: Standard (dynamic scaling for variable traffic without reserved capacity) and fixed model version 2024-05-01"
+      },
+      {
+        "id": "b",
+        "text": "Deployment Type: Provisioned-managed with Auto-update to latest model version"
+      },
+      {
+        "id": "c",
+        "text": "Deployment Type: Serverless global per-token with unconstrained regional routing"
+      },
+      {
+        "id": "d",
+        "text": "Deployment Type: Dedicated compute cluster with reserved throughput capacity"
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "Deployment Type: Standard and fixed model version 2024-05-01",
+      "explanation": "Standard deployment provides dynamic scaling for variable customer support traffic without reserved throughput capacity, while pinning the model version ensures consistency."
+    },
+    "explanation": "Deployment Type: Selected as Standard because the workload requires dynamic scaling for variable traffic\nwithout reserved throughput capacity (eliminating Provisioned options), while adhering to strict regional data\nresidency guidelines (e.g., data remaining within a specific zone or region like the EU).\nVersion Update Policy: Selected as Once the current version expires because the model version must remain\nconsistent to guarantee stable, predictable responses over time, rather than automatically upgrading as soon\nas a new default version becomes available.\nWhy the other answer are incorrect:\nGlobal Standard: Incorrect because \"Global\" routing sends traffic dynamically to any region worldwide with\navailable capacity. This violates strict data residency/compliance rules if your data must remain within a\nspecific geographic boundary (like the EU or US).\nGlobal Provisioned: Incorrect because \"Provisioned\" requires buying reserved Throughput Units (PTUs). This\nincurs a high, fixed cost regardless of usage, making it wrong for workloads with variable, low-volume traffic\nwhere minimizing costs is a priority.\nOpt out of automatic model version upgrades: Incorrect because this policy is deprecated or not\nrecommended for long-term consistency. When a model version reaches its official retirement date, it will\nforce-upgrade anyway, meaning you cannot permanently opt out of upgrades.\nUpgrade once a new default version becomes available: Incorrect because this causes the model to update\nautomatically as soon as Microsoft releases a new default. This can break application code or change prompt\nbehaviors unexpectedly, violating requirements for strict consistency.\nCase Study -\nThis is a case study. Case studies are not timed separately from other exam sections. You can use as much exam\ntime as you would like to complete each case study. However, there might be additional case studies or other\nexam sections. Manage your time to ensure that you can complete all the exam sections in the time provided. Pay\nattention to the Exam Progress at the top of the screen so you have sufficient time to complete any exam sections\nthat follow this case study.\nTo answer the case study questions, you will bed to reference information that is provided in the case. Case studies\nand associated questions might contain exhibits or other resources that provide more information about the\nscenario described in the case. Information provided in an individual question does not apply to the other questions\nin the case study.\nA Review Screen will appear at the end of this case study. From the Review Screen, you can review and change\nyour answers before you move to the next exam section. After you leave this case study, you will NOT be able to\n\nreturn to it.\nTo start the case study -\nTo display the first question in this case study, select the “Next” button. To the left of the question, a menu\nprovides links to information such as business requirements, the existing environment, and problem statements.\nPlease read through all this information before answering any questions. When you are ready to answer a question,\nselect the “Question” button to return to the question.\nOverview -\nCompany Information -\nContoso, Ltd is a multinational retail company that builds, deploys, and manages generative AI and agent-based\nsolutions by using Microsoft Foundry.\nExisting Environment -\nIdentity Environment -\nContoso uses Microsoft Entra ID for identity management, authentication, and authorization capabilities that\nenable agents to access organizational resources and services.\nContoso recently formed a new AI engineering team named Agent1Dev Team to optimize and maintain existing AI\nsolutions.\nThe team collaborates with solution architects, DevOps engineers, and security engineers to design, implement.\nmonitor, and secure AI applications.\nContoso also has a team named Agent1Test Team that is responsible for validating AI solutions before the solution\ndeployments.\nGenerative Environment -\nContoso has a Microsoft Foundry deployment that contains two projects named Project1 and Project2.\nProject1 -\nProject1 contains a customer support agent named Agent1 that assists customers with product inquiries and\ntroubleshooting requests.\nAgent1 has the following configurations:\nAgent1 uses a base model deployment.\nA safety evaluation pipeline is NOT enabled.\nTool invocation approval workflows are NOT enabled.\nConversation memory constraints are NOT configured.\nAgent1 interacts with customers by using digital support channels and answers general questions about Contoso\nproducts.\nProject1 is deployed to an Azure region located in the European Union (EU).\nAgent1Dev Team will use Project1 to optimize and maintain Agent1.\nProject2 -\nProject2 contains a deployed video generation model. The marketing department at Contoso has access to\nProject2 and plans to use the model to develop a video creation solution.\nDevelopment of the solution is incomplete.\nData Environment -\nContoso stores product-related information in Azure resources that support AI applications.\nThe Azure environment contains an Azure Blob Storage account named storage1 that stores product detail sheets\nfor all the Contoso products.\nThe product sheets include specifications, feature descriptions, and product support information that Agent1 can\nuse to answer customer questions. The product sheets are stored in the PDF format.\nProblem Statements -\nContoso identifies the following issues:\nAgent1 has only general knowledge of the Contoso products.\nA recent chat interaction with Agent1 was analyzed for sentiment. The results of the analysis have NOT been\nprocessed yet.\nAgent1 does NOT use the detailed product information in the product sheets stored in storage1 when responding\nto customer questions.\nThe finance department at Contoso reports that vendor invoices must be reviewed manually to ensure that the\ninvoices match the terms defined in the vendor contracts. The invoices contain tables, logos, and varied layouts\nthat make the documents difficult to process consistently.\nRequirements -\nPlanned Changes -\nContoso plans to implement the following changes:\nImplement a solution for Project1 that analyzes the vendor invoices by evaluating both the visual layout and the\ntextual content of the invoices, so that the invoice details can be verified against the vendor contract terms.\nUpdate the base model deployment used by Agent1 and standardize the model version to ensure continuity and\nconsistent responses.\nEnable Agent1 to retrieve and use the detailed product information from the product sheets stored in storage1.\nImplement an indexing solution for the product sheets that Agent1 can use to answer customer questions.\nComplete the development of the video creation solution.\nTechnical Requirements -",
+    "caseStudy": {
+      "title": "Case Study: Contoso, Ltd",
+      "overview": "Contoso, Ltd is a multinational retail company that builds, deploys, and manages generative AI and agent-based solutions by using Microsoft Foundry.",
+      "scenario": "**Existing Environment:**\n- **Identity Environment:** Contoso uses Microsoft Entra ID for identity management, authentication, and authorization. AI engineering teams: Agent1Dev Team (optimizes and maintains solutions) and Agent1Test Team (validates before deployment).\n- **Generative Environment:** Microsoft Foundry deployment with Project1 and Project2:\n  - Project1: Contains customer support agent Agent1 (base model deployment in EU region, no safety evaluation pipeline yet, no tool invocation approval workflows, no memory constraints).\n  - Project2: Deployed video generation model for marketing department.\n- **Data Environment:** Azure Blob Storage account named storage1 storing product detail sheets (PDF format with specs, features, support info).\n- **Problem Statements:** Agent1 has only general knowledge and doesn't use product sheets in storage1; vendor invoices have complex layouts, tables, and logos requiring manual review.\n\n**Planned & Technical Requirements:**\n- Evaluate invoice visual layouts and textual content against contract terms.\n- Standardize model version for Agent1 (consistent responses).\n- Indexing pipeline for product sheets enabling semantic & vector search; model data must remain in EU; dynamic scaling without reserved throughput capacity.\n- **Security:** No API keys for Foundry models; Microsoft Entra ID authentication; least privilege RBAC; protect against malicious instructions hidden in images (Prompt Shields)."
+    }
+  },
+  {
+    "id": "ai103-pdf-2",
+    "num": 2,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "case_study",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "Contoso identifies the following technical requirements:\n\nThe model deployment used by Agent1 must support scalable, high-throughput generative AI workloads and\ndynamically scale to handle variable customer support traffic, without requiring reserved throughput capacity.\nThe product sheets must be processed by using an indexing pipeline that enables semantic and vector search, so\nthat Agent1 can retrieve the relevant product information.\nResponses generated by using the product sheet information must be relevant, complete, and accurate.\nAgent1 must be able to use the product sheets to answer natural language questions about product details.\nThe model version used by Agent1 must remain consistent to ensure stable responses.\nThe data processed by the model must remain within the EU.\nSecurity and Compliance Requirements\nContoso identifies the following security and compliance requirements:\nAPI keys must NOT be used to access Foundry-deployed models.\nAccess to the Azure resources must follow the principle of least privilege.\nThe developers at Contoso must authenticate to Microsoft Foundry resources by using Microsoft Entra\nauthentication.\nAccess to Project1 must be assigned to the members of Agent1Dev Team by using a security group named\nSC_Agent1_Dev.\nAccess to Project1 must be assigned to the members of Agent1Test Team by using a security group named\nSC_Agent1_Test.\nAgent1 must never reveal customer information, even if a document that contains customer data is added\nerroneously to the product sheet repository in storage1.\nThe product sheets might contain images that include embedded text. Agent1 must be protected from malicious\ninstructions potentially hidden within the images.\nBusiness Requirements -\nContoso identifies the following business requirements:\nUsers that interact with Agent1 must have a personalized experience in future interactions, including the ability for\nAgent1 to retain conversation context and recall relevant information from previous interactions.\nAgent1 must answer questions only about the products sold by Contoso.\nYou need to configure Agent1 to meet the security and compliance requirements.\nWhat should you use?",
+    "options": [
+      {
+        "id": "a",
+        "text": "self-harm content filtering"
+      },
+      {
+        "id": "b",
+        "text": "prompt shields"
+      },
+      {
+        "id": "c",
+        "text": "Personally identifiable information (PII) Detection"
+      },
+      {
+        "id": "d",
+        "text": "violence content filtering"
+      }
+    ],
+    "correctIds": [
+      "b"
+    ],
+    "acceptedAnswer": {
+      "text": "prompt shields",
+      "explanation": "Technical Justification for Correct Answer: B. Prompt Shields\nWhy B (Prompt Shields) is the best option:\nSecurity and Compliance Requirement Alignment: The primary reason for choosing Prompt Shields is its\ndirect alignment with multiple security and "
+    },
+    "explanation": "Technical Justification for Correct Answer: B. Prompt Shields\nWhy B (Prompt Shields) is the best option:\nSecurity and Compliance Requirement Alignment: The primary reason for choosing Prompt Shields is its\ndirect alignment with multiple security and compliance requirements stated by Contoso. Specifically, it\naddresses the need to protect Agent1 from revealing customer information (even when erroneously exposed)\nand from potential malicious instructions hidden within images in product sheets.\nProtection Against Malicious Inputs: Prompt Shields are designed to filter out or shield against potentially\nharmful or unwanted inputs (including those that might be embedded in images), ensuring Agent1's responses\nremain safe and compliant.\nRelevance to General Security Posture: Given the constraints around not using API keys and the emphasis on\nleast privilege access, leveraging Prompt Shields further fortifies the security posture of Agent1 without\nintroducing additional access vulnerabilities.\nWhy Other Options are Less Suitable:\nA. Self-Harm Content Filtering:\nRelevance: While important, self-harm content filtering does not directly address the specified security and\ncompliance requirements related to protecting against malicious instructions or inadvertently exposed\n\ncustomer data.\nScope: The primary concern here is not the content generated by Agent1 in response to self-harm queries but\nensuring the security of the input process.\nC. Personally Identifiable Information (PII) Detection:\nRelevance: Although PII Detection is crucial for data privacy, the question's focus is on protecting Agent1\nfrom malicious inputs and ensuring it doesn't reveal customer information proactively. PII Detection is more\nabout identifying than preventing exposure.\nProactivity: The requirement implies a need for a proactive protection mechanism rather than a detection\ncapability.\nD. Violence Content Filtering:\nRelevance: Similar to self-harm content filtering, this does not directly address the protection against\nmalicious instructions or the accidental exposure of customer information as highlighted in the problem\nstatement.\nScope: The concern is broader than just filtering violent content; it's about securing the input pipeline.\nConclusion:Given the specific security and compliance requirements outlined by Contoso, particularly the\nneed to protect against malicious inputs and prevent the exposure of customer information, Prompt Shields\n(B) is the most appropriate choice. It directly addresses the identified risks without introducing additional\nvulnerabilities, aligning with the principle of least privilege and enhancing the overall security posture of\nAgent1.\nReferences\nMicrosoft Documentation: security and compliance for Azure AI Services\nMicrosoft Learn: Protecting AI Models from Malicious Inputs",
+    "caseStudy": {
+      "title": "Case Study: Contoso, Ltd",
+      "overview": "Contoso, Ltd is a multinational retail company that builds, deploys, and manages generative AI and agent-based solutions by using Microsoft Foundry.",
+      "scenario": "**Existing Environment:**\n- **Identity Environment:** Contoso uses Microsoft Entra ID for identity management, authentication, and authorization. AI engineering teams: Agent1Dev Team (optimizes and maintains solutions) and Agent1Test Team (validates before deployment).\n- **Generative Environment:** Microsoft Foundry deployment with Project1 and Project2:\n  - Project1: Contains customer support agent Agent1 (base model deployment in EU region, no safety evaluation pipeline yet, no tool invocation approval workflows, no memory constraints).\n  - Project2: Deployed video generation model for marketing department.\n- **Data Environment:** Azure Blob Storage account named storage1 storing product detail sheets (PDF format with specs, features, support info).\n- **Problem Statements:** Agent1 has only general knowledge and doesn't use product sheets in storage1; vendor invoices have complex layouts, tables, and logos requiring manual review.\n\n**Planned & Technical Requirements:**\n- Evaluate invoice visual layouts and textual content against contract terms.\n- Standardize model version for Agent1 (consistent responses).\n- Indexing pipeline for product sheets enabling semantic & vector search; model data must remain in EU; dynamic scaling without reserved throughput capacity.\n- **Security:** No API keys for Foundry models; Microsoft Entra ID authentication; least privilege RBAC; protect against malicious instructions hidden in images (Prompt Shields)."
+    }
+  },
+  {
+    "id": "ai103-pdf-3",
+    "num": 3,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 5: Implement document intelligence solutions",
+    "subdomain": "Subdomain 5.1: Extract data using Document Intelligence",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You are planning a Microsoft Foundry project named Project1 that will contain multiple agents. Each agent will\naccess the same Azure AI Search resource.\nYou need to recommend a solution to centrally manage the Azure AI Search credentials within Project1. The\nsolution must be implemented across all the agents.\nWhat should you recommend?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Enable role-based access control (RBAC) for the Azure AI Search resource."
+      },
+      {
+        "id": "b",
+        "text": "Disable key-based access control on the Azure AI Search resource."
+      },
+      {
+        "id": "c",
+        "text": "Add a connection to the Azure AI Search resource."
+      },
+      {
+        "id": "d",
+        "text": "Create a managed private endpoint that connects to the Azure AI Search resource."
+      }
+    ],
+    "correctIds": [
+      "c"
+    ],
+    "acceptedAnswer": {
+      "text": "Add a connection to the Azure AI Search resource.",
+      "explanation": "Technical Justification for Recommending Option C\nFor centrally managing Azure AI Search credentials across multiple agents in Project1, Option C: Add a\nconnection to the Azure AI Search resource is the most suitable choice. Here’s why:\nOption C is t"
+    },
+    "explanation": "Technical Justification for Recommending Option C\nFor centrally managing Azure AI Search credentials across multiple agents in Project1, Option C: Add a\nconnection to the Azure AI Search resource is the most suitable choice. Here’s why:\nOption C is the best because adding a connection to the Azure AI Search resource within the Microsoft\nFoundry project (Project1) allows for a centralized management approach. This connection can be securely\nshared or referenced across all agents within the project, ensuring that credentials are not hardcoded or\nduplicated across agents. Instead, agents can leverage this single, managed connection, enhancing security\nand simplifying credential updates.\n\nWhy Other Options are Less Suitable:\nOption A: Enable role-based access control (RBAC) for the Azure AI Search resource\nWhile RBAC is crucial for controlling access, it does not directly address the central management of\ncredentials for accessing the Azure AI Search resource. RBAC defines what actions can be performed but\ndoes not consolidate credential management across multiple agents.\nSuitability for Central Credential Management: Low\nOption B: Disable key-based access control on the Azure AI Search resource\nDisabling key-based access would likely increase security risks by potentially forcing the use of less secure\nmethods or complicating access management. This does not contribute to centralizing credential\nmanagement.\nSuitability for Central Credential Management: Very Low (Counterproductive)\nOption D: Create a managed private endpoint that connects to the Azure AI Search resource\nWhile a managed private endpoint enhances security by providing a private, secure connection to the Azure AI\nSearch resource, it focuses on network security rather than the central management of credentials for access\nby multiple agents.\nSuitability for Central Credential Management: Low\nRecommendation Summary:Given the need for central management of Azure AI Search credentials across\nmultiple agents in Project1, Option C is the most direct and effective solution, facilitating secure, centralized\ncredential management.\nReferences:\nFor further understanding of managing connections and security in Azure and Microsoft Foundry, refer to:\n1. Microsoft Documentation - Manage connections in Microsoft Foundry:\nhttps://learn.microsoft.com/en-us/microsoft-365/apps/foundry/manage-connections?view=o365-\nworldwide\n2. Azure Documentation - Secure your Azure AI Search with Azure RBAC:\nhttps://learn.microsoft.com/en-us/azure/search/security-azure-rbac\nHOTSPOT -"
+  },
+  {
+    "id": "ai103-pdf-4",
+    "num": 4,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "matrix_statements",
+    "domain": "Domain 1: Plan and manage an Azure AI solution",
+    "subdomain": "Subdomain 1.1: Choose the appropriate Foundry services and manage security",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "Your company is piloting a customer support agent in a Microsoft Foundry project name Project1. Project1 is\nconnected to an existing Application Insights resource, and the company’s support team reviews runs in the Traces\ntab.\nThe Foundry Agent Service is configured to perform the following actions:\nRetrieve the Application Insights connection string by calling\nproject_client.telemetry.get_application_insights_connection_string().\nCall configure_azure_monitor(connection_string=...) to enable telemetry.\nA separate LangChain service is configured to use OpenTelemetry and has the following configurations:\nUses AzureAIOpenTelemetryTracer(connection_string=..., enable_content_recording=False)\nPasses the tracer by using config= “callbacks”:[azure_tracer] \nCompany policy has the following requirements:\nTelemetry from LangChain and OpenTelemetry must be distinguishable within the same Application Insights\nresource.\nSecrets and credentials must NOT be stored in prompts, tool arguments, or span attributes.\nFor each of the following statements, select Yes if the statement is true. Otherwise, select No.\nNOTE: Each correct selection is worth one point.",
+    "statements": [
+      {
+        "id": "s1",
+        "text": "OpenTelemetry tracing requires explicit configuration to start capturing data. Without setting up an active\nOpenTelemetry exporter or attaching a dedicated tracer (such as AzureAIOpenTelemetryTracer o...",
+        "correct": "No",
+        "explanation": "OpenTelemetry tracing requires explicit configuration to start capturing data. Without setting up an active\nOpenTelemetry exporter or attaching a dedicated tracer (such as AzureAIOpenTelemetryTracer or calling\nconfigure_azure_monitor), no trace spans or events will be captured or forwarded to Azure Monitor."
+      },
+      {
+        "id": "s2",
+        "text": "The OTEL_SERVICE_NAME environment variable determines the logical name of your application service in\nOpenTelemetry telemetry data. Configuring distinct values for different services allows Azure Appl...",
+        "correct": "Yes",
+        "explanation": "The OTEL_SERVICE_NAME environment variable determines the logical name of your application service in\nOpenTelemetry telemetry data. Configuring distinct values for different services allows Azure Application\nInsights to map, filter, and isolate them into distinct components within the Application Map view."
+      },
+      {
+        "id": "s3",
+        "text": "Setting enable_content_recording=False explicitly tells the tracer to exclude the actual text content of\nprompts, completions, and tool data payloads from the telemetry attributes. This protects user ...",
+        "correct": "No",
+        "explanation": "Setting enable_content_recording=False explicitly tells the tracer to exclude the actual text content of\nprompts, completions, and tool data payloads from the telemetry attributes. This protects user privacy and\nprevents sensitive personal data or secrets from being stored inside logs.\nDRAG DROP -"
+      }
+    ],
+    "options": [
+      {
+        "id": "yes",
+        "text": "Yes"
+      },
+      {
+        "id": "no",
+        "text": "No"
+      }
+    ],
+    "correctIds": [
+      "no",
+      "yes",
+      "no"
+    ],
+    "acceptedAnswer": {
+      "text": "S1: No | S2: Yes | S3: No",
+      "explanation": "Statement 1: No\nOpenTelemetry tracing requires explicit configuration to start capturing data. Without setting up an active\nOpenTelemetry exporter or attaching a dedicated tracer (such as AzureAIOpenTelemetryTracer or calling\nconfigure_azure_monitor)"
+    },
+    "explanation": "Statement 1: No\nOpenTelemetry tracing requires explicit configuration to start capturing data. Without setting up an active\nOpenTelemetry exporter or attaching a dedicated tracer (such as AzureAIOpenTelemetryTracer or calling\nconfigure_azure_monitor), no trace spans or events will be captured or forwarded to Azure Monitor.\nStatement 2: Yes\nThe OTEL_SERVICE_NAME environment variable determines the logical name of your application service in\nOpenTelemetry telemetry data. Configuring distinct values for different services allows Azure Application\nInsights to map, filter, and isolate them into distinct components within the Application Map view.\nStatement 3: No\nSetting enable_content_recording=False explicitly tells the tracer to exclude the actual text content of\nprompts, completions, and tool data payloads from the telemetry attributes. This protects user privacy and\nprevents sensitive personal data or secrets from being stored inside logs.\nDRAG DROP -"
+  },
+  {
+    "id": "ai103-pdf-5",
+    "num": 5,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "ordering",
+    "domain": "Domain 4: Implement natural language processing solutions",
+    "subdomain": "Subdomain 4.2: Process and generate speech with Azure AI Speech",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that processes procurement documents submitted by suppliers.\nYou need to implement two pipelines by using Azure Content Understanding in Foundry Tools. The solution must\nmeet the following requirements:\nInclude a pipeline named Pipeline1 that supports cost-effective, high-volume processing of standalone PDF\n\ninvoices.\nInclude a pipeline named Pipeline2 that supports cross-document validation by using multi-step reasoning and\nreference data.\nHow should you configure each pipeline? To answer, drag the appropriate configurations to the correct pipelines.\nEach configuration may be used once, more than once, of not at all. You may need to drag the split bar between\npanes or scroll to view content.\nNOTE: Each correct selection is worth one point.",
+    "options": [
+      {
+        "id": "step-1",
+        "text": "Provision an on-premises Kubernetes cluster with outbound internet connectivity."
+      },
+      {
+        "id": "step-2",
+        "text": "Pull the required Azure AI container image from Microsoft Container Registry (MCR)."
+      },
+      {
+        "id": "step-3",
+        "text": "Run the container image and specify the Azure AI resource endpoint URL and API key."
+      },
+      {
+        "id": "step-4",
+        "text": "Configure the client application to direct inference queries to the local container endpoint."
+      }
+    ],
+    "correctIds": [
+      "step-1",
+      "step-2",
+      "step-3",
+      "step-4"
+    ],
+    "acceptedAnswer": {
+      "text": "Provision an on-premises Kubernetes cluster with outbound internet connectivity. -> Pull the required Azure AI container image from Microsoft Container Registry (MCR). -> Run the container image and specify the Azure AI resource endpoint URL and API key. -> Configure the client application to direct inference queries to the local container endpoint.",
+      "explanation": "Pipeline1 (Single-file task in standard mode):\nThis is correct for workflows processing independent, standalone documents one by one. Standard mode\nhandles individual file parsing efficiently. It minimizes computational costs for basic schema extract"
+    },
+    "explanation": "Pipeline1 (Single-file task in standard mode):\nThis is correct for workflows processing independent, standalone documents one by one. Standard mode\nhandles individual file parsing efficiently. It minimizes computational costs for basic schema extraction.\nPipeline2 (Multi-file task in pro mode):\nThis is correct for workflows requiring cross-document logic or advanced generative reasoning. Pro mode\nprocesses batches of interrelated files together. It allows the model to correlate information across multiple\nfiles.\nIncorrect answer:\nSingle-file task in pro mode:\nThis is incorrect because Pro mode's core advantage is cross-file reasoning. Using it for a single file\nunnecessarily increases processing limits and costs without utilizing multi-file capabilities.\nMulti-file task in standard mode:\nThis is incorrect because Standard mode lacks the architecture to handle relational dependencies across\nmultiple files. Combining multiple files under standard mode results in schema rejection or validation errors.\nHOTSPOT -"
+  },
+  {
+    "id": "ai103-pdf-6",
+    "num": 6,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 1: Plan and manage an Azure AI solution",
+    "subdomain": "Subdomain 1.1: Choose the appropriate Foundry services and manage security",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Python application named App1 that integrates with a Microsoft Foundry project named Project1.\nYou need to ensure that App1 meets the following requirements:\n\nAuthenticates by using a Microsoft Entra managed identity\nSends prompts to a deployed model by using the Azure OpenAI Responses API\nHow should you complete the Python code? To answer, select the appropriate options in the answer area.\nNOTE: Each correct selection is worth one point.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Explanation:"
+      },
+      {
+        "id": "b",
+        "text": "Alternative manual configuration using individual resource keys and shared access signatures"
+      },
+      {
+        "id": "c",
+        "text": "Direct legacy cognitive service endpoint without managed identity authentication"
+      },
+      {
+        "id": "d",
+        "text": "Client-side prompt validation rule without central service integration"
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "Explanation:",
+      "explanation": "First Dropdown: DefaultAzureCredential\nSecond Dropdown: create\nCredential Initialization: The scenario specifies authentication using a Microsoft Entra managed identity. In\nAzure Python SDKs, DefaultAzureCredential automatically orchestrates managed "
+    },
+    "explanation": "First Dropdown: DefaultAzureCredential\nSecond Dropdown: create\nCredential Initialization: The scenario specifies authentication using a Microsoft Entra managed identity. In\nAzure Python SDKs, DefaultAzureCredential automatically orchestrates managed identities across both local\ndevelopment and Azure-hosted environments. It is explicitly imported at the top of the snippet (from\nazure.identity import DefaultAzureCredential).\nResponses API Call: When interacting with the Azure OpenAI-compatible project client endpoint via\nopenai_client.responses, the standard method to generate chat text completions or send user prompts to the\ndeployed generative model is create.\nHOTSPOT -"
+  },
+  {
+    "id": "ai103-pdf-7",
+    "num": 7,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 2: Implement generative AI and agent solutions",
+    "subdomain": "Subdomain 2.1: Develop and deploy AI agents and generative solutions",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that contains a workflow for a customer support triage process.\nYou have an Ask a question node that stores user responses in a local variable named Var01.\nYou need to create the following Power Fx expressions:\nAn if/else condition expression that ensures that Var01 contains a value\nA Send message expression that returns the stored user response in uppercase\nHow should you configure the expressions? To answer, select the appropriate options in the answer area.\nNOTE: Each correct selection is worth one point.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Explanation:"
+      },
+      {
+        "id": "b",
+        "text": "Alternative manual configuration using individual resource keys and shared access signatures"
+      },
+      {
+        "id": "c",
+        "text": "Direct legacy cognitive service endpoint without managed identity authentication"
+      },
+      {
+        "id": "d",
+        "text": "Client-side prompt validation rule without central service integration"
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "Explanation:",
+      "explanation": "If/else condition expression: Not(IsBlank(Local.Var01))\nSend message expression: Upper(Local.Var01)\nIf/else condition expression:\nThe requirement is to ensure that the variable contains a value (i.e., it is not empty or blank).\nIsBlank(Local.Var01) e"
+    },
+    "explanation": "If/else condition expression: Not(IsBlank(Local.Var01))\nSend message expression: Upper(Local.Var01)\nIf/else condition expression:\nThe requirement is to ensure that the variable contains a value (i.e., it is not empty or blank).\nIsBlank(Local.Var01) evaluates to True if it has no value.\nWrapping it in the Not() function inverts this logic, making the expression evaluate to True only when a valid\nvalue exists.\nSend message expression:\nTo display or send a variable dynamically inside a message node, the variable/formula must be enclosed\nwithin curly brackets string interpolation syntax.\nThe Upper() function converts the text string to uppercase characters.\nThe variable prefix Local. must be explicitly retained to reference the locally-scoped variable correctly within\nthe expression payload ( Upper(Local.Var01) ).\n\nHOTSPOT -"
+  },
+  {
+    "id": "ai103-pdf-8",
+    "num": 8,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that contains a customer support agent built by using the Foundry Agent\nService.\nThe agent uploads user-provided screenshots to Azure Storage through a ticketing tool and receives a blob URL\nfor additional reasoning.\nYou need to use image moderation during agent runs and prevent harmful content from being returned during\nruns. Azure AI Content Safety must access the images by using the blob URL. The solution must follow the\nprinciple of least privilege.\nWhat should you configure for Content Safety? To answer, select the appropriate options in the answer area.\nNOTE: Each correct selection is worth one point.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Explanation:"
+      },
+      {
+        "id": "b",
+        "text": "Alternative manual configuration using individual resource keys and shared access signatures"
+      },
+      {
+        "id": "c",
+        "text": "Direct legacy cognitive service endpoint without managed identity authentication"
+      },
+      {
+        "id": "d",
+        "text": "Client-side prompt validation rule without central service integration"
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "Explanation:",
+      "explanation": "Guardrails\nSelect User input, Output, Tool response, and Tool call and set Action to Block.\nStorage access\nA system-assigned managed identity that is assigned the Storage Blob Data Reader role\nTo securely evaluate and prevent harmful or unsafe conten"
+    },
+    "explanation": "Guardrails\nSelect User input, Output, Tool response, and Tool call and set Action to Block.\nStorage access\nA system-assigned managed identity that is assigned the Storage Blob Data Reader role\nTo securely evaluate and prevent harmful or unsafe content from being returned or processed at any point\nduring an agentic session, content safety filters must be applied comprehensively across all interaction\ntouchpoints. Setting the action to Block ensures that any policy violations are immediately halted rather than\nmerely flagged or annotated in logs, completely protecting the user interface from receiving or exposing\ntoxic data.\n\nStorage access:\nWhen Azure AI Content Safety retrieves screenshots or file attachments via direct blob URLs, it requires\nspecific data-plane permissions on the underlying storage repository.\nSystem-assigned managed identity eliminates password management overhead.\nStorage Blob Data Reader satisfies the principle of least privilege, providing full read access to download\nand review image binaries without granting unnecessary write or delete capabilities (which would be included\nin the Contributor role)."
+  },
+  {
+    "id": "ai103-pdf-9",
+    "num": 9,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 5: Implement document intelligence solutions",
+    "subdomain": "Subdomain 5.1: Extract data using Document Intelligence",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that contains three agents as shown in the following table.\nYou need to orchestrate the agents to ensure that the customer requests meet the following requirements:\nSupport a deterministic, step-based process that uses conditional branching and shared state across the agents.\nOptionally trigger a ticket action based on the triage result.\nThe solution must minimize development effort.\nWhat should you include in the solution?",
+    "options": [
+      {
+        "id": "a",
+        "text": "a workflow"
+      },
+      {
+        "id": "b",
+        "text": "threads and runs without a workflow"
+      },
+      {
+        "id": "c",
+        "text": "a multi-agent group chat session"
+      },
+      {
+        "id": "d",
+        "text": "separate agent runs coordinated in the application code"
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "a workflow",
+      "explanation": "A. a workflow.\nWhy a workflow is correct: In Microsoft Azure AI Foundry, agentic workflows are purposely built to\norchestrate multiple agents using declarative, predefined sequences. They natively support deterministic\nstep-by-step logic, if/else con"
+    },
+    "explanation": "A. a workflow.\nWhy a workflow is correct: In Microsoft Azure AI Foundry, agentic workflows are purposely built to\norchestrate multiple agents using declarative, predefined sequences. They natively support deterministic\nstep-by-step logic, if/else conditional branching, and automatic variable/state sharing across agents without\nrequiring developers to write complex application orchestration or synchronization code, minimizing overall\ndevelopment effort.\nWhy other options are incorrect:\nGroup chat sessions (C) are designed for autonomous, fluid multi-agent conversations where agents\ndynamically choose when to chime in or pass control. They do not natively follow strict, deterministic, step-\nbased workflows.\nSeparate application code loops or standalone threads (B & D) require significant manual engineering effort\nto establish shared states, handle condition mappings, and write error-handling glue logic."
+  },
+  {
+    "id": "ai103-pdf-10",
+    "num": 10,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 4: Implement natural language processing solutions",
+    "subdomain": "Subdomain 4.2: Process and generate speech with Azure AI Speech",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that contains an agent. The agent uses Azure Speech in Foundry Tools.\nYou fine-tune a baseline speech to text model for the en-us locale and publish the model.\nThe agent calls the Speech to text REST API and returns an error message indicating that the project ID is invalid.\nYou need to set the project property to the correct ID.\nTo what should you set the project property?",
+    "options": [
+      {
+        "id": "a",
+        "text": "the project URL"
+      },
+      {
+        "id": "b",
+        "text": "the custom speech project ID"
+      },
+      {
+        "id": "c",
+        "text": "the project ID"
+      },
+      {
+        "id": "d",
+        "text": "the custom speech endpoint URL"
+      }
+    ],
+    "correctIds": [
+      "b"
+    ],
+    "acceptedAnswer": {
+      "text": "the custom speech project ID",
+      "explanation": "Technical Justification for Correct Answer: B\nThe correct option to set the project property to resolve the invalid project ID error when using Azure Speech\nin a Microsoft Foundry project is B. the custom speech project ID. Here's why:\nWhy B is Corre"
+    },
+    "explanation": "Technical Justification for Correct Answer: B\nThe correct option to set the project property to resolve the invalid project ID error when using Azure Speech\nin a Microsoft Foundry project is B. the custom speech project ID. Here's why:\nWhy B is Correct: When fine-tuning a baseline speech-to-text model for a specific locale (like en-us) and\npublishing it through Azure Speech Services, a unique Custom Speech Project ID is generated. This ID is\ncrucial for identifying your specific, customized model when making API calls. The Speech to Text REST API\nrequires this exact ID to route the request to your customized model, ensuring the correct speech-to-text\nprocessing. Setting the project property to the custom speech project ID ensures that the API call targets\nyour fine-tuned model, resolving the invalid project ID error.\nWhy Other Options are Less Suitable:\nA. the project URL: While the project URL might contain the project ID as part of its path, using the full URL is\nnot the expected format for the project ID field in the API configuration. The API typically expects just the ID,\nnot the entire URL, to identify the project.\nC. the project ID: This option is misleadingly similar to the correct answer. In the context of Azure Speech\nServices, \"project ID\" could ambiguously refer to a higher-level project container ID (not specific to the\ncustomized speech model). The custom speech project ID (Option B) is more precise, indicating it's the ID for\nthe fine-tuned speech model, not just any project ID.\nD. the custom speech endpoint URL: Similar to Option A, using the full endpoint URL is not appropriate for the\nproject ID field. The endpoint URL is used to direct the API call to the speech service's entry point, but the\nproject ID (specifically the custom speech project ID for your model) is still required within the API call\nparameters to identify which model to use.\nTechnical Summary: The error indicates a mismatch in identifying your customized speech-to-text model. By\nsetting the project property to the custom speech project ID, you ensure the API call accurately references\nyour published, fine-tuned model for the en-us locale, thereby resolving the invalid project ID error.\nReferences\nAzure Speech Services Documentation - Custom Speech\nAzure Speech Services REST API Reference - Speech to Text\nHOTSPOT -"
+  },
+  {
+    "id": "ai103-pdf-11",
+    "num": 11,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 2: Implement generative AI and agent solutions",
+    "subdomain": "Subdomain 2.1: Develop and deploy AI agents and generative solutions",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that contains an agent named PaymentAgent.\nPaymentAgent includes a function tool that issues customer refunds by using an external API.\nYou are creating a workflow in YAML.\nYou need to ensure that the workflow pauses for human approval and continues with the refund step only after\napproval is granted.\nHow should you complete the workflow definition? To answer, select the appropriate options in the answer area.\nNOTE: Each correct selection is worth one point.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Explanation:"
+      },
+      {
+        "id": "b",
+        "text": "Alternative manual configuration using individual resource keys and shared access signatures"
+      },
+      {
+        "id": "c",
+        "text": "Direct legacy cognitive service endpoint without managed identity authentication"
+      },
+      {
+        "id": "d",
+        "text": "Client-side prompt validation rule without central service integration"
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "Explanation:",
+      "explanation": "ask_question: In declarative agent workflows, ask_question is used to explicitly pause execution and collect\nexternal feedback or manual intervention (such as human authorization/approval) before proceeding, unlike\nbasic_chat or data_transformation w"
+    },
+    "explanation": "ask_question: In declarative agent workflows, ask_question is used to explicitly pause execution and collect\nexternal feedback or manual intervention (such as human authorization/approval) before proceeding, unlike\nbasic_chat or data_transformation which run automatically.\n approval == \"approved\" To ensure that the execute_refund step runs conditionally only if approval has been\nexplicitly granted, the expression evaluates the string output from the preceding id: approval step against the\nexpected value \"approved\"."
+  },
+  {
+    "id": "ai103-pdf-12",
+    "num": 12,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 4: Implement natural language processing solutions",
+    "subdomain": "Subdomain 4.2: Process and generate speech with Azure AI Speech",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have an Azure Speech in Foundry Tools resource that hosts a custom speech to text model deployed to a\ncustom endpoint. An agent uses the endpoint to perform real-time speech recognition.\nYou are approaching the expiration date of the custom speech to text model.\nWhat is the expected behavior when the model expires?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Speech recognition requests will return a 4xx error until a new custom model is deployed."
+      },
+      {
+        "id": "b",
+        "text": "Speech recognition requests will continue to use the expired custom model until the model is removed\nmanually."
+      },
+      {
+        "id": "c",
+        "text": "Speech recognition requests will fall back to the most recent base model for the same locale."
+      },
+      {
+        "id": "d",
+        "text": "The custom model will be deleted automatically when the model expires."
+      }
+    ],
+    "correctIds": [
+      "c"
+    ],
+    "acceptedAnswer": {
+      "text": "Speech recognition requests will fall back to the most recent base model for the same locale.",
+      "explanation": "Technical Justification for Correct Answer: C\nThe correct answer is C. Speech recognition requests will fall back to the most recent base model for the\nsame locale. Here's why:\nReason for C being correct: When a custom speech-to-text model expires in"
+    },
+    "explanation": "Technical Justification for Correct Answer: C\nThe correct answer is C. Speech recognition requests will fall back to the most recent base model for the\nsame locale. Here's why:\nReason for C being correct: When a custom speech-to-text model expires in Azure Speech Services (formerly\npart of Cognitive Services, now potentially managed through Azure Speech in Foundry Tools as mentioned),\nthe service is designed to ensure continuity of service. Instead of interrupting the functionality completely\n(which would be the case with a 4xx error as suggested by A) or requiring immediate manual intervention,\nAzure Speech Services automatically falls back to the most recent base model for the same locale as the\nexpired custom model. This fallback mechanism minimizes disruption to the agent's speech recognition\ncapabilities, ensuring some level of functionality is maintained until a new custom model is deployed.\nWhy A is less suitable:\nA. Speech recognition requests will return a 4xx error until a new custom model is deployed. This option\nsuggests a complete service interruption upon model expiration, which contradicts the design principle of\nAzure Services to provide resilient and continuous functionality wherever possible. A 4xx error implies a\nclient-side issue or a deliberate block, which doesn't align with the expected behavior for a managed\nexpiration scenario.\nWhy B is less suitable:\nB. Speech recognition requests will continue to use the expired custom model until the model is removed\nmanually. Continuing to use an expired model could pose security, compliance, or accuracy issues, as the\nmodel's support and potential updates would have ceased. Azure services typically do not extend the use of\nexpired resources in such a manner without explicit configuration for a temporary extension or auto-renewal,\nwhich is not implied here.\nWhy D is less suitable:\nD. The custom model will be deleted automatically when the model expires. While automatic deletion might\nseem like a housekeeping measure, the immediate question concerns the behavior of speech recognition\nrequests at the time of expiration, not the model's storage lifecycle. The automatic model deletion (if it were\nto happen immediately, which is not the primary concern here) does not directly address the continuity of the\nspeech recognition service's functionality.\nCorrect Answer Summary\nCorrect Answer: C. Speech recognition requests will fall back to the most recent base model for the same\nlocale.\nRationale: Ensures service continuity with the best available alternative (latest base model for the locale)\nupon custom model expiration, aligning with Azure's design for resilient services.\nReferences\nAzure Speech Services: Custom Speech Models\nAzure Speech Services: How to manage models"
+  },
+  {
+    "id": "ai103-pdf-13",
+    "num": 13,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 5: Implement document intelligence solutions",
+    "subdomain": "Subdomain 5.1: Extract data using Document Intelligence",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that contains a model deployment.\nYou have an application that calls the deployment by using the Azure OpenAI v1 API and DefaultAzureCredential.\nThe developers at your company receive HTTP 403 errors when they send inference requests, even after running\naz login.\nYou need to ensure that the developers can perform model inference. The solution must follow the principle of\nleast privilege.\nWhich role-based access control (RBAC) role should you assign to the developers?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Cognitive Services User"
+      },
+      {
+        "id": "b",
+        "text": "Cognitive Services OpenAI User"
+      },
+      {
+        "id": "c",
+        "text": "Contributor"
+      },
+      {
+        "id": "d",
+        "text": "Cognitive Services Data Reader"
+      }
+    ],
+    "correctIds": [
+      "b"
+    ],
+    "acceptedAnswer": {
+      "text": "Cognitive Services OpenAI User",
+      "explanation": "Technical Justification for Correct Answer: B (Cognitive Services OpenAI User)\nThe correct role-based access control (RBAC) role to assign to the developers for resolving the HTTP 403\nerrors when sending inference requests to a Microsoft Foundry (for"
+    },
+    "explanation": "Technical Justification for Correct Answer: B (Cognitive Services OpenAI User)\nThe correct role-based access control (RBAC) role to assign to the developers for resolving the HTTP 403\nerrors when sending inference requests to a Microsoft Foundry (formerly Azure Machine Learning) model\ndeployment via the Azure OpenAI v1 API, while adhering to the principle of least privilege, is B. Cognitive\nServices OpenAI User. Here’s why:\nCognitive Services OpenAI User (B): This role is specifically designed for users who need to perform OpenAI\nmodel inference. Assigning this role ensures that developers have the necessary permissions to call the\nOpenAI API for model inference without granting excessive privileges. This aligns with the principle of least\nprivilege, as it only allows actions directly related to the task at hand (OpenAI model inference) and nothing\nmore.\nWhy Other Options are Less Suitable:\nA. Cognitive Services User: While this role provides access to Cognitive Services, it is more general and might\nnot specifically grant the necessary permissions for OpenAI model inference, or it could grant broader access\nthan necessary, violating the principle of least privilege.\nC. Contributor: Assigning the Contributor role would grant far too many permissions, including the ability to\nmanage resources, which is not necessary for simply performing model inference. This vastly exceeds the\nprinciple of least privilege.\nD. Cognitive Services Data Reader: This role is focused on reading data from Cognitive Services resources\nbut does not necessarily provide the execution permissions required for model inference via the OpenAI API,\nmaking it inappropriate for this specific task.\nPrinciple of Least Privilege Alignment: Assigning Cognitive Services OpenAI User ensures that developers\nhave only the permissions necessary to perform their tasks (model inference via OpenAI API), without any\nadditional, potentially risky permissions.\nReferences\n1. Azure RBAC for Cognitive Services and OpenAI: https://learn.microsoft.com/en-us/azure/cognitive-\nservices/authentication-acls?tabs=platform\n2. Azure OpenAI Permissions and Roles: https://learn.microsoft.com/en-us/azure/cognitive-\nservices/openai/how-to-use-manager-keys#permissions-and-roles"
+  },
+  {
+    "id": "ai103-pdf-14",
+    "num": 14,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 5: Implement document intelligence solutions",
+    "subdomain": "Subdomain 5.1: Extract data using Document Intelligence",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that contains an agent. The agent has a Model Context Protocol (MCP) tool\nthat queries a knowledge base stored in Azure AI Search.\nSome agent runs return answers from the base model without invoking the knowledge base, which results in\nresponses without grounded citations.\nYou are provided with the following code snippet that runs the agent.\nYou need to add the correct tool _choice parameter to the code to deterministically force the agent to invoke the\nMCP tool on each run.\nWhat should you add?",
+    "options": [
+      {
+        "id": "a",
+        "text": "tool_choice= “required”"
+      },
+      {
+        "id": "b",
+        "text": "tool_choice= “auto”"
+      },
+      {
+        "id": "c",
+        "text": "tool_choice= “type”:“knowledge_base”"
+      },
+      {
+        "id": "d",
+        "text": "tool_choice = “type”:“mcp”"
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "tool_choice= “required”",
+      "explanation": "A. tool_choice= “required” .\nWhy it is correct: According to Microsoft Foundry Agent Service tool best practices, the tool_choice\nparameter provides runtime control over whether a model is allowed to answer directly or is forced to invoke a\ntool. Set"
+    },
+    "explanation": "A. tool_choice= “required” .\nWhy it is correct: According to Microsoft Foundry Agent Service tool best practices, the tool_choice\nparameter provides runtime control over whether a model is allowed to answer directly or is forced to invoke a\ntool. Setting tool_choice=\"required\" (or passing the parameter mode as a dict/object depending on the specific\nwrapper structure) explicitly tells the orchestrator that the agent must execute one or more tools before\nformulating its final response. Since the agent only has the Model Context Protocol (MCP) tool configured for\nquerying the knowledge base, this forces deterministic tool execution on every single run, preventing\nungrounded base model hallucinations.\nWhy the other options are incorrect:\nB (\"auto\"): This is the default setting. It lets the model autonomously decide whether to use a tool, which\nmakes it non-deterministic and leads to runs skipping the knowledge base entirely.\nC & D: These options represent invalid formatting syntax for directing type scopes or target keywords within\nthe standard parameter layout for tool-constrained invocation under the Foundry Agent ecosystem.\nDRAG DROP -"
+  },
+  {
+    "id": "ai103-pdf-15",
+    "num": 15,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "ordering",
+    "domain": "Domain 4: Implement natural language processing solutions",
+    "subdomain": "Subdomain 4.2: Process and generate speech with Azure AI Speech",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that contains a customer support agent grounded in internal documentation.\nAfter a recent update, users report the following issues:\nSome answers are unsupported by retrieved documents.\nA small number of responses are flagged for policy violations.\nYou need to evaluate each issue.\n\nWhich observability signals should you use for each issue? To answer, drag the appropriate observability signals to\nthe correct issues. Each observability signal may be used once, more than once, or not at all. You may need to drag\nthe spit bar between panes or scroll to view content.\nNOTE: Each correct selection is worth one point.",
+    "options": [
+      {
+        "id": "step-1",
+        "text": "Provision an on-premises Kubernetes cluster with outbound internet connectivity."
+      },
+      {
+        "id": "step-2",
+        "text": "Pull the required Azure AI container image from Microsoft Container Registry (MCR)."
+      },
+      {
+        "id": "step-3",
+        "text": "Run the container image and specify the Azure AI resource endpoint URL and API key."
+      },
+      {
+        "id": "step-4",
+        "text": "Configure the client application to direct inference queries to the local container endpoint."
+      }
+    ],
+    "correctIds": [
+      "step-1",
+      "step-2",
+      "step-3",
+      "step-4"
+    ],
+    "acceptedAnswer": {
+      "text": "Provision an on-premises Kubernetes cluster with outbound internet connectivity. -> Pull the required Azure AI container image from Microsoft Container Registry (MCR). -> Run the container image and specify the Azure AI resource endpoint URL and API key. -> Configure the client application to direct inference queries to the local container endpoint.",
+      "explanation": "Unsupported responses\nGroundedness evaluation metrics\nPolicy violations:\nRisk and safety metrics\nUnsupported responses: When an AI model generates responses containing facts or assertions not present in\nthe reference context, it results in an ungroun"
+    },
+    "explanation": "Unsupported responses\nGroundedness evaluation metrics\nPolicy violations:\nRisk and safety metrics\nUnsupported responses: When an AI model generates responses containing facts or assertions not present in\nthe reference context, it results in an ungrounded or unsupported response (hallucination). Tracking\nGroundedness evaluation metrics assesses the exact ratio of sentences validated by the source text.\nPolicy violations: These occur when inputs or outputs conflict with regulatory or internal content guidelines\n(e.g., hate speech, violence, or sexual content). Risk and safety metrics directly monitor hits against\npredefined Azure AI Content Safety filter thresholds."
+  },
+  {
+    "id": "ai103-pdf-16",
+    "num": 16,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 5: Implement document intelligence solutions",
+    "subdomain": "Subdomain 5.1: Extract data using Document Intelligence",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project named Project1 that contains an agent. The agent uses an OpenAPI 3.0\nspecification to call an external weather service.\nThe weather service requires a key to be passed in an HTTP header. The key value is stored as a connection in\nProject1.\nYou need to ensure that the key value from the connection is included automatically whenever the OpenAPI tool is\ninvoked.\nWhat should you configure in the OpenAPI specification?",
+    "options": [
+      {
+        "id": "a",
+        "text": "a header parameter defined for each operation"
+      },
+      {
+        "id": "b",
+        "text": "an Azure Key Vault connection"
+      },
+      {
+        "id": "c",
+        "text": "an API key security scheme"
+      },
+      {
+        "id": "d",
+        "text": "a Bearer token security scheme"
+      }
+    ],
+    "correctIds": [
+      "c"
+    ],
+    "acceptedAnswer": {
+      "text": "an API key security scheme",
+      "explanation": "Technical Justification for Correct Answer: C\nTo ensure the key value from the connection is included automatically whenever the OpenAPI tool is invoked\nfor the weather service API call, the most appropriate configuration in the OpenAPI specification"
+    },
+    "explanation": "Technical Justification for Correct Answer: C\nTo ensure the key value from the connection is included automatically whenever the OpenAPI tool is invoked\nfor the weather service API call, the most appropriate configuration in the OpenAPI specification is an API key\nsecurity scheme. Here's why:\nCorrect Answer: C - an API key security scheme\nReason: The API key security scheme in OpenAPI allows for the definition of how an API key is passed (e.g., in\na header, query, or cookie). Since the weather service requires the key in an HTTP header, configuring an API\nkey security scheme in the OpenAPI specification enables the automatic inclusion of the key from the\nconnection without needing to redefine it for each operation. This approach is scalable and maintainable,\nespecially if the key needs to be updated, as changes can be made in one place.\nWhy Other Options are Less Suitable:\nA. a header parameter defined for each operation\nInconvenience and Redundancy: Defining a header parameter for each operation leads to redundancy and\nincreased maintenance effort, especially in large APIs. If the key changes, it would need to be updated in\nmultiple places.\nLack of Central Management: Doesn't leverage the connection storage's central management capability\nefficiently.\nB. an Azure Key Vault connection\nMisalignment with Requirement: While Azure Key Vault is suitable for securely storing secrets, the question\nspecifies that the key is already stored as a connection in Project1. The task is about integrating this existing\nsetup with the OpenAPI specification, not about where to store the key.\nAdditional Complexity: Introducing Key Vault at this stage would add unnecessary complexity to the\nimmediate requirement of passing the key in the HTTP header.\nD. a Bearer token security scheme\nInappropriate for API Keys: Bearer tokens are typically used for authentication in scenarios involving user\nauthentication or service-to-service calls with more complex authentication flows, not for simple API key\nexchanges.\nMismatch with Service's Requirement: The weather service specifically requires an API key in the header, not\na Bearer token.\nReferences\nOpenAPI Specification - Security Schemes\nMicrosoft Azure - Secure your Azure API using API Keys"
+  },
+  {
+    "id": "ai103-pdf-17",
+    "num": 17,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 5: Implement document intelligence solutions",
+    "subdomain": "Subdomain 5.1: Extract data using Document Intelligence",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that serves a high-volume chat app.\nMost requests are simple FAQs, but some require advanced reasoning.\nYou need to reduce costs and latency for common queries, without degrading the quality of the responses to\n\ncomplex questions.\nWhat should you do?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Route all the requests to a smaller model."
+      },
+      {
+        "id": "b",
+        "text": "Use a model cascade that routes the requests to different models."
+      },
+      {
+        "id": "c",
+        "text": "Increase the value of the max_tokens parameter for all the requests."
+      },
+      {
+        "id": "d",
+        "text": "Route all the requests to the most capable model."
+      }
+    ],
+    "correctIds": [
+      "b"
+    ],
+    "acceptedAnswer": {
+      "text": "Use a model cascade that routes the requests to different models.",
+      "explanation": "Technical Justification for Correct Answer: B\nWhy B is the Best Option:Using a model cascade that routes requests to different models is the optimal\napproach for this scenario. This architecture allows for:\nCost Reduction: Simple FAQs can be handled "
+    },
+    "explanation": "Technical Justification for Correct Answer: B\nWhy B is the Best Option:Using a model cascade that routes requests to different models is the optimal\napproach for this scenario. This architecture allows for:\nCost Reduction: Simple FAQs can be handled by smaller, more efficient models with lower inference costs,\nreducing overall expenses.\nLatency Reduction: Routing common queries to lighter models decreases response times for the majority of\nrequests.\nQuality Preservation for Complex Queries: Advanced reasoning questions are directed to more capable\n(likely larger) models, ensuring response quality is maintained without compromise.\nWhy Other Options are Less Suitable:\nA. Route all requests to a smaller model:\nQuality Deterioration: Complex questions may not be answered accurately, degrading overall service quality.\nInadequate Capacity: A single smaller model might not handle the \"high-volume\" aspect efficiently,\npotentially increasing latency under load.\nC. Increase the max_tokens parameter for all requests:\nCost Increase: Higher max_tokens values increase costs per request, contradicting the goal of reducing costs.\nUnnecessary Overhead: Simple queries do not benefit from this increase, leading to wasted resources.\nD. Route all requests to the most capable model:\nExcessive Cost: Utilizing the most capable model for all queries significantly increases costs due to its higher\ninference expense.\nLatency Concerns: Larger models typically have longer response times, affecting the latency of simple, high-\nvolume FAQs.\nCorrect Answer Justification Summary:Option B, using a model cascade, strikes a balance between cost\nefficiency, latency reduction for common queries, and maintaining the quality of responses for complex\ninquiries, making it the most suitable solution.\nReferences:\nMicrosoft Azure Documentation: Model Deployment Strategies\nMicrosoft Azure Cognitive Services: Optimizing Costs for AI Workloads\nHOTSPOT -"
+  },
+  {
+    "id": "ai103-pdf-18",
+    "num": 18,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that contains an internal Q&A agent.\nUsers report the following issues when they ask the agent questions:\nAn increase in the following response: “No relevant information found”\n\nPeriodic HTTP 429 rate limit exceeded errors during peak hours\nYou need to identify whether each issue is caused by model unavailability, resource limits, or inference failures.\nWhat should you do? To answer, select the appropriate options in the answer area.\nNOTE: Each correct selection is worth one point.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Explanation:"
+      },
+      {
+        "id": "b",
+        "text": "Alternative manual configuration using individual resource keys and shared access signatures"
+      },
+      {
+        "id": "c",
+        "text": "Direct legacy cognitive service endpoint without managed identity authentication"
+      },
+      {
+        "id": "d",
+        "text": "Client-side prompt validation rule without central service integration"
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "Explanation:",
+      "explanation": "Metrics to enable :\n Model Availability Rate and Provisioned Utilization\nModel Availability Rate isolates whether service errors or operation drop-offs are caused by downstream,\nserver-side model unavailability.\nProvisioned Utilization provides direc"
+    },
+    "explanation": "Metrics to enable :\n Model Availability Rate and Provisioned Utilization\nModel Availability Rate isolates whether service errors or operation drop-offs are caused by downstream,\nserver-side model unavailability.\nProvisioned Utilization provides direct observability into capacity and resource limits. When it approaches or\nexceeds 100%, requests will automatically experience rate-limiting triggers and throw standard HTTP 429\nToo Many Requests errors.\nDiagnostic log to collect\nRequest Response.\n\nTo store and inspect telemetry data for incoming client interactions, the RequestResponse log category\nexplicitly routes full API payloads (including prompts, generated tokens, status codes, and exact completions)\nto a destination Log Analytics Workspace."
+  },
+  {
+    "id": "ai103-pdf-19",
+    "num": 19,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 5: Implement document intelligence solutions",
+    "subdomain": "Subdomain 5.1: Extract data using Document Intelligence",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that contains a high-traffic agent.\nAfter a recent update, operational costs increase significantly.\nMonitoring confirms that the volume of user traffic to the agent remains unchanged.\nYou suspect that changes to the request or response characteristics are causing the increase. You need to identify\nwhether the additional costs are driven by the model input size, the model output size, or expanded tool usage.\nWhich observability capability should you use?",
+    "options": [
+      {
+        "id": "a",
+        "text": "latency"
+      },
+      {
+        "id": "b",
+        "text": "evaluation metrics"
+      },
+      {
+        "id": "c",
+        "text": "run success rate"
+      },
+      {
+        "id": "d",
+        "text": "token usage"
+      }
+    ],
+    "correctIds": [
+      "d"
+    ],
+    "acceptedAnswer": {
+      "text": "token usage",
+      "explanation": "Technical Justification for Choosing D. Token Usage\nTo identify the cause of increased operational costs in the Microsoft Foundry project, given that user traffic\nvolume remains unchanged, we need to focus on the changed characteristics of the reques"
+    },
+    "explanation": "Technical Justification for Choosing D. Token Usage\nTo identify the cause of increased operational costs in the Microsoft Foundry project, given that user traffic\nvolume remains unchanged, we need to focus on the changed characteristics of the requests, responses, or\ntool usage that could drive up costs. Here’s why D. Token Usage is the most suitable observability capability,\nalongside explanations for why the other options are less suitable:\nD. Token Usage:\nWhy It's the Best Choice: In the context of AI agents, especially those involving natural language processing\n(NLP) or similar models, \"token usage\" refers to the number of tokens (e.g., words, characters) processed by\nthe model in requests and responses. Increased model input size (more tokens in requests) or model output\nsize (more tokens in responses) directly correlates with token usage metrics. Since the question hints at\nchanges in request or response characteristics, monitoring token usage can pinpoint if the cost increase is\ndue to larger inputs, outputs, or potentially more complex queries(initial step before deeper tool usage\nanalysis).\nCost Correlation: Token usage is often directly tied to billing in cloud AI services, as processing more tokens\nincurs higher costs. This metric can clearly indicate if the increase in costs is due to the model handling more\ndata per interaction.\nA. Latency:\nWhy It's Less Suitable: While latency might indicate performance issues or model complexity increases, it\ndoes not directly correlate with cost increases related to input/output size or tool usage. Latency could be\naffected by many factors unrelated to the suspected causes (e.g., infrastructure, model complexity).\nB. Evaluation Metrics:\nWhy It's Less Suitable: Evaluation metrics (e.g., accuracy, F1 score) are crucial for model performance\nassessment but do not provide insight into the operational costs driven by input size, output size, or tool usage\nexpansions. These metrics focus on model efficacy, not cost drivers.\nC. Run Success Rate:\nWhy It's Less Suitable: The success rate of model runs indicates the frequency of successful executions but\ndoes not offer insights into what drives up costs. A high success rate with increased costs would not help\ndifferentiate between input size, output size, or expanded tool usage as the cause.\n\nConclusion: Given the need to identify cost drivers among model input size, model output size, or expanded\ntool usage, with the latter two being more directly related to the former, D. Token Usage is the most\nappropriate observability capability. It provides a direct measure of how much data is being processed, which\nis typically correlated with cost in AI model deployments.\nReferences\n1. Microsoft Azure Cognitive Services Pricing Page: https://azure.microsoft.com/en-\nus/pricing/details/cognitive-services/ - To understand how token usage and other metrics impact\nbilling.\n2. Azure Monitor for Azure Cognitive Services: https://docs.microsoft.com/en-us/azure/cognitive-\nservices/cognitive-services-usage-metrics - For detailed information on available observability\nmetrics, including token usage.\nHOTSPOT -"
+  },
+  {
+    "id": "ai103-pdf-20",
+    "num": 20,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 1: Plan and manage an Azure AI solution",
+    "subdomain": "Subdomain 1.1: Choose the appropriate Foundry services and manage security",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that contains an agent.\nThe agent uses tools to retrieve internal content and call external APIs. The agent is configured to let the model\ndecide when to call the tools.\nYou need to publish the agent for a compliance workflow. The solution must meet the following requirements:\nEach workflow run must include a retrieval step before generating a response.\nTool calls must authenticate by using the published agent’s own identity.\nTool access must use an identity isolated from other project resources.\nTool access must use support audit tracing.\nWhat should you do? To answer, select the appropriate options in the answer area.\nNOTE: Each correct selection is worth one point.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Explanation:"
+      },
+      {
+        "id": "b",
+        "text": "Alternative manual configuration using individual resource keys and shared access signatures"
+      },
+      {
+        "id": "c",
+        "text": "Direct legacy cognitive service endpoint without managed identity authentication"
+      },
+      {
+        "id": "d",
+        "text": "Client-side prompt validation rule without central service integration"
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "Explanation:",
+      "explanation": "Set tool_choice to\n\nrequired\nConfigure the tool to authenticate by:\nUsing a distinct agent identity bound to the client application\nSet tool_choice to (required): Setting this to required ensures that the AI model is deterministically forced to\ncall "
+    },
+    "explanation": "Set tool_choice to\n\nrequired\nConfigure the tool to authenticate by:\nUsing a distinct agent identity bound to the client application\nSet tool_choice to (required): Setting this to required ensures that the AI model is deterministically forced to\ncall one or more tools before returning a final answer, rather than autonomously deciding whether to skip the\ntool (as it would with auto).\nConfigure the tool to authenticate by (Using a distinct agent identity bound to the client application): To\nmeet compliance standards stating that tool access must utilize an identity isolated from other project\nresources and support full audit tracing, assigning a distinct agent identity bound explicitly to the client\napplication ensures complete isolation and individual request tracking."
+  },
+  {
+    "id": "ai103-pdf-21",
+    "num": 21,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 5: Implement document intelligence solutions",
+    "subdomain": "Subdomain 5.1: Extract data using Document Intelligence",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project named Project1 that contains the following:\nAn OpenAPI tool that calls an external API\nA project connection named Connection1 that stores the API key of the external API\nWhen an agent calls the OpenAPI tool, the API returns a 401 unauthorized error, and traces show that the API key\nheader is NOT being sent.\nYou need to ensure that the OpenAPI tool automatically includes the API key from Connection1 on all requests.\nWhat should you do?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Enable identity passthrough so that the tool uses the Microsoft Entra token of the caller."
+      },
+      {
+        "id": "b",
+        "text": "Add the API key header manually to the OpenAPI specification."
+      },
+      {
+        "id": "c",
+        "text": "Configure the tool to use the default connection of Project1."
+      },
+      {
+        "id": "d",
+        "text": "Connect the tool to Connection1."
+      }
+    ],
+    "correctIds": [
+      "d"
+    ],
+    "acceptedAnswer": {
+      "text": "Connect the tool to Connection1.",
+      "explanation": "Technical Justification for Correct Answer D\nCorrect Answer: D. Connect the tool to Connection1\nConnect the tool to Connection1 is the most appropriate solution because it directly addresses the issue by\nleveraging the existing infrastructure for sec"
+    },
+    "explanation": "Technical Justification for Correct Answer D\nCorrect Answer: D. Connect the tool to Connection1\nConnect the tool to Connection1 is the most appropriate solution because it directly addresses the issue by\nleveraging the existing infrastructure for secure and managed credential handling. Here's why:\nSecure Credential Handling: Connection1 already stores the API key. By connecting the tool to this\nconnection, the API key is securely injected into the requests without manual interception, reducing security\nrisks associated with hardcoding or manually handling sensitive information.\nAutomation and Consistency: This approach ensures the API key is automatically included in all requests to\nthe external API, aligning with the requirement for automation and consistency across all tool invocations.\nManagement and Updates: If the API key needs to be updated, changes can be made in one place\n(Connection1), and all connected tools will automatically use the new key without requiring individual updates.\nWhy Other Options are Less Suitable:\n\nA. Enable Identity Passthrough:\nInapplicable Scenario: Identity passthrough is useful for scenarios where the caller's identity needs to be\npropagated, not for including a pre-stored API key from a project connection.\nSecurity and Permission Issues: Might introduce unnecessary permissions or complicate access control, as it\nrelies on the caller's Microsoft Entra token rather than a dedicated API key.\nB. Add the API Key Header Manually to the OpenAPI Specification:\nSecurity Risk: Hardcoding the API key directly in the OpenAPI spec exposes the key in plain text, posing a\nsignificant security risk.\nManagement Overhead: Updates to the API key would require manual changes to the spec, contradicting\nbest practices for secret management.\nC. Configure the Tool to Use the Default Connection of Project1:\nAssumes Incorrect Setup: The premise implies that the default connection would contain or automatically\nprovide the necessary API key, which is not specified or guaranteed.\nLacks Explicit Control: Does not ensure the specific API key from Connection1 is used, potentially leading to\nthe same authorization issue if the default connection lacks the key or uses a different one.\nReferences\nMicrosoft Azure: Securely store and retrieve secrets with Azure Key Vault\nMicrosoft Foundry Documentation: Connecting Tools to Project Connections"
+  },
+  {
+    "id": "ai103-pdf-22",
+    "num": 22,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 5: Implement document intelligence solutions",
+    "subdomain": "Subdomain 5.1: Extract data using Document Intelligence",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that contains a customer support agent. The agent calls an internal\nknowledge API tool before generating responses.\nUsers report the following issues:\nSome requests take more than 15 seconds to complete.\nSome responses are incorrect, even when the knowledge API returns the expected data.\nYou need to inspect individual agent runs to view the ordered sequence of large language model (LLM) calls, tool\ninvocations, and timing information.\nWhich observability capability should you use?",
+    "options": [
+      {
+        "id": "a",
+        "text": "token usage"
+      },
+      {
+        "id": "b",
+        "text": "monitoring"
+      },
+      {
+        "id": "c",
+        "text": "safety metrics"
+      },
+      {
+        "id": "d",
+        "text": "tracing"
+      }
+    ],
+    "correctIds": [
+      "d"
+    ],
+    "acceptedAnswer": {
+      "text": "tracing",
+      "explanation": "Technical Justification for Choosing D. Tracing\nTo address the reported issues with the Microsoft Foundry project's customer support agent, the chosen\nobservability capability must provide detailed, sequential insights into the agent's interactions, "
+    },
+    "explanation": "Technical Justification for Choosing D. Tracing\nTo address the reported issues with the Microsoft Foundry project's customer support agent, the chosen\nobservability capability must provide detailed, sequential insights into the agent's interactions, including\nLarge Language Model (LLM) calls, tool invocations (specifically the internal knowledge API), and precise\ntiming information for each step. Here's why D. Tracing is the most suitable option, along with explanations\nfor why the other options are less fitting:\nD. Tracing (Correct Answer)\n\nDetailed Sequence Insight: Tracing provides an end-to-end view of the system's behavior for a specific run,\nshowing the ordered sequence of events (LLM calls, API invocations). This is crucial for identifying\nbottlenecks (e.g., why some requests take more than 15 seconds).\nTiming Information: Tracing includes latency data for each step, helping pinpoint where delays occur.\nRoot Cause Analysis for Incorrect Responses: By examining the exact sequence and output of each LLM call\nand API invocation, you can identify mismatches between expected and actual API returns and how the agent\nmisinterpreted them.\nWhy Other Options Are Less Suitable\nA. Token Usage\nFocus: Primarily monitors resource utilization (e.g., token consumption in LLMs).\nShortcoming: Doesn’t offer insights into the sequence of events or timing beyond resource usage, making it\ninadequate for diagnosing the described issues.\nB. Monitoring\nFocus: Provides high-level, aggregated views of system performance over time (e.g., error rates, average\nresponse times).\nShortcoming: Lacks the granularity needed to inspect individual agent runs and the detailed sequence of\nevents required to solve the specific problems.\nC. Safety Metrics\nFocus: Concentrates on the safety and fairness aspects of AI model outputs (e.g., bias detection, content\npolicy violations).\nShortcoming: Irrelevant to the operational and sequential debugging needs outlined in the scenario (timing\nissues and response accuracy tied to API returns).\nConclusion: Given the need to inspect the ordered sequence of events with timing information for individual\nagent runs to resolve both the latency and accuracy issues, Tracing (D) is the most appropriate observability\ncapability.\nReferences\n1. Azure Monitor Distributed Tracing: https://learn.microsoft.com/en-us/azure/azure-\nmonitor/app/distributed-tracing\n2. Microsoft Azure Observability Capabilities: https://learn.microsoft.com/en-\nus/azure/architecture/cloud-adoption/.devops/infrastructure-as-code/observability-patterns\nNote: This section contains one or more sets of questions with the same scenario and problem. Each question\npresents a unique solution to the problem. You must determine whether the solution meets the stated goals. More\nthan one solution in the set might solve the problem. It is also possible that none of the solutions in the set solve\nthe problem.\nAfter you answer a question in this section, you will NOT be able to return. As a result, these questions do not\nappear on the Review Screen."
+  },
+  {
+    "id": "ai103-pdf-23",
+    "num": 23,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a multimodal AI generative model that accepts image uploads and uses extracted image text to generate\nresponses.\nYou discover that users can upload unsafe images and embed hidden instructions into images to manipulate the\nmodel.\nYou need to implement controls to mitigate the risk.\nSolution: You configure a prompt shield for user prompts.\nDoes this meet the goal?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Yes"
+      },
+      {
+        "id": "b",
+        "text": "No"
+      }
+    ],
+    "correctIds": [
+      "b"
+    ],
+    "acceptedAnswer": {
+      "text": "No",
+      "explanation": "Technical Justification for Correct Answer: B. No\nGoal: Implement controls to mitigate the risk of users uploading unsafe images with hidden instructions to\nmanipulate a multimodal AI generative model.\nSolution Analysis: Configuring a Prompt Shield f"
+    },
+    "explanation": "Technical Justification for Correct Answer: B. No\nGoal: Implement controls to mitigate the risk of users uploading unsafe images with hidden instructions to\nmanipulate a multimodal AI generative model.\nSolution Analysis: Configuring a Prompt Shield for User Prompts\nWhy B (No) is Correct:\nA Prompt Shield is designed to sanitize, filter, or moderate text-based user inputs (prompts) to prevent\nmalicious text from influencing the model's behavior.\nThe identified risk Specifically pertains to image uploads with embedded hidden instructions, which a prompt\nshield does not address since it focuses on text inputs, not image content analysis or processing.\nConfiguring a prompt shield leaves the vulnerability associated with image uploads unmitigated.\nWhy A (Yes) is Incorrect:\nMisalignment with the Risk Type: The solution (prompt shield) does not align with the type of risk identified\n(unsafe images with hidden instructions), as it is tailored for text-based inputs.\nIncomplete Mitigation: Choosing \"Yes\" would imply that the solution adequately addresses the problem,\nwhich it does not, as the image-based vulnerability remains unaddressed.\nAlternative Suitable Solutions (Not Provided in the Question but for Context):\nImage Content Analysis: Utilize Azure Computer Vision or similar services to analyze uploaded images for\nunsafe content or hidden instructions.\nImage Preprocessing: Implement techniques to sanitize images (e.g., re-encode, thumbnail generation) to\nremove potential hidden text instructions before processing.\nReferences:\nAzure Computer Vision Overview\nAzure Cognitive Services - Secure Your Resources\nNote: This section contains one or more sets of questions with the same scenario and problem. Each question\npresents a unique solution to the problem. You must determine whether the solution meets the stated goals. More\nthan one solution in the set might solve the problem. It is also possible that none of the solutions in the set solve\nthe problem.\nAfter you answer a question in this section, you will NOT be able to return. As a result, these questions do not\nappear on the Review Screen."
+  },
+  {
+    "id": "ai103-pdf-24",
+    "num": 24,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a multimodal AI generative model that accepts image uploads and uses extracted image text to generate\nresponses.\nYou discover that users can upload unsafe images and embed hidden instructions into images to manipulate the\nmodel.\nYou need to implement controls to mitigate the risk.\nSolution: You configure image moderation to block unsafe content before processing the images.\nDoes this meet the goal?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Yes"
+      },
+      {
+        "id": "b",
+        "text": "No"
+      }
+    ],
+    "correctIds": [
+      "b"
+    ],
+    "acceptedAnswer": {
+      "text": "No",
+      "explanation": "Technical Justification for Solution Evaluation\nScenario Recap: Mitigate risks in a multimodal AI generative model by preventing unsafe image uploads that\nembed hidden instructions to manipulate the model.\nProposed Solution: Configure image moderatio"
+    },
+    "explanation": "Technical Justification for Solution Evaluation\nScenario Recap: Mitigate risks in a multimodal AI generative model by preventing unsafe image uploads that\nembed hidden instructions to manipulate the model.\nProposed Solution: Configure image moderation to block unsafe content before processing the images.\nEvaluation of the Solution:\nWhy the Correct Answer is B (No):\nInsufficiency in Addressing Hidden Instructions: Image moderation primarily focuses on identifying and\nblocking explicit, inappropriate, or unsafe visible content (e.g., nudity, violence). However, it may not\neffectively detect hidden instructions embedded in images (e.g., steganography, subtle text overlays not\nimmediately recognizable as harmful).\nScope of \"Unsafe Content\": The solution assumes image moderation's definition of \"unsafe\" aligns with the\nthreat of embedded instructions, which might not be the case. Embedded instructions could be crafted to\navoid moderation flags.\nWhy Other Options are Not Provided but an Explanation for A (Yes) if it were Considered:\nHypothetical Defense for A (Yes): If the image moderation service used had advanced capabilities explicitly\nincluding detection of subtle, embedded textual instructions within images (a less common feature), then A\ncould be justified. However, this is not a standard assumption for most image moderation tools.\nConclusion:Given the standard capabilities of image moderation services, the proposed solution does not fully\nmeet the goal of mitigating the risk of embedded hidden instructions in images. Additional or alternative\nmeasures (e.g., more sophisticated image analysis for steganography, pre-processing to normalize images\nbefore text extraction) would be necessary to address the specified threat comprehensively.\nReferences\nMicrosoft Azure Content Moderator Documentation: Highlights the capabilities and limitations of standard\nimage moderation services.\nSteganography Detection Techniques: Provides insight into the complexities of detecting hidden data in\nimages, underscoring why standard moderation might fail.\nNote: This section contains one or more sets of questions with the same scenario and problem. Each question\npresents a unique solution to the problem. You must determine whether the solution meets the stated goals. More\nthan one solution in the set might solve the problem. It is also possible that none of the solutions in the set solve\nthe problem.\nAfter you answer a question in this section, you will NOT be able to return. As a result, these questions do not\nappear on the Review Screen."
+  },
+  {
+    "id": "ai103-pdf-25",
+    "num": 25,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a multimodal AI generative model that accepts image uploads and uses extracted image text to generate\nresponses.\nYou discover that users can upload unsafe images and embed hidden instructions into images to manipulate the\nmodel.\nYou need to implement controls to mitigate the risk.\nSolution: You configure a prompt shield for documents.\nDoes this meet the goal?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Yes"
+      },
+      {
+        "id": "b",
+        "text": "No"
+      }
+    ],
+    "correctIds": [
+      "b"
+    ],
+    "acceptedAnswer": {
+      "text": "No",
+      "explanation": "Technical Justification for Correct Answer: B. No\nThe proposed solution involves configuring a \"prompt shield for documents\" to mitigate the risk of unsafe\nimages embedding hidden instructions in a multimodal AI generative model. Here's why this solu"
+    },
+    "explanation": "Technical Justification for Correct Answer: B. No\nThe proposed solution involves configuring a \"prompt shield for documents\" to mitigate the risk of unsafe\nimages embedding hidden instructions in a multimodal AI generative model. Here's why this solution does not\nmeet the goal and why other implied options (though not listed) might be less suitable in this specific context,\nfollowed by an explanation of a more appropriate approach:\nWhy the Proposed Solution (Prompt Shield for Documents) is Insufficient (B. No):\nMisalignment with the Threat Vector: The primary issue is with image uploads, not documents. A prompt\nshield designed for documents would not directly address the vulnerability in processing images, as it doesn't\ntarget the image upload and processing pathway.\nTechnology Misapplication: Prompt shields are typically designed to filter, sanitize, or control text inputs to\nprevent harmful prompts. Applying this concept to images requires a fundamentally different approach,\nfocusing on image analysis and content filtering, which the proposed solution does not accomplish.\nImplicit Discussion on Other Potential Solutions (Not Listed but for Context):\nImage Content Filtering/Analysis Services:\nWhy More Suitable: Directly addresses the image upload issue by analyzing the image content for safety and\nembedded texts.\nTechnical Justification: Utilizing AI-powered image analysis services (e.g., Azure Computer Vision, Azure\nContent Moderator) can detect and filter out unsafe images or extract and sanitize text from images before it\nreaches the generative model.\nEmbedded Text Detection in Images:\nWhy More Suitable: Targets the specific risk of hidden instructions within uploaded images.\nTechnical Justification: Implementing OCR (Optical Character Recognition) technologies integrated with NLP\nanalysis to identify and neutralize potentially manipulative text within images.\nCorrect Approach Summary:\nTo mitigate the risk effectively, the solution should involve image-centric security measures, such as\nintegrating image content filtering services or embedded text detection mechanisms, rather than a\ndocument-focused prompt shield.\nReferences\nFor further reading on appropriate technologies to address the image upload security risk:\nAzure Content Moderator: https://azure.microsoft.com/en-us/services/cognitive-services/content-moderator/\nAzure Computer Vision: https://azure.microsoft.com/en-us/services/cognitive-services/computer-vision/\nNote: This section contains one or more sets of questions with the same scenario and problem. Each question\npresents a unique solution to the problem. You must determine whether the solution meets the stated goals. More\n\nthan one solution in the set might solve the problem. It is also possible that none of the solutions in the set solve\nthe problem.\nAfter you answer a question in this section, you will NOT be able to return. As a result, these questions do not\nappear on the Review Screen."
+  },
+  {
+    "id": "ai103-pdf-26",
+    "num": 26,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a multimodal AI generative model that accepts image uploads and uses extracted image text to generate\nresponses.\nYou discover that users can upload unsafe images and embed hidden instructions into images to manipulate the\nmodel.\nYou need to implement controls to mitigate the risk.\nSolution: You configure protected material detection.\nDoes this meet the goal?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Yes"
+      },
+      {
+        "id": "b",
+        "text": "No"
+      }
+    ],
+    "correctIds": [
+      "b"
+    ],
+    "acceptedAnswer": {
+      "text": "No",
+      "explanation": "Technical Justification for Solution Evaluation\nScenario Recap: Mitigate risks associated with unsafe image uploads and hidden instructions in a multimodal\nAI generative model using image uploads and extracted text for response generation.\nProposed S"
+    },
+    "explanation": "Technical Justification for Solution Evaluation\nScenario Recap: Mitigate risks associated with unsafe image uploads and hidden instructions in a multimodal\nAI generative model using image uploads and extracted text for response generation.\nProposed Solution: Configure protected material detection.\nEvaluation of Solution against Goal:\nWhy B. No (Correct Answer)\nProtected Material Detection Limitations: Configuring protected material detection is primarily designed to\nidentify and flag copyrighted, sensitive, or explicitly defined \"protected\" content (e.g., child protection,\nexplicit content). While useful, its core functionality does not specifically target or effectively mitigate the\nrisk of hidden instructions embedded in images designed to manipulate the model's output.\nVulnerability to Adversarial Inputs: The solution does not address the root issue of the model's vulnerability\nto adversarial inputs via image uploads. Protected material detection might not recognize cleverly disguised\nor technically embedded instructions not classified as \"protected\" content.\nNarrow Scope: This solution focuses on content type rather than the integrity and security of the input data in\nrelation to the model's functionality, leaving the model exposed to the identified manipulation risk.\nWhy A. Yes is Incorrect\nInsufficient Risk Mitigation: Selecting \"Yes\" implies that protected material detection adequately addresses\nthe specified risk, which it does not, as explained above.\nMisalignment with Security Goal: The goal is to prevent model manipulation through hidden image\ninstructions, a challenge that requires a more targeted security or AI model integrity solution.\nMore Suitable Approaches (Not Listed but for Context)\nImage Preprocessing and Sanitization: Techniques to scrub or detect hidden data within images before\nprocessing.\nModel Input Validation and Parser Security: Enhancing the security of the text extraction process to identify\nand reject manipulated inputs.\nAdversarial Training or Robustness Enhancements: Modifying the model to be more resilient against\nmanipulated inputs.\nReferences\nFor further reading on securing AI models and image processing security:\n\nMicrosoft Azure - Secure Your AI Models: https://azure.microsoft.com/en-us/services/cognitive-\nservices/security/\nOWASP - Secure Image Uploading: https://owasp.org/www-project-security-\ncheatsheet/cheatsheet/Validation_Cheat_Sheet#Secure_Image_Uploading\nCase Study -\nThis is a case study. Case studies are not timed separately from other exam sections. You can use as much exam\ntime as you would like to complete each case study. However, there might be additional case studies or other\nexam sections. Manage your time to ensure that you can complete all the exam sections in the time provided. Pay\nattention to the Exam Progress at the top of the screen so you have sufficient time to complete any exam sections\nthat follow this case study.\nTo answer the case study questions, you will bed to reference information that is provided in the case. Case studies\nand associated questions might contain exhibits or other resources that provide more information about the\nscenario described in the case. Information provided in an individual question does not apply to the other questions\nin the case study.\nA Review Screen will appear at the end of this case study. From the Review Screen, you can review and change\nyour answers before you move to the next exam section. After you leave this case study, you will NOT be able to\nreturn to it.\nTo start the case study -\nTo display the first question in this case study, select the “Next” button. To the left of the question, a menu\nprovides links to information such as business requirements, the existing environment, and problem statements.\nPlease read through all this information before answering any questions. When you are ready to answer a question,\nselect the “Question” button to return to the question.\nOverview -\nCompany Information -\nContoso, Ltd is a multinational retail company that builds, deploys, and manages generative AI and agent-based\nsolutions by using Microsoft Foundry.\nExisting Environment -\nIdentity Environment -\nContoso uses Microsoft Entra ID for identity management, authentication, and authorization capabilities that\nenable agents to access organizational resources and services.\nContoso recently formed a new AI engineering team named Agent1Dev Team to optimize and maintain existing AI\nsolutions.\nThe team collaborates with solution architects, DevOps engineers, and security engineers to design, implement.\nmonitor, and secure AI applications.\nContoso also has a team named Agent1Test Team that is responsible for validating AI solutions before the solution\ndeployments.\nGenerative Environment -\nContoso has a Microsoft Foundry deployment that contains two projects named Project1 and Project2.\nProject1 -\nProject1 contains a customer support agent named Agent1 that assists customers with product inquiries and\ntroubleshooting requests.\nAgent1 has the following configurations:\nAgent1 uses a base model deployment.\nA safety evaluation pipeline is NOT enabled.\nTool invocation approval workflows are NOT enabled.\nConversation memory constraints are NOT configured.\nAgent1 interacts with customers by using digital support channels and answers general questions about Contoso\nproducts.\nProject1 is deployed to an Azure region located in the European Union (EU).\nAgent1Dev Team will use Project1 to optimize and maintain Agent1.\nProject2 -\nProject2 contains a deployed video generation model. The marketing department at Contoso has access to\nProject2 and plans to use the model to develop a video creation solution.\nDevelopment of the solution is incomplete.\nData Environment -\nContoso stores product-related information in Azure resources that support AI applications.\nThe Azure environment contains an Azure Blob Storage account named storage1 that stores product detail sheets\nfor all the Contoso products.\nThe product sheets include specifications, feature descriptions, and product support information that Agent1 can\nuse to answer customer questions. The product sheets are stored in the PDF format.\n\nProblem Statements -\nContoso identifies the following issues:\nAgent1 has only general knowledge of the Contoso products.\nA recent chat interaction with Agent1 was analyzed for sentiment. The results of the analysis have NOT been\nprocessed yet.\nAgent1 does NOT use the detailed product information in the product sheets stored in storage1 when responding\nto customer questions.\nThe finance department at Contoso reports that vendor invoices must be reviewed manually to ensure that the\ninvoices match the terms defined in the vendor contracts. The invoices contain tables, logos, and varied layouts\nthat make the documents difficult to process consistently.\nRequirements -\nPlanned Changes -\nContoso plans to implement the following changes:\nImplement a solution for Project1 that analyzes the vendor invoices by evaluating both the visual layout and the\ntextual content of the invoices, so that the invoice details can be verified against the vendor contract terms.\nUpdate the base model deployment used by Agent1 and standardize the model version to ensure continuity and\nconsistent responses.\nEnable Agent1 to retrieve and use the detailed product information from the product sheets stored in storage1.\nImplement an indexing solution for the product sheets that Agent1 can use to answer customer questions.\nComplete the development of the video creation solution.\nTechnical Requirements -"
+  },
+  {
+    "id": "ai103-pdf-27",
+    "num": 27,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "Contoso identifies the following technical requirements:\nThe model deployment used by Agent1 must support scalable, high-throughput generative AI workloads and\ndynamically scale to handle variable customer support traffic, without requiring reserved throughput capacity.\nThe product sheets must be processed by using an indexing pipeline that enables semantic and vector search, so\nthat Agent1 can retrieve the relevant product information.\nResponses generated by using the product sheet information must be relevant, complete, and accurate.\nAgent1 must be able to use the product sheets to answer natural language questions about product details.\nThe model version used by Agent1 must remain consistent to ensure stable responses.\nThe data processed by the model must remain within the EU.\nSecurity and Compliance Requirements\nContoso identifies the following security and compliance requirements:\nAPI keys must NOT be used to access Foundry-deployed models.\nAccess to the Azure resources must follow the principle of least privilege.\nThe developers at Contoso must authenticate to Microsoft Foundry resources by using Microsoft Entra\nauthentication.\nAccess to Project1 must be assigned to the members of Agent1Dev Team by using a security group named\nSC_Agent1_Dev.\nAccess to Project1 must be assigned to the members of Agent1Test Team by using a security group named\nSC_Agent1_Test.\nAgent1 must never reveal customer information, even if a document that contains customer data is added\nerroneously to the product sheet repository in storage1.\nThe product sheets might contain images that include embedded text. Agent1 must be protected from malicious\ninstructions potentially hidden within the images.\nBusiness Requirements -\nContoso identifies the following business requirements:\nUsers that interact with Agent1 must have a personalized experience in future interactions, including the ability for\nAgent1 to retain conversation context and recall relevant information from previous interactions.\nAgent1 must answer questions only about the products sold by Contoso.\nYou need to recommend a solution to assess the responses generated by Agent1 when the agent uses the product\ninformation stored in storage1. The solution must meet the technical requirements.\nWhat should you include in the recommendation?",
+    "options": [
+      {
+        "id": "a",
+        "text": "a Retrieval Augmented Generation (RAG) evaluator"
+      },
+      {
+        "id": "b",
+        "text": "a custom guardrail"
+      },
+      {
+        "id": "c",
+        "text": "model fine-tuning"
+      },
+      {
+        "id": "d",
+        "text": "a groundedness evaluator"
+      }
+    ],
+    "correctIds": [
+      "d"
+    ],
+    "acceptedAnswer": {
+      "text": "a groundedness evaluator",
+      "explanation": "D. a groundedness evaluator.\nWhy it is correct: A groundedness evaluator (such as the GroundednessEvaluator in Azure AI Studio\nEvaluation) specifically measures how well the model's generated responses align with and are supported by\nthe input source"
+    },
+    "explanation": "D. a groundedness evaluator.\nWhy it is correct: A groundedness evaluator (such as the GroundednessEvaluator in Azure AI Studio\nEvaluation) specifically measures how well the model's generated responses align with and are supported by\nthe input source data (the product sheets inside storage1). This assessment ensures that the agent answers\nquestions accurately without fabricating facts or hallucinating information outside the provided company\ncontext.\nWhy the other options are incorrect:\nA (RAG evaluator): There is no single generic metric called a \"RAG evaluator\"; rather, RAG applications are\nevaluated using a combination of specific modular metrics like groundedness, coherence, and relevance.\nB (custom guardrail): Guardrails are real-time execution safety tools (such as Azure AI Content Safety) used\nto block policy violations or prompt injections during a live session, not standalone evaluation tools used to\nretroactively assess/grade generated content quality.\nC (model fine-tuning): Fine-tuning is an optimization technique used to customize a model's style, format, or\nspecialized domain vocabulary, not an assessment or evaluation metric solution.\nCase Study -\nThis is a case study. Case studies are not timed separately from other exam sections. You can use as much exam\ntime as you would like to complete each case study. However, there might be additional case studies or other\nexam sections. Manage your time to ensure that you can complete all the exam sections in the time provided. Pay\nattention to the Exam Progress at the top of the screen so you have sufficient time to complete any exam sections\nthat follow this case study.\nTo answer the case study questions, you will bed to reference information that is provided in the case. Case studies\nand associated questions might contain exhibits or other resources that provide more information about the\nscenario described in the case. Information provided in an individual question does not apply to the other questions\nin the case study.\nA Review Screen will appear at the end of this case study. From the Review Screen, you can review and change\nyour answers before you move to the next exam section. After you leave this case study, you will NOT be able to\nreturn to it.\nTo start the case study -\nTo display the first question in this case study, select the “Next” button. To the left of the question, a menu\nprovides links to information such as business requirements, the existing environment, and problem statements.\nPlease read through all this information before answering any questions. When you are ready to answer a question,\nselect the “Question” button to return to the question.\nOverview -\nCompany Information -\nContoso, Ltd is a multinational retail company that builds, deploys, and manages generative AI and agent-based\nsolutions by using Microsoft Foundry.\nExisting Environment -\nIdentity Environment -\nContoso uses Microsoft Entra ID for identity management, authentication, and authorization capabilities that\nenable agents to access organizational resources and services.\nContoso recently formed a new AI engineering team named Agent1Dev Team to optimize and maintain existing AI\nsolutions.\nThe team collaborates with solution architects, DevOps engineers, and security engineers to design, implement.\nmonitor, and secure AI applications.\nContoso also has a team named Agent1Test Team that is responsible for validating AI solutions before the solution\ndeployments.\nGenerative Environment -\nContoso has a Microsoft Foundry deployment that contains two projects named Project1 and Project2.\nProject1 -\nProject1 contains a customer support agent named Agent1 that assists customers with product inquiries and\ntroubleshooting requests.\nAgent1 has the following configurations:\n\nAgent1 uses a base model deployment.\nA safety evaluation pipeline is NOT enabled.\nTool invocation approval workflows are NOT enabled.\nConversation memory constraints are NOT configured.\nAgent1 interacts with customers by using digital support channels and answers general questions about Contoso\nproducts.\nProject1 is deployed to an Azure region located in the European Union (EU).\nAgent1Dev Team will use Project1 to optimize and maintain Agent1.\nProject2 -\nProject2 contains a deployed video generation model. The marketing department at Contoso has access to\nProject2 and plans to use the model to develop a video creation solution.\nDevelopment of the solution is incomplete.\nData Environment -\nContoso stores product-related information in Azure resources that support AI applications.\nThe Azure environment contains an Azure Blob Storage account named storage1 that stores product detail sheets\nfor all the Contoso products.\nThe product sheets include specifications, feature descriptions, and product support information that Agent1 can\nuse to answer customer questions. The product sheets are stored in the PDF format.\nProblem Statements -\nContoso identifies the following issues:\nAgent1 has only general knowledge of the Contoso products.\nA recent chat interaction with Agent1 was analyzed for sentiment. The results of the analysis have NOT been\nprocessed yet.\nAgent1 does NOT use the detailed product information in the product sheets stored in storage1 when responding\nto customer questions.\nThe finance department at Contoso reports that vendor invoices must be reviewed manually to ensure that the\ninvoices match the terms defined in the vendor contracts. The invoices contain tables, logos, and varied layouts\nthat make the documents difficult to process consistently.\nRequirements -\nPlanned Changes -\nContoso plans to implement the following changes:\nImplement a solution for Project1 that analyzes the vendor invoices by evaluating both the visual layout and the\ntextual content of the invoices, so that the invoice details can be verified against the vendor contract terms.\nUpdate the base model deployment used by Agent1 and standardize the model version to ensure continuity and\nconsistent responses.\nEnable Agent1 to retrieve and use the detailed product information from the product sheets stored in storage1.\nImplement an indexing solution for the product sheets that Agent1 can use to answer customer questions.\nComplete the development of the video creation solution.\nTechnical Requirements -"
+  },
+  {
+    "id": "ai103-pdf-28",
+    "num": 28,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "Contoso identifies the following technical requirements:\nThe model deployment used by Agent1 must support scalable, high-throughput generative AI workloads and\ndynamically scale to handle variable customer support traffic, without requiring reserved throughput capacity.\nThe product sheets must be processed by using an indexing pipeline that enables semantic and vector search, so\nthat Agent1 can retrieve the relevant product information.\nResponses generated by using the product sheet information must be relevant, complete, and accurate.\nAgent1 must be able to use the product sheets to answer natural language questions about product details.\nThe model version used by Agent1 must remain consistent to ensure stable responses.\nThe data processed by the model must remain within the EU.\nSecurity and Compliance Requirements\nContoso identifies the following security and compliance requirements:\nAPI keys must NOT be used to access Foundry-deployed models.\nAccess to the Azure resources must follow the principle of least privilege.\nThe developers at Contoso must authenticate to Microsoft Foundry resources by using Microsoft Entra\nauthentication.\nAccess to Project1 must be assigned to the members of Agent1Dev Team by using a security group named\nSC_Agent1_Dev.\nAccess to Project1 must be assigned to the members of Agent1Test Team by using a security group named\nSC_Agent1_Test.\nAgent1 must never reveal customer information, even if a document that contains customer data is added\nerroneously to the product sheet repository in storage1.\nThe product sheets might contain images that include embedded text. Agent1 must be protected from malicious\ninstructions potentially hidden within the images.\nBusiness Requirements -\nContoso identifies the following business requirements:\nUsers that interact with Agent1 must have a personalized experience in future interactions, including the ability for\nAgent1 to retain conversation context and recall relevant information from previous interactions.\n\nAgent1 must answer questions only about the products sold by Contoso.\nYou need to configure Agent1 to answer customer questions about only the Contoso products. The solution must\nmeet the business requirements.\nWhat should you do?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Modify the system message instructions."
+      },
+      {
+        "id": "b",
+        "text": "Add few-shot examples."
+      },
+      {
+        "id": "c",
+        "text": "Apply top-p sampling."
+      },
+      {
+        "id": "d",
+        "text": "Increase the value of the temperature parameter."
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "Modify the system message instructions.",
+      "explanation": "Technical Justification for Correct Answer: A. Modify the system message instructions\nTo address the business requirement that \"Agent1 must answer questions only about the products sold by\nContoso,\" modifying the system message instructions is the mo"
+    },
+    "explanation": "Technical Justification for Correct Answer: A. Modify the system message instructions\nTo address the business requirement that \"Agent1 must answer questions only about the products sold by\nContoso,\" modifying the system message instructions is the most appropriate action. Here's why:\nWhy A is the best choice:\nSystem Message Instructions are used to provide initial or contextual instructions to the model, defining its\nscope, behavior, or the domain of knowledge it should operate within. By modifying these instructions, you can\nexplicitly limit Agent1's response domain to Contoso's products, aligning with the business requirement for\npersonalized and relevant interactions.\nThis approach directly influences the model's understanding of its operational boundaries without altering the\nunderlying model's capabilities unnecessarily.\nWhy other options are less suitable:\nB. Add few-shot examples:\nWhile few-shot examples can guide the model towards understanding the desired output for specific inputs,\nthey do not guarantee a strict limitation to Contoso products across all possible queries. This method is more\nabout fine-tuning for specific examples rather than setting a broad operational boundary.\nC. Apply top-p sampling:\nTop-p sampling is a technique to control the diversity of generated text by only considering the top\nprobabilities. It does not restrict the model's domain knowledge or ensure responses are limited to Contoso\nproducts; it merely influences the variability of responses.\nD. Increase the value of the temperature parameter:\nThe temperature parameter in generation models controls the randomness of the output. Increasing it would\nlead to more diverse but potentially less relevant or accurate responses. This has no direct bearing on limiting\nthe model's responses to Contoso products.\nAdditional Considerations Aligning with Other Requirements:\nFor scalable, high-throughput generative AI workloads and dynamic scaling without reserved throughput,\nleveraging Azure's auto-scaling capabilities for the model deployment (possibly through Azure Kubernetes\nService (AKS) or serverless options like Azure Functions) would be advisable, though this is not directly\nrelated to the question asked.\nIndexing solution for semantic and vector search of product sheets could be achieved with Azure Cognitive\nSearch, integrating with the model to fetch relevant product information.\nConsistency in model version can be managed through careful deployment strategies and version control in\n\nMicrosoft Foundry.\nData processed within the EU is already addressed by Project1's deployment in an EU Azure region.\nSecurity Requirements (least privilege, Microsoft Entra authentication, etc.) are met through the described\nuse of security groups and avoiding API keys, aligning with the provided security and compliance\nrequirements.\nReferences\n1. Microsoft Learn - Customize model behavior with system messages: https://learn.microsoft.com/en-\nus/azure/cognitive-services/language-generation/customize-model-behavior-system-messages\n2. Azure Cognitive Search for Semantic Search: https://learn.microsoft.com/en-\nus/azure/search/search-what-is-semantic-search"
+  },
+  {
+    "id": "ai103-pdf-29",
+    "num": 29,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project.\nYou plan to build a customer support solution that contains an agent. The solution must meet the following\nrequirements:\nProvide accurate, context-aware responses grounded in internal product documentation stored in Azure AI Search.\nRequire deep, multi-step reasoning across long contexts.\nGenerate detailed natural language responses.\nWhich type of model should you use to power the agent?",
+    "options": [
+      {
+        "id": "a",
+        "text": "a multimodal model"
+      },
+      {
+        "id": "b",
+        "text": "a small language model (SLM)"
+      },
+      {
+        "id": "c",
+        "text": "a key phrase extraction model"
+      },
+      {
+        "id": "d",
+        "text": "a large language model (LLM)"
+      }
+    ],
+    "correctIds": [
+      "d"
+    ],
+    "acceptedAnswer": {
+      "text": "a large language model (LLM)",
+      "explanation": "Technical Justification for Choosing D: a Large Language Model (LLM)\nRequirements Analysis and Model Selection\nThe customer support solution requires a model that can:\n1. Provide accurate, context-aware responses based on internal product documentati"
+    },
+    "explanation": "Technical Justification for Choosing D: a Large Language Model (LLM)\nRequirements Analysis and Model Selection\nThe customer support solution requires a model that can:\n1. Provide accurate, context-aware responses based on internal product documentation stored in Azure\nAI Search.\n2. Perform deep, multi-step reasoning across long contexts.\n3. Generate detailed natural language responses.\nWhy D (Large Language Model - LLM) is the Best Choice:\nContext Awareness and Accuracy: LLMs are trained on vast amounts of text data, enabling them to\nunderstand complex contexts and provide accurate responses. Integrating with Azure AI Search, an LLM can\neffectively leverage the internal product documentation to generate informed responses.\nDeep, Multi-Step Reasoning: The architectural design of LLMs, often based on transformer models,\nfacilitates the handling of long-range dependencies and multi-step reasoning, crucial for resolving complex\ncustomer inquiries.\nDetailed Natural Language Responses: LLMs are renowned for their capability to produce coherent, detailed,\nand natural-sounding text, aligning perfectly with the need for comprehensive support responses.\n\nWhy Other Options are Less Suitable:\nA. Multimodal Model:\nWhile useful for processing multiple data types (e.g., text, images), the primary requirement here focuses on\ntext-based reasoning and response generation, making the multimodal aspect less critical.\nMay introduce unnecessary complexity without direct benefit for the specified text-centric tasks.\nB. Small Language Model (SLM):\nSLMs lack the scale and depth of training data compared to LLMs, potentially resulting in less accurate or\nless contextually aware responses.\nMay struggle with the deep, multi-step reasoning required for complex support queries.\nC. Key Phrase Extraction Model:\nDesigned primarily for identifying key phrases rather than generating detailed, context-aware responses.\nFails to meet the requirements for multi-step reasoning and natural language response generation.\nConclusionGiven the specific requirements of the customer support solution, a Large Language Model (LLM)\nis the most appropriate choice due to its capabilities in context-aware response generation, deep reasoning,\nand detailed natural language output.\nReferences\n1. Azure AI Search Documentation: https://learn.microsoft.com/en-us/azure/search/search-what-is-\nazure-search\n2. Microsoft Learn - Large Language Models: https://learn.microsoft.com/en-us/azure/cognitive-\nservices/language-service/concepts/large-language-models\nDRAG DROP -"
+  },
+  {
+    "id": "ai103-pdf-30",
+    "num": 30,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "ordering",
+    "domain": "Domain 2: Implement generative AI and agent solutions",
+    "subdomain": "Subdomain 2.1: Develop and deploy AI agents and generative solutions",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that contains a deployed ticket-triage agent.\nYou discover that sometimes the agent responds without calling any tools, even when a tool is required.\nYou need to ensure that the agent calls a tool during execution.\nHow should you complete the Python code? To answer, drag the appropriate values to the correct targets. Each\nvalue may be used once, more than once, or not at all. You may need to drag the split bar between panes or scroll\nto view content.\nNOTE: Each correct selection is worth one point.",
+    "options": [
+      {
+        "id": "step-1",
+        "text": "Provision an on-premises Kubernetes cluster with outbound internet connectivity."
+      },
+      {
+        "id": "step-2",
+        "text": "Pull the required Azure AI container image from Microsoft Container Registry (MCR)."
+      },
+      {
+        "id": "step-3",
+        "text": "Run the container image and specify the Azure AI resource endpoint URL and API key."
+      },
+      {
+        "id": "step-4",
+        "text": "Configure the client application to direct inference queries to the local container endpoint."
+      }
+    ],
+    "correctIds": [
+      "step-1",
+      "step-2",
+      "step-3",
+      "step-4"
+    ],
+    "acceptedAnswer": {
+      "text": "Provision an on-premises Kubernetes cluster with outbound internet connectivity. -> Pull the required Azure AI container image from Microsoft Container Registry (MCR). -> Run the container image and specify the Azure AI resource endpoint URL and API key. -> Configure the client application to direct inference queries to the local container endpoint.",
+      "explanation": "\"tool_choice\": This parameter key overrides the default tool execution behavior for a specific thread run.\nrequired\": Setting this value forces the agent to deterministically invoke at least one configured tool (such as\nthe MCP tool mentioned in prio"
+    },
+    "explanation": "\"tool_choice\": This parameter key overrides the default tool execution behavior for a specific thread run.\nrequired\": Setting this value forces the agent to deterministically invoke at least one configured tool (such as\nthe MCP tool mentioned in prior scenario requirements) before providing a final response, preventing the\nagent from bypassing tool execution."
+  },
+  {
+    "id": "ai103-pdf-31",
+    "num": 31,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 5: Implement document intelligence solutions",
+    "subdomain": "Subdomain 5.1: Extract data using Document Intelligence",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You are building a web app named App1 that generates responses by using a model deployed to a Microsoft\nFoundry project named Project1.\nBefore sending the prompts to the model, App1 must retrieve documents by using Azure AI Search.\nYou need to integrate Project1 and App1. The solution must meet the following requirements:\nMultiple client applications must use the same search configuration.\nA security policy must prevent key-based authentication.\nAdministrative effort must be minimized.\nWhat should you do?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Create a custom HTTP connection in Foundry and manually configure Azure AI Search endpoints per\napplication."
+      },
+      {
+        "id": "b",
+        "text": "Configure an Azure AI Search connection in Project1 and reference the connection in each application."
+      },
+      {
+        "id": "c",
+        "text": "Call Azure AI Search directly from each application by using Microsoft Entra authentication."
+      },
+      {
+        "id": "d",
+        "text": "Enable a managed identity for each application and call Azure AI Search directly."
+      }
+    ],
+    "correctIds": [
+      "b"
+    ],
+    "acceptedAnswer": {
+      "text": "Configure an Azure AI Search connection in Project1 and reference the connection in each application.",
+      "explanation": "Technical Justification for Correct Answer: B\nWhy B is the Best Option:\nMeets Requirement 1: Multiple Client Applications - Configuring an Azure AI Search connection in Project1\nallows for a single, reusable search configuration that can be easily re"
+    },
+    "explanation": "Technical Justification for Correct Answer: B\nWhy B is the Best Option:\nMeets Requirement 1: Multiple Client Applications - Configuring an Azure AI Search connection in Project1\nallows for a single, reusable search configuration that can be easily referenced by multiple client applications\n(including App1), streamlining the setup process.\nMeets Requirement 2: Prevents Key-Based Authentication - By integrating the search connection at the\nProject1 level, the solution can leverage more secure authentication methods (e.g., managed identities, service\nprincipals with appropriate permissions) instead of key-based authentication for Azure AI Search.\nMeets Requirement 3: Minimizes Administrative Effort - Centralizing the Azure AI Search configuration in\nProject1 reduces the administrative burden compared to configuring each application individually. Updates or\n\nchanges to the search configuration can be made in one place.\nWhy Other Options are Less Suitable:\nA. Custom HTTP Connection in Foundry (Manual Configuration per Application)\nFails Requirement 3: Maximal administrative effort due to manual configuration for each application.\nInefficient: Does not scale well with multiple applications.\nC. Call Azure AI Search Directly from Each Application using Microsoft Entra Authentication\nPartially Addresses Requirement 2: While Entra authentication is secure, this option does not inherently\nprevent key-based authentication if not properly configured.\nFails Requirement 1 & 3: Each application would need its own configuration, increasing effort and potentially\nleading to configuration inconsistencies.\nD. Enable Managed Identity for Each Application and Call Azure AI Search Directly\nAddresses Requirement 2: Secure authentication via managed identities.\nFails Requirement 1 & 3: Similar to C, this approach requires per-application setup and maintenance, lacking\nthe centralization benefit for the search configuration.\nCorrect Action: B. Configure an Azure AI Search connection in Project1 and reference the connection in\neach application.\nReferences\n1. Azure AI Search Documentation - Integrate Azure AI Search with Azure Services\n2. Microsoft Foundry and Azure AI Search Integration - Deploy and integrate models with Azure\nservices (Refer to sections relevant to Azure AI Search and project integrations)\nDRAG DROP -"
+  },
+  {
+    "id": "ai103-pdf-32",
+    "num": 32,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "ordering",
+    "domain": "Domain 2: Implement generative AI and agent solutions",
+    "subdomain": "Subdomain 2.1: Develop and deploy AI agents and generative solutions",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that contains an agent used by the financial analysts at your company.\nYou need to optimize the agent workflow by providing additional data access and processing capabilities. The\nsolution must meet the following requirements:\nEnsure that the agent can perform calculations during conversations.\nEnsure that the agent can access up-to-date information from public websites.\nEnsure that the agent can retrieve information from documents uploaded directly to the agent.\nWhat should you use for each requirement? To answer, drag the appropriate tools to the correct requirements.\nEach tool may be used once, more than once, or not at all. You may need to drag the split bar between panes or\nscroll to view content.\nNOTE: Each correct selection is worth one point.",
+    "options": [
+      {
+        "id": "step-1",
+        "text": "Provision an on-premises Kubernetes cluster with outbound internet connectivity."
+      },
+      {
+        "id": "step-2",
+        "text": "Pull the required Azure AI container image from Microsoft Container Registry (MCR)."
+      },
+      {
+        "id": "step-3",
+        "text": "Run the container image and specify the Azure AI resource endpoint URL and API key."
+      },
+      {
+        "id": "step-4",
+        "text": "Configure the client application to direct inference queries to the local container endpoint."
+      }
+    ],
+    "correctIds": [
+      "step-1",
+      "step-2",
+      "step-3",
+      "step-4"
+    ],
+    "acceptedAnswer": {
+      "text": "Provision an on-premises Kubernetes cluster with outbound internet connectivity. -> Pull the required Azure AI container image from Microsoft Container Registry (MCR). -> Run the container image and specify the Azure AI resource endpoint URL and API key. -> Configure the client application to direct inference queries to the local container endpoint.",
+      "explanation": "Access up-to-date information (Grounding with Bing Search): This native tool allows the agent to execute\nreal-time web queries to retrieve current information and facts from public websites, mitigating static\nknowledge-cutoff limitations.\nPerform cal"
+    },
+    "explanation": "Access up-to-date information (Grounding with Bing Search): This native tool allows the agent to execute\nreal-time web queries to retrieve current information and facts from public websites, mitigating static\nknowledge-cutoff limitations.\nPerform calculations (Code interpreter): This tool creates a sandboxed runtime environment where the agent\ncan dynamically write and execute Python code to handle complex mathematical operations, logical\ncalculations, and data processing accurately.\nRetrieve information from documents (File search): This built-in vector search/RAG capability parses and\nprocesses local document uploads (such as PDFs, DOCX, or TXT files) directly attached to the agent or thread,\nallowing the model to quickly search across their contents."
+  },
+  {
+    "id": "ai103-pdf-33",
+    "num": 33,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "multiple_choice",
+    "domain": "Domain 5: Implement document intelligence solutions",
+    "subdomain": "Subdomain 5.1: Extract data using Document Intelligence",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that contains a prompt agent used by a customer support web app.\nThe agent is invoked from a Python service that does NOT run in the Foundry portal.\nYou need to implement end-to-end tracing to capture latency breakdowns and exceptions across agent runs.\nWhich two components can you use? Each correct answer presents a complete solution.\nNOTE: Each correct selection is worth one point.",
+    "options": [
+      {
+        "id": "a",
+        "text": "a Log Analytics workspace"
+      },
+      {
+        "id": "b",
+        "text": "Application Insights"
+      },
+      {
+        "id": "c",
+        "text": "OpenTelemetry"
+      },
+      {
+        "id": "d",
+        "text": "the Azure Monitor Agent"
+      },
+      {
+        "id": "e",
+        "text": "Microsoft Sentinel"
+      }
+    ],
+    "correctIds": [
+      "b",
+      "c"
+    ],
+    "acceptedAnswer": {
+      "text": "Application Insights, OpenTelemetry",
+      "explanation": "Technical Justification for Correct Answer: BC\nTo implement end-to-end tracing for capturing latency breakdowns and exceptions across agent runs in a\nMicrosoft Foundry project, where the agent is invoked from an external Python service, the chosen\nco"
+    },
+    "explanation": "Technical Justification for Correct Answer: BC\nTo implement end-to-end tracing for capturing latency breakdowns and exceptions across agent runs in a\nMicrosoft Foundry project, where the agent is invoked from an external Python service, the chosen\ncomponents must effectively handle distributed tracing, support integration with both Foundry and non-Azure\n(or external) services, and provide comprehensive insights into performance and errors.\nWhy B (Application Insights) is Correct:\nIntegration with Foundry and External Services: Application Insights (AI) seamlessly integrates with Azure\nservices, including Foundry, and can be easily set up for external applications through its SDKs, which include\na Python SDK for the external Python service.\n\nEnd-to-End Tracing Capability: AI offers automatic detection of dependencies and detailed latency\nbreakdowns, crucial for identifying bottlenecks across the agent and the Python service.\nException Tracking: It provides robust exception tracking, alerted and detailed enough for debugging across\ndifferent components of the application.\nWhy C (OpenTelemetry) is Correct:\nStandard for Distributed Tracing: OpenTelemetry is an open standard for distributed tracing and telemetry,\nmaking it highly compatible with both Azure services (like Foundry) and external services (like the Python\napplication), ensuring a unified view of the system.\nFlexibility in Backends: While OpenTelemetry itself doesn’t store data, it can be configured to send traces to\nvarious backends, including Application Insights, making it a complementary choice for ensuring traces from\nall parts of the system are captured consistently.\nPython Support: OpenTelemetry has a Python SDK, facilitating its integration with the external Python\nservice for comprehensive tracing.\nWhy Other Options are Less Suitable:\nA. Log Analytics workspace: While useful for log aggregation and analysis, it's more focused on logging than\non the end-to-end tracing and latency breakdowns required. It can be used in conjunction with other tools but\ndoesn’t provide the tracing capabilities on its own.\nD. the Azure Monitor Agent: Primarily designed for collecting metrics and logs from VMs and physical\nservers, it's not the best fit for tracing in serverlessastr web apps or external services like the described\nPython service.\nE. Microsoft Sentinel: A security information and event management (SIEM) system, it’s more focused on\nsecurity analytics rather than application performance tracing and latency analysis.\nReferences:\n1. Application Insights Documentation: https://docs.microsoft.com/en-us/azure/azure-monitor/app/\n2. OpenTelemetry Documentation (Python):\nhttps://opentelemetry.io/docs/instrumentation/python/getting-started/"
+  },
+  {
+    "id": "ai103-pdf-34",
+    "num": 34,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 5: Implement document intelligence solutions",
+    "subdomain": "Subdomain 5.1: Extract data using Document Intelligence",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a customer support agent that uses the Microsoft Foundry Agent Service.\nSometimes, customers return to a session days later to continue the same support case, and the agent must\nresume with the full historical context. The agent must provide the following:\nMulti-turn continuity within the session\nCross-session continuity for the same case\nAccess to the full interaction history, including user messages, agent messages, tool calls, and tool outputs\nYou need to ensure that the agent automatically reloads the complete history on each new turn.\nWhat should you do?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Create and reuse a conversation by storing the conversation’s ID and supplying the ID on subsequent\nrequests."
+      },
+      {
+        "id": "b",
+        "text": "Persist only the final model response stored in the client application and prepend the response to future\nprompts."
+      },
+      {
+        "id": "c",
+        "text": "Enable memory summarization on the agent definition to persist the context automatically."
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "Create and reuse a conversation by storing the conversation’s ID and supplying the ID on subsequent\nrequests.",
+      "explanation": "Technical Justification for Correct Option (A)\nTo ensure the Microsoft Foundry Agent Service automatically reloads the complete history on each new turn\nfor resuming support cases with full historical context, Option A is the most suitable choice. He"
+    },
+    "explanation": "Technical Justification for Correct Option (A)\nTo ensure the Microsoft Foundry Agent Service automatically reloads the complete history on each new turn\nfor resuming support cases with full historical context, Option A is the most suitable choice. Here’s why:\nWhy A is Correct:\nMulti-turn and Cross-session Continuity: Creating and reusing a conversation by storing the conversation’s\nID allows for both multi-turn continuity within a session and cross-session continuity for the same case. This\napproach maintains the conversation's state across different interactions.\nAccess to Full Interaction History: By supplying the stored conversation ID on subsequent requests, the\nagent can retrieve the entire interaction history, including user messages, agent messages, tool calls, and tool\noutputs, ensuring the agent has the full context.\nAutomatic Reload of History: This method inherently enables the automatic reloading of the conversation's\nhistory upon providing the ID, meeting the requirement without needing additional logic for history retrieval.\nWhy Other Options are Less Suitable:\nB. Persist only the final model response:\nInadequate Context: Only storing the final model response would lose the detailed interaction history, making\nit impossible to fully resume the case with all context.\nLacks Multi-turn Continuity: Prepending the final response to future prompts does not recreate the\nconversational flow or provide access to all previous messages and tool interactions.\nC. Enable memory summarization on the agent definition:\nSummarization Limitations: Memory summarization might not capture the entirety of the interaction history\nwith the same fidelity as storing the conversation ID. It's designed for highlighting key points rather than\npreserving a complete record.\nUnclear Persistence Across Sessions: There’s no clear indication that memory summarization persists across\nsessions in the same detailed manner as reusing a conversation ID. It’s more suited for in-session context\nmanagement.\nReferences\nMicrosoft Documentation: Conversations in Microsoft Bot Framework\nMicrosoft Foundry Documentation: Managing Conversation State Note: Due to the dynamic nature of\ndocumentation and the specificity of \"Microsoft Foundry Agent Service\" (which might be a hypothetical or\nless-documented service in the provided context), the second link is assumed based on common Microsoft\nservice patterns. For actual implementation, always refer to the most current and specific documentation for\nyour service.\nHOTSPOT -"
+  },
+  {
+    "id": "ai103-pdf-35",
+    "num": 35,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 2: Implement generative AI and agent solutions",
+    "subdomain": "Subdomain 2.1: Develop and deploy AI agents and generative solutions",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that contains a deployed chat model.\nYou have a Python service that sends API requests to the model. The service is integrated with an automated\nvalidation system that compares generated outputs against approved response patterns.\nStakeholders report that small wording differences are causing validation mismatches.\nYou need to update the request parameters to improve output stability. The solution must maximize reasoning\nquality.\nHow should you complete the Python code? To answer, select the appropriate options in the answer area.\nNOTE: Each correct selection is worth one point.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Explanation:"
+      },
+      {
+        "id": "b",
+        "text": "Alternative manual configuration using individual resource keys and shared access signatures"
+      },
+      {
+        "id": "c",
+        "text": "Direct legacy cognitive service endpoint without managed identity authentication"
+      },
+      {
+        "id": "d",
+        "text": "Client-side prompt validation rule without central service integration"
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "Explanation:",
+      "explanation": "temperature :1\nWhen enabling extended or adaptive reasoning via the thinking parameter ( \"type\": \"enabled\" ), API rules\nmandate that the temperature must be set to exactly 1 (or omitted completely). Attempting to use a\ndeterministic value like 0 or h"
+    },
+    "explanation": "temperature :1\nWhen enabling extended or adaptive reasoning via the thinking parameter ( \"type\": \"enabled\" ), API rules\nmandate that the temperature must be set to exactly 1 (or omitted completely). Attempting to use a\ndeterministic value like 0 or high variance like 2 will result in a standard HTTP 400 Bad Request validation\nerror from the API gateway.\noutput_config= \"effort\": ... (\"low\"):\nThe user request is a straightforward text summary (\"Summarize the release notes in 3 bullet points\"). To\nprevent the reasoning model from unnecessarily burning through excessive internal thinking tokens on simple\n\nretrieval/summarization tasks—which directly impacts latency and billing—the overall reasoning intensity\nshould be set to a lower tier like \"low\" or \"medium\"."
+  },
+  {
+    "id": "ai103-pdf-36",
+    "num": 36,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 5: Implement document intelligence solutions",
+    "subdomain": "Subdomain 5.1: Extract data using Document Intelligence",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a chat app in a Microsoft Foundry project and an Azure AI Search vectorized index.\nYou need to connect to the index to meet the following requirements:\nComplex questions must retrieve information from multiple chunks.\nMulti-turn conversations must influence retrieval planning.\nRetrievals must run in parallel to reduce latency.\nWhich retrieval approach should you use?",
+    "options": [
+      {
+        "id": "a",
+        "text": "iterative retrieval"
+      },
+      {
+        "id": "b",
+        "text": "agentic Retrieval Augmented Generation (RAG)"
+      },
+      {
+        "id": "c",
+        "text": "chain of thought"
+      },
+      {
+        "id": "d",
+        "text": "classic Retrieval Augmented Generation (RAG)"
+      }
+    ],
+    "correctIds": [
+      "b"
+    ],
+    "acceptedAnswer": {
+      "text": "agentic Retrieval Augmented Generation (RAG)",
+      "explanation": "Technical Justification for Correct Answer: B - Agentic Retrieval Augmented Generation (RAG)\nWhy B (Agentic Retrieval Augmented Generation) is the Best Choice:\nComplex Questions & Multi-Chunk Retrieval: Agentic RAG is designed to handle complex, open"
+    },
+    "explanation": "Technical Justification for Correct Answer: B - Agentic Retrieval Augmented Generation (RAG)\nWhy B (Agentic Retrieval Augmented Generation) is the Best Choice:\nComplex Questions & Multi-Chunk Retrieval: Agentic RAG is designed to handle complex, open-ended\nquestions by leveraging an agent's capability to iteratively query a knowledge base (in this case, the Azure AI\nSearch vectorized index) across multiple chunks of information. This aligns perfectly with the requirement to\nretrieve information from multiple chunks.\nMulti-Turn Conversations Influence: The \"agentic\" aspect implies the use of an AI agent that can understand\ncontext and adjust its queries based on previous conversation turns, directly influencing retrieval planning to\nprovide more accurate and contextual responses.\nParallel Retrievals for Latency Reduction: Agentic RAG, being part of more advanced AI architectures, is\nmore likely to support or be compatible with parallel processing of queries to the vectorized index, reducing\nlatency in retrieving information from multiple sources simultaneously.\nWhy Other Options are Less Suitable:\nA. Iterative Retrieval:\nLack of Contextual Understanding: Iterative retrieval lacks the contextual understanding and adaptive query\ngeneration provided by an agentic approach, making it less suitable for multi-turn conversations.\nScalability and Latency: While it can retrieve from multiple chunks, it doesn't inherently support parallel\nretrievals as effectively as agentic models might, potentially leading to higher latency.\nC. Chain of Thought:\nPrimary Focus: More focused on generating a step-by-step reasoning process for a model's answer rather\nthan efficient, parallel retrieval from an external index.\nNot Designed for External Index Interaction: Less optimized for interacting with an external vectorized index\nin the manner required.\nD. Classic Retrieval Augmented Generation (RAG):\n\nSingle-Pass Retrieval: Classic RAG typically involves a single retrieval pass, which is less effective for\ncomplex, multi-chunk queries compared to the iterative, adaptive approach of Agentic RAG.\nLimited Contextual Adaptation: Lacks the agentic capability to adapt retrieval plans based on multi-turn\nconversation context.\nReferences\nMicrosoft Azure - Azure Cognitive Search for Complex Queries\nResearch on Agentic Retrieval Augmented Generation for Conversational AI\nHOTSPOT -"
+  },
+  {
+    "id": "ai103-pdf-37",
+    "num": 37,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You need to recommend a plan to create a customer support agent by using the Microsoft Foundry Agent Service.\nThe agent must meet the following requirements:\nRetain user preferences across multiple conversations.\nEnable users to provide contextual grounding by directly uploading documents during a chat.\nWhich Foundry capability should you recommend for each requirement? To answer, select the appropriate options\nin the answer area.\nNOTE: Each correct selection is worth one point.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Explanation:"
+      },
+      {
+        "id": "b",
+        "text": "Alternative manual configuration using individual resource keys and shared access signatures"
+      },
+      {
+        "id": "c",
+        "text": "Direct legacy cognitive service endpoint without managed identity authentication"
+      },
+      {
+        "id": "d",
+        "text": "Client-side prompt validation rule without central service integration"
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "Explanation:",
+      "explanation": "To retain user preferences across conversations, use:\nAgent memory that uses persistent storage.\nTo enable users to provide contextual grounding during chats, use the:\nFile search tool\nRetaining Preferences Across Conversations: Standard conversation"
+    },
+    "explanation": "To retain user preferences across conversations, use:\nAgent memory that uses persistent storage.\nTo enable users to provide contextual grounding during chats, use the:\nFile search tool\nRetaining Preferences Across Conversations: Standard conversation history only persists context within a\n\nsingle active thread session. To remember user preferences and profile parameters long-term across\nseparate conversations or multiple threads, you must utilize Agent memory that uses persistent storage\n(such as Azure AI Foundry's native persistent memory or long-term profile storage capabilities).\nContextual Grounding During Chats: The File search tool allows end users to upload documentation, images,\nor reference files directly into an active chat session or thread. The agent automatically ingests these\ndocuments to provide immediate, contextual grounding for user queries."
+  },
+  {
+    "id": "ai103-pdf-38",
+    "num": 38,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 5: Implement document intelligence solutions",
+    "subdomain": "Subdomain 5.1: Extract data using Document Intelligence",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that contains an agent. The agent generates summaries from retrieved\npolicy documents.\nYou need to improve response completeness. The solution must be implemented in the logic of the application\ncode before responses are returned.\nWhat should you do?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Add a retry evaluation before the responses are returned."
+      },
+      {
+        "id": "b",
+        "text": "Decrease the value of the max_tokens parameter."
+      },
+      {
+        "id": "c",
+        "text": "Switch to Retrieval Augmented Generation (RAG)."
+      },
+      {
+        "id": "d",
+        "text": "Replace the model with a smaller deployment."
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "Add a retry evaluation before the responses are returned.",
+      "explanation": "Technical Justification for Correct Answer: A\nWhy A is the best option:To improve response completeness in the context of an agent generating summaries\nfrom retrieved policy documents within a Microsoft Foundry project, adding a retry evaluation befo"
+    },
+    "explanation": "Technical Justification for Correct Answer: A\nWhy A is the best option:To improve response completeness in the context of an agent generating summaries\nfrom retrieved policy documents within a Microsoft Foundry project, adding a retry evaluation before\nresponses are returned (Option A) is the most appropriate solution. This approach directly addresses\npotential issues with incomplete responses by allowing the system to re-attempt the generation or retrieval\nprocess if the initial response does not meet a defined completeness threshold. This can be implemented\nwithin the application logic to ensure that responses are thoroughly reviewed before being returned to the\nuser, enhancing overall completeness without necessarily altering the core model or parameters in a way that\nmight compromise other aspects of performance.\nWhy other options are less suitable:\nB. Decrease the value of the max_tokens parameter:Decreasing max_tokens would actually limit the\npotential length of the responses, which could worsen the issue of incompleteness by artificially capping the\nresponse size, potentially truncating summaries.\nC. Switch to Retrieval Augmented Generation (RAG):While RAG can enhance the accuracy and relevance of\ngenerated text by augmenting the model with external knowledge retrieval, switching to RAG is a significant\narchitectural change. It does not directly address the issue of response completeness in the context of the\ncurrent implementation's logic before responses are returned. It's more about improving accuracy and\nrelevance than ensuring completeness of the generated summaries based on the retrieved documents.\nD. Replace the model with a smaller deployment:Deploying a smaller model could reduce computational\ncosts and potentially speed up response times, but itlikely compromises the model's capacity to generate\ncomplete and detailed summaries due to reduced computational power and possibly less training data\ncapacity, potentially worsening the completeness issue.\n\nReferences:\nMicrosoft Azure Documentation - Retry Logic in Azure Applications: https://learn.microsoft.com/en-\nus/azure/architecture/resilience/retry-service-specific\nAzure Cognitive Services - Understanding Model Parameters (max_tokens context):\nhttps://learn.microsoft.com/en-us/azure/cognitive-services/language/understand-how-to-use-language-\nmodel#model-parameters"
+  },
+  {
+    "id": "ai103-pdf-39",
+    "num": 39,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 5: Implement document intelligence solutions",
+    "subdomain": "Subdomain 5.1: Extract data using Document Intelligence",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a customer support agent built by using the Microsoft Foundry Agent Service. The agent calls an Azure\nOpenAI model deployment.\nDuring load testing, calls intermittently fail and return an HTTP 429 rate limit exceeded error.\nYou need to handle throttling to reduce call failures and improve reliability under load. The solution must remain\nwithin the service and model limits.\nWhat should you do?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Create a new thread and retry the calls immediately."
+      },
+      {
+        "id": "b",
+        "text": "Reduce the number of registered tools."
+      },
+      {
+        "id": "c",
+        "text": "Implement a retry policy that uses exponential backoff and jitter."
+      },
+      {
+        "id": "d",
+        "text": "Spit uploaded content into smaller files."
+      }
+    ],
+    "correctIds": [
+      "c"
+    ],
+    "acceptedAnswer": {
+      "text": "Implement a retry policy that uses exponential backoff and jitter.",
+      "explanation": "Technical Justification for Correct Answer (C)\nWhy C is the Best Option:Implementing a retry policy with exponential backoff and jitter (Option C) is the\nmost suitable solution for handling throttling and reducing call failures when encountering HTTP"
+    },
+    "explanation": "Technical Justification for Correct Answer (C)\nWhy C is the Best Option:Implementing a retry policy with exponential backoff and jitter (Option C) is the\nmost suitable solution for handling throttling and reducing call failures when encountering HTTP 429 rate\nlimit exceeded errors. This approach directly addresses the rate limiting issue by adjusting the retry timing\nbased on the failure response, preventing immediate repeated failures, and reducing the load on the Azure\nOpenAI model deployment. Exponential backoff increases the wait time between retries after each failure,\nwhile jitter introduces randomness in the wait time, preventing a \"sudden death\" scenario where all retries\nhappen at once after the same wait period, thus more effectively distributing the load.\nWhy Other Options are Less Suitable:\nA. Create a new thread and retry the calls immediately:\nImmediate retries without a backoff strategy will likely result in repeated failures, as the rate limit condition\nhasn't changed.\nCreating a new thread for each retry can lead to resource exhaustion and does not address the underlying\nthrottling issue.\nB. Reduce the number of registered tools:\nThis might indirectly reduce the load but does not directly address the throttling issue during peak loads.\nIt could lead to underutilization of resources if not carefully planned.\nD. Split uploaded content into smaller files:\nThis approach does not address rate limiting on API calls to the Azure OpenAI model.\nIt might be beneficial for upload limits or processing time but is irrelevant to the throttling problem\n\ndescribed.\nCorrect Approach (Detailed):\nImplement a Retry Policy with:\nExponential Backoff: Increase the wait time exponentially after each failed retry (e.g., 1s, 2s, 4s, 8s, ...).\nJitter: Introduce randomness in the wait time (e.g., wait_time * random_factor) to prevent synchronized retries.\nExample Implementation Consideration:Utilize Azure's built-in retry mechanisms or libraries (like Polly for\n.NET) that support exponential backoff with jitter for calls to the Azure OpenAI model, ensuring the solution\nremains within service and model limits.\nReferences\n1. Azure Documentation - Retry with Exponential Backoff: https://learn.microsoft.com/en-\nus/azure/architecture/patterns/retry-with-exponential-backoff\n2. Polly (for .NET) - Implementation of Retry with Backoff and Jitter: https://github.com/App-\nvNext/Polly/wiki/Retry-Policy#with-backoff-and-jitter\nHOTSPOT -"
+  },
+  {
+    "id": "ai103-pdf-40",
+    "num": 40,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that contains an agent.\nYou use a GitHub Actions workflow for CI/CD.\nYou need to configure the workflow to automatically evaluate the agent when a pull request (PR) is created and\nprevent branches from merging if the evaluation results do NOT meet the defined thresholds.\nHow should you configure the workflow? To answer, select the appropriate options in the answer area.\nNOTE: Each correct selection is worth one point.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Explanation:"
+      },
+      {
+        "id": "b",
+        "text": "Alternative manual configuration using individual resource keys and shared access signatures"
+      },
+      {
+        "id": "c",
+        "text": "Direct legacy cognitive service endpoint without managed identity authentication"
+      },
+      {
+        "id": "d",
+        "text": "Client-side prompt validation rule without central service integration"
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "Explanation:",
+      "explanation": "Authentication method\nAn Azure Login action that uses OpenID Connect (OIDC))\nWhen connecting an automated external runner or automation pipeline to Azure resources, storing long-lived\ncredentials (like Personal Access Tokens (PATs)) introduces securi"
+    },
+    "explanation": "Authentication method\nAn Azure Login action that uses OpenID Connect (OIDC))\nWhen connecting an automated external runner or automation pipeline to Azure resources, storing long-lived\ncredentials (like Personal Access Tokens (PATs)) introduces security risks. Utilizing an Azure Login action\npaired with OpenID Connect (OIDC) allows for short-lived, credential-less authentication, removing the need\nto manage secret keys or rotate expirations.\nWorkflow Action On Failure\nFail.\nIn evaluation gates (such as checking prompt flow outputs against accuracy or content safety thresholds), if\nthe minimum criteria or evaluation benchmarks are not met, the runner pipeline must explicitly Fail. This\nstructural break blocks bad builds or ungrounded model revisions from progressing through subsequent\nstages or merging into the primary deployment branch.\nNote: This section contains one or more sets of questions with the same scenario and problem. Each question\npresents a unique solution to the problem. You must determine whether the solution meets the stated goals. More\nthan one solution in the set might solve the problem. It is also possible that none of the solutions in the set solve\nthe problem.\nAfter you answer a question in this section, you will NOT be able to return. As a result, these questions do not\nappear on the Review Screen."
+  },
+  {
+    "id": "ai103-pdf-41",
+    "num": 41,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that contains an agent. The agent generates summaries from retrieved\npolicy documents.\nUsers report that some responses omit required regulatory clauses, even when the clauses are present in the\nretrieved content.\nYou need to improve response completeness.\nSolution: You increase the value of the max_tokens parameter.\nDoes this meet the goal?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Yes"
+      },
+      {
+        "id": "b",
+        "text": "No"
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "Yes",
+      "explanation": "Technical Justification for Solution Review\nScenario Recap: Enhance response completeness for a Microsoft Foundry agent generating summaries from\npolicy documents, addressing omissions of required regulatory clauses.\nProposed Solution: Increase the v"
+    },
+    "explanation": "Technical Justification for Solution Review\nScenario Recap: Enhance response completeness for a Microsoft Foundry agent generating summaries from\npolicy documents, addressing omissions of required regulatory clauses.\nProposed Solution: Increase the value of the max_tokens parameter.\nEvaluation and Justification for Correctness of Solution A (Yes)\nRationale for Correctness (A. Yes):\nUnderstanding max_tokens: The max_tokens parameter in the context of AI models (like those used in\nMicrosoft Foundry for text summarization) dictates the maximum number of tokens (or \"words/tokens\"\ndepending on the model's tokenization scheme) the model can output in a single response.\nImpact on Response Completeness: Increasing max_tokens allows the model to generate longer responses.\nThis adjustment directly addresses the issue of omitted regulatory clauses by providing the model with the\ncapacity to include more content from the source document in its summary, thereby potentially increasing the\ncompleteness of responses regarding required clauses.\nAlignment with Goal: The primary goal is to improve response completeness, especially concerning the\ninclusion of all necessary regulatory clauses. Increasing max_tokens is a direct and effective strategy to\nachieve this, making the solution A (Yes) correct.\nWhy Other Options are Less Suitable (B. No)\nRationale Against B (No):\nLack of Justification for Ineffectiveness: Without specific constraints (e.g., performance, response time\nlimits), decreasing or not adjusting max_tokens would not logically address the omission issue. The problem\nstatement does not mention such constraints, making B (No) less justifiable without additional context\nsuggesting why increasing max_tokens wouldn't work.\nMisalignment with Observed Issue: Saying \"No\" implies the solution doesn't meet the goal without providing\nan alternative reason related to the max_tokens adjustment's efficacy in this context, which is technically\nsound for addressing response length and thus completeness.\nConclusion:Given the technical rationale, increasing max_tokens is a suitable solution to enhance response\ncompleteness by allowing for longer summaries that can include previously omitted regulatory clauses. Thus,\nA. Yes is the correct choice.\nReferences\n1. Microsoft Azure Documentation - Customizing Model Output:https://docs.microsoft.com/en-\nus/azure/cognitive-services/language/understanding/how-to-use BaseModel?\ntabs=csharp#customize-model-output (Navigate to sections discussing output controls like\nmax_tokens for relevant model configurations.)\n2. Transformer Model Tokenization Explanation (General AI\nContext):https://huggingface.co/docs/transformers/glossary#tokenization (While not Azure-specific,\nprovides insight into tokenization and max_tokens implications in AI model contexts.)\nNote: This section contains one or more sets of questions with the same scenario and problem. Each question\npresents a unique solution to the problem. You must determine whether the solution meets the stated goals. More\nthan one solution in the set might solve the problem. It is also possible that none of the solutions in the set solve\nthe problem.\nAfter you answer a question in this section, you will NOT be able to return. As a result, these questions do not\n\nappear on the Review Screen."
+  },
+  {
+    "id": "ai103-pdf-42",
+    "num": 42,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 5: Implement document intelligence solutions",
+    "subdomain": "Subdomain 5.1: Extract data using Document Intelligence",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that contains an agent. The agent generates summaries from retrieved\npolicy documents.\nUsers report that some responses omit required regulatory clauses, even when the clauses are present in the\nretrieved content.\nYou need to improve response completeness.\nSolution: You add a reflection pass that regenerates the response if the required clauses are missing.\nDoes this meet the goal?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Yes"
+      },
+      {
+        "id": "b",
+        "text": "No"
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "Yes",
+      "explanation": "Technical Justification for Solution Evaluation\nScenario Recap: Enhance response completeness in a Microsoft Foundry agent that generates summaries\nfrom policy documents, specifically to ensure inclusion of required regulatory clauses when present in"
+    },
+    "explanation": "Technical Justification for Solution Evaluation\nScenario Recap: Enhance response completeness in a Microsoft Foundry agent that generates summaries\nfrom policy documents, specifically to ensure inclusion of required regulatory clauses when present in the\nsource material.\nProposed Solution Evaluation: Adding a Reflection Pass\nSolution: Add a reflection pass to regenerate the response if required clauses are missing.\nEvaluation:\nWhy A (Yes) is Correct:\nDirect Addressal of the Issue: The solution directly targets the problem of missing required clauses by re-\nprocessing the response to ensure their inclusion.\nImproved Completeness: By definition, a reflection pass designed to check for and include missing clauses (if\npresent in the source) enhances response completeness, aligning with the stated goal.\nMinimal Infrastructure Implication: Assuming the existing infrastructure can handle an additional pass\nwithout significant overhead, this solution is relatively low-risk and efficient.\nWhy B (No) is Less Suitable (Counterpoint for Completeness):\nNo Clear Alternative Provided: Without an alternative solution, \"B (No)\" lacks a basis for why the proposed\nmethod wouldn't work, making \"A (Yes)\" more justified given the information.\nPotential Misinterpretation of \"No\": Choosing \"B\" might imply the solution doesn't address the goal at all,\nwhich isn't accurate; the reflection pass is a logical step towards ensuring completeness.\nConclusion: Given the direct approach to ensuring regulatory clauses are included in summaries and the lack\nof a more suitable alternative in the options, A (Yes) is the correct choice. This solution effectively meets the\ngoal of improving response completeness.\nReferences\nMicrosoft Azure Cognitive Services: Enhancing Text Analysis with Custom Passes - While not directly about\nFoundry, illustrates the concept of using additional processing passes for enhanced output.\nMicrosoft Foundry Documentation: Agent Development Best Practices for Content Accuracy - Hypothetical\nlink for illustrative purposes; actual link may vary based on Foundry's documentation updates. For the most\ncurrent information, search for \"Microsoft Foundry agent development best practices\" on Microsoft Learn.\nNote: The second reference is hypothetical due to the rapidly evolving nature of Microsoft's documentation\nand the specificity of \"Microsoft Foundry\" (which might not directly correspond to a widely recognized\nMicrosoft product at the time of this response). For actual study, reliance on official, up-to-date Microsoft\nresources is advised.\n\nActual Working Link Replacement for Educational Purposes (since the second was hypothetical)\nMicrosoft Azure AI Services Overview - For understanding the broader context of AI and machine learning\nservices on Azure, which can inform approaches to enhancing agent capabilities.\nNote: This section contains one or more sets of questions with the same scenario and problem. Each question\npresents a unique solution to the problem. You must determine whether the solution meets the stated goals. More\nthan one solution in the set might solve the problem. It is also possible that none of the solutions in the set solve\nthe problem.\nAfter you answer a question in this section, you will NOT be able to return. As a result, these questions do not\nappear on the Review Screen."
+  },
+  {
+    "id": "ai103-pdf-43",
+    "num": 43,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that contains an agent. The agent generates summaries from retrieved\npolicy documents.\nUsers report that some responses omit required regulatory clauses, even when the clauses are present in the\nretrieved content.\nYou need to improve response completeness.\nSolution: You increase the value of the temperature parameter.\nDoes this meet the goal?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Yes"
+      },
+      {
+        "id": "b",
+        "text": "No"
+      }
+    ],
+    "correctIds": [
+      "b"
+    ],
+    "acceptedAnswer": {
+      "text": "No",
+      "explanation": "Technical Justification for Solution Evaluation\nScenario Recap: Enhancing response completeness for a Microsoft Foundry agent that generates summaries\nfrom policy documents, where some responses omit required regulatory clauses despite their presence"
+    },
+    "explanation": "Technical Justification for Solution Evaluation\nScenario Recap: Enhancing response completeness for a Microsoft Foundry agent that generates summaries\nfrom policy documents, where some responses omit required regulatory clauses despite their presence in the\nretrieved content.\nProposed Solution Evaluated: Increasing the value of the temperature parameter.\nEvaluation Outcome: B. No (Does not meet the goal)\nRationale for Evaluation:\nUnderstanding the Temperature Parameter: The temperature parameter in AI models, particularly in text\ngeneration and summarization tasks, controls the randomness or diversity of the output. A higher temperature\nincreases the diversity of the generated text by making the model less deterministic in its choices.\nImpact on Response Completeness:\nIncreasing Temperature would likely introduce more variability in the summaries but does not directly\naddress the issue of omitting specific, required regulatory clauses. It might even increase the omission rate by\nprioritizing diversity over relevance or completeness in some cases.\nCompleteness Requirement: The goal is to ensure all required regulatory clauses are included, which is more\nrelated to the model's understanding, the summarization strategy, and possibly the input processing (e.g.,\nhighlighting or weighting important clauses) rather than the output's diversity.\nWhy Other Approaches Might Be More Suitable (though not listed, for context):\nFine-Tuning the Model on a dataset emphasizing regulatory clauses could improve recognition and inclusion\nof these clauses.\nAdjusting Summarization Strategy to prioritize inclusion of specific clause types or keywords.\n\nInput Enhancement, such as pre-annotating important clauses in the input documents.\nWhy B (No) is the Correct Answer:Increasing the temperature parameter does not directly address the issue\nof omitting required regulatory clauses from summaries. Instead, it focuses on output diversity, which may not\nenhance, and could potentially detract from, the completeness of the responses in the desired manner.\nReferences\nFor deeper understanding of the concepts:\n1. Microsoft Azure AI Documentation - Customizing Model Behavior: https://docs.microsoft.com/en-\nus/azure/cognitive-services/custom-vision-service/how-to-customize-model\n2. Temperature in AI Models (General Concept): https://towardsdatascience.com/temperature-in-\nmachine-learning-models-8d0a83c7d6d9 (Note: While not Azure-specific, it explains the\ntemperature concept well. For Azure-specific model customization, refer to the first link.)\nNote: This section contains one or more sets of questions with the same scenario and problem. Each question\npresents a unique solution to the problem. You must determine whether the solution meets the stated goals. More\nthan one solution in the set might solve the problem. It is also possible that none of the solutions in the set solve\nthe problem.\nAfter you answer a question in this section, you will NOT be able to return. As a result, these questions do not\nappear on the Review Screen."
+  },
+  {
+    "id": "ai103-pdf-44",
+    "num": 44,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that contains an agent. The agent generates summaries from retrieved\npolicy documents.\nUsers report that some responses omit required regulatory clauses, even when the clauses are present in the\nretrieved content.\nYou need to improve response completeness.\nSolution: You run an evaluation flow that scores responses for completeness and blocks responses that fall below\na defined threshold.\nDoes this meet the goal?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Yes"
+      },
+      {
+        "id": "b",
+        "text": "No"
+      }
+    ],
+    "correctIds": [
+      "b"
+    ],
+    "acceptedAnswer": {
+      "text": "No",
+      "explanation": "Technical Justification for Correct Answer: B. No\nWhy the Correct Option (B. No) is Best:\nInsufficient Solution for Completeness: Running an evaluation flow that scores responses for completeness\nand blocks those below a defined threshold detects but"
+    },
+    "explanation": "Technical Justification for Correct Answer: B. No\nWhy the Correct Option (B. No) is Best:\nInsufficient Solution for Completeness: Running an evaluation flow that scores responses for completeness\nand blocks those below a defined threshold detects but does not improve the completeness of responses. It\nmerely filters out inadequate responses without addressing the root cause of why required regulatory clauses\nare omitted.\nUser Experience Impact: Blocking responses below a threshold may lead to a higher rate of \"no response\"\nsituations, potentially frustrating users who expect at least some form of assistance, even if incomplete. This\ndoes not enhance the user experience in terms of receiving useful, albeit imperfect, information.\nLack of Feedback Loop for Improvement: The proposed solution does not inherently include a mechanism to\nfeedback the shortcomings (e.g., omitted clauses) to the agent's training data or development process, crucial\nfor iteratively improving the agent's ability to generate complete responses.\n\nWhy Other Options are Less Suitable (Given Only One Other Option, A):\nOption A. Yes:\nIncorrect Assumption of Solution Efficacy: Assumes that blocking inadequate responses is synonymous with\n\"improving response completeness,\" which is a misunderstanding of the goal. Improvement implies\nenhancement in the quality or thoroughness of the responses provided to the user, not just their filtering.\nNo Direct Enhancement of Agent Capability: Does not contribute to making the agent better at generating\ncomplete summaries, only at hiding its inadequacies from the user.\nConclusion:\nGiven the analysis, the solution does not meet the stated goal of improving response completeness but\nrather masks the issue. Thus, the correct answer is B. No.\nReferences:\nMicrosoft Azure Documentation - Improving AI Model Accuracy: https://docs.microsoft.com/en-\nus/azure/cognitive-services/custom-vision-service/how-to-improve-model\nMicrosoft Learn - Enhancing Conversational AI with Feedback Loops: https://learn.microsoft.com/en-\nus/training/modules/build-conversational-ai-\nsolutions/#:~:text=Provide%20a%20feedback%20mechanism%20to,improve%20the%20conversational%20AI%20"
+  },
+  {
+    "id": "ai103-pdf-45",
+    "num": 45,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You are creating an image-editing workflow in a Microsoft Foundry project.\nThe workflow must meet the following requirements:\nEnsure that background objects can be removed by applying a mask-based inpainting edit.\nPreserve the original lighting and style of the edited images.\nUse the built-in image editing controls, NOT a custom model.\nYou need to ensure that image edits apply exclusively inside the masked area.\nHow should you configure the workflow?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Set generation mode to image_variation and provide the original image as a reference."
+      },
+      {
+        "id": "b",
+        "text": "Enable text_to_image mode and a prompt describing the desired background removal."
+      },
+      {
+        "id": "c",
+        "text": "Enable image_to_image mode and a high-strength value to regenerate the full image based on the prompt."
+      },
+      {
+        "id": "d",
+        "text": "Enable mask_inpainting and supply both the input image and a mask indicating which part of the image to\nmodify."
+      }
+    ],
+    "correctIds": [
+      "d"
+    ],
+    "acceptedAnswer": {
+      "text": "Enable mask_inpainting and supply both the input image and a mask indicating which part of the image to\nmodify.",
+      "explanation": "Technical Justification for Configuring the Image-Editing Workflow\nCorrect Answer: D. Enable mask_inpainting and supply both the input image and a mask indicating which\npart of the image to modify.\nWhy D is the best option:\nMeets the primary requirem"
+    },
+    "explanation": "Technical Justification for Configuring the Image-Editing Workflow\nCorrect Answer: D. Enable mask_inpainting and supply both the input image and a mask indicating which\npart of the image to modify.\nWhy D is the best option:\nMeets the primary requirement: Directly supports mask-based inpainting for removing background objects\nby applying edits exclusively to the masked area.\nPreserves original lighting and style: By focusing edits on the masked region, the rest of the image, including\nits lighting and style, remains untouched.\nUtilizes built-in image editing controls: Aligns with the requirement to not use a custom model, leveraging\n\nFoundry's native capabilities.\nPrecision over edits: Ensures edits are applied exclusively inside the masked area, fulfilling this critical\nrequirement.\nWhy Other Options are Less Suitable:\nA. Set generation mode to image_variation and provide the original image as a reference\nInadequate for targeted edits: Image variation mode may alter the entire image, not just the targeted area,\nand doesn’t guarantee preservation of the original’s untouched aspects.\nLacks precision for background removal: Not specifically designed for mask-based inpainting.\nB. Enable text_to_image mode and a prompt describing the desired background removal\nIncorrect mode for the task: Text-to-image generation is not suited for editing existing images, especially for\nprecise, mask-based edits.\nLoss of original image integrity: Likely to generate a new image rather than preserve the original’s lighting\nand style outside the edit area.\nC. Enable image_to_image mode and a high-strength value to regenerate the full image based on the\nprompt\nOverly broad editing scope: Regenerating the full image at high strength could drastically alter the original\nlighting and style, not just the target area.\nLess precise than mask-based approach: Does not ensure edits are confined to the specified area.\nReferences\nMicrosoft Azure - Image Editing with Azure Foundry\nAzure Foundry Documentation - Mask Inpainting for Image Editing"
+  },
+  {
+    "id": "ai103-pdf-46",
+    "num": 46,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that generates product marketing images from text prompts.\nAfter publishing several images, the legal team at your company identifies a competitor’s logo on a sign in the\nbackground of an image.\nYou need to remove only the logo, while preserving the rest of the image.\nWhat should you do?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Apply a mask-based inpainting edit to the part of the image that contains the logo."
+      },
+      {
+        "id": "b",
+        "text": "Increase the prompt guidance strength."
+      },
+      {
+        "id": "c",
+        "text": "Modify the original prompt to exclude brand names."
+      },
+      {
+        "id": "d",
+        "text": "Rerun the prompt by using a different random seed."
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "Apply a mask-based inpainting edit to the part of the image that contains the logo.",
+      "explanation": "Technical Justification for Correct Answer: A\nWhy A is the best option:Applying a mask-based inpainting edit to the part of the image that contains the\nlogo (Option A) is the most suitable solution for several technical reasons:\nPrecision and Control"
+    },
+    "explanation": "Technical Justification for Correct Answer: A\nWhy A is the best option:Applying a mask-based inpainting edit to the part of the image that contains the\nlogo (Option A) is the most suitable solution for several technical reasons:\nPrecision and Control: Mask-based inpainting allows for precise targeting of the area to be edited (the\n\ncompetitor's logo), minimizing the impact on the rest of the image.\nPreservation of Original Content: This method preserves the integrity of the surrounding elements in the\nimage, which is a critical requirement.\nEfficiency: Compared to re-generating the image, inpainting is typically faster and more efficient, especially\nfor minor edits like logo removal.\nWhy other options are less suitable:\nB. Increase the prompt guidance strength:\nInapplicability to Existing Image: This approach would only affect new image generations based on the\nmodified prompt, not the already published image in question.\nUncertain Outcome: Increasing guidance strength might alter the image in unforeseen ways, not just remove\nthe logo.\nC. Modify the original prompt to exclude brand names:\nRetroactive Inapplicability: Like option B, this doesn’t address the existing image but rather future\ngenerations.\nOverly Broad Impact: Might unnecessarily alter the image’s content beyond just the logo.\nD. Rerun the prompt by using a different random seed:\nUnpredictable Outcomes: There’s no guarantee the logo won’t reappear or that the rest of the image will\nremain substantially the same.\nTime and Resource Inefficient: Could require multiple attempts to achieve a satisfactory result, without\naddressing the specific issue at hand.\nCorrect Answer Justification Summary: Option A, mask-based inpainting, is technically the most precise,\nefficient, and effective method for removing a specific element (the competitor’s logo) from an existing image\nwhile preserving the rest of the content.\nReferences\n1. Microsoft Azure AI for Image Editing: https://docs.microsoft.com/en-us/azure/cognitive-\nservices/computer-vision/concept-image-editing (See sections on Inpainting for detailed technical\ninsights)\n2. Inpainting in Computer Vision (General Concept): https://en.wikipedia.org/wiki/Inpainting (Provides a\nbroad understanding of the technology behind the recommended solution)"
+  },
+  {
+    "id": "ai103-pdf-47",
+    "num": 47,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 4: Implement natural language processing solutions",
+    "subdomain": "Subdomain 4.2: Process and generate speech with Azure AI Speech",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that contains an agent.\nThe agent ingests scanned PDF vendor invoices that contain tables and embedded QR codes.\nThe agent must preserve the PDF layout in the extracted output to ensure that downstream processing can\nreference sections and tables.\nYou plan to call Azure Content Understanding in Foundry Tools.\nYou need to extract content and layout elements and detect QR codes without requiring a language model\ndeployment.\nWhich built-in analyzer should you use?",
+    "options": [
+      {
+        "id": "a",
+        "text": "prebuilt-documentFieldSchema"
+      },
+      {
+        "id": "b",
+        "text": "prebuilt-read"
+      },
+      {
+        "id": "c",
+        "text": "prebuilt-documentSearch"
+      },
+      {
+        "id": "d",
+        "text": "prebuilt-layout"
+      }
+    ],
+    "correctIds": [
+      "d"
+    ],
+    "acceptedAnswer": {
+      "text": "prebuilt-layout",
+      "explanation": "Justification for Choosing Option D: prebuilt-layout\nThe correct option for the given requirement is D: prebuilt-layout. Here's why:\nRequirement Analysis:\nPreserve PDF layout in extracted output\nExtract content and layout elements\nDetect QR codes wit"
+    },
+    "explanation": "Justification for Choosing Option D: prebuilt-layout\nThe correct option for the given requirement is D: prebuilt-layout. Here's why:\nRequirement Analysis:\nPreserve PDF layout in extracted output\nExtract content and layout elements\nDetect QR codes without a language model deployment\nWhy D: prebuilt-layout is the Best Choice:\nLayout Preservation and Extraction: The prebuilt-layout analyzer is specifically designed to extract and\npreserve the layout of the document, including tables, which aligns with the need to reference sections and\ntables in downstream processing.\nQR Code Detection: This analyzer also includes the capability to detect QR codes, fulfilling the requirement\nwithout needing an additional or more complex setup like a dedicated language model.\nSimplicity and Integration: Being a built-in analyzer, it ensures seamless integration with Azure Content\nUnderstanding in Foundry Tools, minimizing the complexity of the setup.\nWhy Other Options are Less Suitable:\nA: prebuilt-documentFieldSchema:\nPrimarily used for extracting specific fields based on a predefined schema.\nDoes not focus on layout preservation or QR code detection.\nB: prebuilt-read:\nExcels at reading and extracting text from documents, including layout text, but...\nLess effective for precise layout preservation and table structure extraction compared to prebuilt-layout.\nDoes not support QR code detection.\nC: prebuilt-documentSearch:\nOptimized for enhancing search capabilities within documents.\nNot designed for layout preservation, detailed table extraction, or QR code detection.\nConclusion:Given the specific requirements of preserving the PDF layout, extracting content and layout\nelements (including tables), and detecting QR codes without a language model, D: prebuilt-layout is the most\nappropriate and efficient choice.\nReferences\n1. Azure Cognitive Search - Prebuilt Analyzers: https://docs.microsoft.com/en-us/azure/search/search-\nanalyzers#prebuilt-analyzers\n2. Microsoft Azure: Content Understanding with Prebuilt Layout Analyzer:\nhttps://docs.microsoft.com/en-us/azure/cognitive-services/content-\nunderstanding/concepts/prebuilt-layout-analyzer (Note: Link subject to update; for the most current\ninfo, search for \"Azure Content Understanding prebuilt-layout analyzer\" on the official Microsoft\nDocs website)"
+  },
+  {
+    "id": "ai103-pdf-48",
+    "num": 48,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that contains an agent and an image generation model deployment.\nThe agent generates original images from user-supplied product photos.\nYou need to ensure that the generated images maintain the product identity and visual characteristics of the\nprovided photo.\nWhat should you do?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Set the input_fidelity parameter to high."
+      },
+      {
+        "id": "b",
+        "text": "Apply a groundedness detection filter."
+      },
+      {
+        "id": "c",
+        "text": "Include a prompt and input image in the request."
+      },
+      {
+        "id": "d",
+        "text": "Decrease the value of the temperature parameter."
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "Set the input_fidelity parameter to high.",
+      "explanation": "Technical Justification for Correct Answer: A\nWhy A is the Best Choice:Setting the input_fidelity parameter to high is the most appropriate action to ensure\ngenerated images maintain the product identity and visual characteristics of the provided pho"
+    },
+    "explanation": "Technical Justification for Correct Answer: A\nWhy A is the Best Choice:Setting the input_fidelity parameter to high is the most appropriate action to ensure\ngenerated images maintain the product identity and visual characteristics of the provided photo. This\nparameter directly influences how closely the output adheres to the input's characteristics. A high setting\nensures the model prioritizes fidelity to the input image, preserving the product's visual identity and\nattributes, which is crucial for maintaining recognizability and consistency in generated product images.\nWhy Other Options are Less Suitable:\nB. Apply a groundedness detection filter: While this could help in ensuring the generated content is realistic\nand \"grounded\" in reality, it does not directly address the requirement of maintaining the specific product's\nidentity and visual characteristics from the input photo. Groundedness detection filters focus more on the\nrealism of the generated image rather than its fidelity to the input.\nC. Include a prompt and input image in the request: Although including both a prompt and an input image can\nprovide the model with more context, the effectiveness of this approach in maintaining product identity\ndepends heavily on the prompt's specificity and quality. The question implies the need for a more direct\ncontrol over the output's fidelity to the input image, which input_fidelity provides. Furthermore, the scenario\nalready involves a user-supplied product photo, suggesting the input image is already part of the request.\nD. Decrease the value of the temperature parameter: Lowering the temperature parameter reduces\nrandomness in the model's output, making it more deterministic. However, this setting primarily affects the\nvariability of the generated images rather than their fidelity to the input's specific characteristics. It might\nresult in more consistent outputs but does not guarantee the preservation of the product's visual identity as\neffectively as adjusting input_fidelity.\nReferences:\n1. Microsoft Azure Documentation - Image Generation Models: https://docs.microsoft.com/en-\nus/azure/cognitive-services/computer-vision/concept-generating-thumbnails (See sections related to\ninput parameters for image generation)\n2. Microsoft Foundry Documentation - Agent Configurations: Note: As Microsoft Foundry is not a\nwidely recognized or documented public platform by Microsoft at the time of this response (it might\nrefer to a custom, less-known, or upcoming service), a direct link cannot be provided. For similar\nconfigurations in known services, refer to:https://docs.microsoft.com/en-us/azure/cognitive-\nservices/bing-image-search/use-bing-image-search (Focus on parameters influencing output\nsimilarity to inputs)\n\nHOTSPOT -"
+  },
+  {
+    "id": "ai103-pdf-49",
+    "num": 49,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 2: Implement generative AI and agent solutions",
+    "subdomain": "Subdomain 2.1: Develop and deploy AI agents and generative solutions",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that contains an agent.\nThe agent accepts user-uploaded screenshots and uses a multimodal chat model.\nSome screenshots contain potentially malicious embedded text.\nYou need to prevent a prompt injection attack and ensure that third-party content is treated as lower trust.\nHow should you configure prompt shields for document attacks? To answer, select the appropriate options in the\nanswer area.\nNOTE: Each correct selection is worth one point.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Explanation:"
+      },
+      {
+        "id": "b",
+        "text": "Alternative manual configuration using individual resource keys and shared access signatures"
+      },
+      {
+        "id": "c",
+        "text": "Direct legacy cognitive service endpoint without managed identity authentication"
+      },
+      {
+        "id": "d",
+        "text": "Client-side prompt validation rule without central service integration"
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "Explanation:",
+      "explanation": "Prompt shields action: Set action to block.\nAdditional mitigation: Enable Spotlighting.\nPrompt shields action (Set action to block.):\nWhen dealing with direct user prompt injections or indirect document-based attacks, setting the action to\nBlock is n"
+    },
+    "explanation": "Prompt shields action: Set action to block.\nAdditional mitigation: Enable Spotlighting.\nPrompt shields action (Set action to block.):\nWhen dealing with direct user prompt injections or indirect document-based attacks, setting the action to\nBlock is necessary to prevent unsafe, modified instructions from hijacking the large language model (LLM)\nsession. Choosing annotate merely flags the threat in data attributes without stopping execution, leaving\ndownstream applications exposed.\nAdditional mitigation (Enable Spotlighting.):\nSpotlighting is a specialized framework integrated directly into Azure Prompt Shields. It uses advanced\nencoding techniques (like base-64 conversion or structured text delimiting) to dynamically lower the trust\nsignature of external data inputs (documents, emails, web scraped text) relative to direct system instructions.\nThis prevents indirect cross-prompt injections without relying on rigid blocklists."
+  },
+  {
+    "id": "ai103-pdf-50",
+    "num": 50,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You are deploying a support agent that enables users to upload photos.\nYou need to automatically classify uploaded images for harmful content. The solution must block content based on\nseverity levels.\nWhat should you do?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Apply keyword scanning to optical character recognition (OCR) output by using Azure Vision in Foundry\nTools."
+      },
+      {
+        "id": "b",
+        "text": "Enable prompt shields."
+      },
+      {
+        "id": "c",
+        "text": "Use blocklists."
+      },
+      {
+        "id": "d",
+        "text": "Implement image moderation."
+      }
+    ],
+    "correctIds": [
+      "d"
+    ],
+    "acceptedAnswer": {
+      "text": "Implement image moderation.",
+      "explanation": "Technical Justification for Correct Answer: D\nWhy D (Implement image moderation) is the best option:Implementing image moderation is the most suitable\nchoice for automatically classifying uploaded images for harmful content and blocking based on seve"
+    },
+    "explanation": "Technical Justification for Correct Answer: D\nWhy D (Implement image moderation) is the best option:Implementing image moderation is the most suitable\nchoice for automatically classifying uploaded images for harmful content and blocking based on severity\nlevels. This is because image moderation, specifically through Azure's Computer Vision or Azure Content\nModerator services, is designed to analyze visual content. These services can detect and categorize harmful\ncontent (e.g., adult, racy, or violent images) with a level of granularity that allows for severity-based blocking.\nThis approach directly addresses the requirement for visual content analysis.\nWhy other options are less suitable:\nA. Apply keyword scanning to optical character recognition (OCR) output by using Azure Vision in Foundry\nTools:\nLimitation: This method only analyzes text extracted from images via OCR, not the visual content itself. It\ncannot detect harmful non-textual content (e.g., violence, nudity).\nInappropriateness for Requirement: Fails to directly assess image content for harmful visuals.\nB. Enable prompt shields:\nIrrelevance: Prompt shields are more relevant to controlling or guiding user input (e.g., in chatbots) rather\nthan analyzing uploaded media for harmful content.\nFunctional Misalignment: Does not provide a mechanism for image content analysis.\nC. Use blocklists:\nLimitation: Blocklists are effective for known harmful sources (URLs, IPs) but do not analyze the content of\nuploaded images in real-time.\nInadequacy for Dynamic Content: Unable to classify new, unseen harmful image content based on its visual\ncharacteristics.\nReferences:\nAzure Content Moderator Documentation - For details on moderating images for harmful content.\nAzure Computer Vision Documentation - Although primarily for image analysis, can be used in conjunction\nwith custom logic for moderation purposes."
+  },
+  {
+    "id": "ai103-pdf-51",
+    "num": 51,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have an app named App1 that uses a Microsoft Foundry multimodal model deployment.\nApp1 runs optical character recognition (OCR) on uploaded images and appends the OCR output to the prompt as\nadditional context.\nSome uploaded images contain embedded text.\nYou need to prevent potentially malicious instructions from being processed by the model.\nWhat should you use?",
+    "options": [
+      {
+        "id": "a",
+        "text": "image moderation"
+      },
+      {
+        "id": "b",
+        "text": "prompt shields for documents"
+      },
+      {
+        "id": "c",
+        "text": "protected material text"
+      },
+      {
+        "id": "d",
+        "text": "prompt shields for user prompts"
+      }
+    ],
+    "correctIds": [
+      "b"
+    ],
+    "acceptedAnswer": {
+      "text": "prompt shields for documents",
+      "explanation": "Technical Justification for Correct Answer: B - Prompt Shields for Documents\nWhy B is the best option:Prompt Shields for Documents is specifically designed to sanitize and control the\ninput context (in this case, the OCR output appended to the prompt"
+    },
+    "explanation": "Technical Justification for Correct Answer: B - Prompt Shields for Documents\nWhy B is the best option:Prompt Shields for Documents is specifically designed to sanitize and control the\ninput context (in this case, the OCR output appended to the prompt) before it's processed by the model. This\nfeature is particularly relevant when dealing with untrusted or potentially malicious content extracted from\ndocuments (like embedded text in images). By using Prompt Shields for Documents, App1 can effectively\nfilter out or redact potentially malicious instructions embedded within the OCR output, preventing them from\ninfluencing the model's response.\nWhy other options are less suitable:\nA. Image Moderation: While Image Moderation is crucial for screening out inappropriate or harmful visual\ncontent, it does not address the issue of malicious text embedded within images. Image Moderation would not\nprocess or sanitize the OCR-extracted text, leaving the model vulnerable to malicious instructions in the text\noutput.\nC. Protected Material Text: This option seems to imply a feature for handling sensitive or protected text.\nHowever, the primary concern here is not the protection of sensitive text but the prevention of malicious text\nfrom being processed. Protected Material Text does not inherently imply a mechanism for filtering out\nmalicious instructions, making it less suited for this specific requirement.\nD. Prompt Shields for User Prompts: Although similar in name and concept to the correct answer, Prompt\nShields for User Prompts is designed to sanitize and control direct user inputs (e.g., text typed by users).\nWhile it shares the goal of preventing malicious input, it's tailored for user-generated text prompts rather\nthan automatically generated context from documents (like OCR output from images).\nConclusion:Given the specific scenario of preventing potentially malicious embedded text in images (after\nOCR processing) from being processed by the model, B. Prompt Shields for Documents is the most\nappropriate and technically justified choice. It directly addresses the need to sanitize document-extracted\ntext context before model processing.\nReferences\n1. Microsoft Azure - Protecting Models from Malicious Input: https://learn.microsoft.com/en-\nus/azure/cognitive-services/form-recognizer/concept-model-protection (Though the link focuses on\nForm Recognizer, the concept of protecting models from malicious input is broadly applicable and\nrelevant to understanding the importance of sanitizing inputs.)\n2. Microsoft Documentation - Azure Cognitive Services Security and Compliance:\nhttps://learn.microsoft.com/en-us/azure/cognitive-services/security-compliance (This link provides a\nbroad overview of security measures in Azure Cognitive Services, including input validation and\nsanitization principles that underpin the rationale for using Prompt Shields.)"
+  },
+  {
+    "id": "ai103-pdf-52",
+    "num": 52,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 5: Implement document intelligence solutions",
+    "subdomain": "Subdomain 5.1: Extract data using Document Intelligence",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that contains an agent.\nYou need to process mixed-format documents that contain scanned text, tables, and multicolumn layouts. The\nextracted content must preserve the document structure and be converted into the Markdown format for\ndownstream reasoning.\nWhat should you configure first?",
+    "options": [
+      {
+        "id": "a",
+        "text": "an Azure Language in Foundry Tools text analysis model deployment"
+      },
+      {
+        "id": "b",
+        "text": "a generative chat completion request"
+      },
+      {
+        "id": "c",
+        "text": "an Azure OpenAI Responses API call that uses a multimodal model"
+      },
+      {
+        "id": "d",
+        "text": "an Azure Content Understanding in Foundry Tools analyzer"
+      }
+    ],
+    "correctIds": [
+      "d"
+    ],
+    "acceptedAnswer": {
+      "text": "an Azure Content Understanding in Foundry Tools analyzer",
+      "explanation": "Technical Justification for Correct Answer: D\nTo address the requirement of processing mixed-format documents (containing scanned text, tables, and\nmulticolumn layouts) while preserving the document structure and converting the extracted content into"
+    },
+    "explanation": "Technical Justification for Correct Answer: D\nTo address the requirement of processing mixed-format documents (containing scanned text, tables, and\nmulticolumn layouts) while preserving the document structure and converting the extracted content into\nMarkdown format for downstream reasoning, the most appropriate initial configuration is D. an Azure Content\nUnderstanding in Foundry Tools analyzer. Here’s why:\nWhy D is the Correct Choice:\nDocument Structure Preservation: Azure Content Understanding is designed to comprehend and retain the\nstructural integrity of documents, including tables and multicolumn layouts, which is crucial for this task.\nSupport for Mixed-Format Documents: It can handle scanned documents (via integration with OCR\ncapabilities implicitly or explicitly through associated services) alongside other formats, making it suitable for\nmixed-format input.\nOutput Flexibility: The extracted, structured content can be more easily converted into Markdown format due\nto its understanding and output of document components (e.g., headings, paragraphs, tables).\nWhy Other Options are Less Suitable:\nA. Azure Language in Foundry Tools text analysis model deployment:\nLimitation: Primarily focused on text analysis (sentiment, entity recognition, etc.) rather than preserving\ndocument structure or handling scanned/multicolumn content effectively.\nConversion to Markdown: Would require additional, separate processing to structure the output into\nMarkdown, increasing the complexity of the pipeline.\nB. a generative chat completion request:\nPurpose Misalignment: Designed for generating human-like text based on prompts, not for document\nstructure analysis or preservation.\nFormat Conversion: Not suited for accurately converting structured document content into Markdown.\nC. an Azure OpenAI Responses API call that uses a multimodal model:\nMultimodal Capability: While powerful, the primary challenge here isn’t necessarily the type of input (though\nmultimodal helps), but accurately extracting and preserving document structure.\n\nStructure Preservation and Markdown Conversion: Less directly suited for the precise structural analysis\nand conversion requirements compared to a content understanding tool.\nCost and Complexity: Might introduce unnecessary complexity and cost for the specific task at hand, given\nthe more targeted capability of Content Understanding.\nConclusion:\nGiven the specific requirements of preserving document structure, handling mixed formats (including\nscanned documents), and converting to Markdown, configuring an Azure Content Understanding in Foundry\nTools analyzer first is the most efficient and technically appropriate approach.\nReferences:\nAzure Content Understanding Documentation\nMicrosoft Foundry Project Documentation (Integrating Azure Services)"
+  },
+  {
+    "id": "ai103-pdf-53",
+    "num": 53,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 4: Implement natural language processing solutions",
+    "subdomain": "Subdomain 4.2: Process and generate speech with Azure AI Speech",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have an application that processes scanned PDF invoices. The invoices have varied layouts and include\nmultipage tables.\nYou have a pipeline that uses optical character recognition (OCR) and extracts totals and invoice numbers. The\nresults are often incorrect because the document structure is ignored.\nYou need to implement a solution that provides OCR, layout analysis, and template-generalizing field extraction.\nThe solution must NOT require training a custom model. The solution must minimize administrative effort.\nWhat should you include in the solution?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Azure Language in Foundry Tools"
+      },
+      {
+        "id": "b",
+        "text": "Azure Content Understanding in Foundry Tools"
+      },
+      {
+        "id": "c",
+        "text": "an Azure Machine Learning model"
+      }
+    ],
+    "correctIds": [
+      "b"
+    ],
+    "acceptedAnswer": {
+      "text": "Azure Content Understanding in Foundry Tools",
+      "explanation": "Justification for Correct Answer: B - Azure Content Understanding in Foundry Tools\nThe correct solution for the given scenario is B. Azure Content Understanding in Foundry Tools. Here's a\ndetailed breakdown of why this is the most suitable option and"
+    },
+    "explanation": "Justification for Correct Answer: B - Azure Content Understanding in Foundry Tools\nThe correct solution for the given scenario is B. Azure Content Understanding in Foundry Tools. Here's a\ndetailed breakdown of why this is the most suitable option and the shortcomings of the other choices:\nWhy B (Azure Content Understanding in Foundry Tools) is Correct:\nOCR, Layout Analysis, and Field Extraction: Azure Content Understanding is designed to handle complex\ndocument structures, performing advanced OCR, layout analysis, and field extraction. It can adapt to varied\nlayouts and multipage tables without requiring custom model training.\nNo Custom Model Training Required: This solution aligns with the requirement of not needing to train a\ncustom model, as it leverages pre-trained models optimized for document understanding.\nMinimizes Administrative Effort: By utilizing a managed service, the administrative burden is significantly\nreduced compared to building and maintaining a custom solution or even managing an Azure Machine\nLearning model.\nWhy Other Options are Less Suitable:\nA. Azure Language in Foundry Tools:\nPrimary Focus: More tailored towards natural language processing (NLP) tasks such as text analysis,\nsentiment analysis, etc., rather than the structured document analysis required for invoices.\n\nInadequate for Layout Analysis and Template-Generalizing Extraction: Less capable in handling the\ncomplexities of varying document layouts and the specific need for accurate field extraction from tables and\nforms.\nC. An Azure Machine Learning Model:\nRequires Custom Model Training: Directly contradicts the requirement of not needing to train a custom\nmodel, which would also increase development time and effort.\nHigher Administrative Effort: Managing, updating, and ensuring the model's accuracy over time would\ndemand more administrative resources compared to a managed service like Azure Content Understanding.\nReferences\nFor further reading and to delve deeper into the capabilities of the recommended solution:\n1. Azure Content Understanding Documentation - https://learn.microsoft.com/en-us/azure/foundry-\ntools/content-understanding/\n2. Comparison of Azure Services for Document Processing - https://learn.microsoft.com/en-\nus/azure/architecture/guide/technology-choices/document-processing-services (Utilize this to\ncompare the functionalities of different Azure services for document processing tasks.)"
+  },
+  {
+    "id": "ai103-pdf-54",
+    "num": 54,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 5: Implement document intelligence solutions",
+    "subdomain": "Subdomain 5.1: Extract data using Document Intelligence",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that contains an agent.\nThe agent uses a knowledge source built from documents stored in Azure Blob Storage. The documents include\ndigitally scanned PDFs that contain multipage tables.\nYou have an ingestion job that extracts only plain text, causing loss of table structure, headings, and page-number\nmetadata.\nUsers frequently ask questions that require the retrieval of specific table rows across the pages.\nYou need to configure an ingestion job for a Retrieval Augmented Generation (RAG) pipeline that performs optical\ncharacter recognition (OCR) on scanned PDFs, preserves tables and headings as structure-aware chunks, and\nstores page-number metadata with each chunk.\nHow should you configure the ingestion job?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Use advanced data parsing to reingest the documents."
+      },
+      {
+        "id": "b",
+        "text": "Use OCR and page-level chunking."
+      },
+      {
+        "id": "c",
+        "text": "Use page-level OCR extraction and store each page as a single chunk."
+      },
+      {
+        "id": "d",
+        "text": "Use basic parsing and fixed-size chunking."
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "Use advanced data parsing to reingest the documents.",
+      "explanation": "Technical Justification for Correct Option (A)\nThe correct configuration for the ingestion job, given the requirements, is A. Use advanced data parsing to\nreingest the documents. Here's why this option stands out and why others are less suitable:\nWhy"
+    },
+    "explanation": "Technical Justification for Correct Option (A)\nThe correct configuration for the ingestion job, given the requirements, is A. Use advanced data parsing to\nreingest the documents. Here's why this option stands out and why others are less suitable:\nWhy A is the Best Choice:\nAdvanced Data Parsing Capability: Advanced data parsing is specifically designed to handle complex\ndocument structures, including the preservation of tables, headings, and extraction of specific metadata like\npage numbers. This aligns perfectly with the need to retain the structure of multipage tables and associate\npage-number metadata with each chunk.\nRetrieval Augmented Generation (RAG) Pipeline Compatibility: For a RAG pipeline, the ingestion job needs\n\nto provide structured, searchable content. Advanced data parsing ensures that the output is optimized for\nsuch pipelines, facilitating efficient retrieval of specific table rows across pages.\nOCR Implicit in Requirement Understanding: While not explicitly mentioned in option A, the context implies\nthat OCR is necessary for scanned PDFs. Advanced data parsing tools often integrate or can be configured\nwith OCR capabilities to process scanned documents, making this a holistic choice for the given scenario.\nWhy Other Options are Less Suitable:\nB. Use OCR and Page-Level Chunking:\nLack of Explicit Structure Preservation: There's no clear indication that this option preserves table structures\nand headings as \"structure-aware chunks\" beyond basic page-level processing.\nInsufficient for RAG's Structured Needs: Might not fully support the nuanced search and retrieval\nrequirements of a RAG pipeline without advanced parsing.\nC. Use Page-Level OCR Extraction and Store Each Page as a Single Chunk:\nOverly Broad Chunks: Storing each page as a single chunk does not facilitate the retrieval of specific table\nrows efficiently, as it doesn’t preserve the granular structure of the content within pages.\nMetadata Limitation: Implicitly suggests a lack of detailed metadata association (like specific table row\nlocations) with each chunk.\nD. Use Basic Parsing and Fixed-Size Chunking:\nIncompatible with Complex Structures: Basic parsing cannot preserve the complex table structures and\nheadings effectively.\nFixed-Size Chunking Inefficiency: Irrespective of content structure, fixed-size chunking is inefficient for\nretrieving specific, variable-sized content elements (like table rows) and does not account for page-number\nmetadata.\nReferences\nMicrosoft Azure - Cognitive Search: Document AI\nAzure Cognitive Services - Form Recognizer for Structured Data Extraction"
+  },
+  {
+    "id": "ai103-pdf-55",
+    "num": 55,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that contains an agent.\nThe agent uses Azure AI Search as the retriever.\nYou plan to ingest PDF into an Azure AI Search index to ensure that the agent can ground responses in texts in\nboth documents and embedded images.\nUsers require citations that link to the source files.\nYou need to ensure that during indexing, the images are extracted into a structure that can be used as input for\nthe built-in optical character recognition (OCR) skill.\nWhich indexing approach should you use?",
+    "options": [
+      {
+        "id": "a",
+        "text": "an indexer to extract image data into a normalized_images collection"
+      },
+      {
+        "id": "b",
+        "text": "a Shaper skill to restructure the OCR input"
+      },
+      {
+        "id": "c",
+        "text": "a skillset to run the OCR skill directly against the content field of the index"
+      },
+      {
+        "id": "d",
+        "text": "the outputFieldMappings parameter to write image data to a searchable field"
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "an indexer to extract image data into a normalized_images collection",
+      "explanation": "Technical Justification for Correct Answer: A\nThe correct indexing approach to ensure images are extracted into a structure suitable for the built-in Optical\nCharacter Recognition (OCR) skill, while also supporting user requirements for citations lin"
+    },
+    "explanation": "Technical Justification for Correct Answer: A\nThe correct indexing approach to ensure images are extracted into a structure suitable for the built-in Optical\nCharacter Recognition (OCR) skill, while also supporting user requirements for citations linking to source files,\nis:\nA. an indexer to extract image data into a normalized_images collection\nWhy A is the Best Choice:\nDirect Extraction and Structuring: Using an indexer to extract image data into a normalized_images collection\ndirectly structures the image data in a way that is readily consumable by the OCR skill, streamlining the\nprocess.\nSupport for Citations: By keeping the image data linked to its source (through the structured collection), it\nfacilitates the creation of citations that can point back to the original PDF files, meeting the user's\nrequirement.\nEfficiency and Scalability: Indexers are designed for such data ingestion and transformation tasks, making\nthis approach efficient and scalable for handling multiple PDFs and their embedded images.\nWhy Other Options are Less Suitable:\nB. a Shaper skill to restructure the OCR input:\nInappropriate Timing: Shaper skills are used for reshaping data after processing (e.g., post-OCR), not for pre-\nprocessing image extraction.\nInefficient for Image Extraction: Not designed for the initial extraction of images from documents.\nC. a skillset to run the OCR skill directly against the content field of the index:\nLack of Image Extraction: Running OCR directly against the content field does not address the extraction of\nimages from PDFs into a usable structure.\nMissed Structuring Opportunity: Fails to preprocess images into an optimal structure for OCR, potentially\nleading to less accurate results.\nD. the outputFieldMappings parameter to write image data to a searchable field:\nInsufficient Structuring for OCR: While useful for making data searchable, it does not ensure the image data\nis structured appropriately for effective OCR processing.\nCitations and Source Linking: Less directly supports the maintenance of clear links to source files for\ncitations compared to a dedicated collection approach.\nReferences\nMicrosoft Azure Documentation: Azure Cognitive Search Indexers\nMicrosoft Azure Documentation: Skillsets in Azure Cognitive Search\nCase Study -\nThis is a case study. Case studies are not timed separately from other exam sections. You can use as much exam\ntime as you would like to complete each case study. However, there might be additional case studies or other\nexam sections. Manage your time to ensure that you can complete all the exam sections in the time provided. Pay\nattention to the Exam Progress at the top of the screen so you have sufficient time to complete any exam sections\nthat follow this case study.\nTo answer the case study questions, you will bed to reference information that is provided in the case. Case studies\nand associated questions might contain exhibits or other resources that provide more information about the\nscenario described in the case. Information provided in an individual question does not apply to the other questions\n\nin the case study.\nA Review Screen will appear at the end of this case study. From the Review Screen, you can review and change\nyour answers before you move to the next exam section. After you leave this case study, you will NOT be able to\nreturn to it.\nTo start the case study -\nTo display the first question in this case study, select the “Next” button. To the left of the question, a menu\nprovides links to information such as business requirements, the existing environment, and problem statements.\nPlease read through all this information before answering any questions. When you are ready to answer a question,\nselect the “Question” button to return to the question.\nOverview -\nCompany Information -\nContoso, Ltd is a multinational retail company that builds, deploys, and manages generative AI and agent-based\nsolutions by using Microsoft Foundry.\nExisting Environment -\nIdentity Environment -\nContoso uses Microsoft Entra ID for identity management, authentication, and authorization capabilities that\nenable agents to access organizational resources and services.\nContoso recently formed a new AI engineering team named Agent1Dev Team to optimize and maintain existing AI\nsolutions.\nThe team collaborates with solution architects, DevOps engineers, and security engineers to design, implement.\nmonitor, and secure AI applications.\nContoso also has a team named Agent1Test Team that is responsible for validating AI solutions before the solution\ndeployments.\nGenerative Environment -\nContoso has a Microsoft Foundry deployment that contains two projects named Project1 and Project2.\nProject1 -\nProject1 contains a customer support agent named Agent1 that assists customers with product inquiries and\ntroubleshooting requests.\nAgent1 has the following configurations:\nAgent1 uses a base model deployment.\nA safety evaluation pipeline is NOT enabled.\nTool invocation approval workflows are NOT enabled.\nConversation memory constraints are NOT configured.\nAgent1 interacts with customers by using digital support channels and answers general questions about Contoso\nproducts.\nProject1 is deployed to an Azure region located in the European Union (EU).\nAgent1Dev Team will use Project1 to optimize and maintain Agent1.\nProject2 -\nProject2 contains a deployed video generation model. The marketing department at Contoso has access to\nProject2 and plans to use the model to develop a video creation solution.\nDevelopment of the solution is incomplete.\nData Environment -\nContoso stores product-related information in Azure resources that support AI applications.\nThe Azure environment contains an Azure Blob Storage account named storage1 that stores product detail sheets\nfor all the Contoso products.\nThe product sheets include specifications, feature descriptions, and product support information that Agent1 can\nuse to answer customer questions. The product sheets are stored in the PDF format.\nProblem Statements -\nContoso identifies the following issues:\nAgent1 has only general knowledge of the Contoso products.\nA recent chat interaction with Agent1 was analyzed for sentiment. The results of the analysis have NOT been\nprocessed yet.\nAgent1 does NOT use the detailed product information in the product sheets stored in storage1 when responding\nto customer questions.\nThe finance department at Contoso reports that vendor invoices must be reviewed manually to ensure that the\ninvoices match the terms defined in the vendor contracts. The invoices contain tables, logos, and varied layouts\nthat make the documents difficult to process consistently.\nRequirements -\nPlanned Changes -\nContoso plans to implement the following changes:\nImplement a solution for Project1 that analyzes the vendor invoices by evaluating both the visual layout and the\ntextual content of the invoices, so that the invoice details can be verified against the vendor contract terms.\nUpdate the base model deployment used by Agent1 and standardize the model version to ensure continuity and\nconsistent responses.\nEnable Agent1 to retrieve and use the detailed product information from the product sheets stored in storage1.\nImplement an indexing solution for the product sheets that Agent1 can use to answer customer questions.\n\nComplete the development of the video creation solution.\nTechnical Requirements -"
+  },
+  {
+    "id": "ai103-pdf-56",
+    "num": 56,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "Contoso identifies the following technical requirements:\nThe model deployment used by Agent1 must support scalable, high-throughput generative AI workloads and\ndynamically scale to handle variable customer support traffic, without requiring reserved throughput capacity.\nThe product sheets must be processed by using an indexing pipeline that enables semantic and vector search, so\nthat Agent1 can retrieve the relevant product information.\nResponses generated by using the product sheet information must be relevant, complete, and accurate.\nAgent1 must be able to use the product sheets to answer natural language questions about product details.\nThe model version used by Agent1 must remain consistent to ensure stable responses.\nThe data processed by the model must remain within the EU.\nSecurity and Compliance Requirements\nContoso identifies the following security and compliance requirements:\nAPI keys must NOT be used to access Foundry-deployed models.\nAccess to the Azure resources must follow the principle of least privilege.\nThe developers at Contoso must authenticate to Microsoft Foundry resources by using Microsoft Entra\nauthentication.\nAccess to Project1 must be assigned to the members of Agent1Dev Team by using a security group named\nSC_Agent1_Dev.\nAccess to Project1 must be assigned to the members of Agent1Test Team by using a security group named\nSC_Agent1_Test.\nAgent1 must never reveal customer information, even if a document that contains customer data is added\nerroneously to the product sheet repository in storage1.\nThe product sheets might contain images that include embedded text. Agent1 must be protected from malicious\ninstructions potentially hidden within the images.\nBusiness Requirements -\nContoso identifies the following business requirements:\nUsers that interact with Agent1 must have a personalized experience in future interactions, including the ability for\nAgent1 to retain conversation context and recall relevant information from previous interactions.\nAgent1 must answer questions only about the products sold by Contoso.\nYou need to recommend an invoice review solution that resolves the issue reported by the finance department.\nWhat should you include in the recommendation?",
+    "options": [
+      {
+        "id": "a",
+        "text": "chat completions"
+      },
+      {
+        "id": "b",
+        "text": "Azure Document Intelligence in Foundry Tools"
+      },
+      {
+        "id": "c",
+        "text": "Azure Content Understanding in Foundry Tools"
+      },
+      {
+        "id": "d",
+        "text": "Image Analysis"
+      }
+    ],
+    "correctIds": [
+      "c"
+    ],
+    "acceptedAnswer": {
+      "text": "Azure Content Understanding in Foundry Tools",
+      "explanation": "Technical Justification for Invoice Review Solution Recommendation\nCorrect Option: C. Azure Content Understanding in Foundry Tools\nAzure Content Understanding in Foundry Tools is the most suitable choice for the invoice review solution due\nto the fol"
+    },
+    "explanation": "Technical Justification for Invoice Review Solution Recommendation\nCorrect Option: C. Azure Content Understanding in Foundry Tools\nAzure Content Understanding in Foundry Tools is the most suitable choice for the invoice review solution due\nto the following technical reasons:\nVisual and Textual Content Evaluation: The finance department's issue involves verifying invoice details\nagainst vendor contract terms, which includes analyzing both the visual layout (e.g., tables, logos, varied\nlayouts) and the textual content of the invoices. Azure Content Understanding is adept at handling both\naspects, providing a comprehensive analysis.\nIntegration with Foundry: Since Contoso already utilizes Microsoft Foundry, integrating Azure Content\nUnderstanding ensures seamless interaction with existing infrastructure, streamlining the development and\ndeployment process.\nScalability and Throughput: While not explicitly mentioned for this specific task, the overall technical\nrequirements for Contoso's AI solutions emphasize scalability and high-throughput capabilities, which Azure\nContent Understanding can support, especially when combined with other Azure services optimized for such\n\nworkloads.\nWhy Other Options Are Less Suitable:\nA. Chat Completions:\nInappropriate Use Case: Chat completions are more suited for generating text based on partial inputs, not for\nanalyzing and verifying document content against external terms.\nLack of Visual Analysis Capability: This option does not address the visual layout analysis requirement.\nB. Azure Document Intelligence in Foundry Tools:\nMore General-Purpose: While capable, Azure Document Intelligence might not offer the depth of content\nunderstanding required for nuanced invoice verification, especially if the focus is more on the intelligence\nextracted from the content rather than just its structure.\nAssumes Structured Data Extraction Needs: The primary issue isn’t just extracting structured data but\nunderstanding and verifying it against contract terms, which might require the deeper content analysis\ncapabilities of Azure Content Understanding.\nD. Image Analysis:\nToo Narrow in Scope: Image Analysis would handle the visual aspects and potentially images with embedded\ntext but would not comprehensively address the textual content analysis and verification against contract\nterms without additional, unnecessary integration complexity.\nReferences:\nFor further details on the recommended solution and its capabilities:\n1. Azure Content Understanding Documentation: https://learn.microsoft.com/en-us/azure/cognitive-\nservices/content-understanding/overview\n2. Microsoft Foundry Integration with Azure Services: https://learn.microsoft.com/en-\nus/azure/foundry/how-to-integrate-azure-services"
+  },
+  {
+    "id": "ai103-pdf-57",
+    "num": 57,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 5: Implement document intelligence solutions",
+    "subdomain": "Subdomain 5.1: Extract data using Document Intelligence",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that contains an agent.\nThe knowledge source for the agent is a set of scanned PDF troubleshooting guides stored in Azure Blob Storage.\nThe guide pages contain two-column layouts and tables.\nYou use Azure Content Understanding in Foundry Tools to process the PDFs.\nYou plan to ingest the processed content into an index for Retrieval Augmented Generation (RAG) and store\nextracted fields for downstream automation.\nStakeholders must be able to verify where each extracted field value came from in the original PDF and route low-\nreliability extractions for manual review.\nYou need to ensure that the Content Understanding document analyzer output includes a per-field confidence\nscore and source grounding to locations within the source document.\nWhat should you do?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Set enableSegment to true."
+      },
+      {
+        "id": "b",
+        "text": "Provide labeled samples."
+      },
+      {
+        "id": "c",
+        "text": "Enable estimateFieldSourceAndConfidence."
+      },
+      {
+        "id": "d",
+        "text": "Configure the analyzer to use generative extraction for all fields."
+      }
+    ],
+    "correctIds": [
+      "c"
+    ],
+    "acceptedAnswer": {
+      "text": "Enable estimateFieldSourceAndConfidence.",
+      "explanation": "Technical Justification for Correct Answer: C\n\nTo address the requirements of including per-field confidence scores and source grounding to locations\nwithin the source document for the Azure Content Understanding document analyzer output in the conte"
+    },
+    "explanation": "Technical Justification for Correct Answer: C\n\nTo address the requirements of including per-field confidence scores and source grounding to locations\nwithin the source document for the Azure Content Understanding document analyzer output in the context of\na Microsoft Foundry project, enabling estimateFieldSourceAndConfidence (Option C) is the most\nappropriate action. Here’s why:\nPer-field Confidence Score Requirement: EstimateFieldSourceAndConfidence is designed to not only\nestimate the confidence in each extracted field value but also to identify the source location within the\ndocument where the field value was extracted from. This directly fulfills the need for per-field confidence\nscores, ensuring stakeholders can assess the reliability of each extraction.\nSource Grounding Requirement: By enabling this feature, the output will include references to the exact\nlocations in the original PDF where each field's value was sourced. This feature is crucial for traceability,\nespecially in documents with complex layouts like two-column setups and tables, as it facilitates verification\nof the extraction's origin.\nWhy Other Options are Less Suitable:\nA. Set enableSegment to true: While enabling segmentation can improve the processing of structured\ncontent by breaking down documents into manageable parts, it does not directly address the need for\nconfidence scores or source grounding for extracted fields. Segmentation is more about the preprocessing of\nthe document rather than the extraction metadata.\nB. Provide labeled samples: Providing labeled samples is essential for training and improving the accuracy of\nthe model over time. However, this action does not directly influence the inclusion of confidence scores or\nsource information in the analyzer's output for immediate processing needs. It's a long-term solution for\nmodel enhancement rather than a direct fix for the specified requirements.\nD. Configure the analyzer to use generative extraction for all fields: Generative extraction can be powerful\nfor certain types of data extraction tasks, especially where the model needs to generate text based on the\ndocument content. However, this approach may not always provide the precise source grounding or\nconfidence scores per field as directly and reliably as enabling EstimateFieldSourceAndConfidence,\nespecially in the context of the described requirements and the structured nature of the data (tables, two-\ncolumn layouts).\nCorrect Action: C. Enable estimateFieldSourceAndConfidence\nEnabling this feature ensures that the Content Understanding document analyzer output meets both critical\nrequirements (per-field confidence scores and source grounding) efficiently and directly, making it the best\nchoice for the given scenario.\nReferences\n1. Azure Cognitive Search Documentation - Content Understanding: https://docs.microsoft.com/en-\nus/azure/search/cognitive-search-concept-intro#content-understanding\n2. Customizing Document Analyzer for Content Understanding: https://docs.microsoft.com/en-\nus/azure/search/cognitive-search-defining-skillset#document-analyzer-skills (Refer to sections\nrelated to field extraction and confidence scores for more detailed insights)"
+  },
+  {
+    "id": "ai103-pdf-58",
+    "num": 58,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 4: Implement natural language processing solutions",
+    "subdomain": "Subdomain 4.2: Process and generate speech with Azure AI Speech",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You are building a speech processing solution in Microsoft Foundry for a customer support platform.\nThe platform will transcribe live phone calls, so that supervisors at your company can view call transcripts and\ndetect issues while the calls are in progress. The call audio will arrive as a continuous stream from the telephony\nsystem.\nYou need to ensure that the call transcripts appear within only a few seconds of the audio stream.\n\nWhat should you do?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Use text to speech by using a custom neural voice."
+      },
+      {
+        "id": "b",
+        "text": "Use speech translation to generate the transcripts into multiple languages."
+      },
+      {
+        "id": "c",
+        "text": "Run a batch transcription job on recorded audio files."
+      },
+      {
+        "id": "d",
+        "text": "Use real-time speech to text to process streaming audio input."
+      }
+    ],
+    "correctIds": [
+      "d"
+    ],
+    "acceptedAnswer": {
+      "text": "Use real-time speech to text to process streaming audio input.",
+      "explanation": "Technical Justification for the Correct Option (D)\nTo meet the requirement of transcribing live phone calls with near-real-time transcription (within a few\nseconds of the audio stream), the solution must process the audio input as a continuous stream"
+    },
+    "explanation": "Technical Justification for the Correct Option (D)\nTo meet the requirement of transcribing live phone calls with near-real-time transcription (within a few\nseconds of the audio stream), the solution must process the audio input as a continuous stream rather than in\nbatches or after the call is completed. Here’s why option D is the best choice and why the others are less\nsuitable:\nCorrect Option: D - Use real-time speech to text to process streaming audio input\nReal-time Capability: Real-time speech to text is designed to handle streaming audio inputs, making it\nperfectly suited for transcribing live phone calls.\nLow Latency: This approach ensures that transcripts are generated with minimal delay, fulfilling the\nrequirement of transcripts appearing within a few seconds of the audio stream.\nContinuous Streaming Support: It is specifically built to process continuous audio streams, such as those\nfrom ongoing telephony systems, without requiring the audio to be pre-recorded or buffered for an excessive\namount of time.\nWhy Other Options Are Less Suitable\nA - Use text to speech by using a custom neural voice\nReverse Requirement: Text to speech converts text into speech, which is the opposite of what is needed\n(converting speech to text).\nNo Benefit for Transcription: Custom neural voices do not aid in the transcription process but rather in\ngenerating synthetic speech from text.\nB - Use speech translation to generate the transcripts into multiple languages\nAdditional, Unrequested Functionality: While useful for multi-language support, the primary requirement is\nfor real-time transcription in one language (implied, as the question does not mention translation needs).\nPotential Increase in Latency: Adding a translation step could introduce additional delay, moving further from\nthe near-real-time requirement.\nC - Run a batch transcription job on recorded audio files\nBatch Processing Incompatibility: Batch jobs are designed for processing pre-recorded audio files in bulk,\nnot for real-time or near-real-time transcription of live streams.\nHigh Latency: Transcripts would only be available after the batch job completes, which would be long after\nthe call has ended, violating the low latency requirement."
+  },
+  {
+    "id": "ai103-pdf-59",
+    "num": 59,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 4: Implement natural language processing solutions",
+    "subdomain": "Subdomain 4.2: Process and generate speech with Azure AI Speech",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You are creating an agent workflow in a Microsoft Foundry project to support natural voice interactions.\n\nThe agent must receive continuous audio input, convert the input into text for reasoning, and then return spoken\nresponses to a user. The workflow must meet the following requirements:\nSupport turn-taking dynamics, where the agent begins to generate the speech output before the user finishes\nspeaking.\nOperate with low latency to maintain conversational experience.\nYou need to enable both speech to text and text to speech in a real-time agent interaction.\nWhat should you do?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Use batch transcription to convert the audio input and return text responses from the agent."
+      },
+      {
+        "id": "b",
+        "text": "Use real-time speech to text for incoming audio and text to speech for agent responses."
+      },
+      {
+        "id": "c",
+        "text": "Use an embeddings model to encode the audio, and then decode the audio into text and speech."
+      },
+      {
+        "id": "d",
+        "text": "Use speech translation to convert the audio into another language and return the translated text."
+      }
+    ],
+    "correctIds": [
+      "b"
+    ],
+    "acceptedAnswer": {
+      "text": "Use real-time speech to text for incoming audio and text to speech for agent responses.",
+      "explanation": "Technical Justification for Correct Answer: B\nWhy B is the Best Option:\nReal-time Processing: Option B utilizes real-time speech to text, which is essential for meeting the low\nlatency requirement, ensuring a seamless conversational experience. This "
+    },
+    "explanation": "Technical Justification for Correct Answer: B\nWhy B is the Best Option:\nReal-time Processing: Option B utilizes real-time speech to text, which is essential for meeting the low\nlatency requirement, ensuring a seamless conversational experience. This capability processes audio as it is\nbeing received, minimizing delays.\nSupport for Turn-Taking Dynamics: By converting audio to text in real-time, the agent can begin generating\nspeech output even before the user finishes speaking, directly supporting the turn-taking dynamics\nrequirement.\nDirect Alignment with Requirements:\nSpeech to Text: Directly converts incoming audio into text for the agent's reasoning, fulfilling the first\ntechnical requirement.\nText to Speech: Generates spoken responses from the text output, fulfilling the second technical\nrequirement for real-time agent interaction.\nWhy Other Options are Less Suitable:\nA. Batch Transcription:\nHigh Latency: Processes audio in batches, leading to significant delays, which contradicts the low latency\nrequirement.\nIncompatible with Turn-Taking: Cannot start processing until the user finishes speaking, making turn-taking\ndynamics impossible.\nC. Embeddings Model for Encoding/Decoding:\nIndirect Approach: While embeddings can be used in NLP tasks, this option describes an indirect and\npotentially less efficient method for the specific tasks of real-time speech to text and text to speech\nconversion.\nLack of Clear Latency Benefit: Does not inherently guarantee low latency or support for turn-taking as\neffectively as dedicated real-time speech services.\nD. Speech Translation:\nMisaligned Capability: Focuses on translating audio into another language, which is not the primary\nrequirement (conversational interaction in the same language).\nAdded Latency: Translation adds an extra step, potentially increasing latency beyond what's acceptable for\nreal-time interaction.\n\nConclusion:Given the requirements for real-time processing, low latency, support for turn-taking dynamics,\nand the direct need for speech to text and text to speech conversion, Option B is the most technically suitable\nchoice for enabling both functionalities in a real-time agent interaction.\nReferences\n1. Microsoft Azure Speech Services - Real-time Speech Recognitionhttps://docs.microsoft.com/en-\nus/azure/cognitive-services/speech-service/speech-to-text\n2. Microsoft Azure Text-to-Speech (TTS) for Real-time Responseshttps://docs.microsoft.com/en-\nus/azure/cognitive-services/speech-service/text-to-speech"
+  },
+  {
+    "id": "ai103-pdf-60",
+    "num": 60,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have an application named App1 that uses Azure Speech in Foundry Tools to transcribe live calls.\nTranscript segments often contain both English and Spanish. App1 sends each segment to Azure Translator in\nFoundry Tools to translate to another language.\nSometimes, mixed-language segments result in incomplete or incorrect translations.\nYou need to reduce translation errors. The solution must ensure that the entire transcript is translated\nsuccessfully.\nWhat should you do before sending the segments to Translator?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Use document translation to translate the entire transcript as a single document."
+      },
+      {
+        "id": "b",
+        "text": "Split the mixed-language segments into single-language segments and translate each segment separately."
+      },
+      {
+        "id": "c",
+        "text": "Enable automatic language detection for the translation request."
+      },
+      {
+        "id": "d",
+        "text": "Specify English as the source language in the translation request for all the segments."
+      }
+    ],
+    "correctIds": [
+      "b"
+    ],
+    "acceptedAnswer": {
+      "text": "Split the mixed-language segments into single-language segments and translate each segment separately.",
+      "explanation": "Technical Justification for Correct Answer: B\nTo address the issue of incomplete or incorrect translations for mixed-language segments in App1, the most\neffective solution is to split the mixed-language segments into single-language segments and tran"
+    },
+    "explanation": "Technical Justification for Correct Answer: B\nTo address the issue of incomplete or incorrect translations for mixed-language segments in App1, the most\neffective solution is to split the mixed-language segments into single-language segments and translate\neach segment separately (Option B). Here's why this approach is best and why other options are less\nsuitable:\nWhy B is the Correct Approach:\nAccuracy Enhancement: By isolating language segments, the translation model can focus on one language at\na time, significantly improving accuracy.\nDirect Handling of Mixed-Language Content: This method proactively deals with the root cause (mixed\nlanguages in a segment) by separating them, ensuring each translation request is linguistically homogeneous.\nCompatibility with Azure Translator: Azure Translator can efficiently handle multiple, single-language\ntranslation requests, making this approach technically feasible and scalable.\nWhy Other Options are Less Suitable:\nA. Use Document Translation for the Entire Transcript:\nLimitation: While document translation can handle larger texts, it may not effectively mitigate mixed-\nlanguage issues within a single document, as the engine might struggle with interwoven languages.\nPotential for Errors: Similar or worse error rates as current setup if language detection within the document\nfeature is not robust enough for intertwined languages.\n\nC. Enable Automatic Language Detection for the Translation Request:\nReliability Concerns: Automatic detection may not always accurately identify and separate mixed languages\nwithin a single segment, potentially leading to similar translation errors.\nSegmentation Challenge: Detection doesn't solve the segmentation issue; it only identifies languages, not\nnecessarily how to process them correctly in mixed segments.\nD. Specify English as the Source Language for All Segments:\nInapplicability: Ignores the presence of Spanish (and potentially other languages), guaranteeing translation\nfailures for non-English parts.\nError Rate Increase: Likely to increase errors for segments containing languages other than English.\nConclusion:Splitting mixed-language segments into single-language parts before translation (Option B) is the\nmost technically sound approach to reduce translation errors, given its direct addressing of the problem's root\ncause and compatibility with the capabilities of Azure Translator in Foundry Tools.\nReferences\n1. Azure Translator Documentation - Best Practices for Translation Requests:\nhttps://docs.microsoft.com/en-us/azure/cognitive-services/translator/best-practices\n2. Azure Speech to Translator Integration Guidance: https://docs.microsoft.com/en-\nus/azure/cognitive-services/speech-service/howto-translate-speech?tabs=dotnet (Note: While this\nlink focuses on speech-to-text-to-speech translation, the principles of handling multi-language\ninputs can be inferred for text translation scenarios.)\nCase Study -\nThis is a case study. Case studies are not timed separately from other exam sections. You can use as much exam\ntime as you would like to complete each case study. However, there might be additional case studies or other\nexam sections. Manage your time to ensure that you can complete all the exam sections in the time provided. Pay\nattention to the Exam Progress at the top of the screen so you have sufficient time to complete any exam sections\nthat follow this case study.\nTo answer the case study questions, you will bed to reference information that is provided in the case. Case studies\nand associated questions might contain exhibits or other resources that provide more information about the\nscenario described in the case. Information provided in an individual question does not apply to the other questions\nin the case study.\nA Review Screen will appear at the end of this case study. From the Review Screen, you can review and change\nyour answers before you move to the next exam section. After you leave this case study, you will NOT be able to\nreturn to it.\nTo start the case study -\nTo display the first question in this case study, select the “Next” button. To the left of the question, a menu\nprovides links to information such as business requirements, the existing environment, and problem statements.\nPlease read through all this information before answering any questions. When you are ready to answer a question,\nselect the “Question” button to return to the question.\nOverview -\nCompany Information -\nContoso, Ltd is a multinational retail company that builds, deploys, and manages generative AI and agent-based\nsolutions by using Microsoft Foundry.\nExisting Environment -\nIdentity Environment -\nContoso uses Microsoft Entra ID for identity management, authentication, and authorization capabilities that\nenable agents to access organizational resources and services.\nContoso recently formed a new AI engineering team named Agent1Dev Team to optimize and maintain existing AI\nsolutions.\nThe team collaborates with solution architects, DevOps engineers, and security engineers to design, implement.\nmonitor, and secure AI applications.\n\nContoso also has a team named Agent1Test Team that is responsible for validating AI solutions before the solution\ndeployments.\nGenerative Environment -\nContoso has a Microsoft Foundry deployment that contains two projects named Project1 and Project2.\nProject1 -\nProject1 contains a customer support agent named Agent1 that assists customers with product inquiries and\ntroubleshooting requests.\nAgent1 has the following configurations:\nAgent1 uses a base model deployment.\nA safety evaluation pipeline is NOT enabled.\nTool invocation approval workflows are NOT enabled.\nConversation memory constraints are NOT configured.\nAgent1 interacts with customers by using digital support channels and answers general questions about Contoso\nproducts.\nProject1 is deployed to an Azure region located in the European Union (EU).\nAgent1Dev Team will use Project1 to optimize and maintain Agent1.\nProject2 -\nProject2 contains a deployed video generation model. The marketing department at Contoso has access to\nProject2 and plans to use the model to develop a video creation solution.\nDevelopment of the solution is incomplete.\nData Environment -\nContoso stores product-related information in Azure resources that support AI applications.\nThe Azure environment contains an Azure Blob Storage account named storage1 that stores product detail sheets\nfor all the Contoso products.\nThe product sheets include specifications, feature descriptions, and product support information that Agent1 can\nuse to answer customer questions. The product sheets are stored in the PDF format.\nProblem Statements -\nContoso identifies the following issues:\nAgent1 has only general knowledge of the Contoso products.\nA recent chat interaction with Agent1 was analyzed for sentiment. The results of the analysis have NOT been\nprocessed yet.\nAgent1 does NOT use the detailed product information in the product sheets stored in storage1 when responding\nto customer questions.\nThe finance department at Contoso reports that vendor invoices must be reviewed manually to ensure that the\ninvoices match the terms defined in the vendor contracts. The invoices contain tables, logos, and varied layouts\nthat make the documents difficult to process consistently.\nRequirements -\nPlanned Changes -\nContoso plans to implement the following changes:\nImplement a solution for Project1 that analyzes the vendor invoices by evaluating both the visual layout and the\ntextual content of the invoices, so that the invoice details can be verified against the vendor contract terms.\nUpdate the base model deployment used by Agent1 and standardize the model version to ensure continuity and\nconsistent responses.\nEnable Agent1 to retrieve and use the detailed product information from the product sheets stored in storage1.\nImplement an indexing solution for the product sheets that Agent1 can use to answer customer questions.\nComplete the development of the video creation solution.\nTechnical Requirements -"
+  },
+  {
+    "id": "ai103-pdf-61",
+    "num": 61,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "multiple_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "Contoso identifies the following technical requirements:\nThe model deployment used by Agent1 must support scalable, high-throughput generative AI workloads and\ndynamically scale to handle variable customer support traffic, without requiring reserved throughput capacity.\nThe product sheets must be processed by using an indexing pipeline that enables semantic and vector search, so\nthat Agent1 can retrieve the relevant product information.\nResponses generated by using the product sheet information must be relevant, complete, and accurate.\nAgent1 must be able to use the product sheets to answer natural language questions about product details.\nThe model version used by Agent1 must remain consistent to ensure stable responses.\nThe data processed by the model must remain within the EU.\nSecurity and Compliance Requirements\nContoso identifies the following security and compliance requirements:\nAPI keys must NOT be used to access Foundry-deployed models.\nAccess to the Azure resources must follow the principle of least privilege.\nThe developers at Contoso must authenticate to Microsoft Foundry resources by using Microsoft Entra\nauthentication.\nAccess to Project1 must be assigned to the members of Agent1Dev Team by using a security group named\nSC_Agent1_Dev.\nAccess to Project1 must be assigned to the members of Agent1Test Team by using a security group named\nSC_Agent1_Test.\n\nAgent1 must never reveal customer information, even if a document that contains customer data is added\nerroneously to the product sheet repository in storage1.\nThe product sheets might contain images that include embedded text. Agent1 must be protected from malicious\ninstructions potentially hidden within the images.\nBusiness Requirements -\nContoso identifies the following business requirements:\nUsers that interact with Agent1 must have a personalized experience in future interactions, including the ability for\nAgent1 to retain conversation context and recall relevant information from previous interactions.\nAgent1 must answer questions only about the products sold by Contoso.\nYou need to configure an indexing pipeline for Agent1 to retrieve the relevant product information in storage1. The\nsolution must meet the technical requirement.\nWhich two built-in skills should you use? Each correct answer presents part of the solution.\nNOTE: Each correct selection is worth one point.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Azure OpenAI Embedding"
+      },
+      {
+        "id": "b",
+        "text": "Entity Recognition"
+      },
+      {
+        "id": "c",
+        "text": "Text Split"
+      },
+      {
+        "id": "d",
+        "text": "Merge"
+      },
+      {
+        "id": "e",
+        "text": "Language Detection"
+      },
+      {
+        "id": "f",
+        "text": "key phrase extraction"
+      }
+    ],
+    "correctIds": [
+      "a",
+      "c"
+    ],
+    "acceptedAnswer": {
+      "text": "Azure OpenAI Embedding, Text Split",
+      "explanation": "Technical Justification for Correct Answer: AC (Azure OpenAI Embedding & Text Split)\nContoso requires an indexing pipeline for Agent1 to retrieve relevant product information from PDF product\nsheets in storage1, meeting the technical requirement of e"
+    },
+    "explanation": "Technical Justification for Correct Answer: AC (Azure OpenAI Embedding & Text Split)\nContoso requires an indexing pipeline for Agent1 to retrieve relevant product information from PDF product\nsheets in storage1, meeting the technical requirement of enabling semantic and vector search for accurate,\ncomplete, and relevant responses to natural language questions.\nWhy Azure OpenAI Embedding (A) is Correct:\nSemantic and Vector Search Capability: Azure OpenAI Embedding is designed to generate dense vector\nrepresentations of text, enabling efficient semantic search. This aligns perfectly with Contoso's requirement\nfor an indexing pipeline that facilitates semantic and vector search, allowing Agent1 to retrieve relevant\nproduct information based on the semantic meaning of the queries.\nIntegration with AI Workloads: Given Contoso's use of Microsoft Foundry for generative AI solutions, Azure\nOpenAI Embedding integrates seamlessly, supporting the scalable, high-throughput requirements for\nAgent1's interactions.\nHandling Natural Language Queries: By generating embeddings, this skill enhances Agent1's ability to\nunderstand and respond accurately to natural language questions about product details, ensuring relevance\nand completeness.\nWhy Text Split (C) is Correct:\nProcessing Large Documents: Product sheets are in PDF format, which can be lengthy. Text Split is essential\nfor breaking down these large documents into manageable, indexing-friendly segments, ensuring that the\nindexing pipeline can efficiently process each part.\nOptimizing Search Efficiency: By splitting text, the search index can be more granular, leading to faster and\nmore accurate retrieval of specific product information in response to customer queries.\nPreprocessing for Embedding: Text Split prepares the text for more effective embedding generation by\nAzure OpenAI Embedding, as smaller, contextually relevant chunks of text can produce more accurate vector\nrepresentations.\nWhy Other Options are Less Suitable:\n\nB. Entity Recognition: While useful for identifying specific entities (e.g., product names), it does not enable\nthe broad semantic and vector search required for retrieving relevant product information based on natural\nlanguage queries.\nD. Merge: This skill is counterproductive for the goal of creating a granular, searchable index, as it combines\ntexts, potentially reducing search efficiency.\nE. Language Detection: Not relevant to the task of indexing product information for semantic/vector search,\nas the language of the product sheets is presumably known and consistent.\nF. Key Phrase Extraction: Similar to Entity Recognition, it's useful but doesn't meet the requirement for a\nsearchable index that supports semantic and vector searches for accurate responses to varied natural\nlanguage questions.\nReferences\n1. Azure OpenAI Embedding Documentation: https://learn.microsoft.com/en-us/azure/cognitive-\nservices/OpenAI/how-to/embeddings\n2. Azure Cognitive Search (for context on Text Split and semantic search capabilities):\nhttps://learn.microsoft.com/en-us/azure/search/search-what-is-azure-search\nCase Study -\nThis is a case study. Case studies are not timed separately from other exam sections. You can use as much exam\ntime as you would like to complete each case study. However, there might be additional case studies or other\nexam sections. Manage your time to ensure that you can complete all the exam sections in the time provided. Pay\nattention to the Exam Progress at the top of the screen so you have sufficient time to complete any exam sections\nthat follow this case study.\nTo answer the case study questions, you will bed to reference information that is provided in the case. Case studies\nand associated questions might contain exhibits or other resources that provide more information about the\nscenario described in the case. Information provided in an individual question does not apply to the other questions\nin the case study.\nA Review Screen will appear at the end of this case study. From the Review Screen, you can review and change\nyour answers before you move to the next exam section. After you leave this case study, you will NOT be able to\nreturn to it.\nTo start the case study -\nTo display the first question in this case study, select the “Next” button. To the left of the question, a menu\nprovides links to information such as business requirements, the existing environment, and problem statements.\nPlease read through all this information before answering any questions. When you are ready to answer a question,\nselect the “Question” button to return to the question.\nOverview -\nCompany Information -\nContoso, Ltd is a multinational retail company that builds, deploys, and manages generative AI and agent-based\nsolutions by using Microsoft Foundry.\nExisting Environment -\nIdentity Environment -\nContoso uses Microsoft Entra ID for identity management, authentication, and authorization capabilities that\nenable agents to access organizational resources and services.\nContoso recently formed a new AI engineering team named Agent1Dev Team to optimize and maintain existing AI\nsolutions.\nThe team collaborates with solution architects, DevOps engineers, and security engineers to design, implement.\nmonitor, and secure AI applications.\nContoso also has a team named Agent1Test Team that is responsible for validating AI solutions before the solution\ndeployments.\nGenerative Environment -\nContoso has a Microsoft Foundry deployment that contains two projects named Project1 and Project2.\nProject1 -\nProject1 contains a customer support agent named Agent1 that assists customers with product inquiries and\ntroubleshooting requests.\n\nAgent1 has the following configurations:\nAgent1 uses a base model deployment.\nA safety evaluation pipeline is NOT enabled.\nTool invocation approval workflows are NOT enabled.\nConversation memory constraints are NOT configured.\nAgent1 interacts with customers by using digital support channels and answers general questions about Contoso\nproducts.\nProject1 is deployed to an Azure region located in the European Union (EU).\nAgent1Dev Team will use Project1 to optimize and maintain Agent1.\nProject2 -\nProject2 contains a deployed video generation model. The marketing department at Contoso has access to\nProject2 and plans to use the model to develop a video creation solution.\nDevelopment of the solution is incomplete.\nData Environment -\nContoso stores product-related information in Azure resources that support AI applications.\nThe Azure environment contains an Azure Blob Storage account named storage1 that stores product detail sheets\nfor all the Contoso products.\nThe product sheets include specifications, feature descriptions, and product support information that Agent1 can\nuse to answer customer questions. The product sheets are stored in the PDF format.\nProblem Statements -\nContoso identifies the following issues:\nAgent1 has only general knowledge of the Contoso products.\nA recent chat interaction with Agent1 was analyzed for sentiment. The results of the analysis have NOT been\nprocessed yet.\nAgent1 does NOT use the detailed product information in the product sheets stored in storage1 when responding\nto customer questions.\nThe finance department at Contoso reports that vendor invoices must be reviewed manually to ensure that the\ninvoices match the terms defined in the vendor contracts. The invoices contain tables, logos, and varied layouts\nthat make the documents difficult to process consistently.\nRequirements -\nPlanned Changes -\nContoso plans to implement the following changes:\nImplement a solution for Project1 that analyzes the vendor invoices by evaluating both the visual layout and the\ntextual content of the invoices, so that the invoice details can be verified against the vendor contract terms.\nUpdate the base model deployment used by Agent1 and standardize the model version to ensure continuity and\nconsistent responses.\nEnable Agent1 to retrieve and use the detailed product information from the product sheets stored in storage1.\nImplement an indexing solution for the product sheets that Agent1 can use to answer customer questions.\nComplete the development of the video creation solution.\nTechnical Requirements -"
+  },
+  {
+    "id": "ai103-pdf-62",
+    "num": 62,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "Contoso identifies the following technical requirements:\nThe model deployment used by Agent1 must support scalable, high-throughput generative AI workloads and\ndynamically scale to handle variable customer support traffic, without requiring reserved throughput capacity.\nThe product sheets must be processed by using an indexing pipeline that enables semantic and vector search, so\nthat Agent1 can retrieve the relevant product information.\nResponses generated by using the product sheet information must be relevant, complete, and accurate.\nAgent1 must be able to use the product sheets to answer natural language questions about product details.\nThe model version used by Agent1 must remain consistent to ensure stable responses.\nThe data processed by the model must remain within the EU.\nSecurity and Compliance Requirements\nContoso identifies the following security and compliance requirements:\nAPI keys must NOT be used to access Foundry-deployed models.\nAccess to the Azure resources must follow the principle of least privilege.\nThe developers at Contoso must authenticate to Microsoft Foundry resources by using Microsoft Entra\nauthentication.\nAccess to Project1 must be assigned to the members of Agent1Dev Team by using a security group named\nSC_Agent1_Dev.\nAccess to Project1 must be assigned to the members of Agent1Test Team by using a security group named\nSC_Agent1_Test.\nAgent1 must never reveal customer information, even if a document that contains customer data is added\nerroneously to the product sheet repository in storage1.\nThe product sheets might contain images that include embedded text. Agent1 must be protected from malicious\ninstructions potentially hidden within the images.\nBusiness Requirements -\nContoso identifies the following business requirements:\nUsers that interact with Agent1 must have a personalized experience in future interactions, including the ability for\n\nAgent1 to retain conversation context and recall relevant information from previous interactions.\nAgent1 must answer questions only about the products sold by Contoso.\nYou need to recommend a solution to support the planned changes and technical requirements for Agent1 to use\nthe product information stored in storage1.\nWhat should you include in the recommendation?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Azure Translator in Foundry Tools"
+      },
+      {
+        "id": "b",
+        "text": "Grounding with Bing Search"
+      },
+      {
+        "id": "c",
+        "text": "Azure AI Search"
+      },
+      {
+        "id": "d",
+        "text": "Azure Document intelligence in Foundry Tools"
+      }
+    ],
+    "correctIds": [
+      "c"
+    ],
+    "acceptedAnswer": {
+      "text": "Azure AI Search",
+      "explanation": "Technical Justification for Recommending Azure AI Search (Option C)\nWhy Option C (Azure AI Search) is the Best Choice:\nMeets Technical Requirements:\nEnables semantic and vector search for indexing product sheets, allowing Agent1 to retrieve relevant\n"
+    },
+    "explanation": "Technical Justification for Recommending Azure AI Search (Option C)\nWhy Option C (Azure AI Search) is the Best Choice:\nMeets Technical Requirements:\nEnables semantic and vector search for indexing product sheets, allowing Agent1 to retrieve relevant\ninformation (aligns with the requirement for an indexing pipeline with semantic and vector search\ncapabilities).\nSupports scalable, high-throughput workloads suitable for variable customer support traffic without requiring\nreserved throughput capacity (supports the model deployment requirements for Agent1).\nIntegration and Compatibility:\nSeamless integration with Microsoft Foundry, ensuring consistency with Contoso's existing environment.\nFacilitates the use of detailed product information from storage1 in responses, enhancing Agent1's\ncapabilities.\nSecurity and Compliance Alignment:\nDoes not rely on API keys for access, aligning with the ban on API key usage for Foundry-deployed models.\nCompatible with least privilege access principles and Microsoft Entra authentication for secure access\ncontrol.\nWhy Other Options are Less Suitable:\nOption A (Azure Translator in Foundry Tools):\nPrimarily designed for translation tasks, not suited for indexing or retrieving product information based on\nsemantic/vetor search requirements.\nDoes not address the need for Agent1 to understand and respond with detailed product knowledge.\nOption B (Grounding with Bing Search):\nExternal search may not guarantee data privacy or compliance with EU data retention requirements\n(especially since Project1 is deployed in an EU Azure region).\nLess integrated with Contoso's existing Microsoft Foundry and Azure environment, potentially introducing\ncomplexity.\nOption D (Azure Document Intelligence in Foundry Tools):\nWhile useful for extracting information from documents (like invoices), it doesn't fulfill the semantic/vetor\nsearch indexing requirement for enabling Agent1 to answer product questions effectively.\nMore focused on document processing rather than search and retrieval for conversational AI use cases.\nConclusion:Azure AI Search is the most comprehensive solution for Contoso's requirements, offering the\nnecessary search capabilities, scalability, security, and integration with their existing Microsoft Foundry\nenvironment to enhance Agent1's functionality effectively.\n\nReferences:\n1. Azure AI Search Documentation - https://learn.microsoft.com/en-us/azure/search/search-what-is-\nazure-search\n2. Microsoft Foundry Integration with Azure Services - https://learn.microsoft.com/en-\nus/azure/foundry/how-to-integrate-with-azure-services"
+  },
+  {
+    "id": "ai103-pdf-63",
+    "num": 63,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project named Project1.\nProject1 contains an application that processes PDF vendor invoices.\nYou need to configure Azure Document Intelligence in Foundry Tools to generate a Markdown output that\npreserves the sections and table structure of the PDFs. The solution must minimize development effort.\nWhat should you do?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Configure output=figures when you analyze the PDF."
+      },
+      {
+        "id": "b",
+        "text": "Configure content=markdown when you analyze the document."
+      },
+      {
+        "id": "c",
+        "text": "Increase the confidence threshold."
+      },
+      {
+        "id": "d",
+        "text": "Set the output_content_format=ContentFormat.MARKDOWN value."
+      }
+    ],
+    "correctIds": [
+      "d"
+    ],
+    "acceptedAnswer": {
+      "text": "Set the output_content_format=ContentFormat.MARKDOWN value.",
+      "explanation": "Technical Justification for Correct Answer (D)\nTo configure Azure Document Intelligence in Foundry Tools for generating Markdown output that preserves\nthe sections and table structure of PDF vendor invoices with minimal development effort, the most\na"
+    },
+    "explanation": "Technical Justification for Correct Answer (D)\nTo configure Azure Document Intelligence in Foundry Tools for generating Markdown output that preserves\nthe sections and table structure of PDF vendor invoices with minimal development effort, the most\nappropriate action is to Set the output_content_format=ContentFormat.MARKDOWN value. Here’s why:\nWhy D is the Correct Choice\nDirect Specification of Output Format: By setting output_content_format=ContentFormat.MARKDOWN, you\ndirectly instruct the Azure Document Intelligence API to produce the output in Markdown format. This\nensures that the structure (including sections and tables) is preserved in a format that's easily readable and\nfurther processable.\nMinimal Development Effort: This approach requires no additional coding to parse or transform the output, as\nthe API handles the conversion to Markdown. This aligns perfectly with the requirement to minimize\ndevelopment effort.\nWhy Other Options are Less Suitable\nA. Configure output=figures:\nInadequate for Structural Preservation: Specifying output=figures would primarily focus on extracting images\nor figures from the PDF, neglecting the textual content and structural elements (sections, tables) that need\npreservation.\nDoes Not Generate Markdown: This option does not generate Markdown output, failing to meet the primary\nrequirement.\nB. Configure content=markdown:\nMisinterpretation of Parameter: While this option seems relevant due to the mention of \"markdown\", the\ncontent parameter typically refers to what content to extract (e.g., text, tables) rather than the output format.\n\nThe correct approach for specifying the output format is through output_content_format.\nMay Not Preserve Structure as Required: Even if content=markdown influenced output format (which it\ndoesn't directly), there's no guarantee it would preserve structures as effectively as specifying the output\nformat explicitly.\nC. Increase the confidence threshold:\nIrrelevant to Output Format: Adjusting the confidence threshold affects the accuracy and reliability of the\nextracted data (making the model more conservative in what it outputs as recognized text or structures) but\nhas no bearing on the output format or structural preservation in Markdown.\nConclusion\nSetting output_content_format=ContentFormat.MARKDOWN is the most direct, efficient, and effective method\nto achieve the desired outcome with minimal development effort, making D the correct choice.\nReferences\nAzure Document Intelligence API Reference - Output Formats\nMicrosoft Azure Documentation - Document AI Output Configuration"
+  },
+  {
+    "id": "ai103-pdf-64",
+    "num": 64,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 4: Implement natural language processing solutions",
+    "subdomain": "Subdomain 4.2: Process and generate speech with Azure AI Speech",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that ingests scanned PDF invoices stored in Azure Blob Storage. Each\ninvoice contains printed fine items and has a table-based layout.\nExtracted results are stored as structured JSON and used as grounding data for an agent in a Retrieval\nAugmented Generation (RAG) solution.\nYou need to create a single analyzer that meets the following requirements:\nExtracts the invoice number, invoice date, vendor name, and total amount across varying templates\nReturns confidence scores so that results with confidence below 0.80 can be routed for supervisor review\nWhat should you use?",
+    "options": [
+      {
+        "id": "a",
+        "text": "a Foundry agent that has groundedness guardrails enabled to extract invoice fields and confidence scores"
+      },
+      {
+        "id": "b",
+        "text": "a custom Azure Content Understanding in Foundry Tools analyzer that defines the required fields as the\nextracted fields and the returned confidence scores for routing"
+      },
+      {
+        "id": "c",
+        "text": "the Azure Content Understanding in Foundry Tools prebuilt-layout analyzer"
+      },
+      {
+        "id": "d",
+        "text": "the Azure Content Understanding in Foundry Tools prebuilt-documentSearch analyzer and search.score from\nthe Azure AI Search results for routing"
+      }
+    ],
+    "correctIds": [
+      "b"
+    ],
+    "acceptedAnswer": {
+      "text": "a custom Azure Content Understanding in Foundry Tools analyzer that defines the required fields as the\nextracted fields and the returned confidence scores for routing",
+      "explanation": "Technical Justification for Choosing Option B\nWhy B is the Best Choice:A custom Azure Content Understanding (ACU) in Foundry Tools analyzer, as\ndescribed in option B, is the most suitable choice for this scenario because it directly addresses all spe"
+    },
+    "explanation": "Technical Justification for Choosing Option B\nWhy B is the Best Choice:A custom Azure Content Understanding (ACU) in Foundry Tools analyzer, as\ndescribed in option B, is the most suitable choice for this scenario because it directly addresses all specified\nrequirements with precision. By defining the required fields (invoice number, invoice date, vendor name, and\ntotal amount) as extracted fields, it ensures targeted data extraction across varying templates. Moreover,\nconfiguring the analyzer to return confidence scores enables the crucial functionality of routing results with\nscores below 0.80 for supervisor review, aligning perfectly with the project's needs.\nWhy Other Options are Less Suitable:\nA. Foundry Agent with Groundedness Guardrails:\n\nWhile a Foundry agent can be powerful for tasks involving grounding data, this option does not directly imply\nthe ability to extract specific fields from scanned PDF invoices with variable templates as efficiently as a\ncustomized ACU analyzer.\nConfidence score extraction for routing is not a standard feature highlighted by groundedness guardrails,\nmaking this option less straightforward for the given requirements.\nC. Prebuilt-layout Analyzer in ACU:\nThe prebuilt-layout analyzer might struggle with \"varying templates\" since its performance can be highly\ndependent on the consistency of the layout it's trained on.\nCustom extraction of specific fields (invoice number, date, etc.) and the return of confidence scores for\nrouting might not be as directly configurable or as accurate as with a custom analyzer.\nD. Prebuilt-documentSearch Analyzer with Azure AI Search Score:\nThis option focuses more on search functionality rather than precise field extraction from documents, making\nit less ideal for extracting specific invoice details.\nRelying on search.score for confidence might not accurately reflect the extraction confidence of specific\nfields within the document, as it's more related to the relevance of the document in search results.\nCorrect Choice Justification Summary:Option B is the most technically appropriate because it allows for:\nCustomization to extract specific fields across varying templates.\nDirect configuration to return confidence scores for conditional routing based on a precise threshold (below\n0.80).\nReferences:\nMicrosoft Azure Documentation - Custom Analyzers in Content Understanding\nMicrosoft Learn - Extract insights from documents with Azure Content Understanding"
+  },
+  {
+    "id": "ai103-pdf-65",
+    "num": 65,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that uses Azure AI Search to ground an agent in internal documentation.\nAfter a recent content update, users report that the agent’s answers have become less accurate.\nYou need to identify whether the retrieved content is negatively influencing the model’s generated responses.\nWhich observability signal should you review?",
+    "options": [
+      {
+        "id": "a",
+        "text": "indexer status and failure history"
+      },
+      {
+        "id": "b",
+        "text": "latency breakdown traces"
+      },
+      {
+        "id": "c",
+        "text": "prediction drift metrics"
+      },
+      {
+        "id": "d",
+        "text": "groundedness evaluation metrics"
+      }
+    ],
+    "correctIds": [
+      "d"
+    ],
+    "acceptedAnswer": {
+      "text": "groundedness evaluation metrics",
+      "explanation": "Technical Justification for Correct Answer (D)\nTo address the issue of decreased accuracy in the agent's responses after a content update in a Microsoft\nFoundry project utilizing Azure AI Search for grounding, it's crucial to focus on observability s"
+    },
+    "explanation": "Technical Justification for Correct Answer (D)\nTo address the issue of decreased accuracy in the agent's responses after a content update in a Microsoft\nFoundry project utilizing Azure AI Search for grounding, it's crucial to focus on observability signals that\ndirectly relate to the integration of retrieved content with the model's response generation. Here’s why D.\nGroundedness Evaluation Metrics is the most suitable choice, and why the others are less appropriate:\n\nD. Groundedness Evaluation Metrics:\nRelevance: Groundedness metrics directly measure how well the model's responses are grounded in the\nretrieved content from Azure AI Search. A decline in these metrics post-content update would indicate that\nthe new content is not being effectively utilized or is misleading the model, leading to less accurate\nresponses.\nActionability: Reviewing these metrics provides clear insights into whether the issue lies in the content\nupdate itself or in how the model interprets this content, guiding targeted adjustments.\nA. Indexer Status and Failure History:\nLess Suitable Because: While important for overall system health, indexer status primarily indicates if the\nindexing process is functioning correctly. Failure history might show if content wasn't indexed properly, but it\ndoesn't directly correlate with the model's ability to generate accurate responses from the content.\nWhy Not Best: Doesn't provide insight into the model's usage of the content for response accuracy.\nB. Latency Breakdown Traces:\nLess Suitable Because: Latency issues might affect user experience but do not directly impact the accuracy\nof the model's responses. Slow performance could be a separate issue but doesn't explain the decrease in\nresponse accuracy.\nWhy Not Best: Focuses on performance rather than content-model interaction accuracy.\nC. Prediction Drift Metrics:\nLess Suitable Because: While prediction drift metrics are crucial for monitoring model performance over time,\nthey are more generalized. They can indicate a decline in model accuracy but do not specifically point to the\ninfluence of the retrieved content as the cause.\nWhy Not Best: Less targeted than groundedness metrics for identifying content-related issues.\nConclusion: Given the need to isolate whether the retrieved content update is negatively impacting the\nmodel's response accuracy, D. Groundedness Evaluation Metrics is the most direct and relevant observability\nsignal to review. It offers the clearest path to understanding the interaction between the new content and the\nmodel's performance.\nReferences\nMicrosoft Documentation: Azure AI Search - Troubleshooting (Although not directly linked to \"Groundedness\nEvaluation Metrics\", this resource provides insight into troubleshooting content indexing issues, which can be\na precursor to evaluating groundedness.)\nMicrosoft Learn: Monitor and troubleshoot Azure AI models (While broad, this learning module touches on\nmodel monitoring aspects that can be related to understanding prediction drift and, by extension, the\nimportance of specific metrics in model performance analysis.)\nHOTSPOT\n-\nCase Study\n-\nThis is a case study. Case studies are not timed separately from other exam sections. You can use as much exam\ntime as you would like to complete each case study. However, there might be additional case studies or other\nexam sections. Manage your time to ensure that you can complete all the exam sections in the time provided. Pay\nattention to the Exam Progress at the top of the screen so you have sufficient time to complete any exam sections\nthat follow this case study.\nTo answer the case study questions, you will bed to reference information that is provided in the case. Case studies\nand associated questions might contain exhibits or other resources that provide more information about the\nscenario described in the case. Information provided in an individual question does not apply to the other questions\nin the case study.\nA Review Screen will appear at the end of this case study. From the Review Screen, you can review and change\nyour answers before you move to the next exam section. After you leave this case study, you will NOT be able to\nreturn to it.\nTo start the case study\n\n-\nTo display the first question in this case study, select the “Next” button. To the left of the question, a menu\nprovides links to information such as business requirements, the existing environment, and problem statements.\nPlease read through all this information before answering any questions. When you are ready to answer a question,\nselect the “Question” button to return to the question.\nOverview\n-\nCompany Information\n-\nContoso, Ltd is a multinational retail company that builds, deploys, and manages generative AI and agent-based\nsolutions by using Microsoft Foundry.\nExisting Environment\n-\nIdentity Environment\n-\nContoso uses Microsoft Entra ID for identity management, authentication, and authorization capabilities that\nenable agents to access organizational resources and services.\nContoso recently formed a new AI engineering team named Agent1Dev Team to optimize and maintain existing AI\nsolutions.\nThe team collaborates with solution architects, DevOps engineers, and security engineers to design, implement.\nmonitor, and secure AI applications.\nContoso also has a team named Agent1Test Team that is responsible for validating AI solutions before the solution\ndeployments.\nGenerative Environment\n-\nContoso has a Microsoft Foundry deployment that contains two projects named Project1 and Project2.\nProject1\n-\nProject1 contains a customer support agent named Agent1 that assists customers with product inquiries and\ntroubleshooting requests.\nAgent1 has the following configurations:\n•Agent1 uses a base model deployment.\n•A safety evaluation pipeline is NOT enabled.\n•Tool invocation approval workflows are NOT enabled.\n•Conversation memory constraints are NOT configured.\nAgent1 interacts with customers by using digital support channels and answers general questions about Contoso\nproducts.\nProject1 is deployed to an Azure region located in the European Union (EU).\nAgent1Dev Team will use Project1 to optimize and maintain Agent1.\nProject2\n-\nProject2 contains a deployed video generation model. The marketing department at Contoso has access to\nProject2 and plans to use the model to develop a video creation solution.\nDevelopment of the solution is incomplete.\nData Environment\n-\nContoso stores product-related information in Azure resources that support AI applications.\nThe Azure environment contains an Azure Blob Storage account named storage1 that stores product detail sheets\nfor all the Contoso products.\nThe product sheets include specifications, feature descriptions, and product support information that Agent1 can\nuse to answer customer questions. The product sheets are stored in the PDF format.\nProblem Statements\n-\nContoso identifies the following issues:\n•Agent1 has only general knowledge of the Contoso products.\n•A recent chat interaction with Agent1 was analyzed for sentiment. The results of the analysis have NOT been\nprocessed yet.\n•Agent1 does NOT use the detailed product information in the product sheets stored in storage1 when responding\nto customer questions.\n•The finance department at Contoso reports that vendor invoices must be reviewed manually to ensure that the\ninvoices match the terms defined in the vendor contracts. The invoices contain tables, logos, and varied layouts\nthat make the documents difficult to process consistently.\nRequirements\n-\nPlanned Changes\n-\n\nContoso plans to implement the following changes:\n•Implement a solution for Project1 that analyzes the vendor invoices by evaluating both the visual layout and the\ntextual content of the invoices, so that the invoice details can be verified against the vendor contract terms.\n•Update the base model deployment used by Agent1 and standardize the model version to ensure continuity and\nconsistent responses.\n•Enable Agent1 to retrieve and use the detailed product information from the product sheets stored in storage1.\n•Implement an indexing solution for the product sheets that Agent1 can use to answer customer questions.\n•Complete the development of the video creation solution.\nTechnical Requirements\n-"
+  },
+  {
+    "id": "ai103-pdf-66",
+    "num": 66,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "Contoso identifies the following technical requirements:\n•The model deployment used by Agent1 must support scalable, high-throughput generative AI workloads and\ndynamically scale to handle variable customer support traffic, without requiring reserved throughput capacity.\n•The product sheets must be processed by using an indexing pipeline that enables semantic and vector search, so\nthat Agent1 can retrieve the relevant product information.\n•Responses generated by using the product sheet information must be relevant, complete, and accurate.\n•Agent1 must be able to use the product sheets to answer natural language questions about product details.\n•The model version used by Agent1 must remain consistent to ensure stable responses.\n•The data processed by the model must remain within the EU.\nSecurity and Compliance Requirements\nContoso identifies the following security and compliance requirements:\n•API keys must NOT be used to access Foundry-deployed models.\n•Access to the Azure resources must follow the principle of least privilege.\n•The developers at Contoso must authenticate to Microsoft Foundry resources by using Microsoft Entra\nauthentication.\n•Access to Project1 must be assigned to the members of Agent1Dev Team by using a security group named\nSC_Agent1_Dev.\n•Access to Project1 must be assigned to the members of Agent1Test Team by using a security group named\nSC_Agent1_Test.\n•Agent1 must never reveal customer information, even if a document that contains customer data is added\nerroneously to the product sheet repository in storage1.\n•The product sheets might contain images that include embedded text. Agent1 must be protected from malicious\ninstructions potentially hidden within the images.\nBusiness Requirements\n-\nContoso identifies the following business requirements:\n•Users that interact with Agent1 must have a personalized experience in future interactions, including the ability\nfor Agent1 to retain conversation context and recall relevant information from previous interactions.\n•Agent1 must answer questions only about the products sold by Contoso.\nYou need to ensure that the marketing department can generate videos by using the model deployed to Project2.\nHow should you complete the Python code? To answer, select the appropriate options in the answer area.\nNOTE: Each correct selection is worth one point.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Explanation:"
+      },
+      {
+        "id": "b",
+        "text": "Alternative manual configuration using individual resource keys and shared access signatures"
+      },
+      {
+        "id": "c",
+        "text": "Direct legacy cognitive service endpoint without managed identity authentication"
+      },
+      {
+        "id": "d",
+        "text": "Client-side prompt validation rule without central service integration"
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "Explanation:",
+      "explanation": "First Dropdown: create\nWhy: The initial method call starts an asynchronous video generation task using a given prompt and\ndeployment model.\nResulting Code:\npython\nvideo = client.videos.create( model=deployment_name, prompt=\"A video of our products\",)"
+    },
+    "explanation": "First Dropdown: create\nWhy: The initial method call starts an asynchronous video generation task using a given prompt and\ndeployment model.\nResulting Code:\npython\nvideo = client.videos.create( model=deployment_name, prompt=\"A video of our products\",)\nUse code with caution.\nSecond Dropdown: retrieve\nWhy: Inside the asynchronous checking (while) loop, the code checks the generation progress repeatedly. The\nretrieve method fetches the up-to-date execution status corresponding to the specific video.id.\nResulting Code:\npython\nvideo = client.videos.retrieve(video.id)\nUse code with caution.\nCase Study -\nThis is a case study. Case studies are not timed separately from other exam sections. You can use as much exam\ntime as you would like to complete each case study. However, there might be additional case studies or other\nexam sections. Manage your time to ensure that you can complete all the exam sections in the time provided. Pay\nattention to the Exam Progress at the top of the screen so you have sufficient time to complete any exam sections\nthat follow this case study.\nTo answer the case study questions, you will bed to reference information that is provided in the case. Case studies\nand associated questions might contain exhibits or other resources that provide more information about the\nscenario described in the case. Information provided in an individual question does not apply to the other questions\nin the case study.\nA Review Screen will appear at the end of this case study. From the Review Screen, you can review and change\nyour answers before you move to the next exam section. After you leave this case study, you will NOT be able to\nreturn to it.\nTo start the case study -\nTo display the first question in this case study, select the “Next” button. To the left of the question, a menu\nprovides links to information such as business requirements, the existing environment, and problem statements.\nPlease read through all this information before answering any questions. When you are ready to answer a question,\nselect the “Question” button to return to the question.\nOverview -\nCompany Information -\nContoso, Ltd is a multinational retail company that builds, deploys, and manages generative AI and agent-based\nsolutions by using Microsoft Foundry.\nExisting Environment -\nIdentity Environment -\nContoso uses Microsoft Entra ID for identity management, authentication, and authorization capabilities that\nenable agents to access organizational resources and services.\nContoso recently formed a new AI engineering team named Agent1Dev Team to optimize and maintain existing AI\nsolutions.\nThe team collaborates with solution architects, DevOps engineers, and security engineers to design, implement.\nmonitor, and secure AI applications.\nContoso also has a team named Agent1Test Team that is responsible for validating AI solutions before the solution\ndeployments.\nGenerative Environment -\n\nContoso has a Microsoft Foundry deployment that contains two projects named Project1 and Project2.\nProject1 -\nProject1 contains a customer support agent named Agent1 that assists customers with product inquiries and\ntroubleshooting requests.\nAgent1 has the following configurations:\n•Agent1 uses a base model deployment.\n•A safety evaluation pipeline is NOT enabled.\n•Tool invocation approval workflows are NOT enabled.\n•Conversation memory constraints are NOT configured.\nAgent1 interacts with customers by using digital support channels and answers general questions about Contoso\nproducts.\nProject1 is deployed to an Azure region located in the European Union (EU).\nAgent1Dev Team will use Project1 to optimize and maintain Agent1.\nProject2 -\nProject2 contains a deployed video generation model. The marketing department at Contoso has access to\nProject2 and plans to use the model to develop a video creation solution.\nDevelopment of the solution is incomplete.\nData Environment -\nContoso stores product-related information in Azure resources that support AI applications.\nThe Azure environment contains an Azure Blob Storage account named storage1 that stores product detail sheets\nfor all the Contoso products.\nThe product sheets include specifications, feature descriptions, and product support information that Agent1 can\nuse to answer customer questions. The product sheets are stored in the PDF format.\nProblem Statements -\nContoso identifies the following issues:\n•Agent1 has only general knowledge of the Contoso products.\n•A recent chat interaction with Agent1 was analyzed for sentiment. The results of the analysis have NOT been\nprocessed yet.\n•Agent1 does NOT use the detailed product information in the product sheets stored in storage1 when responding\nto customer questions.\n•The finance department at Contoso reports that vendor invoices must be reviewed manually to ensure that the\ninvoices match the terms defined in the vendor contracts. The invoices contain tables, logos, and varied layouts\nthat make the documents difficult to process consistently.\nRequirements -\nPlanned Changes -"
+  },
+  {
+    "id": "ai103-pdf-67",
+    "num": 67,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "Contoso plans to implement the following changes:\n•Implement a solution for Project1 that analyzes the vendor invoices by evaluating both the visual layout and the\ntextual content of the invoices, so that the invoice details can be verified against the vendor contract terms.\n•Update the base model deployment used by Agent1 and standardize the model version to ensure continuity and\nconsistent responses.\n•Enable Agent1 to retrieve and use the detailed product information from the product sheets stored in storage1.\n•Implement an indexing solution for the product sheets that Agent1 can use to answer customer questions.\n•Complete the development of the video creation solution.\nTechnical Requirements -\nContoso identifies the following technical requirements:\n•The model deployment used by Agent1 must support scalable, high-throughput generative AI workloads and\ndynamically scale to handle variable customer support traffic, without requiring reserved throughput capacity.\n•The product sheets must be processed by using an indexing pipeline that enables semantic and vector search, so\nthat Agent1 can retrieve the relevant product information.\n•Responses generated by using the product sheet information must be relevant, complete, and accurate.\n•Agent1 must be able to use the product sheets to answer natural language questions about product details.\n•The model version used by Agent1 must remain consistent to ensure stable responses.\n•The data processed by the model must remain within the EU.\nSecurity and Compliance Requirements\nContoso identifies the following security and compliance requirements:\n•API keys must NOT be used to access Foundry-deployed models.\n•Access to the Azure resources must follow the principle of least privilege.\n•The developers at Contoso must authenticate to Microsoft Foundry resources by using Microsoft Entra\nauthentication.\n•Access to Project1 must be assigned to the members of Agent1Dev Team by using a security group named\nSC_Agent1_Dev.\n•Access to Project1 must be assigned to the members of Agent1Test Team by using a security group named\nSC_Agent1_Test.\n•Agent1 must never reveal customer information, even if a document that contains customer data is added\nerroneously to the product sheet repository in storage1.\n•The product sheets might contain images that include embedded text. Agent1 must be protected from malicious\n\ninstructions potentially hidden within the images.\nBusiness Requirements -\nContoso identifies the following business requirements:\n•Users that interact with Agent1 must have a personalized experience in future interactions, including the ability\nfor Agent1 to retain conversation context and recall relevant information from previous interactions.\n•Agent1 must answer questions only about the products sold by Contoso.\nYou need to configure personalized user interactions for Agent1. The solution must meet the business\nrequirements.\nWhat should you include in the solution?",
+    "options": [
+      {
+        "id": "a",
+        "text": "knowledge"
+      },
+      {
+        "id": "b",
+        "text": "memory"
+      },
+      {
+        "id": "c",
+        "text": "guardrails"
+      },
+      {
+        "id": "d",
+        "text": "tools"
+      }
+    ],
+    "correctIds": [
+      "b"
+    ],
+    "acceptedAnswer": {
+      "text": "memory",
+      "explanation": "Technical Justification for Configuring Personalized User Interactions for Agent1\nTo meet the business requirement for personalized user interactions with Agent1, where the agent must retain\nconversation context and recall relevant information from p"
+    },
+    "explanation": "Technical Justification for Configuring Personalized User Interactions for Agent1\nTo meet the business requirement for personalized user interactions with Agent1, where the agent must retain\nconversation context and recall relevant information from previous interactions, the most suitable solution\ncomponent is identified and justified below, along with explanations for why other options are less suitable.\nCorrect Answer: B. Memory\nWhy Memory (B) is the Best Choice:\nConversation Context Retention: Implementing memory for Agent1 directly addresses the requirement for\nretaining conversation context. This allows Agent1 to remember previous interactions with users, facilitating a\npersonalized experience.\nRecalling Relevant Information: Memory integration enables Agent1 to recall relevant product information\nfrom previous conversations, ensuring consistency and personalization in responses.\nAlignment with Technical Requirements: While not directly listed under technical requirements, enhancing\nAgent1 with memory capabilities aligns with the broader technical goal of ensuring relevant, complete, and\naccurate responses, especially when combined with the planned indexing solution for product sheets.\nWhy Other Options are Less Suitable:\nA. Knowledge:\nReason: While enhancing Agent1's knowledge base (e.g., with more product information) is crucial and\nplanned (as per updating the base model and using product sheets), \"knowledge\" in this context refers to the\nbreadth of information Agent1 has, not the ability to retain conversation context for personalization.\nMisalignment: Does not directly address the retention of conversation history for personalized interactions.\nC. Guardrails:\nReason: Guardrails are more about setting boundaries and controls on what Agent1 can and cannot do or say,\nensuring safety and compliance (e.g., not revealing customer information). While important, guardrails do not\nenable the personalization of user interactions through context retention.\nMisalignment: Focuses on restriction and safety rather than personalization features.\nD. Tools:\n\nReason: Implementing new \"tools\" for Agent1 could broadly enhance its capabilities, but the term is too vague\nin this context to directly address the personalized interaction requirement. Tools might include anything\nfrom new APIs to integration with other services, not necessarily focusing on conversation memory.\nMisalignment: Too generic; does not specifically target the need for retaining conversation context for\npersonalization.\nConclusion:Given the business requirement for personalized user interactions, incorporating memory (B) into\nAgent1's configuration is the most direct and effective solution. This ensures Agent1 can retain conversation\ncontext and recall relevant information, providing users with a personalized experience.\nReferences:\n1. Microsoft Azure Cognitive Services - Conversational AI\nhttps://azure.microsoft.com/en-us/services/cognitive-services/conversational-ai/\n2. Personalizing Conversations with Azure Bot Service\nhttps://learn.microsoft.com/en-us/azure/bot-service/bot-service-concept-personalization?\nview=azure-bot-service-4.0\nHOTSPOT\n-\nCase Study\n-\nThis is a case study. Case studies are not timed separately from other exam sections. You can use as much exam\ntime as you would like to complete each case study. However, there might be additional case studies or other\nexam sections. Manage your time to ensure that you can complete all the exam sections in the time provided. Pay\nattention to the Exam Progress at the top of the screen so you have sufficient time to complete any exam sections\nthat follow this case study.\nTo answer the case study questions, you will bed to reference information that is provided in the case. Case studies\nand associated questions might contain exhibits or other resources that provide more information about the\nscenario described in the case. Information provided in an individual question does not apply to the other questions\nin the case study.\nA Review Screen will appear at the end of this case study. From the Review Screen, you can review and change\nyour answers before you move to the next exam section. After you leave this case study, you will NOT be able to\nreturn to it.\nTo start the case study\n-\nTo display the first question in this case study, select the “Next” button. To the left of the question, a menu\nprovides links to information such as business requirements, the existing environment, and problem statements.\nPlease read through all this information before answering any questions. When you are ready to answer a question,\nselect the “Question” button to return to the question.\nOverview\n-\nCompany Information\n-\nContoso, Ltd is a multinational retail company that builds, deploys, and manages generative AI and agent-based\nsolutions by using Microsoft Foundry.\nExisting Environment\n-\nIdentity Environment\n-\nContoso uses Microsoft Entra ID for identity management, authentication, and authorization capabilities that\nenable agents to access organizational resources and services.\nContoso recently formed a new AI engineering team named Agent1Dev Team to optimize and maintain existing AI\nsolutions.\nThe team collaborates with solution architects, DevOps engineers, and security engineers to design, implement.\nmonitor, and secure AI applications.\nContoso also has a team named Agent1Test Team that is responsible for validating AI solutions before the solution\n\ndeployments.\nGenerative Environment\n-\nContoso has a Microsoft Foundry deployment that contains two projects named Project1 and Project2.\nProject1\n-\nProject1 contains a customer support agent named Agent1 that assists customers with product inquiries and\ntroubleshooting requests.\nAgent1 has the following configurations:\n•Agent1 uses a base model deployment.\n•A safety evaluation pipeline is NOT enabled.\n•Tool invocation approval workflows are NOT enabled.\n•Conversation memory constraints are NOT configured.\nAgent1 interacts with customers by using digital support channels and answers general questions about Contoso\nproducts.\nProject1 is deployed to an Azure region located in the European Union (EU).\nAgent1Dev Team will use Project1 to optimize and maintain Agent1.\nProject2\n-\nProject2 contains a deployed video generation model. The marketing department at Contoso has access to\nProject2 and plans to use the model to develop a video creation solution.\nDevelopment of the solution is incomplete.\nData Environment\n-\nContoso stores product-related information in Azure resources that support AI applications.\nThe Azure environment contains an Azure Blob Storage account named storage1 that stores product detail sheets\nfor all the Contoso products.\nThe product sheets include specifications, feature descriptions, and product support information that Agent1 can\nuse to answer customer questions. The product sheets are stored in the PDF format.\nProblem Statements\n-\nContoso identifies the following issues:\n•Agent1 has only general knowledge of the Contoso products.\n•A recent chat interaction with Agent1 was analyzed for sentiment. The results of the analysis have NOT been\nprocessed yet.\n•Agent1 does NOT use the detailed product information in the product sheets stored in storage1 when responding\nto customer questions.\n•The finance department at Contoso reports that vendor invoices must be reviewed manually to ensure that the\ninvoices match the terms defined in the vendor contracts. The invoices contain tables, logos, and varied layouts\nthat make the documents difficult to process consistently.\nRequirements\n-\nPlanned Changes\n-\nContoso plans to implement the following changes:\n•Implement a solution for Project1 that analyzes the vendor invoices by evaluating both the visual layout and the\ntextual content of the invoices, so that the invoice details can be verified against the vendor contract terms.\n•Update the base model deployment used by Agent1 and standardize the model version to ensure continuity and\nconsistent responses.\n•Enable Agent1 to retrieve and use the detailed product information from the product sheets stored in storage1.\n•Implement an indexing solution for the product sheets that Agent1 can use to answer customer questions.\n•Complete the development of the video creation solution.\nTechnical Requirements\n-"
+  },
+  {
+    "id": "ai103-pdf-68",
+    "num": 68,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "Contoso identifies the following technical requirements:\n•The model deployment used by Agent1 must support scalable, high-throughput generative AI workloads and\ndynamically scale to handle variable customer support traffic, without requiring reserved throughput capacity.\n•The product sheets must be processed by using an indexing pipeline that enables semantic and vector search, so\nthat Agent1 can retrieve the relevant product information.\n•Responses generated by using the product sheet information must be relevant, complete, and accurate.\n•Agent1 must be able to use the product sheets to answer natural language questions about product details.\n•The model version used by Agent1 must remain consistent to ensure stable responses.\n•The data processed by the model must remain within the EU.\nSecurity and Compliance Requirements\nContoso identifies the following security and compliance requirements:\n•API keys must NOT be used to access Foundry-deployed models.\n\n•Access to the Azure resources must follow the principle of least privilege.\n•The developers at Contoso must authenticate to Microsoft Foundry resources by using Microsoft Entra\nauthentication.\n•Access to Project1 must be assigned to the members of Agent1Dev Team by using a security group named\nSC_Agent1_Dev.\n•Access to Project1 must be assigned to the members of Agent1Test Team by using a security group named\nSC_Agent1_Test.\n•Agent1 must never reveal customer information, even if a document that contains customer data is added\nerroneously to the product sheet repository in storage1.\n•The product sheets might contain images that include embedded text. Agent1 must be protected from malicious\ninstructions potentially hidden within the images.\nBusiness Requirements\n-\nContoso identifies the following business requirements:\n•Users that interact with Agent1 must have a personalized experience in future interactions, including the ability\nfor Agent1 to retain conversation context and recall relevant information from previous interactions.\n•Agent1 must answer questions only about the products sold by Contoso.\nYou need to ensure that Agent1Dev Team can access Agent1. The solution must meet the security and compliance\nrequirements.\nHow should you complete the Python code? To answer, select the appropriate options in the answer area.\nNOTE: Each correct selection is worth one point.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Explanation:"
+      },
+      {
+        "id": "b",
+        "text": "Alternative manual configuration using individual resource keys and shared access signatures"
+      },
+      {
+        "id": "c",
+        "text": "Direct legacy cognitive service endpoint without managed identity authentication"
+      },
+      {
+        "id": "d",
+        "text": "Client-side prompt validation rule without central service integration"
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "Explanation:",
+      "explanation": "First Dropdown: DefaultAzureCredential()\nWhy: The script imports DefaultAzureCredential from azure.identity. For Microsoft Azure AI Foundry project\nclient authentication, token-based authentication via Microsoft Entra ID is the standard approach, whi"
+    },
+    "explanation": "First Dropdown: DefaultAzureCredential()\nWhy: The script imports DefaultAzureCredential from azure.identity. For Microsoft Azure AI Foundry project\nclient authentication, token-based authentication via Microsoft Entra ID is the standard approach, which is\ninstantiated via DefaultAzureCredential().\nResulting Line:\npython\ncredential=DefaultAzureCredential(),\nUse code with caution.\n2\u0001\n⃣ Second Dropdown: get\nWhy: The final print statement output indicates that you are working with an existing agent (Retrieved agent:\n...). The get method is used on the agents client operations property to fetch an active agent profile using its\nagent_name.\nResulting Line:\npython\nagent = project_client.agents.get(agent_name=myAgent)\nUse code with caution."
+  },
+  {
+    "id": "ai103-pdf-69",
+    "num": 69,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "multiple_choice",
+    "domain": "Domain 5: Implement document intelligence solutions",
+    "subdomain": "Subdomain 5.1: Extract data using Document Intelligence",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that contains a Retrieval Augmented Generation (RAG) chat solution used by\ncustomer support agents.\nYou are adding an automated pre-production evaluation step to a CI/CD pipeline named Pipeline1. The evaluation\nwill run against a labeled test dataset that contains support questions and the expected grounding context.\nYou need to ensure that Pipeline1 fails if unsupported content or a retrieval mismatch exceeds a defined threshold:\n•responses include claims not supported by the retrieved source content\n•retrieved source content does not align with the labeled expected context\nWhich two built-in evaluators should you use in Pipeline1? Each correct answer presents pat of the solution.\nNOTE: Each correct selection is worth one point.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Retrieval"
+      },
+      {
+        "id": "b",
+        "text": "Fluency"
+      },
+      {
+        "id": "c",
+        "text": "Coherence"
+      },
+      {
+        "id": "d",
+        "text": "Groundedness"
+      },
+      {
+        "id": "e",
+        "text": "Response Completeness"
+      }
+    ],
+    "correctIds": [
+      "a",
+      "d"
+    ],
+    "acceptedAnswer": {
+      "text": "Retrieval, Groundedness",
+      "explanation": "Technical Justification for Correct Option (AD)\nTo address the requirement of ensuring Pipeline1 fails if unsupported content or a retrieval mismatch exceeds\na defined threshold in the context of a Retrieval Augmented Generation (RAG) chat solution, "
+    },
+    "explanation": "Technical Justification for Correct Option (AD)\nTo address the requirement of ensuring Pipeline1 fails if unsupported content or a retrieval mismatch exceeds\na defined threshold in the context of a Retrieval Augmented Generation (RAG) chat solution, two specific\nbuilt-in evaluators are most suited:\nA. Retrieval: This evaluator directly assesses the alignment between the retrieved source content and the\nexpected grounding context provided in the labeled test dataset. By setting a threshold for retrieval\nmismatch, Pipeline1 can fail if the discrepancy between the expected and actual retrieved content surpasses\nthis limit, ensuring the model's ability to fetch relevant information is within acceptable parameters.\nD. Groundedness: This evaluator checks if the responses generated by the model include claims that are\nsupported by the retrieved source content. Setting a threshold for unsupported content ensures Pipeline1\nfails if the model generates responses with unsupported claims beyond the defined limit, maintaining the\naccuracy and trustworthiness of the automated support responses.\nWhy Other Options Are Less Suitable:\nB. Fluency: Evaluates how natural and fluent the generated responses are. While important for user\nexperience, it does not directly address the issues of unsupported content or retrieval mismatches as\nspecified in the requirement.\nC. Coherence: Assesses the logical consistency and coherence of the generated responses. Similar to\nFluency, it's crucial for overall response quality but does not target the specific thresholds for content\nsupport or retrieval alignment outlined in the problem.\nE. Response Completeness: Checks if the responses fully address the user's query. Although completeness is\nvital, the primary concern here is the accuracy and support of the content, not necessarily its completeness in\nanswering the question, making this option less directly relevant to the specified thresholds.\nConclusion:The combination of Retrieval (A) and Groundedness (D) evaluators is the best choice for Pipeline1\nas they directly target and mitigate the risks of retrieval mismatches and unsupported content claims,\naligning perfectly with the defined failure conditions.\n\nReferences:\n1. Microsoft Azure Cognitive Services - Evaluators for Conversational AI:\nhttps://learn.microsoft.com/en-us/azure/cognitive-services/conversational-ai/howto-evaluation\n(Section on Built-in Evaluators)\n2. Azure DevOps Pipelines - Integrating AI Evaluations: https://learn.microsoft.com/en-\nus/azure/devops/pipelines/tasks/build/azureml-evaluate?view=azure-devops&tabs=yaml (Refer to\nCustomizing Evaluation Metrics for AI Models)"
+  },
+  {
+    "id": "ai103-pdf-70",
+    "num": 70,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 5: Implement document intelligence solutions",
+    "subdomain": "Subdomain 5.1: Extract data using Document Intelligence",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that contains a support-ticket triage agent built by using the Foundry Agent\nService.\nThe agent uses tool to classify the ticket type and sot the ticket priority.\nSometimes, the same support case continues across multiple sessions over several days.\nYou need to persist state by using a durable ID to ensure that the agent can automatically reuse the full interaction\nhistory. The solution must preserve previous user messages, tool calls and tool outputs across turns and sessions.\nWhich runtime component should you use?",
+    "options": [
+      {
+        "id": "a",
+        "text": "output item"
+      },
+      {
+        "id": "b",
+        "text": "agent"
+      },
+      {
+        "id": "c",
+        "text": "conversation"
+      },
+      {
+        "id": "d",
+        "text": "response"
+      }
+    ],
+    "correctIds": [
+      "c"
+    ],
+    "acceptedAnswer": {
+      "text": "conversation",
+      "explanation": "Technical Justification for Choosing C. Conversation\nTo address the requirement of persisting state with a durable ID for an Microsoft Foundry project's support-\nticket triage agent, utilizing the Conversation runtime component is the most appropriat"
+    },
+    "explanation": "Technical Justification for Choosing C. Conversation\nTo address the requirement of persisting state with a durable ID for an Microsoft Foundry project's support-\nticket triage agent, utilizing the Conversation runtime component is the most appropriate choice. Here's why:\nPersistence Across Sessions: The Conversation component is designed to maintain context over multiple\nturns and even across different sessions, spanning several days if necessary. This aligns perfectly with the\nneed to persist the full interaction history (user messages, tool calls, and tool outputs) for ongoing support\ncases.\nDurable ID for State Management: Conversations in Microsoft Foundry can be associated with a durable ID,\nensuring that the agent can automatically reuse the entire history of interactions for a given support case,\nfacilitating seamless continuity.\nScope of Operation:\nA. Output Item: Primarily used for managing the output of a single turn or interaction. It lacks the capability to\npersist state across multiple sessions, making it unsuitable for this scenario.\nB. Agent: While the agent is the core component of the Foundry project, specifying \"agent\" as the runtime\ncomponent for persisting state is too broad. The agent encompasses various functionalities, but the specific\ntask of state persistence across sessions is more accurately attributed to a subset of its capabilities, namely\nthe Conversation component.\nD. Response: Similar to Output Item, Response is focused on the immediate output of an interaction and does\nnot support the long-term persistence of interaction history across sessions.\nWhy C. Conversation is the Best Choice:\n\nDirect Alignment with Requirements: Preserves previous user messages, tool calls, and tool outputs.\nDurable ID Capability: Ensures the agent can reuse the full interaction history across multiple sessions.\nDesigned for Multi-Session Context: Unlike the other options, Conversation is specifically designed to handle\nthe persistence of state over extended periods and multiple interactions.\nReferences\n1. Microsoft Azure Documentation - Microsoft Foundry: Conversations\nhttps://learn.microsoft.com/en-us/microsoft-365/enterprise/microsoft-foundry-conversations?\nview=o365-worldwide\n2. Microsoft Documentation - Microsoft Foundry Agent Service: State Management\nhttps://learn.microsoft.com/en-us/microsoft-365/enterprise/microsoft-foundry-agent-service-state-\nmanagement?view=o365-worldwide\nHOTSPOT\n-"
+  },
+  {
+    "id": "ai103-pdf-71",
+    "num": 71,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 2: Implement generative AI and agent solutions",
+    "subdomain": "Subdomain 2.1: Develop and deploy AI agents and generative solutions",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Founcy project that contains a Retrieval Augmented Generation (RAG) solution.\nYou need to run a pre-production evaluation by using labeled CSV dataset that contains the query, context,\nresponse and ground truth. The evaluation must measure the following:\n•Whether responses address the user query\n•Whether responses are supported by the provided context\n•Whether responses contain sensitive or proprietary information\nWhich AI quality evaluation metrics should you use? To answer, select the appropriate options in the answer area.\nNOTE: Each correct selection is worth one point.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Explanation:"
+      },
+      {
+        "id": "b",
+        "text": "Alternative manual configuration using individual resource keys and shared access signatures"
+      },
+      {
+        "id": "c",
+        "text": "Direct legacy cognitive service endpoint without managed identity authentication"
+      },
+      {
+        "id": "d",
+        "text": "Client-side prompt validation rule without central service integration"
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "Explanation:",
+      "explanation": "1. First Drop-Down Selection\nTo measure whether the responses are supported by the provided context and address the user query:\nCorrect Answer: Groundedness and Relevance\n2. Second Drop-Down Selection\nTo measure whether responses contain sensitive or"
+    },
+    "explanation": "1. First Drop-Down Selection\nTo measure whether the responses are supported by the provided context and address the user query:\nCorrect Answer: Groundedness and Relevance\n2. Second Drop-Down Selection\nTo measure whether responses contain sensitive or proprietary information:\nCorrect Answer: Protected material"
+  },
+  {
+    "id": "ai103-pdf-72",
+    "num": 72,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "multiple_choice",
+    "domain": "Domain 4: Implement natural language processing solutions",
+    "subdomain": "Subdomain 4.2: Process and generate speech with Azure AI Speech",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You plan to configure an evaluation in Microsoft Foundry for a Retrieval Augmented Generation (RAG) chat app.\nYou need to provide scores for groundedness, relevance, and harmful content categories.\nWhich two evaluation categories can you use? Each correct answer presents a complete solution.\nNOTE: Each correct selection is worth one point.",
+    "options": [
+      {
+        "id": "a",
+        "text": "risk and safety metrics"
+      },
+      {
+        "id": "b",
+        "text": "fluency evaluator"
+      },
+      {
+        "id": "c",
+        "text": "similarity evaluators"
+      },
+      {
+        "id": "d",
+        "text": "AI quality (NLP) metrics"
+      },
+      {
+        "id": "e",
+        "text": "AI quality (AI assisted) metrics"
+      }
+    ],
+    "correctIds": [
+      "a",
+      "e"
+    ],
+    "acceptedAnswer": {
+      "text": "risk and safety metrics, AI quality (AI assisted) metrics",
+      "explanation": "Technical Justification for Correct Answer AE\nTo configure an evaluation in Microsoft Foundry for a Retrieval Augmented Generation (RAG) chat app,\nfocusing on groundedness, relevance, and harmful content categories, the most appropriate evaluation\nca"
+    },
+    "explanation": "Technical Justification for Correct Answer AE\nTo configure an evaluation in Microsoft Foundry for a Retrieval Augmented Generation (RAG) chat app,\nfocusing on groundedness, relevance, and harmful content categories, the most appropriate evaluation\ncategories are:\n\nA. Risk and Safety Metrics: This category is crucial for assessing harmful content, as it evaluates the model's\noutput for potential risks, including but not limited to, toxicity, hate speech, and other safety concerns. This\ndirectly addresses the \"harmful content\" category requirement.\nD. AI Quality (NLP) Metrics: For a RAG chat app, groundedness and relevance are key. AI Quality (NLP)\nMetrics are suited for evaluating the linguistic quality, coherence, and relevance of the generated text. This\ncategory can provide insights into how well the model's responses are grounded in the provided context\n(groundedness) and how relevant the responses are to the user's queries (relevance).\nWhy Other Options are Less Suitable:\nB. Fluency Evaluator: While useful for assessing the grammatical correctness and readability of generated\ntext, it does not directly evaluate groundedness, relevance, or harmful content, making it less relevant for this\nspecific set of requirements.\nC. Similarity Evaluators: These are more geared towards detecting duplication or similarity in content, which\ndoes not align with the needs for evaluating groundedness, relevance, or the presence of harmful content.\nE. AI Quality (AI Assisted) Metrics: Although this might seem relevant, it's more focused on the overall quality\nof AI-assisted workflows rather than the specific NLP aspects of groundedness and relevance in generated\ntext, making D more precise for NLP-focused evaluations.\nReferences\nFor deeper insight into Microsoft Foundry's evaluation metrics and how they apply to NLP tasks like RAG chat\napps:\n1. Microsoft Azure - Evaluate AI Models: https://learn.microsoft.com/en-us/azure/machine-\nlearning/how-to-deploy-and-where?tabs=python#evaluate\n2. Microsoft AI for Everyone - NLP Evaluation Metrics: https://learn.microsoft.com/en-\nus/azure/cognitive-services/language/understanding/nlp-concepts#evaluation-metrics (Note: While\nthe second link might not directly mention \"Microsoft Foundry\", it provides foundational knowledge\non NLP evaluation metrics relevant to the context.)"
+  },
+  {
+    "id": "ai103-pdf-73",
+    "num": 73,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 5: Implement document intelligence solutions",
+    "subdomain": "Subdomain 5.1: Extract data using Document Intelligence",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that contains an agent. The agent uses two tools to perform the following\nactions:\n•Use Azure AI Search to retrieve answers from a private product documentation index.\n•Use the web search tool to retrieve public information on the internet.\nYou need to ensure that for a specific run, the agent deterministically retrieves information only from the internet.\nTo what should you set tool_choice?",
+    "options": [
+      {
+        "id": "a",
+        "text": "“type”: “bing_grouding”"
+      },
+      {
+        "id": "b",
+        "text": "“type”: “azure_ai-search”"
+      },
+      {
+        "id": "c",
+        "text": "“auto”"
+      },
+      {
+        "id": "d",
+        "text": "“required”"
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "“type”: “bing_grouding”",
+      "explanation": "Technical Justification\nTo ensure the agent deterministically retrieves information only from the internet for a specific run, the\ncorrect setting for tool_choice must explicitly target the tool designed for internet searches, excluding the\n\nprivate "
+    },
+    "explanation": "Technical Justification\nTo ensure the agent deterministically retrieves information only from the internet for a specific run, the\ncorrect setting for tool_choice must explicitly target the tool designed for internet searches, excluding the\n\nprivate index search. Here's why each option is more or less suitable for the requirement:\nA. “type”: “bing_grouding” : This option is the most suitable. Setting tool_choice to specify \"bing_grouding\"\n(likely a typo in the question, intended to refer to \"Bing\" or a similar web search engine integration) would\ndirect the agent to use the web search tool (implied by \"Bing\" context) exclusively for that run. This ensures\nthe agent retrieves information only from the internet, fulfilling the requirement.\nB. “type”: “azure_ai-search” : This option is less suitable because setting tool_choice to \"azure_ai-search\"\nwould force the agent to use Azure AI Search, which is configured to retrieve answers from a private product\ndocumentation index, not the internet. This contradicts the requirement.\nC. “auto”: This option is less suitable as setting tool_choice to \"auto\" would likely enable the agent to\nautomatically choose between available tools based on the query or predefined rules. This introduces\nunpredictability and does not guarantee that the agent will retrieve information only from the internet for the\nspecific run.\nD. “required”: This option is less suitable and possibly incorrect in context. Setting tool_choice to \"required\"\ndoes not specify a tool type but rather might imply that a tool is mandatory for the operation. It does not direct\nthe agent to use a specific tool (in this case, the internet search tool), leaving the choice ambiguous and not\nensuring the desired behavior.\nCorrect Answer Justification: Option A is correct because it explicitly directs the agent to use the tool\nassociated with internet searches (despite the apparent typo, the intent aligns with the requirement), ensuring\ndeterministic retrieval of information only from the internet for the specific run.\nReferences\n1. Microsoft Azure AI Search Documentation: https://docs.microsoft.com/en-us/azure/cognitive-\nsearch/\n2. Microsoft Foundry (formerly Azure Bot Service) Tools Configuration: https://docs.microsoft.com/en-\nus/azure/bot-service/bot-service-channel-connect-azure-foundry?tabs=csharp (Note: Direct\n\"Microsoft Foundry\" documentation might be scarce or outdated; the link provided relates to the\nbroader context of tool configuration in similar Microsoft services. For the most current information,\nalways check the latest Microsoft Azure and Foundry documentation.)"
+  },
+  {
+    "id": "ai103-pdf-74",
+    "num": 74,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that contains a customer support agent built on a deployed chat model.\nThe agent responses are validated by using an automated testing system that compares generated answers to\nstored expected outputs. Identical prompts must return consistent response to prevent automated test failures.\nYou need to reduce response variability, without modifying the prompt or reducing factual accuracy.\nWhat should you do for the model?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Increase the max_tokens parameter."
+      },
+      {
+        "id": "b",
+        "text": "Remove stop sequences from the requests."
+      },
+      {
+        "id": "c",
+        "text": "Decrease the temperature parameter."
+      },
+      {
+        "id": "d",
+        "text": "Increase the temperature parameter."
+      }
+    ],
+    "correctIds": [
+      "c"
+    ],
+    "acceptedAnswer": {
+      "text": "Decrease the temperature parameter.",
+      "explanation": "Technical Justification for Correct Answer: C\n\nTo address the requirement of reducing response variability in the chat model without modifying the prompt\nor compromising factual accuracy, let's analyze each option in the context of natural language p"
+    },
+    "explanation": "Technical Justification for Correct Answer: C\n\nTo address the requirement of reducing response variability in the chat model without modifying the prompt\nor compromising factual accuracy, let's analyze each option in the context of natural language processing\n(NLP) and language model behavior:\nA. Increase the max_tokens parameter: Increasing max_tokens allows the model to generate longer\nresponses. However, this does not directly impact the variability of responses to identical prompts; it merely\nallows for more lengthy outputs, which could potentially increase variability if the model explores more\ndiverse endings for the same start. Not Suitable.\nB. Remove stop sequences from the requests: Stop sequences are used to indicate the end of a response.\nRemoving them could lead to the model generating indefinitely until it hits the max_tokens limit. This change\naffects response length and form but not the variability of responses to the same prompt. Not Suitable.\nC. Decrease the temperature parameter: The temperature parameter controls the randomness of the\nmodel's output. A lower temperature reduces randomness, leading to more deterministic and less varied\nresponses. Decreasing the temperature is directly aimed at reducing the variability of responses to identical\ninputs without altering the prompt or necessarily impacting factual accuracy, as the model is guided towards\nmore predictable, high-probability outputs. Correct Answer.\nD. Increase the temperature parameter: Increasing the temperature would have the opposite effect of what\nis desired. It increases the randomness of the output, leading to more varied responses for the same input,\nwhich would exacerbate the issue of test failures due to inconsistency. Not Suitable.\nConclusion: Decreasing the temperature parameter (Option C) is the most appropriate action to reduce\nresponse variability for identical prompts without modifying the prompt or reducing factual accuracy. This\nadjustment tunes the model's behavior to produce more consistent outputs, aligning with the requirement for\nreliable automated testing.\nReferences\n1. Microsoft Azure Cognitive Services - Custom Language Models Documentation:\nhttps://docs.microsoft.com/en-us/azure/cognitive-services/language-customization/\n2. Temperature Parameter Explanation in Context of Language Models:\nhttps://huggingface.co/docs/transformers/generation#temperature (Note: While not Azure-specific,\nthis link provides a clear explanation of the temperature parameter's role in NLP models, which is\napplicable across platforms including Azure's language model deployments.)"
+  },
+  {
+    "id": "ai103-pdf-75",
+    "num": 75,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 5: Implement document intelligence solutions",
+    "subdomain": "Subdomain 5.1: Extract data using Document Intelligence",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You are developing prompts for a Micosoft Foundry project that classifies incoming support tickets by category.\nYou need to improve accuracy by showing the model how correct classifications look, without retaining the model\nor storing knowledge permanently.\nWhich prompt engineering approach should you use?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Retrieval Augmented Generation (RAG)"
+      },
+      {
+        "id": "b",
+        "text": "zero-shot learning"
+      },
+      {
+        "id": "c",
+        "text": "chain of thought"
+      },
+      {
+        "id": "d",
+        "text": "few-shot learning"
+      }
+    ],
+    "correctIds": [
+      "d"
+    ],
+    "acceptedAnswer": {
+      "text": "few-shot learning",
+      "explanation": "Technical Justification for Correct Answer (D. few-shot learning)\nTo enhance the accuracy of category classification for incoming support tickets in a Microsoft Foundry\nproject without retaining the model or storing knowledge permanently, the most su"
+    },
+    "explanation": "Technical Justification for Correct Answer (D. few-shot learning)\nTo enhance the accuracy of category classification for incoming support tickets in a Microsoft Foundry\nproject without retaining the model or storing knowledge permanently, the most suitable prompt engineering\napproach is few-shot learning (D). Here's a breakdown of why:\nWhy D. few-shot learning is the best choice:\nDefinition Alignment: Few-shot learning involves training a model on a small, limited dataset (typically 1 to 10\nexamples per class) to perform a specific task, aligning perfectly with the requirement to show the model\n\"how correct classifications look\" without permanent knowledge storage.\nNo Permanent Model Retention: This approach does not necessitate retaining the model post-training, as the\ngoal is to demonstrate immediate classification capability based on the provided few shots.\nAccuracy Improvement: By carefully selecting representative examples for the few shots, the model's\naccuracy on the target task (ticket classification by category) can be significantly improved.\nWhy other options are less suitable:\nA. Retrieval Augmented Generation (RAG)\nRequires Stored Knowledge Base: RAG relies on accessing a large, stored knowledge base to generate\nresponses, conflicting with the \"without storing knowledge permanently\" requirement.\nComplexity: More complex to set up compared to few-shot learning, given the need for a robust retrieval\nsystem.\nB. Zero-shot Learning\nNo Direct Examples Provided: Zero-shot learning involves no examples of the target class being provided\nduring training, which contradicts the need to \"show the model how correct classifications look\".\nLess Accurate for Specific Tasks: Generally less accurate than few-shot learning for tasks where some\nexamples can be provided.\nC. Chain of Thought\nFocus on Transparency Over Efficiency for Small Datasets: While useful for understanding model reasoning,\nit doesn't directly address the efficiency and accuracy needs for a small, non-permanently stored dataset\nscenario as effectively as few-shot learning.\nReferences\nFor in-depth information on Few-Shot Learning and its applications: https://learn.microsoft.com/en-\nus/azure/cognitive-services/custom-question-answering/concept-few-shot-learning\nOverview of Prompt Engineering Techniques including those mentioned: https://aka.ms/prompt-engineering-\ntechniques"
+  },
+  {
+    "id": "ai103-pdf-76",
+    "num": 76,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 1: Plan and manage an Azure AI solution",
+    "subdomain": "Subdomain 1.1: Choose the appropriate Foundry services and manage security",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a web app named App1 that processes user prompts by integrating with a Microsoft Foundry project\nnamed Project1. App1 performs the following actions:\n•Sends prompts directly to a model by using the Azure OpenAI Responses API\n•Invokes the Azure AI Content Safety tool by using a Foundry connection within the same request\nYou need to configure end-to-end visibility into each step of the request workflow.\nWhat should you do?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Enable logging by using the client SDK for Content Safety."
+      },
+      {
+        "id": "b",
+        "text": "Enable logging by using Foundry Local."
+      },
+      {
+        "id": "c",
+        "text": "Enable application tracing in Project1."
+      },
+      {
+        "id": "d",
+        "text": "Route requests through the Azure OpenAI endpoint."
+      }
+    ],
+    "correctIds": [
+      "c"
+    ],
+    "acceptedAnswer": {
+      "text": "Enable application tracing in Project1.",
+      "explanation": "C. Enable application tracing in Project1.\nGenerative AI Observability: Microsoft Azure AI Foundry features built-in application tracing (powered by\nOpenTelemetry/OpenInference standards).\nEnd-to-End Tracking: Enabling tracing directly inside the pro"
+    },
+    "explanation": "C. Enable application tracing in Project1.\nGenerative AI Observability: Microsoft Azure AI Foundry features built-in application tracing (powered by\nOpenTelemetry/OpenInference standards).\nEnd-to-End Tracking: Enabling tracing directly inside the project allows you to trace user prompts, model\ncompletion outputs, token usage, execution duration, and tool execution (like the Content Safety validation\nnode) as unified workflows within the diagnostics panel.\nHOTSPOT\n-"
+  },
+  {
+    "id": "ai103-pdf-77",
+    "num": 77,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 5: Implement document intelligence solutions",
+    "subdomain": "Subdomain 5.1: Extract data using Document Intelligence",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that contains two agents named PolicyWriter and RskReviewer.\nPolicyWriter generates daft updates for customer polices, and RiskReviewer reviews the drafts.\nIn the visual builder, you need to create a workflow that meets the following requirements:\n•Finalizes low-risk updates without manual intervention\n•Ensures predictable execution across the agents\n•Requires user approval for highs updates\nWhat should you configure? To answer, select the appropriate options in the answer area.\nNOTE: Each comet selection is worth one point.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Explanation:"
+      },
+      {
+        "id": "b",
+        "text": "Alternative manual configuration using individual resource keys and shared access signatures"
+      },
+      {
+        "id": "c",
+        "text": "Direct legacy cognitive service endpoint without managed identity authentication"
+      },
+      {
+        "id": "d",
+        "text": "Client-side prompt validation rule without central service integration"
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "Explanation:",
+      "explanation": "The sequential template that passes outputs node by-node: Choose this if your tasks are linear and must\nfollow a fixed, strict step-by-step order from one agent/node to the next.\nAdd an Ask a question node.\nTo create a manual approval checkpoint or g"
+    },
+    "explanation": "The sequential template that passes outputs node by-node: Choose this if your tasks are linear and must\nfollow a fixed, strict step-by-step order from one agent/node to the next.\nAdd an Ask a question node.\nTo create a manual approval checkpoint or gatekeeper step within a conversational workflow, you must pause\nexecution to gather explicit confirmation from a user. This is achieved by adding an interactive \"Ask a\nquestion node\" (or a choice/confirm prompt) to capture the human's approval input before continuing down\nthe branch."
+  },
+  {
+    "id": "ai103-pdf-78",
+    "num": 78,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 5: Implement document intelligence solutions",
+    "subdomain": "Subdomain 5.1: Extract data using Document Intelligence",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that contains an agent named Agent1.\nAgent runs successful, but Foundry Control Plane does NOT display values for error rates, runs, and token usage,\nand the Traces tab is empty.\nYou need to ensure that Found Control Plane displays the appropriate values for Agent1.\nWhat should you do?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Update Agent1 to a new version."
+      },
+      {
+        "id": "b",
+        "text": "Restart Agent from Foundry Control Plan"
+      },
+      {
+        "id": "c",
+        "text": "Assign to a Log Analytics workspace to Agent1."
+      },
+      {
+        "id": "d",
+        "text": "Enable Application Insights for Agent1."
+      }
+    ],
+    "correctIds": [
+      "d"
+    ],
+    "acceptedAnswer": {
+      "text": "Enable Application Insights for Agent1.",
+      "explanation": "Technical Justification for Correct Answer (D)\nWhy D (Enable Application Insights for Agent1) is the best option:Enabling Application Insights for Agent1 is\nthe most suitable solution because Application Insights is a monitoring and analytics service"
+    },
+    "explanation": "Technical Justification for Correct Answer (D)\nWhy D (Enable Application Insights for Agent1) is the best option:Enabling Application Insights for Agent1 is\nthe most suitable solution because Application Insights is a monitoring and analytics service that provides\ndetailed metrics and logs, including error rates, run metrics, and usage telemetry (such as token usage).\nIntegrating Agent1 with Application Insights would populate the Foundry Control Plane with the required\nmetrics (error rates, runs, token usage) and also enable trace logging, thus populating the Traces tab. This is a\ndirect solution to the visibility issue described.\nWhy other options are less suitable:\n\nA. Update Agent1 to a new version:While keeping software up-to-date is crucial, there's no indication that the\nissue with metrics and trace visibility in Foundry Control Plane is due to a versioning problem with Agent1. This\naction does not directly address the monitoring and logging visibility issue.\nB. Restart Agent from Foundry Control Plane:Restarting the agent might resolve transient issues but does\nnot address the fundamental lack of integration with a monitoring solution that would provide the missing\nmetrics and traces to the Control Plane.\nC. Assign to a Log Analytics workspace to Agent1:While Log Analytics is powerful for log analysis, the\nspecific requirement for visibility into error rates, runs, token usage, and traces in the Foundry Control Plane\nsuggests a need for a more integrated application monitoring solution like Application Insights, which is more\ntightly coupled with the metrics and tracing requirements described.\nConclusion:Enabling Application Insights for Agent1 (Option D) is the most direct and effective solution to\nensure Foundry Control Plane displays the necessary metrics and traces for Agent1, as it provides the specific\ntypes of monitoring and analytics capabilities required to address the identified gaps.\nReferences:\nMicrosoft Azure - Application Insights Overview\nAzure | Microsoft Foundry Documentation - Integrating with Application Insights"
+  },
+  {
+    "id": "ai103-pdf-79",
+    "num": 79,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 5: Implement document intelligence solutions",
+    "subdomain": "Subdomain 5.1: Extract data using Document Intelligence",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that contains an agent.\nThe agent uses Azure Content Understanding in Foundry Too to process vendor onboarding packets. The packs\ninclude digital PDFs that contain tables and hyperlinks.\nThe extracted content is indexed for search and provided to a downstream agent in the Markdown format.\nYou need to generate a Markdown output that has a layout and a semantic structure optimized for Retrieval\nAugmented Generation (RAG) workflows.\nWhich built-in analyzer should you use?",
+    "options": [
+      {
+        "id": "a",
+        "text": "prebuilt-documentFieldSchema"
+      },
+      {
+        "id": "b",
+        "text": "prebuilt-documentSearch"
+      },
+      {
+        "id": "c",
+        "text": "prebuilt-read"
+      },
+      {
+        "id": "d",
+        "text": "prebuilt-layout"
+      }
+    ],
+    "correctIds": [
+      "b"
+    ],
+    "acceptedAnswer": {
+      "text": "prebuilt-documentSearch",
+      "explanation": "Technical Justification for Correct Option (B. prebuilt-documentSearch)\nThe correct option for generating Markdown output with a layout and semantic structure optimized for\nRetrieval Augmented Generation (RAG) workflows, given the context of processi"
+    },
+    "explanation": "Technical Justification for Correct Option (B. prebuilt-documentSearch)\nThe correct option for generating Markdown output with a layout and semantic structure optimized for\nRetrieval Augmented Generation (RAG) workflows, given the context of processing vendor onboarding\npackets (PDFs with tables and hyperlinks) using Azure Content Understanding in a Microsoft Foundry project,\nis B. prebuilt-documentSearch. Here’s why:\nWhy B (prebuilt-documentSearch) is the Best Choice:\nOptimization for Search and Semantic Structure: prebuilt-documentSearch is specifically designed to extract\ncontent in a manner that enhances search capabilities and understands the semantic structure of documents.\nThis aligns perfectly with the requirement for optimizing the Markdown output for RAG workflows, which\nheavily rely on effective information retrieval and understanding.\n\nHandling of Diverse Content (Tables, Hyperlinks): This analyzer is capable of handling various document\nelements, including tables and hyperlinks found in the PDF packets, ensuring that the extracted content (and\nsubsequently the Markdown output) retains the necessary structure and links for comprehensive\nunderstanding.\nCompatibility with Downstream Agents and Markdown Format: The output from prebuilt-documentSearch is\nwell-suited for further processing by downstream agents, as it provides a structured format that can be easily\nconverted into Markdown. This structured approach facilitates the organization of content in a way that\nsupports RAG’s augmented generation capabilities.\nWhy Other Options are Less Suitable:\nA. prebuilt-documentFieldSchema:\nPrimarily focused on extracting specific, predefined fields from documents, which might not cater to the\nbroader semantic understanding required for RAG workflows.\nLess adaptable to the varied, unstructured content aspects (like hyperlinks) in the onboarding packets.\nC. prebuilt-read:\nDesigned more for basic reading and text extraction, lacking the specific search and semantic structure\noptimization needed for RAG.\nMight not handle the layout and table extraction as effectively as prebuilt-documentSearch for the stated\nrequirements.\nD. prebuilt-layout:\nWhile excellent for understanding and extracting based on the document’s layout, it may not offer the same\nlevel of semantic understanding and search optimization as prebuilt-documentSearch.\nLess focused on the overall content structure beyond layout, potentially leading to less effective RAG\nworkflow integration.\nConclusion\nGiven the needs of the project—particularly the emphasis on search optimization, semantic structure for RAG\nworkflows, and handling of diverse document content—B. prebuilt-documentSearch is the most appropriate\nanalyzer.\nReferences\n1. Azure Cognitive Search - Prebuilt Analyzers: https://docs.microsoft.com/en-us/azure/search/search-\nanalyzers#prebuilt\n2. Microsoft Azure - Content Understanding in Azure Cognitive Services:\nhttps://azure.microsoft.com/en-us/services/cognitive-services/content-understanding/ (Explore the\ndocumentation for the most current Content Understanding capabilities, though note the service's\nevolution and potential rebranding/refocusing within Azure services)"
+  },
+  {
+    "id": "ai103-pdf-80",
+    "num": 80,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 5: Implement document intelligence solutions",
+    "subdomain": "Subdomain 5.1: Extract data using Document Intelligence",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that contains an agent.\nThe agent uses Azure AI Search for Retrieval Augmented Generation (RAG).\nYou plan to ingest and index PDF product manuals.\nYou need to build a solution that supports semantic similarity matching. The solution must ensure that the agent\nretrieves relevant data when user questions use different wording than the product manuals.\nWhich indexing approach should you use?",
+    "options": [
+      {
+        "id": "a",
+        "text": "vector search"
+      },
+      {
+        "id": "b",
+        "text": "semantic ranking"
+      },
+      {
+        "id": "c",
+        "text": "suggesters"
+      },
+      {
+        "id": "d",
+        "text": "analyzers"
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "vector search",
+      "explanation": "Technical Justification for Correct Answer: A. Vector Search\nTo support semantic similarity matching for the Microsoft Foundry agent utilizing Azure AI Search for\nRetrieval Augmented Generation (RAG) on ingested PDF product manuals, Vector Search (A)"
+    },
+    "explanation": "Technical Justification for Correct Answer: A. Vector Search\nTo support semantic similarity matching for the Microsoft Foundry agent utilizing Azure AI Search for\nRetrieval Augmented Generation (RAG) on ingested PDF product manuals, Vector Search (A) is the most\nappropriate indexing approach. Here’s why:\nCorrect Answer - A. Vector Search:\nSemantic Similarity: Vector search uses dense vector representations (embeddings) of text, allowing for the\nmeasurement of semantic similarity between queries and documents, even when the wording differs. This is\ncrucial for retrieving relevant data from product manuals based on user questions with varied phrasing.\nRAG Compatibility: Given the use of RAG, vector search aligns perfectly as it can efficiently handle the\ngeneration and retrieval aspects by understanding the contextual relevance.\nPDF Content: Since the content is in PDF format, the semantic understanding provided by vector search can\neffectively index and retrieve relevant sections of the manuals, regardless of the exact query wording.\nWhy Other Options are Less Suitable:\nB. Semantic Ranking:\nWhile semantic ranking can improve search results by considering the context, it is more about ranking\nrelevant documents rather than indexing them for semantic similarity. It can complement vector search but\ndoesn’t replace its indexing capabilities for this requirement.\nC. Suggesters:\nSuggesters are useful for auto-completing or suggesting search queries as the user types, based on existing\nsearch queries or indexed terms. They do not address the need for semantic similarity matching in the indexed\ncontent itself.\nD. Analyzers:\nAnalyzers are crucial for tokenizing, stemming, and normalizing text to improve search accuracy. However,\nthey focus on lexical matching rather than semantic understanding, making them insufficient for the\nrequirement of handling differing wording through semantic similarity.\nReferences\n1. Azure Cognitive Search - Vector Search: https://docs.microsoft.com/en-us/azure/search/search-\nvector-search\n2. Understanding RAG in Azure AI Search: https://docs.microsoft.com/en-us/azure/search/search-\nhowto-ragısıyla"
+  },
+  {
+    "id": "ai103-pdf-81",
+    "num": 81,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 5: Implement document intelligence solutions",
+    "subdomain": "Subdomain 5.1: Extract data using Document Intelligence",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry agent that grounds responses from an Azure Search index that contains the\nfollowing:\n•Searchable text fields for product names and product codes\n•A vector field that stores embeddings for product descriptions\n\nYou need to ensure that users can query the index by using the following:\n•Exact product names or codes\n•Natural language descriptions of the products\nWhat should you configure?",
+    "options": [
+      {
+        "id": "a",
+        "text": "vector search only"
+      },
+      {
+        "id": "b",
+        "text": "hybrid search"
+      },
+      {
+        "id": "c",
+        "text": "keyword search only"
+      },
+      {
+        "id": "d",
+        "text": "semantic search only"
+      }
+    ],
+    "correctIds": [
+      "b"
+    ],
+    "acceptedAnswer": {
+      "text": "hybrid search",
+      "explanation": "Technical Justification for Correct Answer: B. Hybrid Search\nTo address the requirement of enabling users to query the Azure Search index using both exact product\nnames/codes and natural language descriptions of products, configuring Hybrid Search is"
+    },
+    "explanation": "Technical Justification for Correct Answer: B. Hybrid Search\nTo address the requirement of enabling users to query the Azure Search index using both exact product\nnames/codes and natural language descriptions of products, configuring Hybrid Search is the most suitable\napproach. Here's why:\nExact Product Names or Codes: This requirement is best met with keyword search capabilities, which allow\nfor precise matches. Keyword search is effective for structured data like product names and codes where\nexact matches are desired.\nNatural Language Descriptions of Products: For this, vector search (leveraging the pre-stored embeddings\nfor product descriptions) is ideal. Vector search enables semantic matching, allowing users to find relevant\nproducts even when using descriptive, non-exact language.\nWhy Hybrid Search (B) is the Best Choice:Hybrid Search combines the strengths of both keyword and vector\nsearch, enabling the index to handle:\nExact matches for product names and codes (keyword search)\nSemantic, natural language queries for product descriptions (vector search)\nWhy Other Options are Less Suitable:\nA. Vector Search Only: Would not support exact matches for product names/codes effectively, as it's\ndesigned for semantic rather than exact text matching.\nC. Keyword Search Only: Fails to leverage the vector field for natural language queries, making product\ndescription searches less effective.\nD. Semantic Search Only: While similar in concept to vector search for natural language processing,\n\"Semantic Search\" in some contexts might imply reliance on external knowledge graphs or more complex AI\nmodels not explicitly mentioned in the scenario. It doesn't clearly address the need for exact matches like\nkeyword search does, and in Azure Search, the direct approach for the described vector field use case is more\naccurately termed as part of a Hybrid Search strategy.\nConclusion:Given the dual nature of the query requirements, Hybrid Search (B) is the most comprehensive\nand technically appropriate configuration, as it effectively combines the precise matching of keyword search\nwith the semantic capabilities of vector search.\nReferences:\n1. Azure Search Hybrid Search Documentation: https://docs.microsoft.com/en-\nus/azure/search/search-hybrid-search\n2. Azure Search Vector Search and Embeddings: https://docs.microsoft.com/en-\nus/azure/search/search-vector-search-overview"
+  },
+  {
+    "id": "ai103-pdf-82",
+    "num": 82,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have an Azure AI Search indexer that ingests PDF policy manuals.\nClient applications must display page-level citations that have bounding polygons for both text and images.\nYou need to add a single built-in multimodal content extraction skill to the Azure AI Search skillset. The solution\nmust meet the following requirements:\n•Provide text and image location metadata.\n•Extract tables that span multiple pages.\nWhat should you add?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Document Extraction"
+      },
+      {
+        "id": "b",
+        "text": "Azure Content Understanding in Foundry Tools"
+      },
+      {
+        "id": "c",
+        "text": "GenAI Prompt"
+      },
+      {
+        "id": "d",
+        "text": "Document Layout"
+      }
+    ],
+    "correctIds": [
+      "b"
+    ],
+    "acceptedAnswer": {
+      "text": "Azure Content Understanding in Foundry Tools",
+      "explanation": "Technical Justification for Choosing B: Azure Content Understanding in Foundry Tools\nFor the given scenario, where the requirement is to add a single built-in multimodal content extraction skill to\nan Azure AI Search skillset that can provide text an"
+    },
+    "explanation": "Technical Justification for Choosing B: Azure Content Understanding in Foundry Tools\nFor the given scenario, where the requirement is to add a single built-in multimodal content extraction skill to\nan Azure AI Search skillset that can provide text and image location metadata, extract tables (even those\nspanning multiple pages), and support page-level citations with bounding polygons for both text and images,\nB. Azure Content Understanding in Foundry Tools is the most suitable option. Here’s why:\nMultimodal Extraction Capability: Azure Content Understanding in Foundry Tools is designed to handle\nmultimodal data, meaning it can effectively extract and provide metadata for both text (including tables\nacross multiple pages) and images. This aligns perfectly with the requirement for extracting diverse content\ntypes from PDF policy manuals.\nLocation Metadata and Bounding Polygons: This skill is capable of providing detailed location metadata. For\nimages and text (including tabular content), it can identify and return bounding polygons, which is crucial for\nclient applications to display accurate page-level citations.\nTable Extraction Across Pages: Specifically, the capability to extract tables that span multiple pages is a\nnuanced requirement. Azure Content Understanding in Foundry Tools, with its advanced document\nunderstanding capabilities, is better suited for handling such complex table extractions compared to the\nother options.\nWhy Other Options Are Less Suitable:\nA. Document Extraction: While useful for extracting document content, this option might not provide the\nsame level of granularity in location metadata (especially for images and multi-page tables) as Azure Content\nUnderstanding. Its capabilities are more focused on the text content without the advanced layout and image\nanalysis required.\nC. GenAI Prompt: GenAI Prompt is more aligned with generating text based on prompts rather than\nextracting multimodal content with precise location metadata from existing documents. It lacks the specific\ndocument layout understanding and extraction capabilities needed for this task.\nD. Document Layout: Although Document Layout Analysis can extract text and layout information, the\nquestion specifies the need for a skill that also handles images with the same level of location precision and\nextracts tables across multiple pages effectively. Document Layout, while strong in text layout analysis, does\nnot fulfill the multimodal (text + image) requirement as comprehensively as Azure Content Understanding in\nFoundry Tools.\n\nReferences\n1. Azure Cognitive Search - Skillset Concepts: https://docs.microsoft.com/en-us/azure/search/search-\nconcept-skillset\n2. Azure AI Services - Content Understanding: https://azure.microsoft.com/en-us/services/cognitive-\nservices/content-understanding/ (Note: As of my last update, direct links to \"Content Understanding\nin Foundry Tools\" might redirect or require navigation from the Azure AI Services page due to\nMicrosoft's documentation updates. Ensure to explore the latest on Azure Content Understanding\ncapabilities within Azure Search and AI services.)"
+  },
+  {
+    "id": "ai103-pdf-83",
+    "num": 83,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You are building an Azure AI Search indexing pipeline named Pipeline1 that ingests invoices stored in Azure Blob\nStorage. The invoices are stored as scanned images.\nYou need to enable users to search invoice data across the invoice fields.\nWhich built-in skill should you add to the skillset of Pipeline1?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Text Split"
+      },
+      {
+        "id": "b",
+        "text": "Text Translation"
+      },
+      {
+        "id": "c",
+        "text": "optical character recognition (OCR)"
+      },
+      {
+        "id": "d",
+        "text": "Image Analysis"
+      }
+    ],
+    "correctIds": [
+      "c"
+    ],
+    "acceptedAnswer": {
+      "text": "optical character recognition (OCR)",
+      "explanation": "Technical Justification for Correct Option (C) Optical Character Recognition (OCR)\nTo enable users to search invoice data across the invoice fields from scanned images stored in Azure Blob\nStorage, the primary requirement is to extract text from the "
+    },
+    "explanation": "Technical Justification for Correct Option (C) Optical Character Recognition (OCR)\nTo enable users to search invoice data across the invoice fields from scanned images stored in Azure Blob\nStorage, the primary requirement is to extract text from the images. Here's why Optical Character\nRecognition (OCR) is the best choice and why other options are less suitable:\nCorrect Option: C. Optical Character Recognition (OCR)\nReason for Choice: OCR skills are specifically designed to extract text from images and scanned documents,\nwhich aligns perfectly with the need to make invoice fields searchable. Azure's OCR skill can handle various\nfonts, layouts, and languages found in invoices.\nTechnical Advantage: By adding an OCR skill to the skillset of Pipeline1, the Azure AI Search indexing pipeline\ncan convert the visual data in scanned invoice images into searchable text, enabling users to query based on\nthe content within the invoices.\nWhy Other Options are Less Suitable\nA. Text Split:\nInappropriateness: Text Split is used to divide large text into smaller segments based on a specified size or\ndelimiter. Since the invoices are images without initially extractable text, this skill does not address the\nprimary requirement.\nUse Case Misalignment: Useful after text extraction (e.g., splitting large extracted texts), not before.\nB. Text Translation:\nInappropriateness: While useful for multi-language support, the immediate need is to extract text from\nimages, not translate existing text.\n\nPremature Application: Could be considered after text extraction if the invoices are in multiple languages\nand need translation.\nD. Image Analysis:\nPartial Relevance but Insufficient for the Goal: Image Analysis can provide metadata about the image (e.g.,\nobjects, tags) but does not focus on extracting readable text from documents.\nMisalignment with Search Requirement: The primary goal is to search text within invoices, not analyze image\ncontents in a broader sense.\nConclusion\nGiven the scenario's requirements, Optical Character Recognition (OCR) is the most appropriate built-in skill\nto add to Pipeline1's skillset for enabling search functionality across invoice fields in scanned image invoices.\nReferences\n1. Azure Cognitive Search - OCR Skill: https://docs.microsoft.com/en-us/azure/cognitive-\nsearch/cognitive-search-skill-ocr\n2. Azure Cognitive Search - Skillset Concepts: https://docs.microsoft.com/en-us/azure/cognitive-\nsearch/cognitive-search-concept-skillset\nDRAG DROP\n-"
+  },
+  {
+    "id": "ai103-pdf-84",
+    "num": 84,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "ordering",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that uses Azure Content Understanding in Foundry Tools to analyze\nmarketing videos.\nVideo segmentation is enabled.\nYou need to configure an analyzer to output a generated JSON field that describes the color scheme of each video\nsegment.\nHow should you configure the analyzer? To answer, drag the appropriate values to the correct targets. Each value\nmay be used once, more than once, or not at all. You may need to drag the split bar between panes or scroll to view\ncontent.\nNOTE: Each correct selection is worth one point.",
+    "options": [
+      {
+        "id": "step-1",
+        "text": "Provision an on-premises Kubernetes cluster with outbound internet connectivity."
+      },
+      {
+        "id": "step-2",
+        "text": "Pull the required Azure AI container image from Microsoft Container Registry (MCR)."
+      },
+      {
+        "id": "step-3",
+        "text": "Run the container image and specify the Azure AI resource endpoint URL and API key."
+      },
+      {
+        "id": "step-4",
+        "text": "Configure the client application to direct inference queries to the local container endpoint."
+      }
+    ],
+    "correctIds": [
+      "step-1",
+      "step-2",
+      "step-3",
+      "step-4"
+    ],
+    "acceptedAnswer": {
+      "text": "Provision an on-premises Kubernetes cluster with outbound internet connectivity. -> Pull the required Azure AI container image from Microsoft Container Registry (MCR). -> Run the container image and specify the Azure AI resource endpoint URL and API key. -> Configure the client application to direct inference queries to the local container endpoint.",
+      "explanation": "string.\nDefines the data format as textual character data.\ngenerate.\nUses an LLM to dynamically create or extract the contents."
+    },
+    "explanation": "string.\nDefines the data format as textual character data.\ngenerate.\nUses an LLM to dynamically create or extract the contents."
+  },
+  {
+    "id": "ai103-pdf-85",
+    "num": 85,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 4: Implement natural language processing solutions",
+    "subdomain": "Subdomain 4.2: Process and generate speech with Azure AI Speech",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have an invoice-processing application named App1 that uses Azure Constant Understanding in Foundry Tools.\nYou are building a new Content Understanding pipeline named Pipeline1 that must meet the following\nrequirements:\n•Compare an invoice to its related purchase order\n•Validate the voice against static vendor contact documents\n•Return a single structured output that includes discrepancy findings\nYou need to configure Pipeline1 and expose the pipeline as a single analyzer endpoint. What should you configure?",
+    "options": [
+      {
+        "id": "a",
+        "text": "a single-file task in standard mode that uses the vendor contract provided as an additional document during\nanalysis."
+      },
+      {
+        "id": "b",
+        "text": "a single-file task in standard mode that uses confidence scores enabled for the extracted fields."
+      },
+      {
+        "id": "c",
+        "text": "a multiple-file task in pro mode that uses the vendor contract files as reference data"
+      },
+      {
+        "id": "d",
+        "text": "a multi-file task in standard mode that uses the invoice and purchase order as input to the analyzer"
+      }
+    ],
+    "correctIds": [
+      "c"
+    ],
+    "acceptedAnswer": {
+      "text": "a multiple-file task in pro mode that uses the vendor contract files as reference data",
+      "explanation": "Technical Justification for Correct Answer C\nThe correct configuration for Pipeline1, given the requirements, is C. a multiple-file task in pro mode that\nuses the vendor contract files as reference data. Here's a detailed breakdown of why C is the be"
+    },
+    "explanation": "Technical Justification for Correct Answer C\nThe correct configuration for Pipeline1, given the requirements, is C. a multiple-file task in pro mode that\nuses the vendor contract files as reference data. Here's a detailed breakdown of why C is the best choice and\nwhy others are less suitable:\nWhy C is the Correct Choice\n\nMultiple-File Task: Since the pipeline needs to compare an invoice to its related purchase order and validate\nthe voice against static vendor contact documents, a multiple-file task is essential to process more than one\ndocument type simultaneously.\nPro Mode: Enables advanced features necessary for complex comparisons and validations across different\ndocument types, aligning with the requirement for discrepancy findings in a structured output.\nVendor Contract Files as Reference Data: Utilizing vendor contracts as reference data in pro mode facilitates\nthe validation of the invoice against static vendor documents, meeting the second requirement effectively.\nWhy Other Options Are Less Suitable\nA. Single-file Task in Standard Mode with Vendor Contract as Additional Document\nInadequate for Multi-Document Comparison: Doesn't support comparing invoice and purchase order directly\nwithin the task.\nLimited Capabilities in Standard Mode: Might not offer the depth of analysis needed for discrepancy findings\nacross different documents.\nB. Single-file Task in Standard Mode with Confidence Scores\nMisses the Multi-Document Requirement: Fails to address the need to compare and validate across multiple\ndocuments (invoice, purchase order, and vendor contract).\nConfidence Scores Alone Are Insufficient: While useful, they don't directly solve the comparison and\nvalidation requirements.\nD. Multi-file Task in Standard Mode with Invoice and Purchase Order as Input\nLacks Pro Mode Capabilities for Advanced Validation: Standard mode may not provide the necessary\nadvanced features for validating against static vendor contracts effectively.\nVendor Contracts Not Utilized as Reference: Ignores the static vendor documents, which are crucial for\nvalidation.\nReferences\nFor deeper understanding of the capabilities and configurations of Azure Cognitive Services' Content\nUnderstanding pipelines, especially in the context of multi-file tasks and pro mode features:\n1. Azure Cognitive Search - Content Understanding: https://learn.microsoft.com/en-\nus/azure/search/cognitive-search-concept-intro\n2. Configure a Cognitive Search Indexer for Content Understanding: https://learn.microsoft.com/en-\nus/azure/search/cognitive-search-howto-content-understanding"
+  },
+  {
+    "id": "ai103-pdf-86",
+    "num": 86,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that generates short promotional product videos.\nAfter several clips are approved, reviewers notice a small watermark in the top-right corner of some videos.\nYou need to remove the watermark without regenerating the videos.\nWhat should you do?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Modify the original prompt to exclude watermarks."
+      },
+      {
+        "id": "b",
+        "text": "Crop the video by using the size parameter."
+      },
+      {
+        "id": "c",
+        "text": "Increase the guidance scale."
+      },
+      {
+        "id": "d",
+        "text": "Apply a mask-based inpainting edit to the affected part of the video."
+      }
+    ],
+    "correctIds": [
+      "d"
+    ],
+    "acceptedAnswer": {
+      "text": "Apply a mask-based inpainting edit to the affected part of the video.",
+      "explanation": "Technical Justification for Correct Answer: D\nThe correct approach to remove the watermark without regenerating the videos is D. Apply a mask-based\ninpainting edit to the affected part of the video. Here's why this option is the best fit and why the "
+    },
+    "explanation": "Technical Justification for Correct Answer: D\nThe correct approach to remove the watermark without regenerating the videos is D. Apply a mask-based\ninpainting edit to the affected part of the video. Here's why this option is the best fit and why the others are\nless suitable:\nD. Apply a mask-based inpainting edit to the affected part of the video:\nPrecision: This method allows for precise targeting of the watermark area (top-right corner) without altering\nthe rest of the video.\nNon-Destructive to Content: Inpainting, when done correctly, can seamlessly blend the area around the\nwatermark with the rest of the video's content, making the removal nearly undetectable.\nNo Regeneration Required: Meets the key requirement of not regenerating the videos, as it's an edit applied\npost-production.\nWhy Other Options are Less Suitable:\nA. Modify the original prompt to exclude watermarks:\nRegeneration Required: This would necessitate regenerating the videos, which contradicts the problem's\nconstraint.\nUnnecessary Overhaul: If the only issue is the watermark, altering the prompt and regenerating could\nintroduce unintended changes or delays.\nB. Crop the video by using the size parameter:\nContent Loss: Cropping to remove a watermark in the top-right corner would result in the loss of content\naround that area, potentially affecting the video's integrity or message.\nAesthetic Implication: Could disrupt the video's compositional balance.\nC. Increase the guidance scale:\nIrrelevant to Watermark Removal: The guidance scale influences the model's adherence to the prompt but\ndoes not directly address or remove existing watermarks in generated content.\nPotential for Unwanted Changes: Could alter the video's content in unintended ways, as it influences the\ngeneration process rather than editing the output.\nReferences\nMicrosoft Azure Video Indexer - Advanced Editing Capabilities (See sections on Custom Inpainting for similar\nconcepts)\nAzure Cognitive Services - Computer Vision for Image Editing Principles (Although focused on images, the\nprinciples of targeted editing like inpainting are relevant)"
+  },
+  {
+    "id": "ai103-pdf-87",
+    "num": 87,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a web app named App1 that sends requests to a multimodal chat model deployment in a Microsoft\nFoundry project.\nUser messages can contain both text and images.\nCurrently, App1 includes image URL: as plain text inside the message content so the model cannot recognize them\nas images.\nTraces show that the requests contain a single text message instead of a multimodal content array.\nYou need to send the message as a structured array that includes both the text portion and the image reference to\nensure that the model can process the image correctly.\nWhat should you do?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Set the user message content array to include items that have type: text and type: image_url."
+      },
+      {
+        "id": "b",
+        "text": "Encode the image to base64 and include the encoded data inside the content string of the user message."
+      },
+      {
+        "id": "c",
+        "text": "Add the image URL to the request metadata section, so the model can resolve the processing issue\nautomatically."
+      },
+      {
+        "id": "d",
+        "text": "Place the image URL inside the System Message and set type to image_url so the model loads the image at\ninitialization."
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "Set the user message content array to include items that have type: text and type: image_url.",
+      "explanation": "Technical Justification for Correct Answer A\nWhy A is the Best Option:\nStructured Array for Multimodal Content: Option A suggests formatting the user message content as an\narray with items explicitly typed as text and image_url. This structured appro"
+    },
+    "explanation": "Technical Justification for Correct Answer A\nWhy A is the Best Option:\nStructured Array for Multimodal Content: Option A suggests formatting the user message content as an\narray with items explicitly typed as text and image_url. This structured approach aligns with how multimodal\nmodels, especially those deployed in Microsoft Foundry projects, are designed to receive and process\nmultiple types of input simultaneously. By clearly defining the type of each content piece, the model can\ncorrectly interpret and process both the text and the image referenced by the URL.\nDirect Processing Compatibility: Sending the message in this structured format (array with typed items) is\ncompatible with the expected input format for multimodal chat model deployments. This ensures that the\nmodel can directly process the image without requiring additional encoding, metadata parsing, or initialization\nadjustments.\nWhy Other Options are Less Suitable:\nB. Base64 Encoding:\nInefficient for Large Images: Encoding images to base64 significantly increases the request payload size,\nwhich can lead to performance issues, especially with large images.\nModel Compatibility: While some models can handle base64-encoded images within text fields, this approach\ndoes not leverage the model's multimodal input capabilities efficiently and may not be universally supported.\nC. Adding Image URL to Request Metadata:\nNon-Standard for Model Input: Request metadata is typically used for contextual or operational information,\nnot for model input data. There's no guarantee the model will process metadata as part of the input.\nModel Configuration Requirements: Would likely require custom model configuration to look for and process\ninputs from metadata, which is not a standard or recommended practice for multimodal input handling.\nD. Placing Image URL in System Message:\nInitialization vs. Runtime Input: System messages are often used for setup or initialization, not for dynamic\nuser input. This approach would not effectively handle images provided at runtime as part of user messages.\nLimited Flexibility: Does not provide a scalable solution for handling multiple or variably timed user inputs\nthat include images.\nConclusion\nOption A is the most technically sound approach as it leverages the model's capability to process multimodal\ninputs in a structured and efficient manner, ensuring both text and images are correctly interpreted without\nunnecessary encoding or reliance on non-standard input locations.\nReferences\nMicrosoft Azure Cognitive Services: Multimodal Input Handling\n\nMicrosoft Foundry Projects: Structured Data Input for AI Models"
+  },
+  {
+    "id": "ai103-pdf-88",
+    "num": 88,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You are building a customer support web app named App1 in Microsoft Foundry that uses a GPT realtime model.\nApp1 must support:\n•Live, low-latency voice conversations that use Azure OpenAI\n•Streaming audio input from users and playback audio responses\nYou need to configure a connection method that supports real-time audio streaming in client application and\ntargets approximately 100 ms latency.\nWhich connection method should you use?",
+    "options": [
+      {
+        "id": "a",
+        "text": "RTMP"
+      },
+      {
+        "id": "b",
+        "text": "WebRTC"
+      },
+      {
+        "id": "c",
+        "text": "SIP"
+      },
+      {
+        "id": "d",
+        "text": "WebSocket"
+      }
+    ],
+    "correctIds": [
+      "d"
+    ],
+    "acceptedAnswer": {
+      "text": "WebSocket",
+      "explanation": "Technical Justification for Choosing Connection Method D. WebSocket\nFor App1, a customer support web app with stringent requirements of live, low-latency voice conversations\nusing Azure OpenAI, streaming audio input, and playback with approximately 1"
+    },
+    "explanation": "Technical Justification for Choosing Connection Method D. WebSocket\nFor App1, a customer support web app with stringent requirements of live, low-latency voice conversations\nusing Azure OpenAI, streaming audio input, and playback with approximately 100 ms latency, the most\nsuitable connection method is D. WebSocket. Here’s why:\nLow Latency Requirement (~100 ms): WebSocket is particularly well-suited for applications requiring real-\ntime data transfer with minimal latency. It establishes a persistent, bi-directional communication channel\nbetween the client and server, enabling immediate push of audio responses from the server to the client,\ncrucial for achieving the desired latency.\nReal-Time Audio Streaming: WebSocket supports the continuous, two-way streaming of audio data (both\ninput from the user and output from the Azure OpenAI model) efficiently. This is essential for the live voice\nconversations App1 aims to facilitate.\nIntegration with Azure Services: While not exclusive to WebSocket, its native support in most web\nframeworks and its compatibility with Azure’s scalable and real-time capable infrastructure (e.g., Azure\nSignalR Service for managed WebSocket connections) make it a pragmatic choice for integrating with Azure\nOpenAI.\nWhy Other Options Are Less Suitable:\nA. RTMP (Real-Time Messaging Protocol): Primarily designed for streaming to a large audience (one-to-\nmany), RTMP is less ideal for low-latency, two-way communications. It also faces challenges with firewall and\nNAT traversal compared to WebSocket.\nB. WebRTC (Web Real-Time Communication): Although WebRTC is designed for real-time communications\nand supports low latency, it is more commonly used for peer-to-peer connections (e.g., video conferencing)\nrather than client-server architectures like the one described for App1. Setting up and managing WebRTC for\nserver-centric, scalable audio streaming might be more complex than necessary.\nC. SIP (Session Initiation Protocol): SIP is a signaling protocol for setting up, modifying, and terminating real-\ntime communication sessions. It does not handle the media streaming itself and is more suited for managing\nthe session lifecycle in VoIP systems rather than direct, low-latency audio streaming in a web app context.\nConclusion: Given the specific requirements of App1—low latency, real-time audio streaming, and integration\n\nwith Azure OpenAI—WebSocket (D) is the most appropriate connection method due to its bi-directional,\npersistent, and low-latency capabilities, along with its ease of integration into the described architecture.\nReferences\n1. Azure Documentation - Azure SignalR Service: https://docs.microsoft.com/en-us/azure/azure-\nsignalr/signalr-overview\n2. WebSocket Protocol Overview (W3C): https://www.w3.org/TR/websockets/"
+  },
+  {
+    "id": "ai103-pdf-89",
+    "num": 89,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 5: Implement document intelligence solutions",
+    "subdomain": "Subdomain 5.1: Extract data using Document Intelligence",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that contains an agent and uses a GitHub repository. The repository contains\na YAM file named File1 that defines the evaluation settings of the agent.\nYou need to create a GitHub Actions workflow that runs the evaluation defined in File1 when a pull request (PR) is\nopened. How should you configure the workflow?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Set project-endpoint to the endpoint of the project."
+      },
+      {
+        "id": "b",
+        "text": "Set evaluation-config to the path of the YAML file."
+      },
+      {
+        "id": "c",
+        "text": "Set model-deployment-name to the deployed model."
+      },
+      {
+        "id": "d",
+        "text": "Set tenant-id to the Microsoft Entra tenant ID"
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "Set project-endpoint to the endpoint of the project.",
+      "explanation": "Technical Justification for Correct Option (A)\nTo configure a GitHub Actions workflow that runs the evaluation defined in File1.yam (note: likely a typo,\nassuming .yaml) when a pull request (PR) is opened for a Microsoft Foundry project, the correct "
+    },
+    "explanation": "Technical Justification for Correct Option (A)\nTo configure a GitHub Actions workflow that runs the evaluation defined in File1.yam (note: likely a typo,\nassuming .yaml) when a pull request (PR) is opened for a Microsoft Foundry project, the correct approach\ninvolves specifying the project's endpoint. Here's why option A is the best choice and why others are less\nsuitable:\nCorrect Option: A. Set project-endpoint to the endpoint of the project.\nRATIONALE: Specifying the project-endpoint is crucial because it directs the GitHub Actions workflow to the\ncorrect Microsoft Foundry project. This endpoint is unique to your project and is necessary for authentication\nand authorization within the Azure environment.\nFUNCTIONALITY: By setting the project-endpoint, the workflow can authenticate with your Microsoft Foundry\nproject, access the File1.yaml (evaluation settings), and execute the evaluation as defined when a PR is\nopened.\nRELEVANCE TO TRIGGER CONDITION: The project-endpoint setting is fundamental to triggering the correct\nevaluation workflow in response to a PR event, as it ensures the workflow operates on the intended project\nresources.\nWhy Other Options Are Less Suitable:\nB. Set evaluation-config to the path of the YAML file.\nINSUFFICIENT FOR TRIGGER SETUP: While specifying the evaluation-config path is necessary for identifying\nthe evaluation settings, it does not authenticate the workflow with the project. This setting would be used in\nconjunction with, not instead of, the project-endpoint.\nLACK OF PROJECT CONTEXT: Without the project endpoint, the workflow cannot determine which project's\nevaluation to run.\n\nC. Set model-deployment-name to the deployed model.\nIRRELEVANT TO EVALUATION TRIGGER SETUP: This setting pertains to the deployment aspect of a model,\nnot the triggering of an evaluation based on a PR event. The evaluation might indirectly relate to a model, but\nthis setting doesn’t address the immediate need of running the evaluation defined in File1.yaml upon a PR.\nTOO NARROW IN SCOPE: Focusing on the model deployment name overlooks the broader project context\nneeded for the workflow trigger.\nD. Set tenant-id to the Microsoft Entra tenant ID.\nTOO BROAD IN SCOPE, INSUFFICIENT FOR PROJECT IDENTIFICATION: While the tenant-id is crucial for\nAzure authentication at a tenant level, it does not specify which project within the tenant should be targeted\nfor the evaluation trigger.\nSECURITY AND PERMISSION CONCERNS: Alone, it doesn’t ensure the workflow has the necessary\npermissions for the specific project, as permissions can be more granular at the project level.\nConfiguration Summary for Correct Workflow Setup:\nTo correctly configure the GitHub Actions workflow:\nMUST: Set project-endpoint to the endpoint of the project (Option A).\nSHOULD (but not for the question's specific task): Additionally, in the workflow steps, specify evaluation-\nconfig to point to File1.yaml to ensure the correct evaluation settings are used.\nReferences\n[1] Microsoft Documentation - Azure DevOps & GitHub Integration: https://docs.microsoft.com/en-\nus/azure/devops/integrate/overview?view=azure-devops\n[2] GitHub Actions Workflow Syntax for Azure Services: https://docs.github.com/en/actions/deploying-to-\nmicrosoft-azure/deploying-to-azure-app-service\nHOTSPOT\n-"
+  },
+  {
+    "id": "ai103-pdf-90",
+    "num": 90,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 1: Plan and manage an Azure AI solution",
+    "subdomain": "Subdomain 1.1: Choose the appropriate Foundry services and manage security",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that contains an agent.\nThe agent uses a stored access key to retrieve secrets from an Azure key vault, which violates a keyless-\ncredentials requirement.\nYou need to ensure that the agent can retrieve the secrets. The solution must follow the principle of least privilege.\nWhat should you configure? To answer, select the appropriate options in the answer area.\nNOTE: Each correct selection is worth one point.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Explanation:"
+      },
+      {
+        "id": "b",
+        "text": "Alternative manual configuration using individual resource keys and shared access signatures"
+      },
+      {
+        "id": "c",
+        "text": "Direct legacy cognitive service endpoint without managed identity authentication"
+      },
+      {
+        "id": "d",
+        "text": "Client-side prompt validation rule without central service integration"
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "Explanation:",
+      "explanation": "Managed identity scope:\nEnable a system-assigned managed identity at the Foundry level.\nIn Azure AI Foundry, core dependencies (such as Azure Key Vault, Azure Storage, and Azure Container\nRegistry) are connected and governed primarily at the hub/Foun"
+    },
+    "explanation": "Managed identity scope:\nEnable a system-assigned managed identity at the Foundry level.\nIn Azure AI Foundry, core dependencies (such as Azure Key Vault, Azure Storage, and Azure Container\nRegistry) are connected and governed primarily at the hub/Foundry workspace level. Enabling a system-\nassigned managed identity at the Foundry level ensures that the entire collaborative environment can\nsecurely manage credentials, connections, and metadata using a single identity baseline.\nKey Vault authorization method:\nAssign the Key Vault Secrets User role to the managed identity.\nAzure strongly recommends using Azure role-based access control (Azure RBAC) instead of legacy vault\naccess policies for modern cloud resources. Assigning the Key Vault Secrets User built-in role to the\nmanaged identity enforces the principle of least privilege, allowing the platform to securely retrieve secrets\nwithout granting excessive administrative permissions.\nHOTSPOT\n-"
+  },
+  {
+    "id": "ai103-pdf-91",
+    "num": 91,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "matrix_statements",
+    "domain": "Domain 2: Implement generative AI and agent solutions",
+    "subdomain": "Subdomain 2.1: Develop and deploy AI agents and generative solutions",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that contains a customer support application.\nYou create an evaluation named Run1 that has the following configurations:\n•Includes risk and safety metrics\n•Includes the protected material evaluation\n•Includes harmful content metrics that use a medium severity threshold\nYou create an evaluation named Run2 that has the following configurations:\n•Includes risk and safety metrics\n•Includes the protected material evaluation\n•Includes harmful content metrics that use a high severity threshold\nYou run both evaluations against a dataset named DB1 and receive the following results:\n•Content harm defect rate of Run1: 12%\n•Content harm defect rate of Run2: 4%\n•Protected material evaluation of Run1: 6%\n•Protected material evaluation of Run1: 6%\nYou start a fine-tuning job by using DB1. The job fails during automatic RAI checks for multiple content harm types.\nYou discover that the content filtering configuration is set to high severity.\nFor each of the following statements, select Yes if the statement is true. Otherwise, select No.\nNOTE: Each correct selection is worth one point.",
+    "statements": [
+      {
+        "id": "s1",
+        "text": "Changing the content filtering configuration to a less restrictive setting can cause a fine-tuning job to fail.",
+        "correct": "No",
+        "explanation": "Content filtering configuration applies to model inference and generation safety, not to the training/fine-tuning execution pipeline itself."
+      },
+      {
+        "id": "s2",
+        "text": "Fine-tuning jobs can fail if the training dataset contains inappropriate content.",
+        "correct": "Yes",
+        "explanation": "Fine-tuning jobs validate training datasets against Azure AI Content Safety guidelines; severe violations in training data cause job validation failure."
+      },
+      {
+        "id": "s3",
+        "text": "Content harm metrics (such as violence, sexual, self-harm, and hate) are calculated during fine-tuning.",
+        "correct": "Yes",
+        "explanation": "Azure OpenAI calculates content harm severity metrics across categories during fine-tuning data validation."
+      }
+    ],
+    "options": [
+      {
+        "id": "yes",
+        "text": "Yes"
+      },
+      {
+        "id": "no",
+        "text": "No"
+      }
+    ],
+    "correctIds": [
+      "no",
+      "yes",
+      "yes"
+    ],
+    "acceptedAnswer": {
+      "text": "S1: No | S2: Yes | S3: Yes",
+      "explanation": "\"Protected material\" checks function as a binary text-matching detector for copyrighted or\nproprietary text/code. Because it operates independently of the category-based content harm severity tiers,\nchanging the harm severity threshold has zero impac"
+    },
+    "explanation": "\"Protected material\" checks function as a binary text-matching detector for copyrighted or\nproprietary text/code. Because it operates independently of the category-based content harm severity tiers,\nchanging the harm severity threshold has zero impact on this percentage.\n\nDRAG DROP\n-"
+  },
+  {
+    "id": "ai103-pdf-92",
+    "num": 92,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "ordering",
+    "domain": "Domain 1: Plan and manage an Azure AI solution",
+    "subdomain": "Subdomain 1.1: Choose the appropriate Foundry services and manage security",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that contains a multi-agent solution. The agents use tool calling to query\ninternal systems.\nYou need to implement responsible AI auditing to meet the following requirements:\n•Capture all the nested operations across the entire agent run.\n•Record tool invocation arguments and retuned results as metadata.\nWhat should you use for each requirement? To answer, drag the appropriate options to the correct targets Each\noption may be used once, more than once, or not at all. You may need o dag the split bar between panes or scroll to\nview content.\nNOTE: Each correct selection is worth one point.",
+    "options": [
+      {
+        "id": "step-1",
+        "text": "Provision an on-premises Kubernetes cluster with outbound internet connectivity."
+      },
+      {
+        "id": "step-2",
+        "text": "Pull the required Azure AI container image from Microsoft Container Registry (MCR)."
+      },
+      {
+        "id": "step-3",
+        "text": "Run the container image and specify the Azure AI resource endpoint URL and API key."
+      },
+      {
+        "id": "step-4",
+        "text": "Configure the client application to direct inference queries to the local container endpoint."
+      }
+    ],
+    "correctIds": [
+      "step-1",
+      "step-2",
+      "step-3",
+      "step-4"
+    ],
+    "acceptedAnswer": {
+      "text": "Provision an on-premises Kubernetes cluster with outbound internet connectivity. -> Pull the required Azure AI container image from Microsoft Container Registry (MCR). -> Run the container image and specify the Azure AI resource endpoint URL and API key. -> Configure the client application to direct inference queries to the local container endpoint.",
+      "explanation": "Hierarchical spans\nIn distributed tracing frameworks, an agent execution sequence involving nested steps (such as orchestration\nflows calling an agent, which then runs a planner or invokes tools) is modeled using parent-child tree\nelements known as h"
+    },
+    "explanation": "Hierarchical spans\nIn distributed tracing frameworks, an agent execution sequence involving nested steps (such as orchestration\nflows calling an agent, which then runs a planner or invokes tools) is modeled using parent-child tree\nelements known as hierarchical spans.\nTool call attributes\n Specific operational parameters, inputs, outputs, and return metadata associated with an individual execution\nblock are recorded structurally as key-value pairs called attributes (specifically tool call attributes in LLM\n\ntracing specifications).\nDRAG DROP\n-"
+  },
+  {
+    "id": "ai103-pdf-93",
+    "num": 93,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "ordering",
+    "domain": "Domain 2: Implement generative AI and agent solutions",
+    "subdomain": "Subdomain 2.1: Develop and deploy AI agents and generative solutions",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that contains an agent. The agent uses threads and file uploads and calls an\nAzure OpenAI model deployment.\nDuring load testing, calls intermittently fall and return an HTTP 429 rate limit exceeded error. Some user uploads\nfail and generate an HTTP 400 file size exceeded error.\nYou need to mitigate the errors and reduce call failures. The solution must remain within the service and model\nlimits.\nWhat should you do to resolve each error? To answer, drag the appropriate actions to the correct errors. Each\naction may be used once, more than once or not at all. You may need to drag the split bar between panes or scroll\nto view content.\nNOTE: Each comet selection is worth one point.",
+    "options": [
+      {
+        "id": "step-1",
+        "text": "Provision an on-premises Kubernetes cluster with outbound internet connectivity."
+      },
+      {
+        "id": "step-2",
+        "text": "Pull the required Azure AI container image from Microsoft Container Registry (MCR)."
+      },
+      {
+        "id": "step-3",
+        "text": "Run the container image and specify the Azure AI resource endpoint URL and API key."
+      },
+      {
+        "id": "step-4",
+        "text": "Configure the client application to direct inference queries to the local container endpoint."
+      }
+    ],
+    "correctIds": [
+      "step-1",
+      "step-2",
+      "step-3",
+      "step-4"
+    ],
+    "acceptedAnswer": {
+      "text": "Provision an on-premises Kubernetes cluster with outbound internet connectivity. -> Pull the required Azure AI container image from Microsoft Container Registry (MCR). -> Run the container image and specify the Azure AI resource endpoint URL and API key. -> Configure the client application to direct inference queries to the local container endpoint.",
+      "explanation": "Implement exponential backoff and jitter in the retry logic.\nAn HTTP 429 status code indicates that you have exceeded your assigned Requests Per Minute (RPM) or\nTokens Per Minute (TPM) limit. The standard programming practice to gracefully handle rat"
+    },
+    "explanation": "Implement exponential backoff and jitter in the retry logic.\nAn HTTP 429 status code indicates that you have exceeded your assigned Requests Per Minute (RPM) or\nTokens Per Minute (TPM) limit. The standard programming practice to gracefully handle rate limiting is to\nretry the request using a randomized, expanding time window (backoff with jitter).\nMove large content to files and use file search.\nIn the AI Agents API, sending massive blobs of raw text directly inside a prompt message will trigger an HTTP\n400 error if it exceeds the maximum input payload or token context window. Moving that context into\nreference documents and using the built-in file search tool keeps the active API payload small and compliant."
+  },
+  {
+    "id": "ai103-pdf-94",
+    "num": 94,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project.\nYou need to deploy a model from the model catalog to support a search solution for internal policy documents. The\nmodel must generate vector representations of the text in the documents and of user queries.\nWhich type of model should you use?",
+    "options": [
+      {
+        "id": "a",
+        "text": "an embedding model"
+      },
+      {
+        "id": "b",
+        "text": "an image generation model"
+      },
+      {
+        "id": "c",
+        "text": "a large language model (LLM)"
+      },
+      {
+        "id": "d",
+        "text": "a small language model (SLM)"
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "an embedding model",
+      "explanation": "Technical Justification for Correct Answer: A. an embedding model\nThe correct answer for deploying a model to generate vector representations of text in documents and user\n\nqueries for a search solution is A. an embedding model. Here's why:\nEmbedding"
+    },
+    "explanation": "Technical Justification for Correct Answer: A. an embedding model\nThe correct answer for deploying a model to generate vector representations of text in documents and user\n\nqueries for a search solution is A. an embedding model. Here's why:\nEmbedding Models are specifically designed to convert text (or other data types) into dense vector\nrepresentations (embeddings) in a high-dimensional space, where semantically similar texts are closer\ntogether. This property is crucial for effective search solutions, as it enables the comparison of similarity\nbetween user queries and document texts at a granular level.\nWhy A is Best:\nDirectly addresses the requirement for generating vector representations of text.\nOptimized for semantic similarity, which is essential for accurate search results.\nTypically more lightweight and efficient for this specific task compared to larger language models.\nWhy Other Options are Less Suitable:\nB. an Image Generation Model:\nIrrelevant to Text Search: Designed for image creation, not text vectorization or search.\nMisses the Requirement: Cannot generate text vector representations for search purposes.\nC. a Large Language Model (LLM):\nOverkill for the Task: While capable of text understanding, LLMs are computationally intensive and not\noptimized solely for generating vector representations for search.\nIndirect Approach: Would require additional processing to extract relevant vector representations, adding\nunnecessary complexity.\nD. a Small Language Model (SLM):\nSimilar to LLM but Smaller: Shares the indirect approach issue with LLMs, albeit with reduced computational\nrequirements.\nMay Lack Sufficient Contextual Understanding: Depending on the model's training, it might not capture the\nnuanced similarities between texts as effectively as an embedding model.\nReferences\n[1] Microsoft Learn - Embedding Models for Text Search: https://learn.microsoft.com/en-us/azure/cognitive-\nsearch/concept-embedding-models\n[2] Azure AI Documentation - Choosing the Right Model for Text Analysis: https://docs.microsoft.com/en-\nus/azure/machine-learning/how-to-choose-algorithms-text-analysis#embedding-models"
+  },
+  {
+    "id": "ai103-pdf-95",
+    "num": 95,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project.\nYou need to deploy a model from the model catalog to support real-time inference. The solution must meet the\nfollowing requirements:\n•Use key-based authentication.\n•Support real-time REST API access.\n•NOT consume the vCPU quota of the virtual machines in the Azure subscription.\nWhich type of deployment should you use?",
+    "options": [
+      {
+        "id": "a",
+        "text": "serverless API"
+      },
+      {
+        "id": "b",
+        "text": "batch"
+      },
+      {
+        "id": "c",
+        "text": "self-hosted container"
+      },
+      {
+        "id": "d",
+        "text": "standard"
+      }
+    ],
+    "correctIds": [
+      "d"
+    ],
+    "acceptedAnswer": {
+      "text": "standard",
+      "explanation": "Technical Justification for Choosing Deployment Type\nGiven the requirements for deploying a model from the Microsoft Foundery model catalog for real-time\ninference, the best deployment type is D. standard. Here’s why each option aligns or fails to al"
+    },
+    "explanation": "Technical Justification for Choosing Deployment Type\nGiven the requirements for deploying a model from the Microsoft Foundery model catalog for real-time\ninference, the best deployment type is D. standard. Here’s why each option aligns or fails to align with the\nspecified requirements:\nD. Standard\nUse key-based authentication: Standard deployments support key-based authentication for securing REST\nAPI access, aligning with this requirement.\nSupport real-time REST API access: Designed for real-time inference, standard deployments provide the\nnecessary infrastructure for immediate API responses.\nNOT consume the vCPU quota of the virtual machines in the Azure subscription: Since standard\ndeployments are managed and run on dedicated resources provisioned by Azure (not leveraging the user’s\nexisting VM quotas), this requirement is met.\nWhy Other Options are Less Suitable\nA. Serverless API\nIssue: While serverless options like Azure Functions can support real-time API access and key-based auth,\nthey may consume vCPU quota indirectly through the underlying compute resources managed by Azure,\nthough this is more about cost optimization than quota consumption. The primary concern here is the potential\nfor quota impact if not properly managed, making it less straightforward for the \"NOT consume vCPU quota\"\nrequirement.\nNote: Serverless might still be a good fit in many scenarios but doesn’t perfectly align with the \"vCPU quota\"\nrequirement as directly as Standard does.\nB. Batch\nIssue: Batch processing is not suited for real-time inference as it’s designed for scheduled or triggered bulk\nprocessing, failing the real-time REST API requirement.\nC. Self-hosted Container\nIssue:\nvCPU Quota: Will consume the vCPU quota of the virtual machines in the Azure subscription since you\nmanage the infrastructure.\nManagement Overhead: Implies more management responsibility for the user, which isn’t necessarily an issue\nbut doesn’t provide an advantage over “Standard” in this context.\nConclusionGiven the constraints, D. Standard is the most appropriate choice because it directly addresses all\nrequirements without the ambiguities or mismatches present in the other options.\nReferences\n1. Azure Machine Learning - Deploy Model: https://docs.microsoft.com/en-us/azure/machine-\nlearning/how-to-deploy-and-where?tabs=python\n2. Azure Resource Quotas and Limits: https://docs.microsoft.com/en-us/azure/azure-resource-\nmanager/management/azure-subscription-service-limits#virtual-machines-limits\nHOTSPOT\n-"
+  },
+  {
+    "id": "ai103-pdf-96",
+    "num": 96,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 1: Plan and manage an Azure AI solution",
+    "subdomain": "Subdomain 1.1: Choose the appropriate Foundry services and manage security",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You plan to create a Microsoft Foundry project named Project1 that will contain an agent and use an Azure key\n\nvault named KV1.\nYou need to configure a connection from Project1 to KV1.\nHow should you complete the Bicep code? To answer, select the appropriate options in the answer area?\nNOTE: Each correct selection is worth one point.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Explanation:"
+      },
+      {
+        "id": "b",
+        "text": "Alternative manual configuration using individual resource keys and shared access signatures"
+      },
+      {
+        "id": "c",
+        "text": "Direct legacy cognitive service endpoint without managed identity authentication"
+      },
+      {
+        "id": "d",
+        "text": "Client-side prompt validation rule without central service integration"
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "Explanation:",
+      "explanation": "AzureKeyVault'\nThe Bicep block targets existingKeyVault.id and establishes a secure link to an Azure Key Vault workspace\nbackend. In the Azure AI Hub/Foundry connection schema, the category property must match the resource\nclass being integrated, whi"
+    },
+    "explanation": "AzureKeyVault'\nThe Bicep block targets existingKeyVault.id and establishes a secure link to an Azure Key Vault workspace\nbackend. In the Azure AI Hub/Foundry connection schema, the category property must match the resource\nclass being integrated, which is 'AzureKeyVault'.\nAccountManagedIdentity'\nAzure Key Vault relies on identity-based authentication mechanisms (such as Azure RBAC or vault access\npolicies) via system-assigned or user-assigned identities. It does not utilize symmetric account keys or API\nkeys for direct workspace connections, meaning 'AccountManagedIdentity' is the structurally valid\nauthorization protocol.\nHOTSPOT\n-"
+  },
+  {
+    "id": "ai103-pdf-97",
+    "num": 97,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 2: Implement generative AI and agent solutions",
+    "subdomain": "Subdomain 2.1: Develop and deploy AI agents and generative solutions",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project.\nYou need to create a customer support agent that meets the following requirements:\n•Grounds responses only in company policy documents stored in curated repositories\n•Retains customer preferences across separate chat sessions\nHow should you configure the agent? To answer, select the appropriate options in the answer area.\n\nNOTE: Each correct selection is worth one point.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Explanation:"
+      },
+      {
+        "id": "b",
+        "text": "Alternative manual configuration using individual resource keys and shared access signatures"
+      },
+      {
+        "id": "c",
+        "text": "Direct legacy cognitive service endpoint without managed identity authentication"
+      },
+      {
+        "id": "d",
+        "text": "Client-side prompt validation rule without central service integration"
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "Explanation:",
+      "explanation": "Configure retrieval from approved data sources.\nIn enterprise AI applications, Knowledge Grounding is best achieved via Retrieval-Augmented Generation\n(RAG) architecture by connecting your model or agent to an enterprise search index or specific stor"
+    },
+    "explanation": "Configure retrieval from approved data sources.\nIn enterprise AI applications, Knowledge Grounding is best achieved via Retrieval-Augmented Generation\n(RAG) architecture by connecting your model or agent to an enterprise search index or specific storage\naccounts (approved data sources). This prevents hallucination without risking token context limitations or\nmodel instruction degradation that occurs when trying to upload or embed massive raw policy documents\ndirectly into the agent's prompt instructions.\nEnable agent memory that uses persistent storage.\nTo implement true agentic long-term memory that preserves user history, preferences, and state context\nacross multiple independent conversational sessions, you should configure persistent storage-backed agent\nmemory (such as Azure AI Projects' MemorySearchTool mapped to a persistent store resource)."
+  },
+  {
+    "id": "ai103-pdf-98",
+    "num": 98,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that contains an agent. The agent generates summaries from retrieved\npolicy documents.\nYou need to improve response completeness. The solution must be implemented in the logic of the application\ncode before responses are returned.\nWhat should you do?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Add a retry evaluation before the responses are returned."
+      },
+      {
+        "id": "b",
+        "text": "Decrease the value of the temperature parameter."
+      },
+      {
+        "id": "c",
+        "text": "Increase the value of the presence_penalty parameter"
+      },
+      {
+        "id": "d",
+        "text": "Replace the model with a smaller deployment."
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "Add a retry evaluation before the responses are returned.",
+      "explanation": "Technical Justification for Correct Answer: A\nTo enhance response completeness for the Microsoft Foundry agent that generates summaries from retrieved\npolicy documents, the most effective solution among the provided options is to Add a retry evaluati"
+    },
+    "explanation": "Technical Justification for Correct Answer: A\nTo enhance response completeness for the Microsoft Foundry agent that generates summaries from retrieved\npolicy documents, the most effective solution among the provided options is to Add a retry evaluation before\nthe responses are returned (Option A). Here's why:\nOption A: Add a retry evaluation before the responses are returned is the best choice because it directly\naddresses the issue of response completeness by allowing the system to re-attempt the generation of a\nsummary if the initial response does not meet a predefined threshold of completeness. This can be\nimplemented in the application logic to catch and retry incomplete responses before they are returned to the\nuser, thus improving overall completeness.\nOption B: Decrease the value of the temperature parameter would actually have the opposite effect of\nwhat's intended for improving completeness. The temperature parameter in AI models controls randomness\nand creativity; lowering it increases the model's tendency to produce the most probable (but not necessarily\nmore complete) responses, potentially leading to less diverse and possibly less complete outputs if the model\nis overly constrained.\nOption C: Increase the value of the presence_penalty parameter is relevant in the context of controlling\nrepetition in responses. While useful for readability, increasing this parameter does not directly contribute to\nensuring the completeness of the response regarding the coverage of the policy document's content.\nOption D: Replace the model with a smaller deployment would likely worsen response completeness.\nSmaller models typically have less capacity to understand and generate comprehensive text, leading to\npotentially more incomplete summaries compared to larger, more capable models.\nWhy A is Best:\nDirect Addressal: A directly addresses the need for more complete responses by allowing for retries.\nImplementation Feasibility: Can be implemented in the application logic without altering the model's\nconfiguration or size.\nTargeted Improvement: Specifically aims at improving completeness without unnecessarily affecting other\naspects of response quality.\nReferences\nFor deeper understanding of the concepts mentioned:\n1. Microsoft Azure Documentation - Retry Policies in Azure: https://learn.microsoft.com/en-\n\nus/azure/architecture/patterns/retry-with-exponential-backoff\n2. Understanding AI Model Parameters (Temperature, etc.): https://huggingface.co/blog/how-to-fine-\ntune (Refer to the sections on model parameters for insight into how temperature and penalty\nparameters function)\nHOTSPOT\n-\nYou develop a test method to verify the results retrieved from a call to the Azure Vision in Foundry Tools API. The\ncall is used to analyze the existence of company logos in images. The call returns a collection of brands named\nbrands."
+  },
+  {
+    "id": "ai103-pdf-99",
+    "num": 99,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "matrix_statements",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have the following code segment:\nFor each of the following statements, select Yes if the statement is true. Otherwise, select No.\nNOTE: Each correct selection is worth one point.",
+    "statements": [
+      {
+        "id": "s1",
+        "text": "(Yes): The code filters results using a conditional check (brand.Confidence >= 0.75), meaning only\nbrands meeting or exceeding 75% confidence are displayed.",
+        "correct": "Yes",
+        "explanation": "(Yes): The code filters results using a conditional check (brand.Confidence >= 0.75), meaning only\nbrands meeting or exceeding 75% confidence are displayed."
+      },
+      {
+        "id": "s2",
+        "text": "(Yes): The bounding box properties X and Y provided by the Azure Computer Vision API directly\nrepresent the top-left corner horizontal and vertical coordinates of the bounding box.",
+        "correct": "Yes",
+        "explanation": "(Yes): The bounding box properties X and Y provided by the Azure Computer Vision API directly\nrepresent the top-left corner horizontal and vertical coordinates of the bounding box."
+      },
+      {
+        "id": "s3",
+        "text": "(No): The API provides width (W) and height (H) rather than the coordinates of the bottom-right\ncorner. To obtain the bottom-right coordinates, one would have to calculate them via X + W and Y + H.",
+        "correct": "No",
+        "explanation": "(No): The API provides width (W) and height (H) rather than the coordinates of the bottom-right\ncorner. To obtain the bottom-right coordinates, one would have to calculate them via X + W and Y + H."
+      }
+    ],
+    "options": [
+      {
+        "id": "yes",
+        "text": "Yes"
+      },
+      {
+        "id": "no",
+        "text": "No"
+      }
+    ],
+    "correctIds": [
+      "yes",
+      "yes",
+      "no"
+    ],
+    "acceptedAnswer": {
+      "text": "S1: Yes | S2: Yes | S3: No",
+      "explanation": "Statement 1 (Yes): The code filters results using a conditional check (brand.Confidence >= 0.75), meaning only\nbrands meeting or exceeding 75% confidence are displayed.\nStatement 2 (Yes): The bounding box properties X and Y provided by the Azure Comp"
+    },
+    "explanation": "Statement 1 (Yes): The code filters results using a conditional check (brand.Confidence >= 0.75), meaning only\nbrands meeting or exceeding 75% confidence are displayed.\nStatement 2 (Yes): The bounding box properties X and Y provided by the Azure Computer Vision API directly\nrepresent the top-left corner horizontal and vertical coordinates of the bounding box.\nStatement 3 (No): The API provides width (W) and height (H) rather than the coordinates of the bottom-right\ncorner. To obtain the bottom-right coordinates, one would have to calculate them via X + W and Y + H."
+  },
+  {
+    "id": "ai103-pdf-100",
+    "num": 100,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have an Azure subscription.\nYou plan to build an app that will use the Azure AI DALL-E model.\nYou need to deploy the model.\nWhat should you use?",
+    "options": [
+      {
+        "id": "a",
+        "text": "the Azure SDK for Python and PowerShell cmdlets."
+      },
+      {
+        "id": "b",
+        "text": "the Azure SDK for JavaScript and Azure Machine Learning Studio."
+      },
+      {
+        "id": "c",
+        "text": "Microsoft Foundry and the Azure Command Line Interface (CLI)"
+      },
+      {
+        "id": "d",
+        "text": "the Azure portal and Microsoft Graph API"
+      }
+    ],
+    "correctIds": [
+      "c"
+    ],
+    "acceptedAnswer": {
+      "text": "Microsoft Foundry and the Azure Command Line Interface (CLI)",
+      "explanation": "Justification for Correct Answer: C\nThe correct option for deploying the Azure AI DALL-E model is C. Microsoft Foundry and the Azure Command\nLine Interface (CLI). Here’s why:\nMicrosoft Foundry is specifically designed for building, deploying, and man"
+    },
+    "explanation": "Justification for Correct Answer: C\nThe correct option for deploying the Azure AI DALL-E model is C. Microsoft Foundry and the Azure Command\nLine Interface (CLI). Here’s why:\nMicrosoft Foundry is specifically designed for building, deploying, and managing AI and machine learning\nmodels at scale on Azure. It provides a streamlined workflow for model deployment, which aligns perfectly\nwith the requirement of deploying the DALL-E model. Foundry handles the complexities of model serving,\nscaling, and monitoring, making it the most suitable choice for this task.\n\nAzure Command Line Interface (CLI) complements Foundry by offering a flexible, scriptable way to manage\nand automate the deployment process across Azure services. It's particularly useful for configuring the\nenvironment, setting up resources (e.g., compute targets), and integrating the deployed model with other\nAzure services, all of which are crucial steps in deploying a model like DALL-E.\nWhy Other Options are Less Suitable:\nA. The Azure SDK for Python and PowerShell cmdlets: While powerful for managing Azure resources and\npossible for deployment, this combination is more oriented towards general Azure resource management and\ncustom scripting, not specifically optimized for the streamlined deployment of AI models like DALL-E. Python\nSDK could be used in conjunction with other services for model training or custom integration but lacks the\ndirect, model-deployment focused capabilities of Microsoft Foundry.\nB. The Azure SDK for JavaScript and Azure Machine Learning Studio: Azure Machine Learning Studio is\nindeed useful for the lifecycle of machine learning models, including deployment. However, for specifically\nleveraging the DALL-E model (which implies a need for a more specialized, possibly pre-configured\nenvironment for immediate deployment), Microsoft Foundry offers a more direct path. The JavaScript SDK,\nmeanwhile, is more suited for web application integrations rather than the deployment process itself.\nD. The Azure portal and Microsoft Graph API: The Azure portal provides a GUI for deploying models through\ncertain Azure services but may not offer the same level of automation, scalability, and model-specific\ndeployment features as Microsoft Foundry for AI models. Microsoft Graph API is primarily focused on\naccessing Microsoft 365 data and services, not AI model deployment on Azure.\nReferences\nMicrosoft Foundry Documentation\nAzure Command Line Interface (CLI) Documentation\nHOTSPOT\n-"
+  },
+  {
+    "id": "ai103-pdf-101",
+    "num": 101,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 2: Implement generative AI and agent solutions",
+    "subdomain": "Subdomain 2.1: Develop and deploy AI agents and generative solutions",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have an Azure subscription.\nYou need to create a new resource that will generate fictional stores in response to user prompts. The solution\nmust ensure that the resource uses a customer-managed key to protect data.\nHow should you complete the script? To answer, select the appropriate options in the answer area.\nNOTE: Each correct selection is worth one point.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Explanation:"
+      },
+      {
+        "id": "b",
+        "text": "Alternative manual configuration using individual resource keys and shared access signatures"
+      },
+      {
+        "id": "c",
+        "text": "Direct legacy cognitive service endpoint without managed identity authentication"
+      },
+      {
+        "id": "d",
+        "text": "Client-side prompt validation rule without central service integration"
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "Explanation:",
+      "explanation": "1. OpenAI: The question specifically configures an OpenAI model resource container. Choosing\nAIServices or LanguageAuthoring would create incorrect resource kinds.\n2. --encryption: This parameter accepts the JSON-formatted key configuration string sp"
+    },
+    "explanation": "1. OpenAI: The question specifically configures an OpenAI model resource container. Choosing\nAIServices or LanguageAuthoring would create incorrect resource kinds.\n2. --encryption: This parameter accepts the JSON-formatted key configuration string specifying\nkeySource as Microsoft.KeyVault and the parameters mapping out the target encryption key.\n\nHOTSPOT\n-"
+  },
+  {
+    "id": "ai103-pdf-102",
+    "num": 102,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 1: Plan and manage an Azure AI solution",
+    "subdomain": "Subdomain 1.1: Choose the appropriate Foundry services and manage security",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Python application collects customer comments before posting them to a public forum.\nYou need to send a text comment to Azure AI Content Safety and return the self-harm severity from the response.\nHow should you complete the code? To answer, select the appropriate options in the answer area.\nNOTE: Each correct selection is worth one point.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Explanation:"
+      },
+      {
+        "id": "b",
+        "text": "Alternative manual configuration using individual resource keys and shared access signatures"
+      },
+      {
+        "id": "c",
+        "text": "Direct legacy cognitive service endpoint without managed identity authentication"
+      },
+      {
+        "id": "d",
+        "text": "Client-side prompt validation rule without central service integration"
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "Explanation:",
+      "explanation": "1. First Drop-Down Selection (request =)\nCorrect Value: AnalyzeTextOptions(text=comment)\nExplanation: The AnalyzeTextOptions class takes a named parameter text which expects a single string value\ncontaining the input text content to be evaluated.\n2. "
+    },
+    "explanation": "1. First Drop-Down Selection (request =)\nCorrect Value: AnalyzeTextOptions(text=comment)\nExplanation: The AnalyzeTextOptions class takes a named parameter text which expects a single string value\ncontaining the input text content to be evaluated.\n2. Second Drop-Down Selection (response =)\nCorrect Value: client.analyze_text(request)\nExplanation: The synchronous method to submit a text moderation analysis request via a configured\nContentSafetyClient instance is explicitly named analyze_text."
+  },
+  {
+    "id": "ai103-pdf-103",
+    "num": 103,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a custom named entity recognition (NER) project in Azure Language in Foundry Tools for support tickets.\nThe schema for the project contains an entity type named ContactInfo.\nIn tagged training files, ContactInfo is used for phone numbers, email addresses, and social media handles.\nModel evaluation shows low precision for ContactInfo, including false positives in which nearby text is extracted as\nContactInfo.\nYou need to improve the precision of the project.\nWhat should you do before retraining the model?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Lower the confidence threshold for ContactInfo."
+      },
+      {
+        "id": "b",
+        "text": "Trigger an auto-labeling job."
+      },
+      {
+        "id": "c",
+        "text": "Add more support tickets as training data and label more ContactInfo entities."
+      },
+      {
+        "id": "d",
+        "text": "Replace ContactInfo by using Phone, Email, and SocialMedia entities. Relabel every matching span."
+      }
+    ],
+    "correctIds": [
+      "d"
+    ],
+    "acceptedAnswer": {
+      "text": "Replace ContactInfo by using Phone, Email, and SocialMedia entities. Relabel every matching span.",
+      "explanation": "Technical Justification for Correct Answer D\nCorrect Answer: D. Replace ContactInfo by using Phone, Email, and SocialMedia entities. Relabel every\nmatching span.\nWhy D is the Best Option:Replacing the broad ContactInfo entity with more specific entit"
+    },
+    "explanation": "Technical Justification for Correct Answer D\nCorrect Answer: D. Replace ContactInfo by using Phone, Email, and SocialMedia entities. Relabel every\nmatching span.\nWhy D is the Best Option:Replacing the broad ContactInfo entity with more specific entities (Phone, Email, and\nSocialMedia) directly addresses the issue of low precision and false positives. By differentiating between\nthese types, the model can learn more distinct features for each, reducing the likelihood of incorrectly\nextracting nearby text as ContactInfo. Relabeling ensures the training data accuracy, which is crucial for\nimproving model precision.\nWhy Other Options are Less Suitable:\nA. Lower the confidence threshold for ContactInfo: Decreasing the confidence threshold would actually\nincrease the number of false positives, as the model would be more likely to predict ContactInfo for less\nconfident matches. This contradicts the goal of improving precision.\nB. Trigger an auto-labeling job: While auto-labeling can save time, without first addressing the schema's\nambiguity (by splitting ContactInfo), auto-labeling would likely perpetuate the existing inaccuracies at scale,\nmaking subsequent retraining less effective.\nC. Add more support tickets as training data and label more ContactInfo entities: Although increasing the\nsize and diversity of the training dataset can generally improve model performance, the underlying issue of\nContactInfo's broad definition would remain. This approach might slightly improve precision due to the law of\nlarge numbers but would not fundamentally solve the precision problem without redefining the entity for\nclearer differentiation.\nKey Technical Points for Improvement:\nEntity Granularity: More granular entities improve model precision by reducing ambiguity.\nData Quality Over Quantity (Initially): Ensuring the labeled data's accuracy is more critical than increasing its\nvolume when faced with a precision issue stemming from entity design.\nRetraining After Data Refinement: Retraining after refining the entity schema and relabeling ensures the\nmodel learns from accurately defined data, maximizing the likelihood of improved precision.\nReferences\nMicrosoft Azure Documentation: Understand entities in Azure Language Understanding\nMicrosoft Azure Blog: Best Practices for Named Entity Recognition (NER) in Azure Language Service"
+  },
+  {
+    "id": "ai103-pdf-104",
+    "num": 104,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 4: Implement natural language processing solutions",
+    "subdomain": "Subdomain 4.2: Process and generate speech with Azure AI Speech",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You are building a text-to-speech solution that uses Azure Speech in Foundry Tools to read instructions from the\nscript in a text file.\nYou discover that the solution often pronounces technical terms incorrectly.\nYou need to prevent the incorrect pronunciations. The solution must minimize development effort.\nWhat should you do?",
+    "options": [
+      {
+        "id": "a",
+        "text": "From Speech Studio, train a custom neural voice"
+      },
+      {
+        "id": "b",
+        "text": "Use Speech Synthesis Markup Language (SSML) to specify phonemes."
+      },
+      {
+        "id": "c",
+        "text": "Use Speech Synthesis Markup Language (SSML) to apply say as rules."
+      },
+      {
+        "id": "d",
+        "text": "Use Speech Synthesis Markup Language (SSML) to adjust the prosody of the voice."
+      },
+      {
+        "id": "e",
+        "text": "From Azure OpenAI use the Whisper model."
+      }
+    ],
+    "correctIds": [
+      "b"
+    ],
+    "acceptedAnswer": {
+      "text": "Use Speech Synthesis Markup Language (SSML) to specify phonemes.",
+      "explanation": "Technical Justification for Correct Answer: B\nCorrect Answer: B. Use Speech Synthesis Markup Language (SSML) to specify phonemes.\nWhy B is the Best Option:Specifying phonemes using SSML directly addresses the issue of incorrect\npronunciations of tech"
+    },
+    "explanation": "Technical Justification for Correct Answer: B\nCorrect Answer: B. Use Speech Synthesis Markup Language (SSML) to specify phonemes.\nWhy B is the Best Option:Specifying phonemes using SSML directly addresses the issue of incorrect\npronunciations of technical terms by providing explicit pronunciation guidance for the text-to-speech engine.\nThis approach minimizes development effort as it doesn't require training new models (like in A) or leveraging\nentirely different services (like in E). Instead, it involves adding specific markup to the text, which is a\nrelatively lightweight development task. SSML is natively supported by Azure Speech Services, ensuring\nseamless integration.\nWhy Other Options are Less Suitable:\nA. Train a custom neural voice: While effective for broad, consistent voice customization or for voices not\ncurrently offered, training a custom neural voice is resource-intensive (both in terms of development effort\nand potentially cost) for a problem as specific as correcting the pronunciation of certain technical terms. This\noption does not minimize development effort as required.\nC. Use SSML to apply say-as rules: Say-as rules in SSML are useful for indicating the interpretation of\ncertain words or phrases (e.g., dates, times, abbreviations) but may not offer the fine-grained control over\npronunciation that specifying phonemes does for technical terms.\nD. Use SSML to adjust the prosody of the voice: Adjusting prosody (the rhythm, stress, and intonation of\nspeech) enhances the natural flow or emotional content of synthesized speech but does not correct the\npronunciation of specific words.\nE. From Azure OpenAI use the Whisper model: The Whisper model is primarily a speech-to-text model, not\ndesigned for text-to-speech tasks or correcting pronunciation issues in synthesized speech. This option is\ncompletely off-target for the problem at hand.\nConclusion:Given the need to minimize development effort while correcting the pronunciation of technical\nterms in a text-to-speech solution using Azure Speech, specifying phonemes with SSML is the most direct,\nefficient, and effective approach.\nReferences:\nMicrosoft Documentation: Customize speech synthesis with SSML\nMicrosoft Documentation: Phonemes in SSML for Azure Speech Services\nHOTSPOT\n-"
+  },
+  {
+    "id": "ai103-pdf-105",
+    "num": 105,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "matrix_statements",
+    "domain": "Domain 2: Implement generative AI and agent solutions",
+    "subdomain": "Subdomain 2.1: Develop and deploy AI agents and generative solutions",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Python application that redacts sensitive information before sending prompt text to a language model.\nThe application has the following code:\n\nFor each of the following statements, select Yes if the statement is true. Otherwise, select No.\nNOTE: Each correct selection is worth one point.",
+    "statements": [
+      {
+        "id": "s1",
+        "text": "(No): The Azure PII recognition service uses highly specific, predefined entity categories\n(such as Person, Email, PhoneNumber, and SSN). There is no overarching single category called\nContact.\n2. Sta...",
+        "correct": "No",
+        "explanation": "(No): The Azure PII recognition service uses highly specific, predefined entity categories\n(such as Person, Email, PhoneNumber, and SSN). There is no overarching single category called\nContact.\n2. Statement 2 (No): The purpose of creating a sanitized string (like text_for_model) through PII\nredaction is to remove or mask sensitive information. Consequently, raw values like the email address\n(john.doe@contoso.com) and the SSN (859-98-0987) will be stripped out and will not appear in the\nfinal text.\n3. Statement 3 (Yes): When executing PII redaction with an entity-masking configuration, the sensitive\nelements (such as the name \"John Doe\" and the telephone number \"312-55-1234\") are replaced by\ntheir corresponding type labels (e.g., [Person] and [PhoneNumber]).\nDRAG DROP\n-"
+      }
+    ],
+    "options": [
+      {
+        "id": "yes",
+        "text": "Yes"
+      },
+      {
+        "id": "no",
+        "text": "No"
+      }
+    ],
+    "correctIds": [
+      "no"
+    ],
+    "acceptedAnswer": {
+      "text": "S1: No",
+      "explanation": "1. Statement 1 (No): The Azure PII recognition service uses highly specific, predefined entity categories\n(such as Person, Email, PhoneNumber, and SSN). There is no overarching single category called\nContact.\n2. Statement 2 (No): The purpose of creat"
+    },
+    "explanation": "1. Statement 1 (No): The Azure PII recognition service uses highly specific, predefined entity categories\n(such as Person, Email, PhoneNumber, and SSN). There is no overarching single category called\nContact.\n2. Statement 2 (No): The purpose of creating a sanitized string (like text_for_model) through PII\nredaction is to remove or mask sensitive information. Consequently, raw values like the email address\n(john.doe@contoso.com) and the SSN (859-98-0987) will be stripped out and will not appear in the\nfinal text.\n3. Statement 3 (Yes): When executing PII redaction with an entity-masking configuration, the sensitive\nelements (such as the name \"John Doe\" and the telephone number \"312-55-1234\") are replaced by\ntheir corresponding type labels (e.g., [Person] and [PhoneNumber]).\nDRAG DROP\n-"
+  },
+  {
+    "id": "ai103-pdf-106",
+    "num": 106,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "ordering",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You are developing an application that will detect faulty components produced on a factory production line. The\ncomponents are specific to your business.\n\nYou need to use the Azure Custom Vision API to help detect common faults.\nWhich three actions should you perform in sequence? To answer, move the appropriate actions from the list of\nactions to the answer area and arrange them in the correct order.",
+    "options": [
+      {
+        "id": "step-1",
+        "text": "Provision an on-premises Kubernetes cluster with outbound internet connectivity."
+      },
+      {
+        "id": "step-2",
+        "text": "Pull the required Azure AI container image from Microsoft Container Registry (MCR)."
+      },
+      {
+        "id": "step-3",
+        "text": "Run the container image and specify the Azure AI resource endpoint URL and API key."
+      },
+      {
+        "id": "step-4",
+        "text": "Configure the client application to direct inference queries to the local container endpoint."
+      }
+    ],
+    "correctIds": [
+      "step-1",
+      "step-2",
+      "step-3",
+      "step-4"
+    ],
+    "acceptedAnswer": {
+      "text": "Provision an on-premises Kubernetes cluster with outbound internet connectivity. -> Pull the required Azure AI container image from Microsoft Container Registry (MCR). -> Run the container image and specify the Azure AI resource endpoint URL and API key. -> Configure the client application to direct inference queries to the local container endpoint.",
+      "explanation": "Step 1: Create a project.\nBefore any other actions can be taken, you must configure a new project container within the Custom Vision\nportal and choose the project type (e.g., Image Classification).\nStep 2: Upload and tag images."
+    },
+    "explanation": "Step 1: Create a project.\nBefore any other actions can be taken, you must configure a new project container within the Custom Vision\nportal and choose the project type (e.g., Image Classification).\nStep 2: Upload and tag images."
+  },
+  {
+    "id": "ai103-pdf-107",
+    "num": 107,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You need to provide the dataset for training by uploading the required set of target images and assigning\nlabels (tags) to define the classes.\nStep 3: Train the classifier model.\nOnce your images are tagged, you initiate model training using either Fast Training or Advanced Training to\n\nconstruct your custom classifier.\nYou are developing a new sales system that will process user-generated video and text from a public-facing\nwebsite.\nYou plan to notify users that their data has been processed by the sales system.\nWhich responsible AI principle does this help meet?",
+    "options": [
+      {
+        "id": "a",
+        "text": "fairness"
+      },
+      {
+        "id": "b",
+        "text": "transparency"
+      },
+      {
+        "id": "c",
+        "text": "inclusiveness"
+      },
+      {
+        "id": "d",
+        "text": "reliability and safety"
+      }
+    ],
+    "correctIds": [
+      "b"
+    ],
+    "acceptedAnswer": {
+      "text": "transparency",
+      "explanation": "Technical Justification for Correct Answer: B. Transparency\nNotifying users that their data has been processed by the sales system directly aligns with the principle of\ntransparency in responsible AI practices. Transparency involves clearly communica"
+    },
+    "explanation": "Technical Justification for Correct Answer: B. Transparency\nNotifying users that their data has been processed by the sales system directly aligns with the principle of\ntransparency in responsible AI practices. Transparency involves clearly communicating to users how their\ndata is collected, used, and processed. By informing users about the processing of their video and text data,\nthe system ensures that individuals are aware of what happens to their input, fostering trust and allowing\nthem to make informed decisions about their data sharing.\nWhy Other Options are Less Suitable:\nA. Fairness: While fairness ensures that AI systems do not discriminate against certain groups, notifying users\nabout data processing does not directly address fairness in decision-making or outcomes. Fairness would be\nmore relevant if the question discussed ensuring equitable treatment across different user groups in the sales\nsystem's processing.\nC. Inclusiveness: Inclusiveness pertains to designing systems that are accessible and beneficial to diverse\npopulations. Notifying users about data processing is a universal practice and does not specifically enhance\nor address the inclusivity of the system for diverse user groups.\nD. Reliability and Safety: Reliability and safety focus on the system's performance, accuracy, and potential\nrisks. While crucial, notifying users about data processing is more about ethical communication than ensuring\nthe system's operational reliability or safety aspects.\nReferences\n[1] Microsoft - Responsible AI Principles: https://www.microsoft.com/en-us/trust-center/ai/responsible-\nai/principles\n[2] Azure - Transparency in AI and Machine Learning: https://azure.microsoft.com/en-\ngb/resources/transparent-ai-and-machine-learning/"
+  },
+  {
+    "id": "ai103-pdf-108",
+    "num": 108,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 4: Implement natural language processing solutions",
+    "subdomain": "Subdomain 4.2: Process and generate speech with Azure AI Speech",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You are designing a content management system.\nYou need to ensure that the reading experience is optimized for users who have reduced comprehension and\nlearning differences, such as dyslexia. The solution must minimize development effort.\nWhich Azure service should you include in the solution?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Azure Document Intelligence in Foundry Tools"
+      },
+      {
+        "id": "b",
+        "text": "Azure Language in Foundry Tools"
+      },
+      {
+        "id": "c",
+        "text": "Azure AI Immersive Reader"
+      },
+      {
+        "id": "d",
+        "text": "Azure Translator in Foundry Tools"
+      }
+    ],
+    "correctIds": [
+      "c"
+    ],
+    "acceptedAnswer": {
+      "text": "Azure AI Immersive Reader",
+      "explanation": "Technical Justification for Correct Answer: C (Azure AI Immersive Reader)\nWhy Azure AI Immersive Reader (C) is the Best Option:\nOptimized Reading Experience for Dyslexia and Learning Differences: Azure AI Immersive Reader is\nspecifically designed to "
+    },
+    "explanation": "Technical Justification for Correct Answer: C (Azure AI Immersive Reader)\nWhy Azure AI Immersive Reader (C) is the Best Option:\nOptimized Reading Experience for Dyslexia and Learning Differences: Azure AI Immersive Reader is\nspecifically designed to improve the reading experience for users with dyslexia, learning differences, and\nsecond-language learners. It offers features like font size adjustment, line spacing control, reading aloud with\nnatural speech, translation, and highlighting of important words or phrases, directly addressing the\nrequirement.\nMinimized Development Effort: Immersive Reader provides a pre-built, configurable widget that can be easily\nintegrated into web applications with minimal code, thus minimizing development effort. This aligns perfectly\nwith the need to reduce development overhead.\nWhy Other Options are Less Suitable:\nA. Azure Document Intelligence in Foundry Tools:\nPurpose: Primarily designed for extracting insights and structured data from unstructured documents, not for\nenhancing reading experiences.\nDevelopment Effort: Would require significant customization to meet the reading experience requirements,\nincreasing development effort.\nB. Azure Language in Foundry Tools:\nPurpose: Focuses on advanced natural language understanding and generation capabilities, not specifically\non reading accessibility features.\nDevelopment Effort: Integrating the necessary reading experience features would demand substantial\ndevelopment work.\nD. Azure Translator in Foundry Tools:\nPurpose: Mainly for translating text in real-time, with some reading aloud capabilities but lacks the\ncomprehensive accessibility features for dyslexia and learning differences.\nDevelopment Effort/Feature Alignment: While easier to integrate than A or B for basic reading aloud, it\ndoesn’t fully address the optimized reading experience for the specified user group without additional\ndevelopment.\nReferences\nAzure AI Immersive Reader Documentation\nComparing Azure Cognitive Services for Text and Language"
+  },
+  {
+    "id": "ai103-pdf-109",
+    "num": 109,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have an Azure subscription that contains an Azure App Service app named App1.\n\nYou provision a Microsoft Foundry Service resource named CSAccount1.\nYou need to configure App1 to access CSAccount1. The solution must minimize administrative effort.\nWhat should you use to configure App1?",
+    "options": [
+      {
+        "id": "a",
+        "text": "the endpoint URI and subscription key"
+      },
+      {
+        "id": "b",
+        "text": "the endpoint URI and an OAuth token"
+      },
+      {
+        "id": "c",
+        "text": "the endpoint URI and a shared access signature (SAS) token"
+      },
+      {
+        "id": "d",
+        "text": "a system assigned managed identity and an X.509 certificate"
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "the endpoint URI and subscription key",
+      "explanation": "Justification for Correct Answer (A) and Analysis of Other Options\nTo configure App1 (an Azure App Service app) to access CSAccount1 (a Microsoft Foundry Service resource)\nwith minimal administrative effort, the most suitable option is:\nA. the endpoi"
+    },
+    "explanation": "Justification for Correct Answer (A) and Analysis of Other Options\nTo configure App1 (an Azure App Service app) to access CSAccount1 (a Microsoft Foundry Service resource)\nwith minimal administrative effort, the most suitable option is:\nA. the endpoint URI and subscription key\nWhy A is the Best Choice:\nMinimal Administrative Effort: Using the endpoint URI along with a subscription key requires the least setup\nand administrative overhead compared to other methods. It involves simply obtaining the URI and a key from\nthe Azure portal, which is a straightforward process.\nDirect Access: For many Azure services, including accessing APIs or resources directly, using a subscription\nkey (when available and appropriate for the service) is the most direct method, aligning with the requirement\nfor minimal effort.\nAppropriateness for Foundry Service: Given the context of a Foundry Service, which often involves data or\nservice access, using a subscription key is a common and supported method for authentication, making it the\nmost fitting choice here.\nWhy Other Options are Less Suitable:\nB. the endpoint URI and an OAuth token\nIncreased Complexity: Implementing OAuth requires setting up an application registration, configuring\nconsent scopes (if necessary), and handling token refreshes, significantly increasing administrative effort.\nNot Necessarily Required for Resource Access: Unless App1 is acting on behalf of a user or needs delegated\npermissions, OAuth's complexity isn't justified for direct service-to-service communication in this scenario.\nC. the endpoint URI and a shared access signature (SAS) token\nSAS for Resource-Specific Access: SAS tokens are typically used for granting temporary, restricted access\nto specific Azure resources (e.g., Blob Storage), not generally for service endpoints like Foundry Service.\nAdditional Setup: Generating and managing SAS tokens adds administrative overhead without clear benefits\nover a subscription key for this use case.\nD. a system assigned managed identity and an X.509 certificate\nMaximum Administrative Effort: This option involves the most setup, including enabling managed identity,\nconfiguring IAM roles for CSAccount1, and managing X.509 certificates, which is contrary to the requirement\nfor minimal effort.\nOverkill for Direct Service Access: Managed identities with X.509 certificates are more suited for scenarios\nrequiring secure, credential-less access across services with fine-grained permissions, not the\nstraightforward access described.\nReferences\n\nMicrosoft Azure: Authenticate with Azure services using the subscription key\nMicrosoft Azure: Microsoft Foundry Service Overview\nDRAG DROP\n-"
+  },
+  {
+    "id": "ai103-pdf-110",
+    "num": 110,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "ordering",
+    "domain": "Domain 1: Plan and manage an Azure AI solution",
+    "subdomain": "Subdomain 1.1: Choose the appropriate Foundry services and manage security",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a web app that uses Azure AI Search.\nWhen reviewing activity you see greater than expected search query volumes. You suspect that the query key is\ncompromised.\nYou need to prevent unauthorized access to the search endpoint and ensure that users only have read only access\nto the documents collection. The solution must minimize app downtime.\nWhich three actions should you perform in sequence? To answer, move the appropriate actions from the list of\nactions to the answer area and arrange them in the correct order.",
+    "options": [
+      {
+        "id": "step-1",
+        "text": "Provision an on-premises Kubernetes cluster with outbound internet connectivity."
+      },
+      {
+        "id": "step-2",
+        "text": "Pull the required Azure AI container image from Microsoft Container Registry (MCR)."
+      },
+      {
+        "id": "step-3",
+        "text": "Run the container image and specify the Azure AI resource endpoint URL and API key."
+      },
+      {
+        "id": "step-4",
+        "text": "Configure the client application to direct inference queries to the local container endpoint."
+      }
+    ],
+    "correctIds": [
+      "step-1",
+      "step-2",
+      "step-3",
+      "step-4"
+    ],
+    "acceptedAnswer": {
+      "text": "Provision an on-premises Kubernetes cluster with outbound internet connectivity. -> Pull the required Azure AI container image from Microsoft Container Registry (MCR). -> Run the container image and specify the Azure AI resource endpoint URL and API key. -> Configure the client application to direct inference queries to the local container endpoint.",
+      "explanation": "Step 1: Change the app to use the secondary admin key\nBefore changing or invalidating the compromised primary key, update your application code or configuration\nsettings to use the valid secondary admin key. This ensures the application continues to "
+    },
+    "explanation": "Step 1: Change the app to use the secondary admin key\nBefore changing or invalidating the compromised primary key, update your application code or configuration\nsettings to use the valid secondary admin key. This ensures the application continues to run without\nexperiencing connection downtime.\nStep 2: Regenerate the primary admin key\nNow that your application is safely routing requests using the secondary key, you can safely regenerate the\ncompromised primary admin key. This immediately revokes unauthorized access using the old, leaked key.\nStep 3: Change the app to use the new key\nOnce the new primary key is generated, update your application configurations once more to point back to\nthis new, uncompromised primary credential.\nHOTSPOT\n-"
+  },
+  {
+    "id": "ai103-pdf-111",
+    "num": 111,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You need to create a new resource that will be used to perform sentiment analysis and optical character\nrecognition (OCR). The solution must meet the following requirements:\n•Use a single key and endpoint to access multiple services.\n•Consolidate billing for future services that you might use.\n•Support the use of Azure Vision in Foundry Tools in the future.\nHow should you complete the HTTP request to create the new resource? To answer, select the appropriate options\nin the answer area.\nNOTE: Each correct selection is worth one point.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Explanation:"
+      },
+      {
+        "id": "b",
+        "text": "Alternative manual configuration using individual resource keys and shared access signatures"
+      },
+      {
+        "id": "c",
+        "text": "Direct legacy cognitive service endpoint without managed identity authentication"
+      },
+      {
+        "id": "d",
+        "text": "Client-side prompt validation rule without central service integration"
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "Explanation:",
+      "explanation": "1. HTTP Method Selection\nCorrect Value: PUT\nExplanation: Under Azure Resource Manager REST API guidelines, creating or performing an idempotent\nreplacement of a specific named cloud resource (such as /accounts/CS1) requires using the PUT verb. POST i"
+    },
+    "explanation": "1. HTTP Method Selection\nCorrect Value: PUT\nExplanation: Under Azure Resource Manager REST API guidelines, creating or performing an idempotent\nreplacement of a specific named cloud resource (such as /accounts/CS1) requires using the PUT verb. POST is\ntypically used for action endpoints or non-idempotent creations without a predefined resource name, and\nPATCH is strictly for partial delta updates on an already existing resource.\n2. Resource Kind Selection\nCorrect Value: CognitiveServices\nExplanation: The target provider namespace in the URI is explicitly defined as\nMicrosoft.CognitiveServices/accounts. For an all-in-one multi-service Azure AI resource type within this\nnamespace, the exact case-sensitive kind value required by the schema is CognitiveServices.\nHOTSPOT\n-"
+  },
+  {
+    "id": "ai103-pdf-112",
+    "num": 112,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You are building a model to detect objects in images.\nThe performance of the model based on training data is shown in the following exhibit.\n\nUse the drop-down menus to select the answer choice that completes each statement based on the information\npresented in the graphic.\nNOTE: Each correct selection is worth one point.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Explanation:"
+      },
+      {
+        "id": "b",
+        "text": "Alternative manual configuration using individual resource keys and shared access signatures"
+      },
+      {
+        "id": "c",
+        "text": "Direct legacy cognitive service endpoint without managed identity authentication"
+      },
+      {
+        "id": "d",
+        "text": "Client-side prompt validation rule without central service integration"
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "Explanation:",
+      "explanation": "Percentage of False Positives (0):\nWhen a model achieves a Precision rate of 100%, it means every single object predicted by the model was\ncorrect. Consequently, there are no incorrect positive predictions, resulting in a 0% false positive rate.\nTrue"
+    },
+    "explanation": "Percentage of False Positives (0):\nWhen a model achieves a Precision rate of 100%, it means every single object predicted by the model was\ncorrect. Consequently, there are no incorrect positive predictions, resulting in a 0% false positive rate.\nTrue Positives ÷ (True Positives + False Negatives) (100):\nThis formula calculates Recall, which measures the model's ability to find all the actual positive objects in the\ndataset. In this specific question variant, the training summary dashboard displays a Recall value of 100%."
+  },
+  {
+    "id": "ai103-pdf-113",
+    "num": 113,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "multiple_choice",
+    "domain": "Domain 5: Implement document intelligence solutions",
+    "subdomain": "Subdomain 5.1: Extract data using Document Intelligence",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You are developing an application that will use Azure AI Search for internal documents.\nYou need to implement document-level filtering for Azure AI Search.\nWhich three actions should you include in the solution? Each correct answer presents part of the solution.\nNOTE: Each correct selection is worth one point.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Add allowed groups to each index entry"
+      },
+      {
+        "id": "b",
+        "text": "Create one index per group."
+      },
+      {
+        "id": "c",
+        "text": "Send access tokens from Microsoft Entra ID, with the search request."
+      },
+      {
+        "id": "d",
+        "text": "Retrieve all the groups."
+      },
+      {
+        "id": "e",
+        "text": "Retrieve the group memberships of the user"
+      },
+      {
+        "id": "f",
+        "text": "Supply the groups as a filter for the search requests"
+      }
+    ],
+    "correctIds": [
+      "a",
+      "e",
+      "f"
+    ],
+    "acceptedAnswer": {
+      "text": "Add allowed groups to each index entry, Retrieve the group memberships of the user, Supply the groups as a filter for the search requests",
+      "explanation": "Technical Justification for Correct Option (AEF) and Analysis of Alternatives\nCorrect Option: AEF\nA. Add allowed groups to each index entry: This action is crucial for document-level filtering as it enables the\nassociation of specific groups with eac"
+    },
+    "explanation": "Technical Justification for Correct Option (AEF) and Analysis of Alternatives\nCorrect Option: AEF\nA. Add allowed groups to each index entry: This action is crucial for document-level filtering as it enables the\nassociation of specific groups with each document (index entry) in Azure AI Search. By embedding group\npermissions at the index level, the search service can efficiently filter results based on user access rights.\nThis approach ensures that during query execution, the search service can quickly determine which\ndocuments a user is authorized to see, making the filtering process efficient.\nE. Retrieve the group memberships of the user: Before executing the search query, fetching the user's group\nmemberships is essential. This step ensures that the application knows which groups the current user belongs\nto, allowing for the accurate application of filters based on the user's entitlements. This dynamic retrieval\nensures flexibility in handling changing group memberships without altering the search index.\nF. Supply the groups as a filter for the search requests: By passing the user's group memberships as a filter\nwith the search request, Azure AI Search can effectively filter the results to only include documents (index\nentries) that the user has access to, based on the group associations defined in the index. This real-time\nfiltering ensures that search results are personalized to the user's permissions.\nWhy Other Options are Less Suitable:\nB. Create one index per group: While this approach could theoretically work for filtering, it is highly inefficient\nfor management and scalability, especially with a large number of groups or frequently changing group\nmemberships. Maintaining multiple indexes increases operational overhead and complicates search queries\nthat might need to span across groups.\nC. Send access tokens from Microsoft Entra ID, with the search request: While sending access tokens might\nseem like a viable security measure, Azure AI Search's filtering capabilities are more effectively utilized with\nexplicit group filters (as in option F) rather than relying solely on external token validation for each query.\nTokens are better used for authentication, not for the fine-grained filtering that document-level access\nrequires.\nD. Retrieve all the groups: This action is unnecessary for the implementation of document-level filtering for a\nspecific user's search request. Retrieving all groups would be inefficient and irrelevant to determining the\naccess rights of the current user, especially in environments with a large number of groups not related to the\nuser.\nReferences\nFor detailed information on implementing security and access control in Azure AI Search, visit:\nhttps://learn.microsoft.com/en-us/azure/search/search-security-rbac\nFor guidance on filters in Azure AI Search queries, refer to: https://learn.microsoft.com/en-\nus/azure/search/query-lucene-filter"
+  },
+  {
+    "id": "ai103-pdf-114",
+    "num": 114,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have an Azure AI Search indexer that ingest PDF policy manuals.\nClient applications must display page-level citations that have bounding polygons for both text and images.\nYou need to add a single built-in multimodal content extraction skill to the Azure AI Search skillset. The solution\nmust meet the following requirements:\n•Provide text and image location metadata.\n•Extract tables that span multiple pages.\nWhat should you add?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Document Layout"
+      },
+      {
+        "id": "b",
+        "text": "Document Extraction"
+      },
+      {
+        "id": "c",
+        "text": "Azure Content Understanding"
+      },
+      {
+        "id": "d",
+        "text": "GenAI Prompt"
+      }
+    ],
+    "correctIds": [
+      "c"
+    ],
+    "acceptedAnswer": {
+      "text": "Azure Content Understanding",
+      "explanation": "Technical Justification for Choosing C. Azure Content Understanding\nTo fulfill the requirements of extracting page-level citations with bounding polygons for both text and\nimages, and additionally extracting tables that span multiple pages from PDF p"
+    },
+    "explanation": "Technical Justification for Choosing C. Azure Content Understanding\nTo fulfill the requirements of extracting page-level citations with bounding polygons for both text and\nimages, and additionally extracting tables that span multiple pages from PDF policy manuals in an Azure AI\nSearch indexer, Azure Content Understanding (C) is the most suitable built-in multimodal content extraction\nskill to add to the search skillset. Here’s why:\nRequirement 1: Provide text and image location metadata with bounding polygons\nAzure Content Understanding (C): Capable of extracting both text and images with their respective locations,\nincluding bounding box coordinates. This meets the need for precise page-level citations.\nInsufficiency of Other Options:\nA. Document Layout: While it can extract text and layout information, it's primarily focused on the document's\nstructural layout rather than providing detailed metadata for images or complex bounding polygons for both\ntext and images.\nB. Document Extraction: Excels at extracting specific data fields but doesn't inherently provide the location\nmetadata with bounding polygons for images and text as required.\nD. GenAI Prompt: Not designed for extracting existing content with metadata but rather for generating text\nbased on prompts, making it unsuitable for this requirement.\nRequirement 2: Extract tables that span multiple pages\nAzure Content Understanding (C): Advanced in handling complex document structures, including the\ncapability to identify and extract tables even when they span across multiple pages, thanks to its\nunderstanding of document context.\nInsufficiency of Other Options:\nA. Document Layout & B. Document Extraction: While they can extract tables, their capability to handle\ntables spanning multiple pages is limited compared to Azure Content Understanding's contextual\nunderstanding.\nD. GenAI Prompt: Again, not applicable for extraction tasks, especially complex ones like multi-page table\nextraction.\nWhy C. Azure Content Understanding is the Best Choice:\nMultimodal Extraction: Handles both text and image extraction with location metadata.\nAdvanced Table Extraction: Capable of extracting tables across multiple pages.\nAlignment with Requirements: Directly meets both specified requirements without needing additional skills,\nkeeping the solution streamlined.\nReferences\nAzure Cognitive Search Skills Overview - Microsoft Docs\nAzure Content Understanding Skill - Microsoft Docs\nHOTSPOT\n-"
+  },
+  {
+    "id": "ai103-pdf-115",
+    "num": 115,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 5: Implement document intelligence solutions",
+    "subdomain": "Subdomain 5.1: Extract data using Document Intelligence",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You are creating an enrichment pipeline that will use Azure AI Search. The knowledge store contains unstructured\nJSON data and the text from scanned PDF documents.\nWhich projection type should you use for each data type? To answer, select the appropriate options in the answer\n\narea.\nNOTE: Each correct selection is worth one point.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Explanation:"
+      },
+      {
+        "id": "b",
+        "text": "Alternative manual configuration using individual resource keys and shared access signatures"
+      },
+      {
+        "id": "c",
+        "text": "Direct legacy cognitive service endpoint without managed identity authentication"
+      },
+      {
+        "id": "d",
+        "text": "Client-side prompt validation rule without central service integration"
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "Explanation:",
+      "explanation": "1. Object projection: This type is used when you need a full, hierarchical JSON representation of your\nenrichment tree data structures, making it the perfect fit for unstructured JSON content.\n2. Table projection: When text is extracted from document"
+    },
+    "explanation": "1. Object projection: This type is used when you need a full, hierarchical JSON representation of your\nenrichment tree data structures, making it the perfect fit for unstructured JSON content.\n2. Table projection: When text is extracted from documents (like scanned PDFs or articles), it is usually\nbroken down into tabular structures (such as paragraphs, key phrases, or localized lines of text) that\nmap natively into rows and columns within Azure Table Storage.\n\nHOTSPOT\n-"
+  },
+  {
+    "id": "ai103-pdf-116",
+    "num": 116,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You are building a custom vision model that will be deployed as part of an iOS app.\nYou have images of cats and dogs. Each image contains either a cat or a dog.\nYou need to use the Azure Custom Vision service to detect whether the image is of a cat or a dog.\nHow should you configure the project in the Azure Custom Vision portal? To answer, select the appropriate options\nin the answer area.\nNOTE: Each correct selection is worth one point.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Explanation:"
+      },
+      {
+        "id": "b",
+        "text": "Alternative manual configuration using individual resource keys and shared access signatures"
+      },
+      {
+        "id": "c",
+        "text": "Direct legacy cognitive service endpoint without managed identity authentication"
+      },
+      {
+        "id": "d",
+        "text": "Client-side prompt validation rule without central service integration"
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "Explanation:",
+      "explanation": "Classification.\nMulticlass single tag per image\nGeneral Compact"
+    },
+    "explanation": "Classification.\nMulticlass single tag per image\nGeneral Compact"
+  },
+  {
+    "id": "ai103-pdf-117",
+    "num": 117,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 2: Implement generative AI and agent solutions",
+    "subdomain": "Subdomain 2.1: Develop and deploy AI agents and generative solutions",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project that contains an agent. The agent has a Model Context Protocol (MCP) tool\nnamed kbsearch that queries a knowledge base stored in Azure AI Search.\nSome agent runs return answers from the base model without invoking the knowledge base, which results in\nresponses without grounded citations.\nYou are provided with the following code snippet that runs the agent.\nYou need to deterministically force the agent to invoke kbsearch on each run.\nWhat should you do?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Add the response_format parameter to the create_and_process() method call."
+      },
+      {
+        "id": "b",
+        "text": "Replace create_and_process() method with the create_thread_and_process_run() method."
+      },
+      {
+        "id": "c",
+        "text": "Add the toolset parameter to the create_and_process() method call."
+      },
+      {
+        "id": "d",
+        "text": "Add the tool_choice parameter to the create_and_process() method call."
+      }
+    ],
+    "correctIds": [
+      "d"
+    ],
+    "acceptedAnswer": {
+      "text": "Add the tool_choice parameter to the create_and_process() method call.",
+      "explanation": "Correct choice verified."
+    },
+    "explanation": ""
+  },
+  {
+    "id": "ai103-pdf-118",
+    "num": 118,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 2: Implement generative AI and agent solutions",
+    "subdomain": "Subdomain 2.1: Develop and deploy AI agents and generative solutions",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You are developing a text processing solution.\nYou have the following function.\nYou call the function and use the following string as the second argument.\nOur tour of London included a visit to Buckingham Palace\nWhat will be the output of the function?",
+    "options": [
+      {
+        "id": "a",
+        "text": "London and Buckingham Palace only"
+      },
+      {
+        "id": "b",
+        "text": "Tour and visit only"
+      },
+      {
+        "id": "c",
+        "text": "Our tour of London included a visit to Buckingham Palace"
+      },
+      {
+        "id": "d",
+        "text": "London and Tour only"
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "London and Buckingham Palace only",
+      "explanation": "HOTSPOT\n-"
+    },
+    "explanation": "HOTSPOT\n-"
+  },
+  {
+    "id": "ai103-pdf-119",
+    "num": 119,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "matrix_statements",
+    "domain": "Domain 2: Implement generative AI and agent solutions",
+    "subdomain": "Subdomain 2.1: Develop and deploy AI agents and generative solutions",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You are building a solution that students will use to find references for essays.\nYou use the following code to start building the solution.\nFor each of the following statements, select Yes is the statement is true. Otherwise, select No.\n\nNOTE: Each correct selection is worth one point.",
+    "statements": [
+      {
+        "id": "s1",
+        "text": "OpenTelemetry tracing requires explicit configuration to start capturing distributed traces in Microsoft Foundry.",
+        "correct": "No",
+        "explanation": "OpenTelemetry tracing requires configuring the Application Insights connection string or exporter, but baseline agent tracing can be enabled via standard SDK instrumentation."
+      },
+      {
+        "id": "s2",
+        "text": "Azure AI Content Safety Prompt Shields can evaluate user prompts for direct and indirect prompt injection attacks.",
+        "correct": "Yes",
+        "explanation": "Prompt Shields analyze incoming text inputs and document content for prompt injection threats before the prompt reaches the model."
+      },
+      {
+        "id": "s3",
+        "text": "Model Context Protocol (MCP) server connections in Microsoft Foundry require managed identity authorization.",
+        "correct": "Yes",
+        "explanation": "Foundry tools connecting to MCP endpoints leverage Microsoft Entra ID managed identities for credential-less authentication."
+      }
+    ],
+    "options": [
+      {
+        "id": "yes",
+        "text": "Yes"
+      },
+      {
+        "id": "no",
+        "text": "No"
+      }
+    ],
+    "correctIds": [
+      "no",
+      "yes",
+      "yes"
+    ],
+    "acceptedAnswer": {
+      "text": "S1: No | S2: Yes | S3: Yes",
+      "explanation": "1. Language Detection (No): The code utilizes the RecognizeLinkedEntities method from the Azure AI\nLanguage / Text Analytics client library, which identifies entities assuming a known language\ncontext. It does not automatically execute a language det"
+    },
+    "explanation": "1. Language Detection (No): The code utilizes the RecognizeLinkedEntities method from the Azure AI\nLanguage / Text Analytics client library, which identifies entities assuming a known language\ncontext. It does not automatically execute a language detection routine on the text dataset.\n2. Entity URL Reference (No): When Azure AI Language Entity Linking recognizes an entity, the\nreturned Url string points directly to a high-authority knowledge repository—typically Wikipedia—\nrather than a generic Bing search result page.\n3. Matches Location Tracking (Yes): The matches collection inside the linked entity response object\ncontains crucial metadata (specifically offset and length properties) indicating exactly where that text\nsubstring appears within the submitted document payload.\nHOTSPOT\n-"
+  },
+  {
+    "id": "ai103-pdf-120",
+    "num": 120,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 1: Plan and manage an Azure AI solution",
+    "subdomain": "Subdomain 1.1: Choose the appropriate Foundry services and manage security",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a Microsoft Foundry project for a support ticket triage app that reads ticket text from a database.\nYou need to ensure that the app meets the following requirements:\n•Compares candidate models by quality, cost, and throughput\n•Prevents hosting model weights in the Azure subscription\nWhat should you configure? To answer, select the appropriate options in the answer area.\nNOTE: Each correct selection is worth one point.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Explanation:"
+      },
+      {
+        "id": "b",
+        "text": "Alternative manual configuration using individual resource keys and shared access signatures"
+      },
+      {
+        "id": "c",
+        "text": "Direct legacy cognitive service endpoint without managed identity authentication"
+      },
+      {
+        "id": "d",
+        "text": "Client-side prompt validation rule without central service integration"
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "Explanation:",
+      "explanation": "Model evaluation: The Azure AI Studio Model Catalog features model cards (providing benchmarks, intended\nuse cases, and metadata) and global leaderboards to compare accuracy and latency metrics across open-\nsource and foundation models prior to selec"
+    },
+    "explanation": "Model evaluation: The Azure AI Studio Model Catalog features model cards (providing benchmarks, intended\nuse cases, and metadata) and global leaderboards to compare accuracy and latency metrics across open-\nsource and foundation models prior to selection.\nDeployment option: For large foundation models or large language models (LLMs) in the catalog, Serverless\nAPI deployment (pay-as-you-go) provides an abstract endpoint that handles infrastructure hosting\ndynamically without requiring dedicated virtual machine orchestration."
+  },
+  {
+    "id": "ai103-pdf-121",
+    "num": 121,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have an Azure subscription.\nYou need to build an app that will compare documents for semantic similarity. The solution must meet the\nfollowing requirements:\n•Return numeric vectors that represent the tokens of each document.\n•Minimize development effort.\nWhich Azure OpenAI model should you use?",
+    "options": [
+      {
+        "id": "a",
+        "text": "GPT-3.5"
+      },
+      {
+        "id": "b",
+        "text": "embeddings"
+      },
+      {
+        "id": "c",
+        "text": "GPT-4"
+      },
+      {
+        "id": "d",
+        "text": "DALL-E"
+      }
+    ],
+    "correctIds": [
+      "b"
+    ],
+    "acceptedAnswer": {
+      "text": "embeddings",
+      "explanation": "Technical Justification for Choosing the Correct Option (B. embeddings)\nRequirements Recap:\n1. Return numeric vectors representing document tokens for semantic similarity comparison.\n2. Minimize development effort.\nWhy B. embeddings is the Best Choic"
+    },
+    "explanation": "Technical Justification for Choosing the Correct Option (B. embeddings)\nRequirements Recap:\n1. Return numeric vectors representing document tokens for semantic similarity comparison.\n2. Minimize development effort.\nWhy B. embeddings is the Best Choice:\nSemantic Similarity through Embeddings: The embeddings model is specifically designed to generate dense\nvector representations (embeddings) of input texts. These vectors capture semantic similarities between\ntokens/documents, making them ideal for comparison tasks. This directly fulfills the first requirement.\nDevelopment Effort Minimization: Utilizing the embeddings model requires minimal custom development\nsince it's pre-trained for this exact purpose. You can directly integrate the API into your application with less\ncoding effort compared to fine-tuning or adapting more general models like GPT-3.5 or GPT-4 for embedding\ngeneration.\nWhy Other Options are Less Suitable:\nA. GPT-3.5 & C. GPT-4:\nPrimary Functionality: Both are general-purpose language models, primarily suited for text generation,\nquestion-answering, and similar tasks, not specifically for generating embeddings for semantic similarity.\nDevelopment Effort: To use either for semantic similarity, you'd need to implement additional logic or fine-\ntune the model, significantly increasing development time and effort.\nEfficiency: Not optimized for returning numeric vectors of tokens, making them less efficient choices for this\nspecific task.\nD. DALL-E:\nFunctionality Misalignment: DALL-E is focused on image generation from text prompts, completely unrelated\nto the task of comparing document semantic similarity.\nIrrelevance to Text Embeddings: Does not provide any functionality for generating numeric vectors for text\ntokens, making it wholly inappropriate for the requirement.\nConclusion:Given the specific requirements of generating numeric vectors for semantic similarity comparison\nand minimizing development effort, B. embeddings is the most technically suitable and efficient choice\namong the provided Azure OpenAI models.\nReferences\nAzure Cognitive Services - Text Analytics for Sentiment Analysis and Entity Recognition (though not directly\non embeddings, illustrates the text analysis capabilities in Azure)\nAzure OpenAI Documentation - Overview (navigate through for model specifics, as direct embedding model\ndocs may not be publicly linked without a subscription)\n\nHOTSPOT\n-"
+  },
+  {
+    "id": "ai103-pdf-122",
+    "num": 122,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "matrix_statements",
+    "domain": "Domain 2: Implement generative AI and agent solutions",
+    "subdomain": "Subdomain 2.1: Develop and deploy AI agents and generative solutions",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You are building an app that will provide users with definitions of common AI terms.\nYou create the following Python code.\nFor each of the following statements, select Yes if the statement is true. Otherwise, select No.\nNOTE: Each correct selection is worth point.",
+    "statements": [
+      {
+        "id": "s1",
+        "text": "OpenTelemetry tracing requires explicit configuration to start capturing distributed traces in Microsoft Foundry.",
+        "correct": "No",
+        "explanation": "OpenTelemetry tracing requires configuring the Application Insights connection string or exporter, but baseline agent tracing can be enabled via standard SDK instrumentation."
+      },
+      {
+        "id": "s2",
+        "text": "Azure AI Content Safety Prompt Shields can evaluate user prompts for direct and indirect prompt injection attacks.",
+        "correct": "Yes",
+        "explanation": "Prompt Shields analyze incoming text inputs and document content for prompt injection threats before the prompt reaches the model."
+      },
+      {
+        "id": "s3",
+        "text": "Model Context Protocol (MCP) server connections in Microsoft Foundry require managed identity authorization.",
+        "correct": "Yes",
+        "explanation": "Foundry tools connecting to MCP endpoints leverage Microsoft Entra ID managed identities for credential-less authentication."
+      }
+    ],
+    "options": [
+      {
+        "id": "yes",
+        "text": "Yes"
+      },
+      {
+        "id": "no",
+        "text": "No"
+      }
+    ],
+    "correctIds": [
+      "no",
+      "yes",
+      "yes"
+    ],
+    "acceptedAnswer": {
+      "text": "S1: No | S2: Yes | S3: Yes",
+      "explanation": "Statements evaluated against official Azure documentation."
+    },
+    "explanation": ""
+  },
+  {
+    "id": "ai103-pdf-123",
+    "num": 123,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 5: Implement document intelligence solutions",
+    "subdomain": "Subdomain 5.1: Extract data using Document Intelligence",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have an Azure OpenAI model named AI1.\nYou are building a web app named App1 by using the Azure OpenAI SDK.\nYou need to configure App1 to connect to AI1.\nWhat information must you provide?",
+    "options": [
+      {
+        "id": "a",
+        "text": "the deployment name, key, and model name"
+      },
+      {
+        "id": "b",
+        "text": "the endpoint, key, and model type"
+      },
+      {
+        "id": "c",
+        "text": "the deployment name, endpoint, and key"
+      },
+      {
+        "id": "d",
+        "text": "the endpoint, key, and model name"
+      }
+    ],
+    "correctIds": [
+      "c"
+    ],
+    "acceptedAnswer": {
+      "text": "the deployment name, endpoint, and key",
+      "explanation": "Technical Justification for Correct Answer: C\n\nTo configure App1 (the web app) to connect to AI1 (the Azure OpenAI model) using the Azure OpenAI SDK, the\nessential configuration parameters are analyzed as follows, highlighting why option C is the mos"
+    },
+    "explanation": "Technical Justification for Correct Answer: C\n\nTo configure App1 (the web app) to connect to AI1 (the Azure OpenAI model) using the Azure OpenAI SDK, the\nessential configuration parameters are analyzed as follows, highlighting why option C is the most suitable:\nCorrect Answer: C - the deployment name, endpoint, and key\nDeployment Name: Necessary to identify the specific deployment of the Azure OpenAI model (AI1) that App1\nshould interact with. Each deployment can have different configurations or versions of the model.\nEndpoint: Required to specify the URL where App1 can send requests to interact with AI1. The endpoint is\nunique to the Azure OpenAI resource.\nKey: Essential for authentication. The key authorizes App1 to make requests to AI1, ensuring only authorized\napplications can interact with the model.\nWhy Other Options Are Less Suitable:\nA. the deployment name, key, and model name\nMissing Endpoint: Without the endpoint, App1 doesn't know where to send requests, making this option\nincomplete for connectivity.\nInclusion of Model Name: While knowing the model name might seem useful, the deployment name already\nencapsulates the specific model version or configuration being targeted, making the model name redundant\nin this context.\nB. the endpoint, key, and model type\nMissing Deployment Name: Critical for identifying the correct deployment of AI1. Without it, App1 might not\ntarget the intended model version or configuration.\nModel Type Instead of Deployment/Model Name: Knowing the \"type\" (e.g., GPT-3, etc.) doesn't specify which\ndeployment ( potentially with custom training or specific version) of that type to use.\nD. the endpoint, key, and model name\nMissing Deployment Name: Similar to option B, this lacks specificity regarding which deployment of AI1 to\ninteract with, potentially leading to targeting the wrong model configuration.\nEndpoint and Model Name Redundancy: If the endpoint is correctly configured, it should implicitly point to\nthe correct model, making the model name unnecessary for the connection setup.\nConclusion:\nOption C (the deployment name, endpoint, and key) is the most comprehensive and necessary set of\ninformation for App1 to securely and accurately connect to the intended deployment of AI1 without\nredundancy or omission of critical connection parameters.\nReferences:\n1. Azure OpenAI Authentication and Authorizationhttps://docs.microsoft.com/en-us/azure/cognitive-\nservices/openai/how-to/authenticate?tabs=azure-portal\n2. Azure OpenAI SDK Connection Setuphttps://docs.microsoft.com/en-us/azure/cognitive-\nservices(openai)/how-to/use-azure-openai-sdk?tabs=python"
+  },
+  {
+    "id": "ai103-pdf-124",
+    "num": 124,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 5: Implement document intelligence solutions",
+    "subdomain": "Subdomain 5.1: Extract data using Document Intelligence",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You are building a solution in Azure that will use Azure Language in Foundry Tools service to process sensitive\ncustomer data.\nYou need to ensure that only specific Azure processes can access the Language service. The solution must\nminimize administrative effort.\nWhat should you include in the solution?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Azure Application Gateway"
+      },
+      {
+        "id": "b",
+        "text": "a virtual network gateway"
+      },
+      {
+        "id": "c",
+        "text": "IPsec rules"
+      },
+      {
+        "id": "d",
+        "text": "virtual network rules"
+      }
+    ],
+    "correctIds": [
+      "d"
+    ],
+    "acceptedAnswer": {
+      "text": "virtual network rules",
+      "explanation": "Technical Justification for Correct Answer D: Virtual Network Rules\nTo ensure that only specific Azure processes can access the Language service while minimizing\nadministrative effort when processing sensitive customer data with Azure Language in Fou"
+    },
+    "explanation": "Technical Justification for Correct Answer D: Virtual Network Rules\nTo ensure that only specific Azure processes can access the Language service while minimizing\nadministrative effort when processing sensitive customer data with Azure Language in Foundry Tools service,\nVirtual Network Rules (D) is the most suitable option. Here's why:\nWhy D (Virtual Network Rules) is the Best Choice:\nSecurity and Access Control: Virtual Network (VNet) Rules allow you to restrict access to your Azure\nLanguage service to only those resources within specified Virtual Networks (VNets) or subnets. This ensures\nthat only authorized, specific Azure processes (configured within those VNets) can communicate with the\nLanguage service.\nMinimal Administrative Effort: Configuring VNet Rules is relatively straightforward within the Azure portal or\nthrough Azure CLI/ARM templates, requiring less ongoing administrative effort compared to managing\nexternal gateways or complex IPsec configurations.\nIntegration and Scalability: This approach integrates seamlessly with Azure's networking model, supporting\nscalable solutions without introducing additional latency or dependency on external gateways.\nWhy Other Options Are Less Suitable:\nA. Azure Application Gateway:\nOverkill for the Requirement: While secure, an Application Gateway is more suited for load balancing and\nprotecting web applications, not for controlling access to a specific Azure service in a way that minimizes\nadministrative effort.\nAdditional Complexity and Cost: Introduces extra layers of configuration and incurs additional costs.\nB. Virtual Network Gateway:\nPurpose Misalignment: Virtual Network Gateways are primarily used for establishing connections between\nVNets or between a VNet and an on-premises network, not for controlling access to a cloud service.\nUnnecessary Complexity: Would require more setup and maintenance than necessary for this specific access\ncontrol task.\nC. IPsec Rules:\nManagement Overhead: Managing IPsec rules can be complex, especially in dynamic environments, leading\nto higher administrative effort.\nLess Integrated with Azure Services: Less seamlessly integrated with controlling access to Azure services\ncompared to VNet Rules."
+  },
+  {
+    "id": "ai103-pdf-125",
+    "num": 125,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "multiple_choice",
+    "domain": "Domain 5: Implement document intelligence solutions",
+    "subdomain": "Subdomain 5.1: Extract data using Document Intelligence",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have an Azure subscription that contains a Microsoft Foundry Service resource named CSAccount1 and a\nvirtual network named VNet1. CSAaccount1 is connected to VNet1.\nYou need to ensure that only specific resources can access CSAccount1. The solution must meet the following\nrequirements:\n•Prevent external access to CSAccount1.\n•Minimize administrative effort.\nWhich two actions should you perform? Each correct answer presents part of the solution.\n\nNOTE: Each correct answer is worth one point.",
+    "options": [
+      {
+        "id": "a",
+        "text": "In CSAccount1, modify the virtual network settings."
+      },
+      {
+        "id": "b",
+        "text": "In VNet1, create a virtual subnet."
+      },
+      {
+        "id": "c",
+        "text": "In VNet1, enable a service endpoint for CSAccount1."
+      },
+      {
+        "id": "d",
+        "text": "In CSAccount1, configure the Access control (IAM) settings."
+      },
+      {
+        "id": "e",
+        "text": "In VNet1, modify the virtual network settings."
+      }
+    ],
+    "correctIds": [
+      "a",
+      "c"
+    ],
+    "acceptedAnswer": {
+      "text": "In CSAccount1, modify the virtual network settings., In VNet1, enable a service endpoint for CSAccount1.",
+      "explanation": "Technical Justification for Correct Answer: AC\nWhy A is Correct:Modifying the virtual network settings in CSAccount1 (A) is essential to restrict access to\nthe Foundry Service resource. By updating these settings, you can specifically configure CSAcc"
+    },
+    "explanation": "Technical Justification for Correct Answer: AC\nWhy A is Correct:Modifying the virtual network settings in CSAccount1 (A) is essential to restrict access to\nthe Foundry Service resource. By updating these settings, you can specifically configure CSAccount1 to only\nallow traffic from the associated VNet1, thereby preventing external access. This action directly addresses\nthe requirement to prevent external access to CSAccount1.\nWhy C is Correct:Enabling a service endpoint for CSAccount1 in VNet1 (C) enhances security by allowing\ntraffic from VNet1 to CSAccount1 through Microsoft's backbone network, without exposing CSAccount1 to\nthe public internet. This meets the security requirement while also minimizing administrative effort, as service\nendpoints are managed at the VNet level and don’t require constant updating of firewall rules or access lists\nfor CSAccount1.\nWhy Other Options are Less Suitable:\nB. In VNet1, create a virtual subnet. While creating a subnet could be part of a broader security strategy (e.g.,\nisolating resources), it does not directly prevent external access to CSAccount1 or necessarily minimize\nadministrative effort in this specific context.\nD. In CSAccount1, configure the Access control (IAM) settings. IAM settings control who can manage\nCSAccount1, not which resources can access it. This does not prevent network-level external access.\nE. In VNet1, modify the virtual network settings. While related, this option is too broad and does not\nspecifically ensure CSAccount1's external access is prevented without further context on what settings are\nmodified. Option A is more direct and effective for the given requirement.\nSummary:Actions A and C are the most technically suitable because they directly address the requirement to\nprevent external access to CSAccount1 while minimizing administrative effort. A ensures CSAccount1 only\naccepts traffic from VNet1, and C securely enables this communication without public internet exposure.\nReferences:\nMicrosoft Azure Documentation: Virtual network service endpoints\nMicrosoft Azure Documentation: Integrate Azure services with Azure Virtual Network\nHOTSPOT\n-"
+  },
+  {
+    "id": "ai103-pdf-126",
+    "num": 126,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 5: Implement document intelligence solutions",
+    "subdomain": "Subdomain 5.1: Extract data using Document Intelligence",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You have a collection of press releases stored as PDF files.\nYou need to extract text from the files and perform sentiment analysis.\nWhich service should you use for each task? To answer, select the appropriate options in the answer area.\nNOTE: Each correct selection is worth one point.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Explanation:"
+      },
+      {
+        "id": "b",
+        "text": "Alternative manual configuration using individual resource keys and shared access signatures"
+      },
+      {
+        "id": "c",
+        "text": "Direct legacy cognitive service endpoint without managed identity authentication"
+      },
+      {
+        "id": "d",
+        "text": "Client-side prompt validation rule without central service integration"
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "Explanation:",
+      "explanation": "Extract text: Azure Document Intelligence is optimized to extract text, handwriting, tables, and document\nstructure from forms, receipts, or PDF files.\nPerform sentiment analysis: Azure Language provides natural language processing (NLP) features, in"
+    },
+    "explanation": "Extract text: Azure Document Intelligence is optimized to extract text, handwriting, tables, and document\nstructure from forms, receipts, or PDF files.\nPerform sentiment analysis: Azure Language provides natural language processing (NLP) features, including\n\nsentiment analysis, opinion mining, and key phrase extraction."
+  },
+  {
+    "id": "ai103-pdf-127",
+    "num": 127,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You are designing an Azure AI solution to identify defective products on a production line.\nYou have a real-time video feed and an image library of sample products that are approved or rejected manually.\nYou need to recommend a service that meets the following requirements:\n•Monitors the video feed and identifies the defective products.\n•Can train a new model by using the image library.\n•Minimizes development effort.\nWhat should you recommend?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Azure Vision in Foundry Tools"
+      },
+      {
+        "id": "b",
+        "text": "Azure AI Video Indexer"
+      },
+      {
+        "id": "c",
+        "text": "Azure AI Custom Vision"
+      },
+      {
+        "id": "d",
+        "text": "Azure Machine Learning"
+      }
+    ],
+    "correctIds": [
+      "c"
+    ],
+    "acceptedAnswer": {
+      "text": "Azure AI Custom Vision",
+      "explanation": "Here's a structured technical justification for the correct answer in paragraph and bullet point format,\nfollowed by explanations for why other options are less suitable:\nRecommended Service: C. Azure AI Custom Vision\nJustification for Azure AI Custo"
+    },
+    "explanation": "Here's a structured technical justification for the correct answer in paragraph and bullet point format,\nfollowed by explanations for why other options are less suitable:\nRecommended Service: C. Azure AI Custom Vision\nJustification for Azure AI Custom Vision:\nAzure AI Custom Vision is the most suitable service for this scenario due to the following key reasons:\nDefective Product Identification in Real-Time Video Feed: While Custom Vision primarily processes images, it\ncan be integrated with a video processing pipeline where frames from the video feed are extracted and\nanalyzed as individual images. This approach enables the identification of defective products in near real-time.\nTraining with Image Library: Custom Vision excels at training models from user-provided image datasets,\nwhich aligns perfectly with the requirement of leveraging an existing library of approved and rejected product\nimages for model training.\nMinimized Development Effort: The service provides a user-friendly interface and SDKs for easy integration,\nreducing the development effort required for training, deploying, and maintaining the model compared to\nmore general-purpose machine learning platforms.\nWhy Other Options are Less Suitable:\nA. Azure Vision in Foundry Tools:\nMisconception: \"Azure Vision\" is not a recognized standalone service by Microsoft Azure in the context\nprovided. If referring to computer vision capabilities within Azure, Custom Vision or Cognitive Services'\nComputer Vision would be more accurate.\nFoundry Tools are not directly related to the described requirements, as they pertain more to data integration\nand transformation rather than AI/ML model training and deployment for image/video analysis.\nB. Azure AI Video Indexer:\nPrimary Function: Designed for video indexing, search, and analytics (e.g., people, text, objects detection in a\nmore general sense), not specifically tailored for custom defect detection based on a user-provided dataset."
+  },
+  {
+    "id": "ai103-pdf-128",
+    "num": 128,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "matrix_statements",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "Model Training: Not optimized for training a custom model with a specific image library for defect detection.\nD. Azure Machine Learning:\nSuitability: While capable of handling the task, it requires significantly more development effort, expertise in\nmachine learning model selection, training, and deployment, which contradicts the \"Minimizes Development\nEffort\" requirement.\nCustomization and Control: Provides too much of both for this specific use case where a more streamlined,\ndedicated computer vision solution is preferable.\nReferences\nAzure Custom Vision Documentation\nComparing Azure Services for Computer Vision Tasks\nHOTSPOT\n-\nYou run the following command.\nFor each of the following statements, select Yes if the statement is true. Otherwise, select No.\nNOTE: Each correct selection is worth one point.",
+    "statements": [
+      {
+        "id": "s1",
+        "text": "Going to http://localhost:5000/status will query the Azure endpoint... \\(\\rightarrow \\) No\n\n(Explanation: The /status endpoint checks the validity of the local api-key configuration without executing ...",
+        "correct": "No",
+        "explanation": "Going to http://localhost:5000/status will query the Azure endpoint... \\(\\rightarrow \\) No\n\n(Explanation: The /status endpoint checks the validity of the local api-key configuration without executing a\nremote billing/endpoint query.)"
+      },
+      {
+        "id": "s2",
+        "text": "The container logging provider will write log data. \\(\\rightarrow \\) No\n(Explanation: Console/file logging requires explicit configuration arguments during the docker run command;\nit is not automatica...",
+        "correct": "No",
+        "explanation": "The container logging provider will write log data. \\(\\rightarrow \\) No\n(Explanation: Console/file logging requires explicit configuration arguments during the docker run command;\nit is not automatically active or configured for persistent writing by default parameters.)"
+      },
+      {
+        "id": "s3",
+        "text": "Going to http://localhost:5000/swagger will provide the details to access the documentation... \\\n(\\rightarrow \\) Yes\n(Explanation: All Azure AI container endpoints natively host an interactive Swagger...",
+        "correct": "No",
+        "explanation": "Going to http://localhost:5000/swagger will provide the details to access the documentation... \\\n(\\rightarrow \\) Yes\n(Explanation: All Azure AI container endpoints natively host an interactive Swagger UI description page at\n/swagger for developers to view service schemas and test requests locally.)"
+      }
+    ],
+    "options": [
+      {
+        "id": "yes",
+        "text": "Yes"
+      },
+      {
+        "id": "no",
+        "text": "No"
+      }
+    ],
+    "correctIds": [
+      "no",
+      "no",
+      "no"
+    ],
+    "acceptedAnswer": {
+      "text": "S1: No | S2: No | S3: No",
+      "explanation": "Statement 1: Going to http://localhost:5000/status will query the Azure endpoint... \\(\\rightarrow \\) No\n\n(Explanation: The /status endpoint checks the validity of the local api-key configuration without executing a\nremote billing/endpoint query.)\nSta"
+    },
+    "explanation": "Statement 1: Going to http://localhost:5000/status will query the Azure endpoint... \\(\\rightarrow \\) No\n\n(Explanation: The /status endpoint checks the validity of the local api-key configuration without executing a\nremote billing/endpoint query.)\nStatement 2: The container logging provider will write log data. \\(\\rightarrow \\) No\n(Explanation: Console/file logging requires explicit configuration arguments during the docker run command;\nit is not automatically active or configured for persistent writing by default parameters.)\nStatement 3: Going to http://localhost:5000/swagger will provide the details to access the documentation... \\\n(\\rightarrow \\) Yes\n(Explanation: All Azure AI container endpoints natively host an interactive Swagger UI description page at\n/swagger for developers to view service schemas and test requests locally.)"
+  },
+  {
+    "id": "ai103-pdf-129",
+    "num": 129,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You are developing an app that will use the Speech and Language APIs.\nYou need to provision resources for the app. The solution must ensure that each service is accessed by using a\nsingle endpoint and credential.\nWhich type of resource should you create?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Azure Language in Foundry Tools"
+      },
+      {
+        "id": "b",
+        "text": "Microsoft Foundry service"
+      },
+      {
+        "id": "c",
+        "text": "Azure Speech in Foundry Tools"
+      },
+      {
+        "id": "d",
+        "text": "Content Safety in Foundry Control Plane"
+      }
+    ],
+    "correctIds": [
+      "b"
+    ],
+    "acceptedAnswer": {
+      "text": "Microsoft Foundry service",
+      "explanation": "Technical Justification for Choosing Option B: Microsoft Foundry service\nFor an application leveraging both Speech and Language APIs with the requirement of accessing each service\nthrough a single endpoint and credential, provisioning a Microsoft Fou"
+    },
+    "explanation": "Technical Justification for Choosing Option B: Microsoft Foundry service\nFor an application leveraging both Speech and Language APIs with the requirement of accessing each service\nthrough a single endpoint and credential, provisioning a Microsoft Foundry service is the most suitable\nchoice. Here's why:\nSingle Endpoint and Credential Requirement: Microsoft Foundry service allows for the unification of multiple\nAzure AI services (including Speech and Language APIs) under a single, unified endpoint and credential\nmanagement system. This streamlines access and management for your app.\nIntegration of Multiple AI Services: Designed to support a suite of AI services, Microsoft Foundry service\nnaturally fits the bill for an application requiring both Speech and Language capabilities without the need for\nseparate endpoints or credentials for each.\nSimplified Security and Access Management: By using a single credential set for both services through\nMicrosoft Foundry, security and access management are significantly simplified, reducing administrative\noverhead.\nWhy Other Options are Less Suitable:\nA. Azure Language in Foundry Tools & C. Azure Speech in Foundry Tools:\nBoth options imply using a tool specifically tailored for either Language or Speech, not both, failing to meet\nthe requirement of managing multiple services under one umbrella.\n\"Foundry Tools\" is not a recognized standard deployment option for these services in the context provided,\nsuggesting a misunderstanding or misrepresentation of the service offerings.\nD. Content Safety in Foundry Control Plane:\n\nContent Safety is not directly related to the core functionality of Speech and Language APIs, indicating a\nmismatch with the primary requirement.\nFoundry Control Plane might imply a management or oversight layer, but pairing it with \"Content Safety\"\ndoes not address the necessity for a unified access point for Speech and Language services.\nConclusion: Given the need for a single endpoint and credential for accessing both Speech and Language\nAPIs, Microsoft Foundry service (Option B) is the most appropriate choice due to its capability to integrate\nmultiple AI services under a unified management and access framework.\nReferences\n1. Microsoft Azure Documentation - Azure Cognitive Services: https://docs.microsoft.com/en-\nus/azure/cognitive-services/\n2. Microsoft Azure Documentation - Unified Endpoint for Azure Cognitive Services:\nhttps://docs.microsoft.com/en-us/azure/cognitive-services/cognitive-services-apis-create-\naccount#find-the-cognitive-services-resource EO (Note: While the exact \"Microsoft Foundry service\"\ndocumentation might not be publicly available or up-to-date as of my last knowledge update, the\nabove links provide context on managing multiple Cognitive Services, including Speech and\nLanguage, under unified principles. For \"Microsoft Foundry\", please refer to the latest Azure\nannouncements or documentation for the most current information.)"
+  },
+  {
+    "id": "ai103-pdf-130",
+    "num": 130,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You are building an app that will include one million scanned magazine articles. Each article will be stored as an\nimage file.\nYou need to configure the app to extract text from the images. The solution must minimize development effort.\nWhat should you include in the solution?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Azure Document Intelligence in Foundry Tools"
+      },
+      {
+        "id": "b",
+        "text": "the Read API in Azure Vision in Foundry Tools"
+      },
+      {
+        "id": "c",
+        "text": "Azure Vision in Foundry Tools Image Analysis"
+      },
+      {
+        "id": "d",
+        "text": "Azure Language in Foundry Tools"
+      }
+    ],
+    "correctIds": [
+      "b"
+    ],
+    "acceptedAnswer": {
+      "text": "the Read API in Azure Vision in Foundry Tools",
+      "explanation": "DRAG DROP\n-"
+    },
+    "explanation": "DRAG DROP\n-"
+  },
+  {
+    "id": "ai103-pdf-131",
+    "num": 131,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "ordering",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You are building an app that will scan confidential documents and use the Azure Language in Foundry Tools\nservice to analyze the contents.\nYou provision a Microsoft Foundry Service resource.\nYou need to ensure that the app can make requests to the Azure Language in Foundry Tools service endpoint. The\nsolution must ensure that confidential documents remain on-premises.\nWhich three actions should you perform in sequence? To answer, move the appropriate actions from the list of\nactions to the answer area and arrange them in the correct order.",
+    "options": [
+      {
+        "id": "step-1",
+        "text": "Provision an on-premises Kubernetes cluster that has internet connectivity."
+      },
+      {
+        "id": "step-2",
+        "text": "Pull an image from the Microsoft Container Registry (MCR)."
+      },
+      {
+        "id": "step-3",
+        "text": "Run the container and specify an API key and the Endpoint URL of the Azure AI resource.\nInternet Connectivity Requirement: Azure AI containers run loc"
+      }
+    ],
+    "correctIds": [
+      "step-1",
+      "step-2",
+      "step-3"
+    ],
+    "acceptedAnswer": {
+      "text": "Provision an on-premises Kubernetes cluster that has internet connectivity. -> Pull an image from the Microsoft Container Registry (MCR). -> Run the container and specify an API key and the Endpoint URL of the Azure AI resource.\nInternet Connectivity Requirement: Azure AI containers run loc",
+      "explanation": "1. Provision an on-premises Kubernetes cluster that has internet connectivity.\n2. Pull an image from the Microsoft Container Registry (MCR).\n3. Run the container and specify an API key and the Endpoint URL of the Azure AI resource.\nInternet Connectiv"
+    },
+    "explanation": "1. Provision an on-premises Kubernetes cluster that has internet connectivity.\n2. Pull an image from the Microsoft Container Registry (MCR).\n3. Run the container and specify an API key and the Endpoint URL of the Azure AI resource.\nInternet Connectivity Requirement: Azure AI containers run locally but require outbound internet\nconnectivity to send billing data and usage metrics back to Azure. They cannot function in an environment\nisolated from the internet.\nImage Repository: Official Microsoft containerized services and AI models are published and maintained on\nthe Microsoft Container Registry (MCR) rather than public Docker Hub repositories.\nRequired Parameters: Azure AI containers require two fundamental configuration arguments to initialize and\nvalidate billing state: the ApiKey and the target Azure AI resource Billing URL (Endpoint URL).\n\nHOTSPOT\n-"
+  },
+  {
+    "id": "ai103-pdf-132",
+    "num": 132,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "single_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You are developing an app that will use the Azure Vision in Foundry Tools API to analyze an image.\nYou need configure the request that will be used by the app to identify whether an image is clipart or a line\ndrawing.\nHow should you complete the request? To answer, select the appropriate options in the answer area.\nNOTE: Each correct selection is worth one point.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Features: ImageType"
+      },
+      {
+        "id": "b",
+        "text": "Alternative manual configuration using individual resource keys and shared access signatures"
+      },
+      {
+        "id": "c",
+        "text": "Direct legacy cognitive service endpoint without managed identity authentication"
+      },
+      {
+        "id": "d",
+        "text": "Client-side prompt validation rule without central service integration"
+      }
+    ],
+    "correctIds": [
+      "a"
+    ],
+    "acceptedAnswer": {
+      "text": "Features: ImageType",
+      "explanation": "Correct implementation option."
+    },
+    "explanation": ""
+  },
+  {
+    "id": "ai103-pdf-133",
+    "num": 133,
+    "courseId": "azure-ai-103",
+    "lang": "en",
+    "type": "multiple_choice",
+    "domain": "Domain 3: Implement computer vision solutions",
+    "subdomain": "Subdomain 3.1: Analyze images and video with Azure AI Vision",
+    "isLatest": true,
+    "badge": "NUEVA 2026",
+    "difficulty": "hard",
+    "prompt": "You use the Azure Custom Vision service to build a classifier.\nAfter training is complete, you need to evaluate the classifier.\nWhich two metrics are available for review? Each correct answer presents a complete solution.\nNOTE: Each correct selection is worth one point.",
+    "options": [
+      {
+        "id": "a",
+        "text": "F-score"
+      },
+      {
+        "id": "b",
+        "text": "area under the curve (AUC)"
+      },
+      {
+        "id": "c",
+        "text": "precision"
+      },
+      {
+        "id": "d",
+        "text": "weighted accuracy"
+      },
+      {
+        "id": "e",
+        "text": "recall"
+      }
+    ],
+    "correctIds": [
+      "c",
+      "e"
+    ],
+    "acceptedAnswer": {
+      "text": "precision, recall",
+      "explanation": "Technical Justification for Correct Answer: CE (Precision and Recall)\nWhen evaluating a classifier built with Azure Custom Vision, the primary metrics for assessing its\nperformance are Precision and Recall. Here's why these are the correct choices, a"
+    },
+    "explanation": "Technical Justification for Correct Answer: CE (Precision and Recall)\nWhen evaluating a classifier built with Azure Custom Vision, the primary metrics for assessing its\nperformance are Precision and Recall. Here's why these are the correct choices, along with explanations for\nwhy the other options are less suitable for this specific context:\nCorrect Choices:\nC. Precision: This metric measures the accuracy of the classifier's positive predictions, indicating how many of\nthe predicted positives are actually correct. In the context of Custom Vision, where image classification\naccuracy is crucial, precision helps in understanding the reliability of the model's positive identifications. For\nexample, if a model predicts 100 images as \"cats\" with a precision of 0.9, it means 90 of those predictions are\n\ncorrect, which is vital for applications requiring high confidence in positive predictions.\nE. Recall: This metric assesses the classifier's ability to identify all actual positives, reflecting how many of\nthe actual positives were correctly predicted. Recall is vital for ensuring the model captures as many\ninstances of the target class as possible, which is particularly important in scenarios where missing a positive\nidentification has significant consequences.\nWhy Other Options Are Less Suitable:\nA. F-score: While the F-score is a useful composite metric that balances precision and recall, it is not directly\nlisted as a primary evaluation metric provided by Azure Custom Vision for immediate review after training. The\nservice emphasizes the individual components (precision and recall) for a more nuanced understanding of the\nmodel's performance.\nB. Area Under the Curve (AUC): AUC, associated with Receiver Operating Characteristic (ROC) curves, is more\ncommonly used for models where the output is a probability score and the threshold for positive/negative\nclassification can be adjusted. Azure Custom Vision's primary evaluation focuses on the direct outcomes\n(precision and recall) rather than the threshold-dependent AUC for classification models.\nD. Weighted Accuracy: While accuracy is a basic metric for classifier evaluation, \"weighted accuracy\" is not\nexplicitly highlighted as a standard evaluation metric in Azure Custom Vision's post-training analysis.\nStandard accuracy can be misleading in imbalanced datasets, and while weighted accuracy addresses this,\nthe service's feedback loop for classifiers emphasizes precision and recall for more detailed insight into\nmodel performance.\nConclusion:\nPrecision and Recall (CE) are the most appropriate and directly available metrics for evaluating a classifier's\nperformance in Azure Custom Vision, offering a clear insight into the model's accuracy and coverage of\npositive predictions.\nReferences:\nAzure Custom Vision - Evaluate a Model\nAzure Custom Vision - Metrics\n\nThank you\nThank you for being so interested in the premium exam material. \nI'm glad to hear that you found it informative and helpful. \nIf you have any feedback or thoughts on the bumps, I would love to hear them. \nYour insights can help me improve our writing and better understand our readers.\nBest of Luck\nYou have worked hard to get to this point, and you are well-prepared for the exam\nKeep your head up, stay positive, and go show that exam what you're made of!\n\nTotal: 135 Questions\nLink: \n Feedback \nMore Papers"
+  },
+  {
+    "id": "ai103-q1",
+    "num": 134,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -56,7 +5339,7 @@
   },
   {
     "id": "ai103-q2",
-    "num": 2,
+    "num": 135,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -109,7 +5392,7 @@
   },
   {
     "id": "ai103-q3",
-    "num": 3,
+    "num": 136,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -162,7 +5445,7 @@
   },
   {
     "id": "ai103-q4",
-    "num": 4,
+    "num": 137,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -215,7 +5498,7 @@
   },
   {
     "id": "ai103-q5",
-    "num": 5,
+    "num": 138,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -268,7 +5551,7 @@
   },
   {
     "id": "ai103-q6",
-    "num": 6,
+    "num": 139,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -321,7 +5604,7 @@
   },
   {
     "id": "ai103-q7",
-    "num": 7,
+    "num": 140,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -374,7 +5657,7 @@
   },
   {
     "id": "ai103-q8",
-    "num": 8,
+    "num": 141,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -427,7 +5710,7 @@
   },
   {
     "id": "ai103-q9",
-    "num": 9,
+    "num": 142,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -480,7 +5763,7 @@
   },
   {
     "id": "ai103-q10",
-    "num": 10,
+    "num": 143,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -533,7 +5816,7 @@
   },
   {
     "id": "ai103-q11",
-    "num": 11,
+    "num": 144,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -586,7 +5869,7 @@
   },
   {
     "id": "ai103-q12",
-    "num": 12,
+    "num": 145,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -639,7 +5922,7 @@
   },
   {
     "id": "ai103-q13",
-    "num": 13,
+    "num": 146,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -692,7 +5975,7 @@
   },
   {
     "id": "ai103-q14",
-    "num": 14,
+    "num": 147,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -745,7 +6028,7 @@
   },
   {
     "id": "ai103-q15",
-    "num": 15,
+    "num": 148,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -798,7 +6081,7 @@
   },
   {
     "id": "ai103-q16",
-    "num": 16,
+    "num": 149,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -851,7 +6134,7 @@
   },
   {
     "id": "ai103-q17",
-    "num": 17,
+    "num": 150,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -904,7 +6187,7 @@
   },
   {
     "id": "ai103-q18",
-    "num": 18,
+    "num": 151,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -957,7 +6240,7 @@
   },
   {
     "id": "ai103-q19",
-    "num": 19,
+    "num": 152,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -1010,7 +6293,7 @@
   },
   {
     "id": "ai103-q20",
-    "num": 20,
+    "num": 153,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -1063,7 +6346,7 @@
   },
   {
     "id": "ai103-q21",
-    "num": 21,
+    "num": 154,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -1116,7 +6399,7 @@
   },
   {
     "id": "ai103-q22",
-    "num": 22,
+    "num": 155,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -1169,7 +6452,7 @@
   },
   {
     "id": "ai103-q23",
-    "num": 23,
+    "num": 156,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -1222,7 +6505,7 @@
   },
   {
     "id": "ai103-q24",
-    "num": 24,
+    "num": 157,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -1275,7 +6558,7 @@
   },
   {
     "id": "ai103-q25",
-    "num": 25,
+    "num": 158,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -1328,7 +6611,7 @@
   },
   {
     "id": "ai103-q26",
-    "num": 26,
+    "num": 159,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -1381,7 +6664,7 @@
   },
   {
     "id": "ai103-q27",
-    "num": 27,
+    "num": 160,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -1434,7 +6717,7 @@
   },
   {
     "id": "ai103-q28",
-    "num": 28,
+    "num": 161,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -1487,7 +6770,7 @@
   },
   {
     "id": "ai103-q29",
-    "num": 29,
+    "num": 162,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -1540,7 +6823,7 @@
   },
   {
     "id": "ai103-q30",
-    "num": 30,
+    "num": 163,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -1593,7 +6876,7 @@
   },
   {
     "id": "ai103-q31",
-    "num": 31,
+    "num": 164,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -1646,7 +6929,7 @@
   },
   {
     "id": "ai103-q32",
-    "num": 32,
+    "num": 165,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -1699,7 +6982,7 @@
   },
   {
     "id": "ai103-q33",
-    "num": 33,
+    "num": 166,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -1752,7 +7035,7 @@
   },
   {
     "id": "ai103-q34",
-    "num": 34,
+    "num": 167,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -1805,7 +7088,7 @@
   },
   {
     "id": "ai103-q35",
-    "num": 35,
+    "num": 168,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -1858,7 +7141,7 @@
   },
   {
     "id": "ai103-q36",
-    "num": 36,
+    "num": 169,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -1911,7 +7194,7 @@
   },
   {
     "id": "ai103-q37",
-    "num": 37,
+    "num": 170,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -1964,7 +7247,7 @@
   },
   {
     "id": "ai103-q38",
-    "num": 38,
+    "num": 171,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -2017,7 +7300,7 @@
   },
   {
     "id": "ai103-q39",
-    "num": 39,
+    "num": 172,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -2070,7 +7353,7 @@
   },
   {
     "id": "ai103-q40",
-    "num": 40,
+    "num": 173,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -2123,7 +7406,7 @@
   },
   {
     "id": "ai103-q41",
-    "num": 41,
+    "num": 174,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -2176,7 +7459,7 @@
   },
   {
     "id": "ai103-q42",
-    "num": 42,
+    "num": 175,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -2229,7 +7512,7 @@
   },
   {
     "id": "ai103-q43",
-    "num": 43,
+    "num": 176,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -2282,7 +7565,7 @@
   },
   {
     "id": "ai103-q44",
-    "num": 44,
+    "num": 177,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -2335,7 +7618,7 @@
   },
   {
     "id": "ai103-q45",
-    "num": 45,
+    "num": 178,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -2388,7 +7671,7 @@
   },
   {
     "id": "ai103-q46",
-    "num": 46,
+    "num": 179,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -2441,7 +7724,7 @@
   },
   {
     "id": "ai103-q47",
-    "num": 47,
+    "num": 180,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -2494,7 +7777,7 @@
   },
   {
     "id": "ai103-q48",
-    "num": 48,
+    "num": 181,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -2547,7 +7830,7 @@
   },
   {
     "id": "ai103-q49",
-    "num": 49,
+    "num": 182,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -2600,7 +7883,7 @@
   },
   {
     "id": "ai103-q50",
-    "num": 50,
+    "num": 183,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -2653,7 +7936,7 @@
   },
   {
     "id": "ai103-q51",
-    "num": 51,
+    "num": 184,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -2706,7 +7989,7 @@
   },
   {
     "id": "ai103-q52",
-    "num": 52,
+    "num": 185,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -2759,7 +8042,7 @@
   },
   {
     "id": "ai103-q53",
-    "num": 53,
+    "num": 186,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "multiple_choice",
@@ -2817,7 +8100,7 @@
   },
   {
     "id": "ai103-q54",
-    "num": 54,
+    "num": 187,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -2870,7 +8153,7 @@
   },
   {
     "id": "ai103-q55",
-    "num": 55,
+    "num": 188,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "multiple_choice",
@@ -2928,7 +8211,7 @@
   },
   {
     "id": "ai103-q56",
-    "num": 56,
+    "num": 189,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -2981,7 +8264,7 @@
   },
   {
     "id": "ai103-q57",
-    "num": 57,
+    "num": 190,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "multiple_choice",
@@ -3039,7 +8322,7 @@
   },
   {
     "id": "ai103-q58",
-    "num": 58,
+    "num": 191,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -3092,7 +8375,7 @@
   },
   {
     "id": "ai103-q59",
-    "num": 59,
+    "num": 192,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "multiple_choice",
@@ -3150,7 +8433,7 @@
   },
   {
     "id": "ai103-q60",
-    "num": 60,
+    "num": 193,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -3203,7 +8486,7 @@
   },
   {
     "id": "ai103-q61",
-    "num": 61,
+    "num": 194,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "multiple_choice",
@@ -3261,7 +8544,7 @@
   },
   {
     "id": "ai103-q62",
-    "num": 62,
+    "num": 195,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -3314,7 +8597,7 @@
   },
   {
     "id": "ai103-q63",
-    "num": 63,
+    "num": 196,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "multiple_choice",
@@ -3372,7 +8655,7 @@
   },
   {
     "id": "ai103-q64",
-    "num": 64,
+    "num": 197,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -3425,7 +8708,7 @@
   },
   {
     "id": "ai103-q65",
-    "num": 65,
+    "num": 198,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "multiple_choice",
@@ -3483,7 +8766,7 @@
   },
   {
     "id": "ai103-q66",
-    "num": 66,
+    "num": 199,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -3536,7 +8819,7 @@
   },
   {
     "id": "ai103-q67",
-    "num": 67,
+    "num": 200,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "multiple_choice",
@@ -3594,7 +8877,7 @@
   },
   {
     "id": "ai103-q68",
-    "num": 68,
+    "num": 201,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -3647,7 +8930,7 @@
   },
   {
     "id": "ai103-q69",
-    "num": 69,
+    "num": 202,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "multiple_choice",
@@ -3705,7 +8988,7 @@
   },
   {
     "id": "ai103-q70",
-    "num": 70,
+    "num": 203,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -3758,7 +9041,7 @@
   },
   {
     "id": "ai103-q71",
-    "num": 71,
+    "num": 204,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "multiple_choice",
@@ -3816,7 +9099,7 @@
   },
   {
     "id": "ai103-q72",
-    "num": 72,
+    "num": 205,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -3869,7 +9152,7 @@
   },
   {
     "id": "ai103-q73",
-    "num": 73,
+    "num": 206,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "multiple_choice",
@@ -3927,7 +9210,7 @@
   },
   {
     "id": "ai103-q74",
-    "num": 74,
+    "num": 207,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -3980,7 +9263,7 @@
   },
   {
     "id": "ai103-q75",
-    "num": 75,
+    "num": 208,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "multiple_choice",
@@ -4038,7 +9321,7 @@
   },
   {
     "id": "ai103-q76",
-    "num": 76,
+    "num": 209,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -4091,7 +9374,7 @@
   },
   {
     "id": "ai103-q77",
-    "num": 77,
+    "num": 210,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "multiple_choice",
@@ -4149,7 +9432,7 @@
   },
   {
     "id": "ai103-q78",
-    "num": 78,
+    "num": 211,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -4202,7 +9485,7 @@
   },
   {
     "id": "ai103-q79",
-    "num": 79,
+    "num": 212,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -4255,7 +9538,7 @@
   },
   {
     "id": "ai103-q80",
-    "num": 80,
+    "num": 213,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -4308,7 +9591,7 @@
   },
   {
     "id": "ai103-q81",
-    "num": 81,
+    "num": 214,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -4361,7 +9644,7 @@
   },
   {
     "id": "ai103-q82",
-    "num": 82,
+    "num": 215,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -4414,7 +9697,7 @@
   },
   {
     "id": "ai103-q83",
-    "num": 83,
+    "num": 216,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -4467,7 +9750,7 @@
   },
   {
     "id": "ai103-q84",
-    "num": 84,
+    "num": 217,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -4520,7 +9803,7 @@
   },
   {
     "id": "ai103-q85",
-    "num": 85,
+    "num": 218,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -4573,7 +9856,7 @@
   },
   {
     "id": "ai103-q86",
-    "num": 86,
+    "num": 219,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -4626,7 +9909,7 @@
   },
   {
     "id": "ai103-q87",
-    "num": 87,
+    "num": 220,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -4679,7 +9962,7 @@
   },
   {
     "id": "ai103-q88",
-    "num": 88,
+    "num": 221,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -4732,7 +10015,7 @@
   },
   {
     "id": "ai103-q89",
-    "num": 89,
+    "num": 222,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -4785,7 +10068,7 @@
   },
   {
     "id": "ai103-q90",
-    "num": 90,
+    "num": 223,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -4838,7 +10121,7 @@
   },
   {
     "id": "ai103-q91",
-    "num": 91,
+    "num": 224,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -4891,7 +10174,7 @@
   },
   {
     "id": "ai103-q92",
-    "num": 92,
+    "num": 225,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -4944,7 +10227,7 @@
   },
   {
     "id": "ai103-q93",
-    "num": 93,
+    "num": 226,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -4997,7 +10280,7 @@
   },
   {
     "id": "ai103-q94",
-    "num": 94,
+    "num": 227,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -5050,7 +10333,7 @@
   },
   {
     "id": "ai103-q95",
-    "num": 95,
+    "num": 228,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -5103,7 +10386,7 @@
   },
   {
     "id": "ai103-q96",
-    "num": 96,
+    "num": 229,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -5156,7 +10439,7 @@
   },
   {
     "id": "ai103-q97",
-    "num": 97,
+    "num": 230,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -5209,7 +10492,7 @@
   },
   {
     "id": "ai103-q98",
-    "num": 98,
+    "num": 231,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -5262,7 +10545,7 @@
   },
   {
     "id": "ai103-q99",
-    "num": 99,
+    "num": 232,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -5315,7 +10598,7 @@
   },
   {
     "id": "ai103-q100",
-    "num": 100,
+    "num": 233,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -5368,7 +10651,7 @@
   },
   {
     "id": "ai103-q101",
-    "num": 101,
+    "num": 234,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -5421,7 +10704,7 @@
   },
   {
     "id": "ai103-q102",
-    "num": 102,
+    "num": 235,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -5474,7 +10757,7 @@
   },
   {
     "id": "ai103-q103",
-    "num": 103,
+    "num": 236,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -5527,7 +10810,7 @@
   },
   {
     "id": "ai103-q104",
-    "num": 104,
+    "num": 237,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -5580,7 +10863,7 @@
   },
   {
     "id": "ai103-q105",
-    "num": 105,
+    "num": 238,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -5633,7 +10916,7 @@
   },
   {
     "id": "ai103-q106",
-    "num": 106,
+    "num": 239,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -5686,7 +10969,7 @@
   },
   {
     "id": "ai103-q107",
-    "num": 107,
+    "num": 240,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -5739,7 +11022,7 @@
   },
   {
     "id": "ai103-q108",
-    "num": 108,
+    "num": 241,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -5792,7 +11075,7 @@
   },
   {
     "id": "ai103-q109",
-    "num": 109,
+    "num": 242,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -5845,7 +11128,7 @@
   },
   {
     "id": "ai103-q110",
-    "num": 110,
+    "num": 243,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -5898,7 +11181,7 @@
   },
   {
     "id": "ai103-q111",
-    "num": 111,
+    "num": 244,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -5951,7 +11234,7 @@
   },
   {
     "id": "ai103-q112",
-    "num": 112,
+    "num": 245,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -6004,7 +11287,7 @@
   },
   {
     "id": "ai103-q113",
-    "num": 113,
+    "num": 246,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -6057,7 +11340,7 @@
   },
   {
     "id": "ai103-q114",
-    "num": 114,
+    "num": 247,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -6110,7 +11393,7 @@
   },
   {
     "id": "ai103-q115",
-    "num": 115,
+    "num": 248,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -6163,7 +11446,7 @@
   },
   {
     "id": "ai103-q116",
-    "num": 116,
+    "num": 249,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -6216,7 +11499,7 @@
   },
   {
     "id": "ai103-q117",
-    "num": 117,
+    "num": 250,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -6269,7 +11552,7 @@
   },
   {
     "id": "ai103-q118",
-    "num": 118,
+    "num": 251,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -6322,7 +11605,7 @@
   },
   {
     "id": "ai103-q119",
-    "num": 119,
+    "num": 252,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -6375,7 +11658,7 @@
   },
   {
     "id": "ai103-q120",
-    "num": 120,
+    "num": 253,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -6428,7 +11711,7 @@
   },
   {
     "id": "ai103-q121",
-    "num": 121,
+    "num": 254,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -6481,7 +11764,7 @@
   },
   {
     "id": "ai103-q122",
-    "num": 122,
+    "num": 255,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -6534,7 +11817,7 @@
   },
   {
     "id": "ai103-q123",
-    "num": 123,
+    "num": 256,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -6587,7 +11870,7 @@
   },
   {
     "id": "ai103-q124",
-    "num": 124,
+    "num": 257,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -6640,7 +11923,7 @@
   },
   {
     "id": "ai103-q125",
-    "num": 125,
+    "num": 258,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -6693,7 +11976,7 @@
   },
   {
     "id": "ai103-q126",
-    "num": 126,
+    "num": 259,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -6746,7 +12029,7 @@
   },
   {
     "id": "ai103-q127",
-    "num": 127,
+    "num": 260,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -6799,7 +12082,7 @@
   },
   {
     "id": "ai103-q128",
-    "num": 128,
+    "num": 261,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -6852,7 +12135,7 @@
   },
   {
     "id": "ai103-q129",
-    "num": 129,
+    "num": 262,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -6905,7 +12188,7 @@
   },
   {
     "id": "ai103-q130",
-    "num": 130,
+    "num": 263,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -6958,7 +12241,7 @@
   },
   {
     "id": "ai103-q131",
-    "num": 131,
+    "num": 264,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -7011,7 +12294,7 @@
   },
   {
     "id": "ai103-q132",
-    "num": 132,
+    "num": 265,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -7064,7 +12347,7 @@
   },
   {
     "id": "ai103-q133",
-    "num": 133,
+    "num": 266,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -7117,7 +12400,7 @@
   },
   {
     "id": "ai103-q134",
-    "num": 134,
+    "num": 267,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -7170,7 +12453,7 @@
   },
   {
     "id": "ai103-q135",
-    "num": 135,
+    "num": 268,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -7223,7 +12506,7 @@
   },
   {
     "id": "ai103-q136",
-    "num": 136,
+    "num": 269,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -7276,7 +12559,7 @@
   },
   {
     "id": "ai103-q137",
-    "num": 137,
+    "num": 270,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -7329,7 +12612,7 @@
   },
   {
     "id": "ai103-q138",
-    "num": 138,
+    "num": 271,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -7382,7 +12665,7 @@
   },
   {
     "id": "ai103-q139",
-    "num": 139,
+    "num": 272,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -7435,7 +12718,7 @@
   },
   {
     "id": "ai103-q140",
-    "num": 140,
+    "num": 273,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -7488,7 +12771,7 @@
   },
   {
     "id": "ai103-q141",
-    "num": 141,
+    "num": 274,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -7541,7 +12824,7 @@
   },
   {
     "id": "ai103-q142",
-    "num": 142,
+    "num": 275,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -7594,7 +12877,7 @@
   },
   {
     "id": "ai103-q143",
-    "num": 143,
+    "num": 276,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -7647,7 +12930,7 @@
   },
   {
     "id": "ai103-q144",
-    "num": 144,
+    "num": 277,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -7700,7 +12983,7 @@
   },
   {
     "id": "ai103-q145",
-    "num": 145,
+    "num": 278,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -7753,7 +13036,7 @@
   },
   {
     "id": "ai103-q146",
-    "num": 146,
+    "num": 279,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -7806,7 +13089,7 @@
   },
   {
     "id": "ai103-q147",
-    "num": 147,
+    "num": 280,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -7859,7 +13142,7 @@
   },
   {
     "id": "ai103-q148",
-    "num": 148,
+    "num": 281,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -7912,7 +13195,7 @@
   },
   {
     "id": "ai103-q149",
-    "num": 149,
+    "num": 282,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -7965,7 +13248,7 @@
   },
   {
     "id": "ai103-q150",
-    "num": 150,
+    "num": 283,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -8018,7 +13301,7 @@
   },
   {
     "id": "ai103-q151",
-    "num": 151,
+    "num": 284,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -8071,7 +13354,7 @@
   },
   {
     "id": "ai103-q152",
-    "num": 152,
+    "num": 285,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -8124,7 +13407,7 @@
   },
   {
     "id": "ai103-q153",
-    "num": 153,
+    "num": 286,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -8177,7 +13460,7 @@
   },
   {
     "id": "ai103-q154",
-    "num": 154,
+    "num": 287,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -8230,7 +13513,7 @@
   },
   {
     "id": "ai103-q155",
-    "num": 155,
+    "num": 288,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -8283,7 +13566,7 @@
   },
   {
     "id": "ai103-q156",
-    "num": 156,
+    "num": 289,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -8336,7 +13619,7 @@
   },
   {
     "id": "ai103-q157",
-    "num": 157,
+    "num": 290,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -8389,7 +13672,7 @@
   },
   {
     "id": "ai103-q158",
-    "num": 158,
+    "num": 291,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -8442,7 +13725,7 @@
   },
   {
     "id": "ai103-q159",
-    "num": 159,
+    "num": 292,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -8495,7 +13778,7 @@
   },
   {
     "id": "ai103-q160",
-    "num": 160,
+    "num": 293,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -8548,7 +13831,7 @@
   },
   {
     "id": "ai103-q161",
-    "num": 161,
+    "num": 294,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -8601,7 +13884,7 @@
   },
   {
     "id": "ai103-q162",
-    "num": 162,
+    "num": 295,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -8654,7 +13937,7 @@
   },
   {
     "id": "ai103-q163",
-    "num": 163,
+    "num": 296,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -8707,7 +13990,7 @@
   },
   {
     "id": "ai103-q164",
-    "num": 164,
+    "num": 297,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -8760,7 +14043,7 @@
   },
   {
     "id": "ai103-q165",
-    "num": 165,
+    "num": 298,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -8813,7 +14096,7 @@
   },
   {
     "id": "ai103-q166",
-    "num": 166,
+    "num": 299,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -8866,7 +14149,7 @@
   },
   {
     "id": "ai103-q167",
-    "num": 167,
+    "num": 300,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -8919,7 +14202,7 @@
   },
   {
     "id": "ai103-q168",
-    "num": 168,
+    "num": 301,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -8972,7 +14255,7 @@
   },
   {
     "id": "ai103-q169",
-    "num": 169,
+    "num": 302,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -9025,7 +14308,7 @@
   },
   {
     "id": "ai103-q170",
-    "num": 170,
+    "num": 303,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -9078,7 +14361,7 @@
   },
   {
     "id": "ai103-q171",
-    "num": 171,
+    "num": 304,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -9131,7 +14414,7 @@
   },
   {
     "id": "ai103-q172",
-    "num": 172,
+    "num": 305,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -9184,7 +14467,7 @@
   },
   {
     "id": "ai103-q173",
-    "num": 173,
+    "num": 306,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -9237,7 +14520,7 @@
   },
   {
     "id": "ai103-q174",
-    "num": 174,
+    "num": 307,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -9290,7 +14573,7 @@
   },
   {
     "id": "ai103-q175",
-    "num": 175,
+    "num": 308,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -9343,7 +14626,7 @@
   },
   {
     "id": "ai103-q176",
-    "num": 176,
+    "num": 309,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -9396,7 +14679,7 @@
   },
   {
     "id": "ai103-q177",
-    "num": 177,
+    "num": 310,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -9449,7 +14732,7 @@
   },
   {
     "id": "ai103-q178",
-    "num": 178,
+    "num": 311,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -9502,7 +14785,7 @@
   },
   {
     "id": "ai103-q179",
-    "num": 179,
+    "num": 312,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -9555,7 +14838,7 @@
   },
   {
     "id": "ai103-q180",
-    "num": 180,
+    "num": 313,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -9608,7 +14891,7 @@
   },
   {
     "id": "ai103-q181",
-    "num": 181,
+    "num": 314,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -9661,7 +14944,7 @@
   },
   {
     "id": "ai103-q182",
-    "num": 182,
+    "num": 315,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -9714,7 +14997,7 @@
   },
   {
     "id": "ai103-q183",
-    "num": 183,
+    "num": 316,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -9767,7 +15050,7 @@
   },
   {
     "id": "ai103-q184",
-    "num": 184,
+    "num": 317,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -9820,7 +15103,7 @@
   },
   {
     "id": "ai103-q185",
-    "num": 185,
+    "num": 318,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -9873,7 +15156,7 @@
   },
   {
     "id": "ai103-q186",
-    "num": 186,
+    "num": 319,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -9926,7 +15209,7 @@
   },
   {
     "id": "ai103-q187",
-    "num": 187,
+    "num": 320,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -9979,7 +15262,7 @@
   },
   {
     "id": "ai103-q188",
-    "num": 188,
+    "num": 321,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -10032,7 +15315,7 @@
   },
   {
     "id": "ai103-q189",
-    "num": 189,
+    "num": 322,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -10085,7 +15368,7 @@
   },
   {
     "id": "ai103-q190",
-    "num": 190,
+    "num": 323,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -10138,7 +15421,7 @@
   },
   {
     "id": "ai103-q191",
-    "num": 191,
+    "num": 324,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -10191,7 +15474,7 @@
   },
   {
     "id": "ai103-q192",
-    "num": 192,
+    "num": 325,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -10244,7 +15527,7 @@
   },
   {
     "id": "ai103-q193",
-    "num": 193,
+    "num": 326,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -10297,7 +15580,7 @@
   },
   {
     "id": "ai103-q194",
-    "num": 194,
+    "num": 327,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -10350,7 +15633,7 @@
   },
   {
     "id": "ai103-q195",
-    "num": 195,
+    "num": 328,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -10403,7 +15686,7 @@
   },
   {
     "id": "ai103-q196",
-    "num": 196,
+    "num": 329,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -10456,7 +15739,7 @@
   },
   {
     "id": "ai103-q197",
-    "num": 197,
+    "num": 330,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -10509,7 +15792,7 @@
   },
   {
     "id": "ai103-q198",
-    "num": 198,
+    "num": 331,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -10562,7 +15845,7 @@
   },
   {
     "id": "ai103-q199",
-    "num": 199,
+    "num": 332,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -10615,7 +15898,7 @@
   },
   {
     "id": "ai103-q200",
-    "num": 200,
+    "num": 333,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -10668,7 +15951,7 @@
   },
   {
     "id": "ai103-q201",
-    "num": 201,
+    "num": 334,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -10721,7 +16004,7 @@
   },
   {
     "id": "ai103-q202",
-    "num": 202,
+    "num": 335,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -10774,7 +16057,7 @@
   },
   {
     "id": "ai103-q203",
-    "num": 203,
+    "num": 336,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -10827,7 +16110,7 @@
   },
   {
     "id": "ai103-q204",
-    "num": 204,
+    "num": 337,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -10880,7 +16163,7 @@
   },
   {
     "id": "ai103-q205",
-    "num": 205,
+    "num": 338,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -10933,7 +16216,7 @@
   },
   {
     "id": "ai103-q206",
-    "num": 206,
+    "num": 339,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -10986,7 +16269,7 @@
   },
   {
     "id": "ai103-q207",
-    "num": 207,
+    "num": 340,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -11039,7 +16322,7 @@
   },
   {
     "id": "ai103-q208",
-    "num": 208,
+    "num": 341,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -11092,7 +16375,7 @@
   },
   {
     "id": "ai103-q209",
-    "num": 209,
+    "num": 342,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -11145,7 +16428,7 @@
   },
   {
     "id": "ai103-q210",
-    "num": 210,
+    "num": 343,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -11198,7 +16481,7 @@
   },
   {
     "id": "ai103-q211",
-    "num": 211,
+    "num": 344,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -11251,7 +16534,7 @@
   },
   {
     "id": "ai103-q212",
-    "num": 212,
+    "num": 345,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -11304,7 +16587,7 @@
   },
   {
     "id": "ai103-q213",
-    "num": 213,
+    "num": 346,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -11357,7 +16640,7 @@
   },
   {
     "id": "ai103-q214",
-    "num": 214,
+    "num": 347,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -11410,7 +16693,7 @@
   },
   {
     "id": "ai103-q215",
-    "num": 215,
+    "num": 348,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -11463,7 +16746,7 @@
   },
   {
     "id": "ai103-q216",
-    "num": 216,
+    "num": 349,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -11516,7 +16799,7 @@
   },
   {
     "id": "ai103-q217",
-    "num": 217,
+    "num": 350,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -11569,7 +16852,7 @@
   },
   {
     "id": "ai103-q218",
-    "num": 218,
+    "num": 351,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -11622,7 +16905,7 @@
   },
   {
     "id": "ai103-q219",
-    "num": 219,
+    "num": 352,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -11675,7 +16958,7 @@
   },
   {
     "id": "ai103-q220",
-    "num": 220,
+    "num": 353,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -11728,7 +17011,7 @@
   },
   {
     "id": "ai103-q221",
-    "num": 221,
+    "num": 354,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -11781,7 +17064,7 @@
   },
   {
     "id": "ai103-q222",
-    "num": 222,
+    "num": 355,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -11834,7 +17117,7 @@
   },
   {
     "id": "ai103-q223",
-    "num": 223,
+    "num": 356,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -11887,7 +17170,7 @@
   },
   {
     "id": "ai103-q224",
-    "num": 224,
+    "num": 357,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -11940,7 +17223,7 @@
   },
   {
     "id": "ai103-q225",
-    "num": 225,
+    "num": 358,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -11993,7 +17276,7 @@
   },
   {
     "id": "ai103-q226",
-    "num": 226,
+    "num": 359,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -12046,7 +17329,7 @@
   },
   {
     "id": "ai103-q227",
-    "num": 227,
+    "num": 360,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -12099,7 +17382,7 @@
   },
   {
     "id": "ai103-q228",
-    "num": 228,
+    "num": 361,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -12152,7 +17435,7 @@
   },
   {
     "id": "ai103-q229",
-    "num": 229,
+    "num": 362,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -12205,7 +17488,7 @@
   },
   {
     "id": "ai103-q230",
-    "num": 230,
+    "num": 363,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -12258,7 +17541,7 @@
   },
   {
     "id": "ai103-q231",
-    "num": 231,
+    "num": 364,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -12311,7 +17594,7 @@
   },
   {
     "id": "ai103-q232",
-    "num": 232,
+    "num": 365,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -12364,7 +17647,7 @@
   },
   {
     "id": "ai103-q233",
-    "num": 233,
+    "num": 366,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -12417,7 +17700,7 @@
   },
   {
     "id": "ai103-q234",
-    "num": 234,
+    "num": 367,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -12470,7 +17753,7 @@
   },
   {
     "id": "ai103-q235",
-    "num": 235,
+    "num": 368,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -12523,7 +17806,7 @@
   },
   {
     "id": "ai103-q236",
-    "num": 236,
+    "num": 369,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -12576,7 +17859,7 @@
   },
   {
     "id": "ai103-q237",
-    "num": 237,
+    "num": 370,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -12629,7 +17912,7 @@
   },
   {
     "id": "ai103-q238",
-    "num": 238,
+    "num": 371,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -12682,7 +17965,7 @@
   },
   {
     "id": "ai103-q239",
-    "num": 239,
+    "num": 372,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -12735,7 +18018,7 @@
   },
   {
     "id": "ai103-q240",
-    "num": 240,
+    "num": 373,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -12788,7 +18071,7 @@
   },
   {
     "id": "ai103-q241",
-    "num": 241,
+    "num": 374,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -12841,7 +18124,7 @@
   },
   {
     "id": "ai103-q242",
-    "num": 242,
+    "num": 375,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -12894,7 +18177,7 @@
   },
   {
     "id": "ai103-q243",
-    "num": 243,
+    "num": 376,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -12947,7 +18230,7 @@
   },
   {
     "id": "ai103-q244",
-    "num": 244,
+    "num": 377,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -13000,7 +18283,7 @@
   },
   {
     "id": "ai103-q245",
-    "num": 245,
+    "num": 378,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -13053,7 +18336,7 @@
   },
   {
     "id": "ai103-q246",
-    "num": 246,
+    "num": 379,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -13106,7 +18389,7 @@
   },
   {
     "id": "ai103-q247",
-    "num": 247,
+    "num": 380,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -13159,7 +18442,7 @@
   },
   {
     "id": "ai103-q248",
-    "num": 248,
+    "num": 381,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -13212,7 +18495,7 @@
   },
   {
     "id": "ai103-q249",
-    "num": 249,
+    "num": 382,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -13265,7 +18548,7 @@
   },
   {
     "id": "ai103-q250",
-    "num": 250,
+    "num": 383,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -13318,7 +18601,7 @@
   },
   {
     "id": "ai103-q251",
-    "num": 251,
+    "num": 384,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -13371,7 +18654,7 @@
   },
   {
     "id": "ai103-q252",
-    "num": 252,
+    "num": 385,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -13424,7 +18707,7 @@
   },
   {
     "id": "ai103-q253",
-    "num": 253,
+    "num": 386,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -13477,7 +18760,7 @@
   },
   {
     "id": "ai103-q254",
-    "num": 254,
+    "num": 387,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -13530,7 +18813,7 @@
   },
   {
     "id": "ai103-q255",
-    "num": 255,
+    "num": 388,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -13583,7 +18866,7 @@
   },
   {
     "id": "ai103-q256",
-    "num": 256,
+    "num": 389,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -13636,7 +18919,7 @@
   },
   {
     "id": "ai103-q257",
-    "num": 257,
+    "num": 390,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -13689,7 +18972,7 @@
   },
   {
     "id": "ai103-q258",
-    "num": 258,
+    "num": 391,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -13742,7 +19025,7 @@
   },
   {
     "id": "ai103-q259",
-    "num": 259,
+    "num": 392,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -13795,7 +19078,7 @@
   },
   {
     "id": "ai103-q260",
-    "num": 260,
+    "num": 393,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -13848,7 +19131,7 @@
   },
   {
     "id": "ai103-q261",
-    "num": 261,
+    "num": 394,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -13901,7 +19184,7 @@
   },
   {
     "id": "ai103-q262",
-    "num": 262,
+    "num": 395,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -13954,7 +19237,7 @@
   },
   {
     "id": "ai103-q263",
-    "num": 263,
+    "num": 396,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -14007,7 +19290,7 @@
   },
   {
     "id": "ai103-q264",
-    "num": 264,
+    "num": 397,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -14060,7 +19343,7 @@
   },
   {
     "id": "ai103-q265",
-    "num": 265,
+    "num": 398,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -14113,7 +19396,7 @@
   },
   {
     "id": "ai103-q266",
-    "num": 266,
+    "num": 399,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -14166,7 +19449,7 @@
   },
   {
     "id": "ai103-q267",
-    "num": 267,
+    "num": 400,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -14219,7 +19502,7 @@
   },
   {
     "id": "ai103-q268",
-    "num": 268,
+    "num": 401,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -14272,7 +19555,7 @@
   },
   {
     "id": "ai103-q269",
-    "num": 269,
+    "num": 402,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -14325,7 +19608,7 @@
   },
   {
     "id": "ai103-q270",
-    "num": 270,
+    "num": 403,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -14378,7 +19661,7 @@
   },
   {
     "id": "ai103-q271",
-    "num": 271,
+    "num": 404,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -14431,7 +19714,7 @@
   },
   {
     "id": "ai103-q272",
-    "num": 272,
+    "num": 405,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -14484,7 +19767,7 @@
   },
   {
     "id": "ai103-q273",
-    "num": 273,
+    "num": 406,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -14537,7 +19820,7 @@
   },
   {
     "id": "ai103-q274",
-    "num": 274,
+    "num": 407,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -14590,7 +19873,7 @@
   },
   {
     "id": "ai103-q275",
-    "num": 275,
+    "num": 408,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -14643,7 +19926,7 @@
   },
   {
     "id": "ai103-q276",
-    "num": 276,
+    "num": 409,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -14696,7 +19979,7 @@
   },
   {
     "id": "ai103-q277",
-    "num": 277,
+    "num": 410,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -14749,7 +20032,7 @@
   },
   {
     "id": "ai103-q278",
-    "num": 278,
+    "num": 411,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -14802,7 +20085,7 @@
   },
   {
     "id": "ai103-q279",
-    "num": 279,
+    "num": 412,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -14855,7 +20138,7 @@
   },
   {
     "id": "ai103-q280",
-    "num": 280,
+    "num": 413,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -14908,7 +20191,7 @@
   },
   {
     "id": "ai103-q281",
-    "num": 281,
+    "num": 414,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -14961,7 +20244,7 @@
   },
   {
     "id": "ai103-q282",
-    "num": 282,
+    "num": 415,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -15014,7 +20297,7 @@
   },
   {
     "id": "ai103-q283",
-    "num": 283,
+    "num": 416,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -15067,7 +20350,7 @@
   },
   {
     "id": "ai103-q284",
-    "num": 284,
+    "num": 417,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -15120,7 +20403,7 @@
   },
   {
     "id": "ai103-q285",
-    "num": 285,
+    "num": 418,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -15173,7 +20456,7 @@
   },
   {
     "id": "ai103-q286",
-    "num": 286,
+    "num": 419,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -15226,7 +20509,7 @@
   },
   {
     "id": "ai103-q287",
-    "num": 287,
+    "num": 420,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -15279,7 +20562,7 @@
   },
   {
     "id": "ai103-q288",
-    "num": 288,
+    "num": 421,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -15332,7 +20615,7 @@
   },
   {
     "id": "ai103-q289",
-    "num": 289,
+    "num": 422,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -15385,7 +20668,7 @@
   },
   {
     "id": "ai103-q290",
-    "num": 290,
+    "num": 423,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -15438,7 +20721,7 @@
   },
   {
     "id": "ai103-q291",
-    "num": 291,
+    "num": 424,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -15491,7 +20774,7 @@
   },
   {
     "id": "ai103-q292",
-    "num": 292,
+    "num": 425,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -15544,7 +20827,7 @@
   },
   {
     "id": "ai103-q293",
-    "num": 293,
+    "num": 426,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -15597,7 +20880,7 @@
   },
   {
     "id": "ai103-q294",
-    "num": 294,
+    "num": 427,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -15650,7 +20933,7 @@
   },
   {
     "id": "ai103-q295",
-    "num": 295,
+    "num": 428,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -15703,7 +20986,7 @@
   },
   {
     "id": "ai103-q296",
-    "num": 296,
+    "num": 429,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -15756,7 +21039,7 @@
   },
   {
     "id": "ai103-q297",
-    "num": 297,
+    "num": 430,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -15809,7 +21092,7 @@
   },
   {
     "id": "ai103-q298",
-    "num": 298,
+    "num": 431,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -15862,7 +21145,7 @@
   },
   {
     "id": "ai103-q299",
-    "num": 299,
+    "num": 432,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -15915,7 +21198,7 @@
   },
   {
     "id": "ai103-q300",
-    "num": 300,
+    "num": 433,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -15968,7 +21251,7 @@
   },
   {
     "id": "ai103-q301",
-    "num": 301,
+    "num": 434,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -16021,7 +21304,7 @@
   },
   {
     "id": "ai103-q302",
-    "num": 302,
+    "num": 435,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -16074,7 +21357,7 @@
   },
   {
     "id": "ai103-q303",
-    "num": 303,
+    "num": 436,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -16127,7 +21410,7 @@
   },
   {
     "id": "ai103-q304",
-    "num": 304,
+    "num": 437,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -16180,7 +21463,7 @@
   },
   {
     "id": "ai103-q305",
-    "num": 305,
+    "num": 438,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -16233,7 +21516,7 @@
   },
   {
     "id": "ai103-q306",
-    "num": 306,
+    "num": 439,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -16286,7 +21569,7 @@
   },
   {
     "id": "ai103-q307",
-    "num": 307,
+    "num": 440,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -16339,7 +21622,7 @@
   },
   {
     "id": "ai103-q308",
-    "num": 308,
+    "num": 441,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -16392,7 +21675,7 @@
   },
   {
     "id": "ai103-q309",
-    "num": 309,
+    "num": 442,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -16445,7 +21728,7 @@
   },
   {
     "id": "ai103-q310",
-    "num": 310,
+    "num": 443,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -16498,7 +21781,7 @@
   },
   {
     "id": "ai103-q311",
-    "num": 311,
+    "num": 444,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -16551,7 +21834,7 @@
   },
   {
     "id": "ai103-q312",
-    "num": 312,
+    "num": 445,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -16604,7 +21887,7 @@
   },
   {
     "id": "ai103-q313",
-    "num": 313,
+    "num": 446,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -16657,7 +21940,7 @@
   },
   {
     "id": "ai103-q314",
-    "num": 314,
+    "num": 447,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -16710,7 +21993,7 @@
   },
   {
     "id": "ai103-q315",
-    "num": 315,
+    "num": 448,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -16763,7 +22046,7 @@
   },
   {
     "id": "ai103-q316",
-    "num": 316,
+    "num": 449,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -16816,7 +22099,7 @@
   },
   {
     "id": "ai103-q317",
-    "num": 317,
+    "num": 450,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -16869,7 +22152,7 @@
   },
   {
     "id": "ai103-q318",
-    "num": 318,
+    "num": 451,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -16922,7 +22205,7 @@
   },
   {
     "id": "ai103-q319",
-    "num": 319,
+    "num": 452,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -16975,7 +22258,7 @@
   },
   {
     "id": "ai103-q320",
-    "num": 320,
+    "num": 453,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -17028,7 +22311,7 @@
   },
   {
     "id": "ai103-q321",
-    "num": 321,
+    "num": 454,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -17081,7 +22364,7 @@
   },
   {
     "id": "ai103-q322",
-    "num": 322,
+    "num": 455,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -17134,7 +22417,7 @@
   },
   {
     "id": "ai103-q323",
-    "num": 323,
+    "num": 456,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -17187,7 +22470,7 @@
   },
   {
     "id": "ai103-q324",
-    "num": 324,
+    "num": 457,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -17240,7 +22523,7 @@
   },
   {
     "id": "ai103-q325",
-    "num": 325,
+    "num": 458,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -17293,7 +22576,7 @@
   },
   {
     "id": "ai103-q326",
-    "num": 326,
+    "num": 459,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -17346,7 +22629,7 @@
   },
   {
     "id": "ai103-q327",
-    "num": 327,
+    "num": 460,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -17399,7 +22682,7 @@
   },
   {
     "id": "ai103-q328",
-    "num": 328,
+    "num": 461,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -17452,7 +22735,7 @@
   },
   {
     "id": "ai103-q329",
-    "num": 329,
+    "num": 462,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -17505,7 +22788,7 @@
   },
   {
     "id": "ai103-q330",
-    "num": 330,
+    "num": 463,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -17558,7 +22841,7 @@
   },
   {
     "id": "ai103-q331",
-    "num": 331,
+    "num": 464,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -17611,7 +22894,7 @@
   },
   {
     "id": "ai103-q332",
-    "num": 332,
+    "num": 465,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -17664,7 +22947,7 @@
   },
   {
     "id": "ai103-q333",
-    "num": 333,
+    "num": 466,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -17717,7 +23000,7 @@
   },
   {
     "id": "ai103-q334",
-    "num": 334,
+    "num": 467,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -17770,7 +23053,7 @@
   },
   {
     "id": "ai103-q335",
-    "num": 335,
+    "num": 468,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -17823,7 +23106,7 @@
   },
   {
     "id": "ai103-q336",
-    "num": 336,
+    "num": 469,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -17876,7 +23159,7 @@
   },
   {
     "id": "ai103-q337",
-    "num": 337,
+    "num": 470,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -17929,7 +23212,7 @@
   },
   {
     "id": "ai103-q338",
-    "num": 338,
+    "num": 471,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -17982,7 +23265,7 @@
   },
   {
     "id": "ai103-q339",
-    "num": 339,
+    "num": 472,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -18035,7 +23318,7 @@
   },
   {
     "id": "ai103-q340",
-    "num": 340,
+    "num": 473,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -18088,7 +23371,7 @@
   },
   {
     "id": "ai103-q341",
-    "num": 341,
+    "num": 474,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -18141,7 +23424,7 @@
   },
   {
     "id": "ai103-q342",
-    "num": 342,
+    "num": 475,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -18194,7 +23477,7 @@
   },
   {
     "id": "ai103-q343",
-    "num": 343,
+    "num": 476,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -18247,7 +23530,7 @@
   },
   {
     "id": "ai103-q344",
-    "num": 344,
+    "num": 477,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -18300,7 +23583,7 @@
   },
   {
     "id": "ai103-q345",
-    "num": 345,
+    "num": 478,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -18353,7 +23636,7 @@
   },
   {
     "id": "ai103-q346",
-    "num": 346,
+    "num": 479,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -18406,7 +23689,7 @@
   },
   {
     "id": "ai103-q347",
-    "num": 347,
+    "num": 480,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -18459,7 +23742,7 @@
   },
   {
     "id": "ai103-q348",
-    "num": 348,
+    "num": 481,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -18512,7 +23795,7 @@
   },
   {
     "id": "ai103-q349",
-    "num": 349,
+    "num": 482,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -18565,7 +23848,7 @@
   },
   {
     "id": "ai103-q350",
-    "num": 350,
+    "num": 483,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -18618,7 +23901,7 @@
   },
   {
     "id": "ai103-q351",
-    "num": 351,
+    "num": 484,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -18671,7 +23954,7 @@
   },
   {
     "id": "ai103-q352",
-    "num": 352,
+    "num": 485,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -18724,7 +24007,7 @@
   },
   {
     "id": "ai103-q353",
-    "num": 353,
+    "num": 486,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -18777,7 +24060,7 @@
   },
   {
     "id": "ai103-q354",
-    "num": 354,
+    "num": 487,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -18830,7 +24113,7 @@
   },
   {
     "id": "ai103-q355",
-    "num": 355,
+    "num": 488,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -18883,7 +24166,7 @@
   },
   {
     "id": "ai103-q356",
-    "num": 356,
+    "num": 489,
     "courseId": "azure-ai-103",
     "lang": "en",
     "type": "single_choice",
@@ -18938,8 +24221,5 @@
 
   if (typeof window !== 'undefined') {
     window.questionsData = (window.questionsData || []).concat(azureAi103Questions);
-  }
-  if (typeof module !== 'undefined' && module.exports) {
-    module.exports = azureAi103Questions;
   }
 })();

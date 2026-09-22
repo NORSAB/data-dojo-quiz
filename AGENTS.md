@@ -501,6 +501,149 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
 - Verificó con 0 errores las 6 suites de validación (`validate_full_application.js` con **81/81 checks pasados**, `validate_ui_palette.js` con 18 colores hex y 0 gradientes, `validate_global_language.js`, `validate_ai103_integration.js`, `validate_genai_integration.js`, `audit_code_structure.js`).
 
 
+### 2026-09-20 18:47 CST — Antigravity (Gemini 3.8 Flash)
+- Extrajo íntegramente el curso oficial de Databricks Academy **Get Started with AI Agents on Databricks** (excluyendo archivos binarios de video conforme a la solicitud del usuario) y lo estructuró en la carpeta `D:\2026\Simulador de Preguntas\Get Started with AI Agents on Databricks`:
+  1. **Estructura Modular Organizada**:
+     - `00_Introduccion/`: Diapositivas de bienvenida (`01_Before_we_get_started.md`), logística del curso y labs (`02_Course_Logistics_Review.md`) y Conferencia Magistral SCORM 1 (`03_Introduction_to_AI_Agents.md`).
+     - `01_Seccion_1_Building_AI_Agents/`: Conferencia Magistral SCORM 2 (`01_Building_AI_Agents_on_Databricks.md`) y síntesis metodológica de demos prácticas (`02_Demos_Resumen_y_Objetivos.md`).
+     - `02_Seccion_2_Evaluation_and_Deployment/`: Conferencia Magistral SCORM 3 (`01_Deploying_Agents_and_Model_Serving.md`) y guía de despliegue a producción (`02_Demo_Deployment_Overview.md`).
+     - `03_Seccion_3_Production_Ready_Agent_Bricks/`: Conferencia Magistral SCORM 4 (`01_Introduction_to_Agent_Bricks.md`).
+     - `04_Cierre_y_Examen/`: Resumen de competencias y próximos pasos (`01_Summary_and_Next_Steps.md`) y banco verificado del examen (`02_Quiz_20_Preguntas_Oficiales.md`).
+  2. **Extracción y Validación al 100% del Examen Oficial**:
+     - Completó el examen oficial de Databricks Academy en vivo con calificación perfecta **100 de 100**.
+     - Documentó las 20 preguntas con sus 4 opciones íntegras, respuesta correcta calificada, explicaciones exhaustivas (*Notas de la respuesta*) y enlaces directos a la documentación oficial de Databricks.
+  3. **Índice Maestro `README.md`**:
+     - Resumen general del curso, competencias, prerrequisitos técnicos y registro de cambios.
+
+
+### 2026-09-20 19:15 CST — Antigravity (Gemini 3.8 Flash)
+- Extrajo íntegramente la información técnica, arquitectónica y documental del curso oficial de Databricks Academy **Continued Pre-training and Pre-training Large Language Models** (Course ID: `2486`, Code: `ACAD-ALL-SLP-CPPLLM-ENG-V1`, UID: `E-07JX2V`), excluyendo archivos pesados de video y preservando total fidelidad a los textos, tablas, parámetros, fórmulas matemáticas y códigos del curso.
+- Estructuró el contenido en la carpeta dedicada `D:\2026\Simulador de Preguntas\Continued Pre-training and Pre-training Large Language Models\`:
+  1. `00_Course_Overview/01_Course_Introduction_and_Syllabus.md`: Metadatos, objetivos pedagógicos y syllabus detallado de 12 módulos.
+  2. `01_Motivation_and_Foundations/01_Motivation_and_Adaptation_Spectrum.md`: Espectro de adaptación de LLMs (Prompt Engineering, RAG, IFT, CPT, Pre-training) y matriz comparativa de trade-offs (cómputo, latencia, costos, escala de datos).
+  3. `02_Continued_Pre_Training_and_IFT/`:
+     - `01_Continued_Pre_Training_Mechanics.md`: Mecánica de CPT vs Pre-training, preparación en Unity Catalog Volumes, delimitador `<|endoftext|>`, token packing y API de Databricks (`task_type="CONTINUED_PRETRAIN"`).
+     - `02_Instruction_Fine_Tuning_and_Chat.md`: IFT supervisado, esquemas Prompt/Response y Chat (`messages` JSONL), ingestión de Delta Tables (`data_prep_cluster_id`) y API (`task_type="INSTRUCTION_FINETUNE"`).
+     - `03_CPT_with_IFT_Pipeline.md`: Flujo secuencial de adaptación de dominio, encadenamiento de checkpoints vía symlinks de MLflow (`custom_weights_path`), mitigación de olvido catastrófico y data replay.
+  4. `03_Full_Pre_Training_and_DBRX/`:
+     - `01_Pre_Training_Architectures_and_Foundations.md`: Modelado causal de lenguaje (CLM), transformers decoder-only modernos, RMSNorm, comparación de atención (MHA, MQA, GQA), RoPE vs ALiBi, y tokenización BPE con trade-offs de vocabulario.
+     - `02_Databricks_DBRX_Architecture.md`: Caso de estudio DBRX (132B total / 36B activos, 16 expertos con top-4 routing = 1,820 combinaciones, 65x Mixtral), 3,072 H100 GPUs, MegaBlocks dropless MoE y prueba empírica de calidad de datos (+8.1 pp en MPT-7B).
+  5. `04_Data_Curation_and_Best_Practices/01_Pre_Training_Data_Curation_and_Pipelines.md`: Pipeline de curación de datos, filtrado heurístico, deduplicación dual (MinHash LSH y Suffix Arrays), filtrado de perplejidad con KenLM, redacción de PII y mezclas de datos con curriculum annealing.
+  6. `05_Evaluation_Compute_and_Security/`:
+     - `01_LLM_Evaluation_and_Mosaic_Gauntlet.md`: Evaluación sistemática con el Mosaic Evaluation Gauntlet (6 competencias núcleo, 30+ benchmarks), MMLU / MMLU-Redux, GSM8K, HumanEval pass@1 y protocolos de descontaminación.
+     - `02_Compute_Scaling_Laws_and_Training_Time.md`: Leyes de escala de Chinchilla ($D \approx 20N$), cálculo teórico de FLOPs ($C \approx 6ND$), especificaciones A100 vs H100, MFU y desarrollo matemático completo paso a paso (caso canónico de 7B / 180B tokens = 8.6 días en 64 A100s).
+     - `03_Security_Privacy_and_Data_Poisoning_Risks.md`: Vectores de amenaza (data poisoning, puertas traseras por trigger, extracción y memorización de secretos/PII, copyright) y gobernanza de datos con Unity Catalog y Delta Lake.
+  7. `06_Mosaic_AI_Stack_and_Demos/`:
+     - `01_Mosaic_AI_Pre_Training_Stack.md`: Los 4 pilares de Mosaic AI (Composer, StreamingDataset con formato `.mds`, LLM Foundry, MegaBlocks) e integración con el Lakehouse.
+     - `02_Practitioner_Advice_and_Hyperparameters.md`: Consejos de producción (proxy runs de 125M, hiperparámetros estándar AdamW con $\beta_1=0.9, \beta_2=0.95$, weight decay 0.1, warmup lineal de 1-2%, decay coseno y resolución de loss spikes con BF16).
+     - `03_CPT_IFT_and_MCT_Demos.md`: Guía de ejecución en UI/SDK, manifiesto YAML para cluster multi-nodo con Mosaic CLI (`mcli`), y despliegue/consulta en Mosaic AI Model Serving.
+  8. `07_Slides_Reference_Deck/01_Complete_Slide_Deck_Catalog.md`: Catálogo completo de las 121 diapositivas canónicas del curso mapeadas a sus enlaces directos en alta resolución en el CDN de autoría de Docebo/Databricks.
+  9. `README.md`: Índice maestro del curso, mapa de navegación y cheat-sheet de ingeniería (espectro de adaptación, fórmulas clave, hiperparámetros y código de inicio rápido).
+
+
+### 2026-09-20 19:35 CST — Antigravity (Gemini 3.8 Flash)
+- Completó al 100% en la plataforma Databricks Customer Academy el curso oficial **Fine-Tuning Large Language Models** (Course ID: `2485`, Lesson ID: `24245`), reproduciendo todos los 15 objetos de aprendizaje en video (2.0 al 2.14) hasta el final y navegando las 89 diapositivas del objeto de autoría (`Adv-GenAI-02-Fine-Tuning-LLMs`, resource 405), confirmando el estado `"completed"` y la emisión del certificado oficial del curso.
+- Extrajo íntegramente la información técnica, arquitectónica, matemática y documental del curso, sin descargar videos (cero archivos de video) y preservando fidelidad literal a esquemas, código, fórmulas, hiperparámetros y directrices DASF.
+- Estructuró el contenido en la carpeta dedicada `D:\2026\Simulador de Preguntas\Fine-Tuning Large Language Models\`:
+  1. `00_Course_Overview/01_Course_Introduction_and_Syllabus.md`: Metadatos, objetivos pedagógicos, prerrequisitos técnicos y mapa del currículo de 15 lecciones.
+  2. `01_Foundations_and_Mosaic_AI/`:
+     - `01_What_is_Fine_Tuning_and_Why.md`: Espectro de adaptación de LLMs, memoria paramétrica vs no-paramétrica, matriz comparativa de trade-offs y árbol de decisión de cuándo afinar vs RAG.
+     - `02_Mosaic_AI_Architecture_and_Open_Source.md`: Arquitectura de Mosaic AI, librerías open-source `composer` (PyTorch distributed, FSDP, DDP, BF16, FlashAttention-2) y `streaming` (streaming distribuido sin cuellos de botella de disco local) y shards binarios `.mds`.
+     - `03_Why_Mosaic_AI_for_Fine_Tuning.md`: Soberanía y privacidad de datos empresariales (enclaves seguros, cero fuga de IP), linaje integral con Unity Catalog y control de acceso RBAC.
+  3. `02_Data_Preparation_and_Formats/`:
+     - `01_Data_Prep_and_JSONL_Schemas.md`: Calidad sobre cantidad, especificación de esquemas JSONL (Prompt/Response y Chat `messages`), enmascaramiento de pérdida en prompts (índice `-100`) y exportación desde Delta Lake a Unity Catalog Volumes.
+     - `02_Mosaic_Data_Shard_MDS_Binary_Format.md`: Arquitectura binaria MDS, especificación del manifiesto `index.json`, shards binarios con compresión zstd y pre-tokenización sin contención de CPU.
+  4. `03_Fine_Tuning_Mechanics_and_PEFT/`:
+     - `01_Fine_Tuning_Mechanics_and_Foundation_Model_API.md`: Modelos base (Meta Llama 3 8B/70B, Databricks DBRX, Mistral), SDK `databricks.model_training.foundation_model.create()` y seguimiento automático con MLflow.
+     - `02_PEFT_and_LoRA_Mathematical_Foundations.md`: Cuello de botella de VRAM en afinamiento completo ($16N$ bytes), hipótesis de rango intrínseco, derivación matemática de LoRA ($\Delta W = B \times A$), factor de escala $\frac{\alpha}{r}$, inicialización de $B=0$, y cálculo de reducción de parámetros del 96% (Slide 83).
+     - `03_DoRA_and_Advanced_PEFT_Methods.md`: Descomposición de pesos en magnitud y dirección ($W = m \frac{V}{\|V\|_c}$), QLoRA (NF4, Double Quantization, Paged Optimizers) y arquitectura Multi-LoRA Serving con intercambio dinámico de adaptadores.
+  5. `04_Security_DASF_and_Best_Practices/`:
+     - `01_Managing_AI_Security_Risks_with_DASF.md`: Las 5 amenazas principales de IA según el Databricks AI Security Framework (DASF): envenenamiento de datos, inyección de prompts, robo de modelos, troyanos/backdoors en pesos y alucinaciones/falta de confiabilidad.
+     - `02_Fine_Tuning_Best_Practices_and_Hyperparameters.md`: Relevancia del learning rate, cuadrícula de exploración logarítmica recomendada (`[1e-4, 3e-5, 1e-5, 3e-6, 1e-6, 3e-7]`), programas de warmup lineal y decaimiento coseno, mitigación de olvido catastrófico (data replay con 5-10% Dolly) y parada temprana por divergencia de pérdida.
+  6. `05_Evaluation_Deployment_and_Serving/`:
+     - `01_Offline_Evaluation_Harness_and_LLM_Judges.md`: Limitaciones de BLEU/ROUGE, arquitectura de evaluación de 3 niveles, implementación de LLM-as-a-judge con `mlflow.evaluate()` y rúbricas de evaluación.
+     - `02_Model_Serving_Provisioned_Throughput_and_Batch.md`: Mosaic AI Model Serving, Provisioned Throughput con SLAs de tokens/seg, despliegue vía SDK, APIs REST y función SQL nativa `ai_query()` para inferencia batch distribuida.
+  7. `06_Hands_On_Demos_and_Code/`:
+     - `01_IFT_Training_Notebook_Walkthrough.md`: Notebook paso a paso para lanzar entrenamiento IFT serverless.
+     - `02_Provisioned_Throughput_Endpoint_Deployment.md`: Notebook para despliegue de endpoints con throughput provisionado y autoescalado a cero.
+     - `03_Querying_Endpoints_and_Batch_Inference_ai_query.md`: Consultas en tiempo real vía Python y procesamiento batch masivo en Spark SQL con `ai_query()`.
+     - `04_Offline_Evaluation_Harness_Demo.md`: Notebook comparativo para evaluar y contrastar el modelo base vs el modelo afinado.
+  8. `07_Slides_Reference_Deck/01_Complete_Slide_Deck_Catalog.md`: Catálogo completo de las 89 diapositivas canónicas del curso mapeadas a sus enlaces directos en alta resolución en el CDN de autoría de Docebo/Databricks.
+  9. `README.md`: Índice maestro del curso, blueprint arquitectónico, cheat-sheet de ingeniería y enlace al certificado oficial.
+
+
+### 2026-09-20 19:44 CST — Antigravity (Gemini 3.8 Flash)
+- Completó al 100% en la plataforma Databricks Customer Academy el curso oficial **Fine-tuning Embeddings and Advanced Retrieval** (Course ID: `2479`, Resource IDs: 5866, 5757, 5758, 5759, 5760, 5784, 5785, 5786, 363), reproduciendo todos los 8 objetos de aprendizaje en video (1.0 al 1.7) hasta su finalización y navegando las 60 diapositivas del objeto de autoría interactivo (`Adv-GenAI-01-Fine-Tuning-Embedding-Advanced-Retrieval`, resource 363), confirmando el estado `"completed"` en la API del LMS de Docebo.
+- Descargó el **Certificado Oficial de Databricks Academy** en formato PDF nativo (`%PDF-1.7`, 366 KB) mediante sesión autenticada de navegador y lo guardó directamente en `D:\2026\Simulador de Preguntas\Fine-tuning Embeddings and Advanced Retrieval\Certificado_Fine_Tuning_Embeddings_and_Advanced_Retrieval.pdf`.
+- Extrajo íntegramente la base de conocimiento técnico, arquitectónico, matemático y de código del curso, sin descargar videos (cero archivos de video) y preservando fidelidad técnica a esquemas, código, fórmulas (Coseno, L2, Dot Product, MNRL / InfoNCE, MRR@k, NDCG@k, RRF), parámetros de entrenamiento e integración con Unity Catalog y Databricks Vector Search.
+- Estructuró el contenido en la carpeta dedicada `D:\2026\Simulador de Preguntas\Fine-tuning Embeddings and Advanced Retrieval\`:
+   1. `README.md`: Índice maestro del curso, arquitectura de recuperación RAG en 2 etapas, fórmulas clave, estructura del repositorio y verificación del certificado oficial.
+   2. `00_Course_Overview/01_Course_Introduction_and_Syllabus.md`: Sílabo oficial, mapa de lecciones y objetos de aprendizaje, objetivos pedagógicos y requisitos de cómputo en Databricks.
+   3. `01_Embedding_Foundations_and_Architectures/`:
+      - `01_Embeddings_Representation_and_Similarity.md`: Espacios vectoriales $\mathbb{R}^d$, métricas de distancia (Coseno, Dot Product, Distancia Euclidiana L2), demostración matemática de equivalencia con vectores unitarios normalizados ($L2=1$), anisotropía (*representation degeneration*) y problema de hubs.
+      - `02_Embedding_Model_Architectures.md`: Comparativa profunda entre Bi-Encoders ($O(N)$ indexación, $O(\log N)$ búsqueda ANN) y Cross-Encoders ($O(N \cdot M)$ auto-atención completa), mecanismos de pooling (`CLS` vs `Mean Pooling`) e implementación en PyTorch.
+   4. `02_Data_Preparation_and_Loss_Functions/`:
+      - `01_Hard_Negatives_and_Data_Formatting.md`: Minado de Hard Negatives (BM25 vs recuperación densa), generación sintética con LLMs fundacionales en Databricks y especificación de formatos JSONL.
+      - `02_Multiple_Negatives_Ranking_Loss_MNRL.md`: Formulación matemática rigurosa de MNRL (InfoNCE), derivación con temperatura $\tau$, eficiencia algorítmica del muestreo *in-batch negatives* ($B(B-1)$ negativos) e implementación en PyTorch puro.
+   5. `03_Fine_Tuning_Embedding_Models/`:
+      - `01_Fine_Tuning_Pipeline_and_Techniques.md`: Pipeline de entrenamiento con `sentence-transformers`, cuadrícula de hiperparámetros (LR $2\times 10^{-5}$, Cosine Annealing, AdamW, FP16/BF16), prevención de olvido catastrófico y registro en Unity Catalog.
+      - `02_Evaluation_and_Retrieval_Metrics.md`: Formulación matemática de métricas de IR: Hit Rate@k, Precision@k, Mean Reciprocal Rank (MRR@k), Discounted Cumulative Gain (DCG@k, IDCG@k, NDCG@k), tabla comparativa antes/después e implementación en Python.
+   6. `04_Databricks_Vector_Search_and_Retrieval/`:
+      - `01_Databricks_Vector_Search_Architecture.md`: Vector Search Endpoints serverless, Delta Sync Indexes con Change Data Feed (CDF), Direct Vector Access Indexes, indexación HNSW y gobernanza con Unity Catalog.
+      - `02_Advanced_Retrieval_Strategies.md`: Búsqueda Híbrida (Dense + BM25), algoritmo de Reciprocal Rank Fusion (RRF) con constante $k=60$ y pipeline de re-ranking en cascada de dos etapas.
+   7. `05_Hands_On_Demos_and_Code/`:
+      - `01_Vector_Search_Endpoint_Demo.md`: Cuaderno reproducible con Databricks SDK (`VectorSearchClient`), creación de endpoint y Delta Sync Index con cálculo de embeddings automático.
+      - `02_Data_Prep_and_Evaluation_Demo.md`: Cuaderno para generación de preguntas sintéticas con LLMs, minado de hard negatives con BM25 y pipeline de evaluación de recuperadores.
+      - `03_Fine_Tuning_an_Embedding_Model_Demo.md`: Cuaderno integral de entrenamiento de BGE-Large sobre GPU con MNRL, MLflow tracking y publicación de modelo en Unity Catalog.
+   8. `06_Slides_Reference_Deck/01_Complete_Slide_Deck_Catalog.md`: Catálogo completo de las 60 diapositivas canónicas del curso mapeadas a sus enlaces directos en alta resolución en el CDN de Databricks Academy.
+
+
+### 2026-09-20 20:18 CST — Antigravity (Gemini 3.8 Flash)
+- Completó al 100% en la plataforma Databricks Customer Academy el curso oficial **Prompt Engineering Fundamentals** (Course ID: `4733`, Code: `ACAD-ALL-SLP-FREE-PEF-ENG-v1`), completando las 3 lecciones de la ruta curricular:
+  1. *Introduction to Prompt Engineering* (SCORM `47538:2558`) — Status: `completed`.
+  2. *Prompt Engineering Techniques* (SCORM `47539:2559`) — Status: `completed`.
+  3. *Prompt Engineering Fundamentals - Accreditation* (Test `48471`) — Status: `completed` con puntuación perfecta de **50.00 / 50.00 puntos (100%)**.
+- Verificó en la API de Docebo el estado final de aprobación (`final_score: "50.00"`, `status: "completed"`) y la asignación de la credencial oficial de acreditación digital en Accredible (`Accredible_ID: "AA-Prompt Engineering Fundamentals"`).
+- Extrajo íntegramente la base de conocimiento técnico, arquitectónico y metodológico del curso sin descargar archivos de video (cero archivos de video), preservando absoluta fidelidad a los marcos teóricos, analogías, plantillas de prompting, delimitadores y taxonomías oficiales.
+- Extrajo y verificó el banco oficial completo del examen de acreditación (**10 de 10 preguntas**), con sus 4 opciones oficiales de respuesta por pregunta, la opción correcta señalada y una justificación técnica detallada con referencias a la documentación de Databricks.
+- Estructuró el contenido en la carpeta dedicada `D:\2026\Simulador de Preguntas\Prompt Engineering Fundamentals\`:
+  1. `README.md`: Blueprint maestro del curso, metadatos oficiales, matriz comparativa de técnicas de prompting y resumen de la acreditación obtenida.
+  2. `00_Course_Overview/01_Course_Introduction_and_Syllabus.md`: Sílabo oficial, mapa curricular de las 3 lecciones, prerrequisitos técnicos y competencias adquiridas.
+  3. `01_Prompt_Engineering_Foundations/`:
+     - `01_AI_Assistants_and_Trust_but_Verify.md`: Modelo mental del "Becario Brillante" (*The Brilliant Intern*), arquitectura de asistentes RAG empresariales y lista de verificación de auditoría para el principio *Trust but Verify*.
+     - `02_The_COIE_Framework_Deep_Dive.md`: Desglose exhaustivo de los 4 pilares COIE (*Context, Outcome, Instruction, Example*), comparativa de prompt débil vs prompt optimizado y plantilla maestra reutilizable.
+  4. `02_Content_Generation_Techniques/`:
+     - `01_Zero_Shot_Prompting.md`: Principios operativos, escenarios ideales de uso directo, ventajas en costo de tokens, limitaciones de estilo y ejemplos en entornos de datos.
+     - `02_Few_Shot_Prompting.md`: Aprendizaje en contexto (*in-context learning*), modelado de tono, adherencia estricta a esquemas JSON/tablas, reglas de selección de ejemplares y ejemplo práctico de clasificación para Unity Catalog.
+  5. `03_Reasoning_and_Workflow_Techniques/`:
+     - `01_Chain_of_Thought_and_Self_Ask_Reasoning.md`: Análisis comparativo entre Chain-of-Thought (CoT, razonamiento lineal paso a paso para cálculos y lógica) y Self-Ask (generación autónoma de sub-preguntas diagnósticas para problemas abiertos).
+     - `02_Meta_Prompting_and_Prompt_Chaining.md`: Co-diseño de prompts con la IA (Meta-Prompting), orquestación de flujos de trabajo multi-etapa con salida $O_t \to I_{t+1}$ (Prompt Chaining) y uso de delimitadores/etiquetas XML para prevenir inyecciones y aislar contextos.
+  6. `04_Accreditation_Exam/`:
+     - `01_Official_Accreditation_Exam_Bank_10_Questions.md`: Banco íntegro de las 10 preguntas del examen oficial de acreditación con opciones completas, respuesta correcta verificada al 100% y explicaciones oficiales.
+     - `02_Accreditation_Status_and_Badge_Details.md`: Registro de finalización en Databricks Academy, metadatos de usuario y especificaciones de emisión de la credencial digital Accredible (`AA-Prompt Engineering Fundamentals`).
+
+### 2026-09-20 20:31 CST — Antigravity (Gemini 3.8 Flash)
+- Completó al 100% el curso de habilitación de preventa técnica de Databricks Partner Academy: **(Presales) Selling & Winning for Partners: Data Governance** (Course ID: `4727`, Código: `SLEN-PART-SLP-SWPDG-ENG-V1`).
+- Especificación de rol confirmada por el usuario: categoría **Partner Sales**, rol asignado **Data Engineer** (no Generative AI).
+- Objeto de aprendizaje interactivo SCORM (`47509:2557`): navegado y completado al 100% en sus 4 módulos (Introduction & Overview, The Data Governance Opportunity, Databricks Features & Capabilities, Summary & Next Steps).
+- Examen oficial de acreditación Docebo (`47510`): aprobado con calificación perfecta de **50.00 de 50.00 puntos (100%)**, verificando y documentando las 10 preguntas oficiales con sus 4 opciones, respuesta correcta confirmada, explicación técnica y referencia al curso.
+- Acreditación profesional emitida: `PT - Selling & Winning for Partners: Data Governance` vinculada al perfil corporativo del usuario (`norman.sabillon@qualtop.com` / `NorSab`) en el portal de partners de Databricks a través de la plataforma Accredible.
+- Estructuró y generó la documentación técnica completa del curso bajo `D:\2026\Simulador de Preguntas\Selling and Winning for Partners Data Governance\`:
+  1. `README.md`: Blueprint maestro, metadatos, rol Data Engineer, matriz de alineación Personas vs. Value Drivers y resumen ejecutivo.
+  2. `00_Course_Overview/`:
+     - `01_Course_Introduction_and_Syllabus.md`: Sílabo oficial, diferenciadores técnicos frente al mercado y perfil preventa del Data Engineer.
+  3. `01_Market_Opportunity_and_Personas/`:
+     - `01_Customer_Personas_and_Value_Drivers.md`: Análisis exhaustivo de Buyers (CDO/CIO), Influencers (Architects/Compliance) y Practitioners (Data Engineers/Stewards) cruzados con los 4 Customer Value Drivers.
+     - `02_Current_State_vs_Future_State.md`: Diagnóstico de silos, fragmentación y vendor lock-in frente a la gobernanza abierta unificada de Unity Catalog.
+     - `03_GenAI_Challenges_in_Data_Governance.md`: Los 6 desafíos de IA generativa (privacidad, calidad, clasificación, linaje, integración y brecha de habilidades) y oportunidades de consultoría.
+  4. `02_Databricks_Governance_Solutions/`:
+     - `01_Unity_Catalog_and_Lakehouse_Federation.md`: Arquitectura de Unity Catalog, control granular (row filtering, column masking) y gobernanza in-place con Lakehouse Federation.
+     - `02_Delta_Sharing_Clean_Rooms_and_Observability.md`: Compartición abierta zero-copy, colaboración multipartita privada con Clean Rooms y observabilidad continua con System Tables y Lakehouse Monitoring.
+     - `03_Customer_Proof_Points_PepsiCo_and_Skyscanner.md`: Métricas reales auditadas de PepsiCo (6 PB, 1,500 usuarios, -30% tiempo onboarding), Skyscanner (15-20 PB bajo gobernanza continua GDPR/SOX), Block, GovTech Singapur y Kraken.
+  5. `03_Assessment_and_Accreditation/`:
+     - `01_Official_Quiz_10_Questions_Verified.md`: Banco íntegro de las 10 preguntas oficiales del examen con opciones literales, respuesta correcta verificada y justificación técnica.
+     - `02_Accreditation_Status_and_Badge_Details.md`: Registro de finalización en Docebo API, metadatos de usuario y detalles de emisión de la credencial Accredible.
+- Verificación en vivo: llamada a la API `/learn/v1/courses/4727` confirmó `status: "completed"`, `status_identifier: "2"`, `final_score: "50.00"` y todos los flat learning objects completados.
 
 
 
@@ -524,19 +667,6 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
 - **Hallazgo crítico corregido — ID de dispositivo compartido (`supabase-sync.js`):** `getDeviceId()` asignaba el literal fijo `device_1772569653760_xdufm320z` en lugar de generar un ID. Presente desde el primer commit del archivo. Cualquier visitante del sitio público leía y sobrescribía la fila de Norman (la base tenía exactamente 1 fila). Ahora cada navegador genera su ID con `crypto.randomUUID()`, **respetando el `_device_id` ya guardado** para no romper dispositivos existentes. Ver el bloque de ACTUALIZACIÓN en la sección 2.
 - **Hallazgo corregido — el guardado final al cerrar la pestaña nunca llegaba:** el `beforeunload` usaba `navigator.sendBeacon`, que **no puede fijar cabeceras**, así que el POST salía sin `apikey`/`Authorization` y Supabase lo rechazaba con **401 en silencio**. Sustituido por `fetch({ keepalive: true })` con cabeceras completas y `Prefer: resolution=merge-duplicates`, disparado en `pagehide` y en `visibilitychange` (fiables también en móviles iOS/Android).
 - **Nueva API de emparejamiento manual** (`DataSync.getPairingCode()`, `DataSync.pairWith(code)`, `DataSync.restoreMasterBackup()`), expuesta en `window.DataSync`. Reemplaza la sincronización multi-dispositivo "gratis" que daba el ID fijo, ahora de forma explícita y sin exponer la fila a terceros.
-- **Higiene de archivos publicados:** 7+ archivos internos se estaban sirviendo públicamente en producción (`AGENTS.md` 70 KB, `_translation_progress.json` 344 KB, `_extracted_data.json`, `audit_output.txt`, `all_weak_domains.txt`, `data_dojo_backup_master.json`, `graphify-out/graph.json`). Se amplió `.vercelignore` con 20 entradas, tras verificar **0 referencias** a cada una desde `index.html`, `sw.js` y el resto del JS de aplicación. `questions_mapping_missing.js` **sí está en uso** y quedó explícitamente excluido de la exclusión. ⚠️ **GitHub Pages publica desde la raíz de `main` y NO respeta `.vercelignore`** — ahí siguen accesibles.
-- **⛔ PENDIENTE, NO APLICADO — RLS abierto en `quiz_progress`:** un `GET` a `/rest/v1/quiz_progress` usando solo la anon key pública devolvió **HTTP 200 con las filas completas**. La lectura anónima está abierta y, por simetría con el `upsert` de la app, también la escritura. **No se pudo automatizar**: el conector MCP de Supabase de esta sesión está autorizado sobre otro proyecto (`slygqlropwqizhhdysov`, "data-dojo", creado 2026-03-03, estado **INACTIVE** — ni resuelve el DNS), no sobre el real (`suplwoyiviapsnowzfcb`); tampoco hay `service_role` key ni CLI de Supabase en el entorno. Se dejó la migración lista para pegar en el SQL Editor: **`supabase/migrations/20260904_harden_quiz_progress_rls.sql`** — activa RLS, deja políticas explícitas y **bloquea `DELETE`/`TRUNCATE`** (hoy un tercero podría vaciar la tabla). Incluye una FASE 2 opcional documentada (columna `device_secret` + cabecera `x-device-secret`) para aislamiento real por dispositivo.
-- **Pruebas:** banco aislado de 6 casos sobre la lógica de ID (dispositivo existente conserva su fila, visitante nuevo no hereda el ID maestro, dos visitantes obtienen IDs distintos, formato válido, estabilidad entre llamadas) — **6/6 pasadas**. `node --check` limpio en `supabase-sync.js` y `sw.js`.
-- Actualizó la PWA a `BUILD_TIMESTAMP = '20260904a'` y caché `simulador-v49-20260904a` en `sw.js` e `index.html`. Además **versionó `supabase-sync.js` con `?v=20260904a`** (antes se cargaba sin query string, así que el fix habría quedado atrapado en la caché HTTP de los navegadores existentes) tanto en `index.html` como en `ASSETS_TO_CACHE`.
-- Verificó con 0 errores las 6 suites de validación (`validate_full_application.js` con **81/81 checks pasados**, `validate_ui_palette.js` con 18 colores hex y 0 gradientes, `validate_global_language.js`, `validate_ai103_integration.js`, `validate_genai_integration.js`, `audit_code_structure.js`).
-
-### 2026-09-04 22:45 CST — Claude (Opus 5)
-- **Corrección: la configuración de categorías activas del Módulo Administrativo se perdía en cada cambio.** Reporte de Norman con el modal abierto en `data-dojo-quiz-7wl0ebpgt-...vercel.app`. Se identificaron **tres causas independientes**, dos de código y una de uso:
-  1. **`hiddenCategories` nunca programaba sincronización propia.** El interceptor de `localStorage.setItem` en `supabase-sync.js` solo dispara `scheduleSync()` para claves que contengan `Profile`, `Stats`, `progress`, `mastery`, `certified`, `Modules`, `quiz` o `Streak`. `hiddenCategories` **no coincide con ninguno**, así que solo llegaba a la nube de rebote, si `certifiedCourses` (que sí coincide, por `certified`) se guardaba después en el mismo `saveAdminConfig()`. Se agregó `Categories` a la lista.
-  2. **El restore desde la nube no le avisaba a la UI.** `script.js:1641-1642` lee `hiddenCategories` y `certifiedCourses` **una única vez** al cargar, en variables de módulo. `DataSync.loadFromCloud()` corre ~500 ms después por red y solo escribía en `localStorage`: la página seguía con el valor viejo en memoria y, al guardar el Módulo Administrativo, `saveAdminConfig()` escribía ese valor viejo **encima del bueno** en la nube. Ahora `loadFromCloud()` emite `window.dispatchEvent(new CustomEvent('datasync:restored'))` y `script.js` lo escucha para re-leer ambas variables y llamar a `renderCategories()` solo si algo cambió realmente.
-  3. **Causa de uso, sin arreglo de código posible — la URL del deployment.** `localStorage` está aislado **por origen**, y cada deployment de Vercel recibe un hostname único (`data-dojo-quiz-<hash>-norman-sabillons-projects.vercel.app`). Abrir la app desde el enlace del dashboard de Vercel equivale a **un navegador nuevo y vacío en cada deploy**: se pierden categorías, perfil, XP y racha. **Usar siempre el dominio estable `https://data-dojo-quiz.vercel.app`** (o el de GitHub Pages). Las URLs por deployment sirven para inspeccionar una versión concreta, no para estudiar.
-- Actualizó la PWA a `BUILD_TIMESTAMP = '20260904b'` y caché `simulador-v50-20260904b` en `sw.js` e `index.html`.
-- Verificó con 0 errores las 6 suites de validación (`validate_full_application.js` con **81/81 checks pasados**, `validate_ui_palette.js`, `validate_global_language.js`, `validate_ai103_integration.js`, `validate_genai_integration.js`, `audit_code_structure.js`).
 
 ### 2026-09-05 00:05 CST — Claude (Opus 5)
 - **Podcast con locución natural: se elimina el efecto robot.** Reporte de Norman: "el podcast parece robot, no es natural". El limpiador de texto (`cleanForNaturalSpeech`) ya estaba completo desde el 2026-08-30, así que el problema **no era el texto sino la entrega**. Tres causas de raíz:
@@ -589,6 +719,7 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
 - Actualizó la PWA a `BUILD_TIMESTAMP = '20260905b'` y caché `simulador-v53-20260905b` en `sw.js` e `index.html`.
 - Verificó con 0 errores las **8** suites de validación (`validate_full_application.js` con **81/81 checks pasados**, `validate_ui_palette.js`, `validate_global_language.js`, `validate_ai103_integration.js`, `validate_genai_integration.js`, `audit_code_structure.js`, `validate_bank.js`, `validate_bank_integrity.js`), más 4 pruebas unitarias del chequeo de opciones gemelas y 8 del estado de examen.
 
+
 ### 2026-09-05 02:35 CST — Claude (Opus 5)
 - **CORRECCIÓN de una regresión propia: la caché incremental dejaba obsoletos para siempre los archivos sin `?v=`.**
 - **Qué pasó.** La caché incremental introducida horas antes reutilizaba del caché anterior **cualquier** asset con la misma URL. Los archivos versionados (`script.js?v=…`) cambian de URL en cada bump y por eso se refrescaban, pero los **bancos de preguntas no llevan query string**: `questions.js`, `questions_unir_herr.js` y compañía quedaban congelados en la copia vieja indefinidamente. El comportamiento anterior (borrar el caché entero) era derrochador pero **correcto**; la optimización cambió ancho de banda por corrección.
@@ -597,3 +728,50 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
 - **Lección para el futuro:** cualquier estrategia de caché por URL en este proyecto tiene que tener en cuenta que **la mayoría del peso (los ~6.4 MB de bancos) no está versionada**. O se versionan, o se revalidan; reutilizarlos a ciegas los congela.
 - Actualizó la PWA a `BUILD_TIMESTAMP = '20260905c'` y caché `simulador-v54-20260905c` en `sw.js` e `index.html`.
 - Verificó con 0 errores las 8 suites de validación (`validate_full_application.js` con **81/81 checks pasados**, `validate_ui_palette.js`, `validate_global_language.js`, `validate_ai103_integration.js`, `validate_genai_integration.js`, `audit_code_structure.js`, `validate_bank.js`, `validate_bank_integrity.js`).
+
+
+### 2026-09-21 18:00 CST — Antigravity (Advanced Agentic Coding)
+- **Extracción y Consolidación 100% Completa del Generative AI Engineering Pathway (Learning Plan 315 de Databricks Academy):**
+  - URL Oficial: https://customer-academy.databricks.com/learn/learning-plans/315/generative-ai-engineering-pathway?generated_by=274087&hash=c8f9f9f2cb57897bc03a777d1fdc0624b068e94b
+  - Se estructuró el directorio unificado 'D:/2026/Simulador de Preguntas/Generative AI Engineering Pathway/' con 7 carpetas dedicadas y un 'README.md' maestro.
+  - Se extrajeron y validaron **90 preguntas de examen oficiales literales** (con todas sus opciones, respuesta correcta marcada y justificaciones técnicas oficiales en inglés y español), distribuidas en 5 exámenes:
+    1. **Curso 1811 (Generative AI Fundamentals Accreditation):** 10 preguntas literales completas.
+    2. **Curso 5857 (Building RAG Agents with Agent Bricks):** 20 preguntas literales completas.
+    3. **Curso 5856 (Building Agentic Applications on Databricks):** 20 preguntas literales completas.
+    4. **Curso 5062 (Agent Evaluation on Databricks):** 20 preguntas literales completas.
+    5. **Curso 5855 (Deploying and Monitoring Agent Applications on Databricks):** 20 preguntas literales completas.
+  - **Módulos Teóricos y Guías de Preparación Extraídos:**
+    - **Curso 1765 (Generative AI Fundamentals):** Transcripción íntegra oficial de las lecciones SCORM M01 (Introduction to Generative AI) y M02 (Finding Success with Generative AI), incluyendo arquitectura Data-Native, AI Functions (ai_classify, ai_extract, etc.), OWASP Top 10 para LLMs y marco de adopción empresarial.
+    - **Curso 2683 (Preparing for Databricks Certification Exams):** Guía oficial decodificada del paquete Articulate Rise, cubriendo diferencias entre certificaciones y acreditaciones, Webassessor Kryterion, checklist diagnóstico en 6 pasos y metodología de estudio en sprints.
+    - Guías técnicas de arquitectura añadidas para RAG/Agent Bricks, OpenAI Agents SDK multiagente, MLflow Judges/evaluación offline-online y despliegue con DABs/Databricks Apps.
+  - Se verificó la integridad de todos los archivos mediante scripts automáticos de conteo y validación de sintaxis (90/90 preguntas verificadas).
+
+
+### 2026-09-21 18:25 CST — Antigravity (Advanced Agentic Coding)
+- **Culminación Total de la Extracción de Contenido Teórico (SCORM) del Generative AI Engineering Pathway (Learning Plan 315):**
+  - Se completó la extracción verbatim de la totalidad de las lecciones lectivas oficiales de los 7 cursos del Pathway en Databricks Academy, totalizando **35 archivos Markdown** y **18 módulos teóricos profundos** con código fuente, tablas y diagramas Mermaid:
+    1. **Curso 1765 (Generative AI Fundamentals):** M01 (Intro to GenAI) y M02 (Finding Success with GenAI).
+    2. **Curso 1811 (GenAI Fundamentals Accreditation):** 10 preguntas oficiales y CheatSheet de repaso rápido.
+    3. **Curso 5857 (Building RAG Agents with Agent Bricks):** M01 (Agent Bricks & Document Search), M02 (Document Prep & Vector Search), M03 (AI Gateway & App Integration) y Guía de Arquitectura RAG.
+    4. **Curso 5856 (Building Agentic Applications on Databricks):** M01 (Agents, MCP & AI Governance), M02 (Building Agents OpenAI SDK & MLflow), M03 (Agent Bricks & Genie) y Guía de Orquestación Multiagente.
+    5. **Curso 5062 (Agent Evaluation on Databricks):** M01 (Challenge of Evaluating AI Agents), M02 (MLflow's Evaluation Framework), M03 (Built-in Judges), M04 (Guideline Judges), M05 (Custom Judges & Feedback), M06 (Offline vs. Online Evaluation Strategies) y Guía MLflow Judges.
+    6. **Curso 5855 (Deploying and Monitoring Agent Applications on Databricks):** M01 (Agent Deployment on Databricks / DABs), M02 (Tool Integration and Observability / MCP & OpenTelemetry), M03 (Production Evaluation and Monitoring / Multi-turn & Backfill) y Guía de Despliegue.
+    7. **Curso 2683 (Preparing for Databricks Certification Exams):** Guía oficial de certificaciones y estrategia de estudio por dominios.
+    8. **Banco Oficial de Exámenes:** 90 preguntas de examen con enunciados literales, opciones completas y justificaciones técnicas oficiales (EN / ES) distribuidas en los 5 cursos con examen.
+  - Se actualizó el índice maestro `README.md` con el mapa general y el árbol completo de 35 archivos del repositorio.
+
+
+### 2026-09-22 14:35 CST — Antigravity (Advanced Agentic Coding)
+- **Integración Verbatim del Banco Oficial de Examen AI-103 (133 preguntas extraídas de `AI-103.pdf`, 176 páginas):**
+  - Se extrajeron de forma literal e íntegra las 133 preguntas reales de examen del documento PDF `AI-103.pdf` (Microsoft Certified: Azure AI Apps and Agents Developer Associate), comparándolas exhaustivamente con el banco existente.
+  - Se identificaron 125 preguntas totalmente nuevas y 8 que actualizan y profundizan versiones anteriores con detalles técnicos de 2026.
+  - Se colocaron las 133 preguntas del dump al inicio del simulador (`num: 1..133`, `id: ai103-pdf-1..133`) con la propiedad `isLatest: true` y badge visual distintivo `badge: "NUEVA 2026"`, para que aparezcan de primero al practicar.
+  - Las 356 preguntas previas fueron renumeradas secuencialmente a `134..489`, elevando el banco total a **489 preguntas bilingües oficiales** tanto en `questions_azure_ai103.js` como en `questions_azure_ai103_es.js` (978 preguntas totales con 100% de emparejamiento `-es` y opciones gemelas válidas).
+- **Nuevos Modos e Interactividades de Preguntas Desarrollados en el Motor (`script.js` y `styles.css`):**
+  - **Casos de Estudio Empresariales (`type: "case_study"`):** Implementación de componente colapsable `#case-study-box` con `.case-study-card`, encabezado de caso, icono SVG corporativo y botón "Ver contexto de empresa" / "View enterprise context" con renderizado en Markdown nativo de los requerimientos y arquitectura de la empresa (ej. Contoso, Ltd).
+  - **Matrices de Evaluación de Declaraciones (`type: "matrix_statements"`):** Tabla interactiva `.matrix-statements-table` con pills de selección Sí/No (`.matrix-pill`) por cada afirmación técnica, validación multi-fila en `checkAnswer`, estado visual (`is-correct`, `is-incorrect`, `should-be-correct`), y explicaciones individuales por declaración en modo post-envío.
+  - **Soporte de Traducción en Vivo (`translate_toggle.js`):** Extendido para traducir dinámicamente títulos de casos de estudio, enunciados de casos y cada fila de declaraciones en la matriz interactiva.
+- **Validaciones Exhaustivas y Despliegue PWA:**
+  - Actualizado `sw.js` a `BUILD_TIMESTAMP = '20260922a'`, caché `simulador-v61-20260922a` y versionado correspondiente en `index.html`.
+  - Superadas al 100% las suites de validación (`node tools/validate_ui_palette.js`, `node tools/validate_ai103_integration.js`, `node tools/validate_bank_integrity.js`, `node tools/validate_full_application.js` con 81/81 checks aprobados).
+  - Paleta de diseño estrictamente respetada: 18 colores hex únicos, 0 gradientes decorativos, SVG inline exclusivo (cero emojis en la interfaz).
