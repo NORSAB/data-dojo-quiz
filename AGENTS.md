@@ -775,3 +775,17 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
   - Actualizado `sw.js` a `BUILD_TIMESTAMP = '20260922a'`, caché `simulador-v61-20260922a` y versionado correspondiente en `index.html`.
   - Superadas al 100% las suites de validación (`node tools/validate_ui_palette.js`, `node tools/validate_ai103_integration.js`, `node tools/validate_bank_integrity.js`, `node tools/validate_full_application.js` con 81/81 checks aprobados).
   - Paleta de diseño estrictamente respetada: 18 colores hex únicos, 0 gradientes decorativos, SVG inline exclusivo (cero emojis en la interfaz).
+
+
+### 2026-09-22 15:00 CST — Antigravity (Advanced Agentic Coding)
+- **Expansión y Actualización Exhaustiva del Centro de Estudio de Azure AI-103 con Contenido del Examen 2026 (`AI-103.pdf`):**
+  - Se actualizaron `study_azure_ai103.js` y `study_azure_ai103_resources.js` incorporando las temáticas profundas del dump que no estaban cubiertas en las guías iniciales:
+    1. **Blueprint del Caso de Estudio Empresarial (Contoso, Ltd):** Guía arquitectónica completa de integración segura multi-servicio (Foundry Hub/Project, Managed Identity asignada por el usuario, aislamiento de red con Private Endpoints, cifrado Customer-Managed Keys en Key Vault, búsqueda híbrida con ponderación de vectores y listas de bloqueo personalizadas).
+    2. **Observabilidad y OpenTelemetry para GenAI:** Matriz de convenciones semánticas estándar (`gen_ai.system`, `gen_ai.request.model`, `gen_ai.usage.prompt_tokens`, `gen_ai.usage.completion_tokens`, exportación a Azure Application Insights) y pipeline de filtros en Semantic Kernel (`IPromptRenderFilter` para auditoría/moderación de prompts antes de invocar el LLM e `IFunctionInvocationFilter` para interceptar llamadas a herramientas/funciones nativas).
+    3. **Azure AI Agent Service & Tools Avanzado:** Guía de selección de herramientas (`CodeInterpreterTool`, `AzureAISearchTool` con vector query weighting, `BingGroundingTool`, OpenAPI/Functions) y patrones de orquestación multiagente (Pipeline secuencial con Handoffs, Evaluator-Optimizer loop, Group Chat colaborativo).
+    4. **Azure AI Content Safety Avanzado:** API de Detección de Fundamentación (Groundedness Detection API para tareas `QnA` y `Summarization` con umbrales de porcentaje no fundamentado), y Detección de Material Protegido para Código (cotejo contra licencias de GitHub con citas) y Texto con copyright.
+    5. **Azure AI Search 2026:** Algoritmos vectoriales (HNSW vs Exhaustive KNN), métricas de similitud (Cosine, Dot Product, Euclidean), vectorización integrada con `SplitSkill` + `AzureOpenAIEmbeddingSkill` + Index Projections, y Reclasificador Semántico con `captions: 'extractive'`.
+    6. **Ajuste Fino (SFT vs DPO):** Estructura JSONL para Supervised Fine-Tuning de Chat Completions vs Direct Preference Optimization, y criterios de decisión entre RAG vs Fine-Tuning.
+  - Se agregaron 2 nuevas categorías y ejemplos ejecutables de código SDK en `study_azure_ai103_resources.js` (OpenTelemetry Tracing y Content Safety Groundedness API).
+  - PWA actualizada a `BUILD_TIMESTAMP = '20260922b'`, caché `simulador-v62-20260922b` en `sw.js` e `index.html`.
+  - Superadas al 100% las 8 suites de validación (`node tools/validate_ui_palette.js`, `node tools/validate_ai103_integration.js`, `node tools/validate_bank_integrity.js`, `node tools/validate_full_application.js` con 81/81 checks).

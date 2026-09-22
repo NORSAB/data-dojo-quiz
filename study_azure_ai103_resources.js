@@ -283,6 +283,60 @@
           ]
         }
       ]
+    },
+    {
+      category: "OpenTelemetry & GenAI Observability",
+      icon: "M13 2L3 14h9l-1 8 10-12h-9l1-8z",
+      comandos: [
+        {
+          nombre: "Trace LLM Invocations with OpenTelemetry Semantic Conventions",
+          descripcion_en: "Configure OpenTelemetry tracer to export GenAI semantic spans to Azure Application Insights.",
+          descripcion_es: "Configura el trazador de OpenTelemetry para exportar spans semánticos de GenAI a Azure Application Insights.",
+          ejemplos: [
+            {
+              titulo_en: "Instrumentation with GenAI semantic attributes",
+              titulo_es: "Instrumentación con atributos semánticos de GenAI",
+              sql: "from opentelemetry import trace\nfrom azure.monitor.opentelemetry import configure_azure_monitor\n\nconfigure_azure_monitor(connection_string='InstrumentationKey=...;IngestionEndpoint=...')\ntracer = trace.get_tracer('azure.ai.app')\n\nwith tracer.start_as_current_span('chat_completion') as span:\n    span.set_attribute('gen_ai.system', 'az.ai.openai')\n    span.set_attribute('gen_ai.request.model', 'gpt-4o')\n    span.set_attribute('gen_ai.request.temperature', 0.2)\n    \n    response = client.chat.completions.create(model='gpt-4o', messages=messages)\n    \n    span.set_attribute('gen_ai.usage.prompt_tokens', response.usage.prompt_tokens)\n    span.set_attribute('gen_ai.usage.completion_tokens', response.usage.completion_tokens)\n    span.set_attribute('gen_ai.response.finish_reasons', [choice.finish_reason for choice in response.choices])",
+              lineas: [
+                { code: "from opentelemetry import trace", en: "Import standard OpenTelemetry trace API", es: "Importa la API estándar de trazas de OpenTelemetry" },
+                { code: "configure_azure_monitor(...)", en: "Configure Azure Monitor exporter for Application Insights", es: "Configura el exportador de Azure Monitor para Application Insights" },
+                { code: "with tracer.start_as_current_span('chat_completion') as span:", en: "Start distributed span for model invocation", es: "Inicia el span distribuido para la invocación del modelo" },
+                { code: "    span.set_attribute('gen_ai.system', 'az.ai.openai')", en: "Set standard provider identifier", es: "Establece el identificador de proveedor estándar" },
+                { code: "    span.set_attribute('gen_ai.request.model', 'gpt-4o')", en: "Set foundation model deployment identifier", es: "Establece el identificador del despliegue del modelo" },
+                { code: "    span.set_attribute('gen_ai.usage.prompt_tokens', ...)", en: "Log exact prompt tokens consumed", es: "Registra los tokens exactos de entrada consumidos" },
+                { code: "    span.set_attribute('gen_ai.usage.completion_tokens', ...)", en: "Log completion tokens produced", es: "Registra los tokens de respuesta producidos" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      category: "Azure AI Content Safety & Groundedness",
+      icon: "M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z",
+      comandos: [
+        {
+          nombre: "Detect Groundedness & Protected Material for Code",
+          descripcion_en: "Call Content Safety to detect hallucinations against context and verify code against public GitHub licenses.",
+          descripcion_es: "Llama a Content Safety para detectar alucinaciones frente al contexto y verificar código contra licencias de GitHub.",
+          ejemplos: [
+            {
+              titulo_en: "Groundedness Detection API in Python",
+              titulo_es: "API de Detección de Fundamentación (Groundedness) en Python",
+              sql: "from azure.ai.contentsafety import ContentSafetyClient\nfrom azure.ai.contentsafety.models import CheckGroundednessOptions\nfrom azure.identity import DefaultAzureCredential\n\nclient = ContentSafetyClient(\n    endpoint='https://my-content-safety.cognitiveservices.azure.com/',\n    credential=DefaultAzureCredential()\n)\n\noptions = CheckGroundednessOptions(\n    domain='Generic',\n    task='QnA',\n    qna={\n        'query': 'What is Contoso insurance claim policy?',\n        'context': 'Contoso auto policy claims must be filed within 30 days of incident.'\n    },\n    text='Contoso allows filing auto claims up to 90 days after incident.'\n)\n\nresult = client.check_groundedness(options)\nis_ungrounded = result.ungrounded_percentage > 0.3",
+              lineas: [
+                { code: "from azure.ai.contentsafety import ContentSafetyClient", en: "Import Azure AI Content Safety client", es: "Importa el cliente de Azure AI Content Safety" },
+                { code: "options = CheckGroundednessOptions(", en: "Create groundedness evaluation options payload", es: "Crea el payload de opciones para evaluar fundamentación" },
+                { code: "    task='QnA',", en: "Set evaluation task type: QnA or Summarization", es: "Fija el tipo de tarea: QnA o Summarization" },
+                { code: "    qna={'query': ..., 'context': ...},", en: "Provide original user question and retrieved ground-truth context", es: "Provee la pregunta original y el contexto fuente verificado" },
+                { code: "    text='Contoso allows filing...'", en: "Candidate text generated by the LLM", es: "Texto candidato generado por el modelo LLM" },
+                { code: "result = client.check_groundedness(options)", en: "Execute groundedness safety check", es: "Ejecuta la comprobación de fundamentación" },
+                { code: "is_ungrounded = result.ungrounded_percentage > 0.3", en: "Flag if ungrounded percentage exceeds tolerance threshold", es: "Marca error si el porcentaje no fundamentado supera el umbral" }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ];
 

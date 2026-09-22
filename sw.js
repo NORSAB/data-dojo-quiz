@@ -27,16 +27,17 @@
 // Claude (Opus 5) | 2026-09-05 | Se retiran 7 preguntas del curso demo que tapaban a 7 reales de DP-600, se corrige una opcion duplicada en unir-herr-5-64 y se agrega validate_bank_integrity.js.
 // Codex (GPT-5) | 2026-09-16 20:24 CST | Actualiza la caché para el examen completo Agentic Applications.
 // Antigravity (Advanced Agentic) | 2026-09-22 14:15 CST | Integra 133 preguntas oficiales del examen AI-103 2026 (Case Studies, Hotspots, Matrix Statements, Ordering) y renumera banco a 489 preguntas bilingües.
-const BUILD_TIMESTAMP = '20260922a';
-const CACHE_NAME = `simulador-v61-${BUILD_TIMESTAMP}`;
+// Antigravity (Advanced Agentic) | 2026-09-22 14:55 CST | Expande Centro de Estudio de AI-103 con Contoso Case Study, OpenTelemetry, Semantic Kernel Filters y Content Safety Groundedness.
+const BUILD_TIMESTAMP = '20260922b';
+const CACHE_NAME = `simulador-v62-${BUILD_TIMESTAMP}`;
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './styles.css?v=20260922a',
-  './app_i18n.js?v=20260922a',
-  './script.js?v=20260922a',
-  './features.js?v=20260922a',
-  './quiz_style.css?v=20260922a',
+  './styles.css?v=20260922b',
+  './app_i18n.js?v=20260922b',
+  './script.js?v=20260922b',
+  './features.js?v=20260922b',
+  './quiz_style.css?v=20260922b',
   './hero_data.js',
   './auto_restore_data.js',
   './manifest.json',
@@ -77,8 +78,8 @@ const ASSETS_TO_CACHE = [
   './conceptos_databricks.js',
   './personajes_unir_viz.js',
   './translations_databricks_es.js',
-  './translate_toggle.js?v=20260922a',
-  './supabase-sync.js?v=20260922a',
+  './translate_toggle.js?v=20260922b',
+  './supabase-sync.js?v=20260922b',
   './comandos_sql_databricks.js',
   './comandos_sql_genai.js',
   './centro_quizzes_genai.html',
