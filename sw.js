@@ -29,16 +29,17 @@
 // Antigravity (Advanced Agentic) | 2026-09-22 14:15 CST | Integra 133 preguntas oficiales del examen AI-103 2026 (Case Studies, Hotspots, Matrix Statements, Ordering) y renumera banco a 489 preguntas bilingües.
 // Antigravity (Advanced Agentic) | 2026-09-22 14:55 CST | Expande Centro de Estudio de AI-103 con Contoso Case Study, OpenTelemetry, Semantic Kernel Filters y Content Safety Groundedness.
 // Antigravity (Advanced Agentic) | 2026-09-22 15:20 CST | Reordena 133 preguntas por dominios oficiales (1..5), deduplica prompts y corrige opciones técnicas.
-const BUILD_TIMESTAMP = '20260922c';
-const CACHE_NAME = `simulador-v63-${BUILD_TIMESTAMP}`;
+// Antigravity (Advanced Agentic) | 2026-09-30 00:30 CST | Integra 4 cursos oficiales de Associate Data Engineering (Lakeflow Connect, Jobs, Pipelines, DevOps) con 80 preguntas bilingües y centro de estudio.
+const BUILD_TIMESTAMP = '20260930a';
+const CACHE_NAME = `simulador-v64-${BUILD_TIMESTAMP}`;
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './styles.css?v=20260922c',
-  './app_i18n.js?v=20260922c',
-  './script.js?v=20260922c',
-  './features.js?v=20260922c',
-  './quiz_style.css?v=20260922c',
+  './styles.css?v=20260930a',
+  './app_i18n.js?v=20260930a',
+  './script.js?v=20260930a',
+  './features.js?v=20260930a',
+  './quiz_style.css?v=20260930a',
   './hero_data.js',
   './auto_restore_data.js',
   './manifest.json',
@@ -54,6 +55,11 @@ const ASSETS_TO_CACHE = [
   './questions_databricks_sql_analytics.js',
   './questions_databricks_genai.js',
   './questions_databricks_genai_es.js',
+  './questions_databricks_lakeflow_connect.js',
+  './questions_databricks_lakeflow_jobs.js',
+  './questions_databricks_lakeflow_pipelines.js',
+  './questions_databricks_devops.js',
+  './study_databricks_lakeflow.js',
   './study_databricks_genai.js',
   './study_databricks_genai_resources.js',
   './study_fabric_dp600_resources.js',
@@ -79,8 +85,8 @@ const ASSETS_TO_CACHE = [
   './conceptos_databricks.js',
   './personajes_unir_viz.js',
   './translations_databricks_es.js',
-  './translate_toggle.js?v=20260922c',
-  './supabase-sync.js?v=20260922c',
+  './translate_toggle.js?v=20260930a',
+  './supabase-sync.js?v=20260930a',
   './comandos_sql_databricks.js',
   './comandos_sql_genai.js',
   './centro_quizzes_genai.html',

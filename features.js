@@ -3125,6 +3125,10 @@ window.StudyGuidePDF = {
         'databricks-fundamentals': 'Databricks Fundamentals',
         'databricks-aibi': 'Databricks AI/BI for Data Analysts',
         'databricks-sql-analytics': 'Databricks SQL Analytics',
+        'databricks-lakeflow-connect': 'Databricks: Data Ingestion with Lakeflow Connect',
+        'databricks-lakeflow-jobs': 'Databricks: Deploy Workloads with Lakeflow Jobs',
+        'databricks-lakeflow-pipelines': 'Databricks: Build Data Pipelines with Lakeflow Spark Declarative Pipelines',
+        'databricks-devops-de': 'Databricks: DevOps Essentials for Data Engineering',
         'unir-viz-interactiva': 'UNIR — Visualización Interactiva de la Información',
         'unir-herramientas-viz': 'UNIR — Herramientas de Visualización de Datos',
         'unah-tesis': 'UNAH — Tesis Doctoral Modelo Híbrido'
@@ -6092,6 +6096,10 @@ window.PodcastPlaylist = {
         { id: 'databricks-fundamentals', name: 'Databricks Fundamentals' },
         { id: 'databricks-aibi', name: 'Databricks AI/BI for Data Analysts' },
         { id: 'databricks-sql-analytics', name: 'Databricks SQL Analytics' },
+        { id: 'databricks-lakeflow-connect', name: 'Databricks Data Ingestion with Lakeflow Connect' },
+        { id: 'databricks-lakeflow-jobs', name: 'Databricks Deploy Workloads with Lakeflow Jobs' },
+        { id: 'databricks-lakeflow-pipelines', name: 'Databricks Build Data Pipelines with Lakeflow SDP' },
+        { id: 'databricks-devops-de', name: 'Databricks DevOps Essentials for Data Engineering' },
         { id: 'unir-viz-interactiva', name: 'UNIR Visualización Interactiva' },
         { id: 'unir-herramientas-viz', name: 'UNIR Herramientas de Visualización' },
         { id: 'unah-tesis', name: 'UNAH Tesis de Maestría' }

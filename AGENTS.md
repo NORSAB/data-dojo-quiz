@@ -805,6 +805,167 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
   - **Fidelidad y Paridad Bilingüe en `questions_azure_ai103_es.js`:**
     - Se aplicó exactamente el mismo ordenamiento por dominio y renumeración a las preguntas gemelas en español (`-es`).
     - Traducciones técnicas íntegras sin acortar ni alterar el contenido original, manteniendo paridad 1:1 en `correctIds`, opciones e interactividades.
-  - **Validación y Actualización PWA:**
-    - PWA actualizada a `BUILD_TIMESTAMP = '20260922c'`, caché `simulador-v63-20260922c` en `sw.js` e `index.html`.
-    - Aprobadas al 100% todas las suites: `validate_ui_palette.js` (18 hex, 0 gradientes), `validate_ai103_integration.js` (489 EN + 489 ES), `validate_bank_integrity.js` (2,715 preguntas deduplicadas) y `validate_full_application.js` (81/81 checks).
+    - **Validación y Actualización PWA:**
+      - PWA actualizada a `BUILD_TIMESTAMP = '20260922c'`, caché `simulador-v63-20260922c` en `sw.js` e `index.html`.
+      - Aprobadas al 100% todas las suites: `validate_ui_palette.js` (18 hex, 0 gradientes), `validate_ai103_integration.js` (489 EN + 489 ES), `validate_bank_integrity.js` (2,715 preguntas deduplicadas) y `validate_full_application.js` (81/81 checks).
+
+### 2026-09-25 19:16 CST — Codex (GPT-5)
+- Creó la carpeta `Microsoft/Fabric Analytics Engineer Associate - Renewal/` para organizar las preguntas de renovación del certificado Microsoft Certified: Fabric Analytics Engineer Associate.
+- Agregó `respuestas_cuestionario.md` con la pregunta 1 de 25 y sus cuatro opciones transcritas literalmente desde la captura proporcionada por el usuario.
+- Registró como respuesta correcta `Contributor`, conforme a la matriz oficial de roles de workspace de Microsoft Fabric y al requisito de mínimo privilegio: puede crear/modificar elementos, escribir datos y desplegar mediante deployment pipelines, pero no eliminar el workspace.
+- Esta sesión no modificó archivos de la aplicación, bancos existentes ni la caché PWA.
+
+### 2026-09-25 19:17 CST — Codex (GPT-5)
+- Agregó la pregunta 2 de 25 al mismo `respuestas_cuestionario.md`, conservando literalmente el enunciado y las cuatro opciones de la captura proporcionada por el usuario.
+- Registró como respuesta correcta `a Power BI app`, porque las aplicaciones de Power BI permiten distribuir varios informes y paneles a muchos usuarios con acceso de solo lectura y menor esfuerzo administrativo.
+- Esta sesión no modificó archivos de la aplicación, bancos existentes ni la caché PWA.
+
+### 2026-09-25 19:18 CST — Codex (GPT-5)
+- Agregó la pregunta 3 de 25 al mismo `respuestas_cuestionario.md`, conservando literalmente el enunciado y las cuatro opciones de la captura proporcionada por el usuario.
+- Registró como respuesta correcta `Add the Read all SQL endpoint data permission`, porque permite consultar por SQL sin conceder acceso a los archivos subyacentes de OneLake y es compatible con el control mediante RLS.
+- Esta sesión no modificó archivos de la aplicación, bancos existentes ni la caché PWA.
+
+### 2026-09-25 19:19 CST — Codex (GPT-5)
+- Agregó la pregunta 4 de 25 al mismo `respuestas_cuestionario.md`, conservando literalmente el enunciado y las cuatro rutas de archivo de la captura proporcionada por el usuario.
+- Registró como respuesta correcta `SalesOrders.SemanticModel\definition\tables\ModelMeasures.tmdl`, porque en TMDL cada tabla tiene su archivo `.tmdl` y todas las medidas están ubicadas en `ModelMeasures`.
+- Esta sesión no modificó archivos de la aplicación, bancos existentes ni la caché PWA.
+
+### 2026-09-25 19:21 CST — Codex (GPT-5)
+- Agregó las preguntas 5 y 6 de 25 al mismo `respuestas_cuestionario.md`, conservando literalmente sus enunciados, requisitos y opciones de las capturas proporcionadas por el usuario.
+- Registró como respuestas correctas `PBIP` para la pregunta 5 e `In the Power BI service, open the lineage view for WS1.` para la pregunta 6.
+- La pregunta 5 se guardó como pendiente de la solicitud anterior cuyo primer intento de parche no coincidió con el texto exacto del archivo; no se duplicó ninguna pregunta.
+- Esta sesión no modificó archivos de la aplicación, bancos existentes ni la caché PWA.
+
+### 2026-09-25 19:22 CST — Codex (GPT-5)
+- Agregó la pregunta 7 de 25 al mismo `respuestas_cuestionario.md`, conservando literalmente el enunciado y las cuatro opciones de la captura proporcionada por el usuario.
+- Registró como respuesta correcta `a pipeline`, porque la actividad `Delete data` se agrega y configura dentro de una canalización de Fabric.
+- Esta sesión no modificó archivos de la aplicación, bancos existentes ni la caché PWA.
+
+### 2026-09-25 19:23 CST — Codex (GPT-5)
+- Agregó la pregunta 8 de 25 al mismo `respuestas_cuestionario.md`, conservando literalmente el enunciado y las cinco opciones de la captura proporcionada por el usuario.
+- Registró como respuesta correcta `Copy data activity`, porque admite Parquet como origen y puede cargarlo en una tabla Delta de Lakehouse sin transformaciones.
+- Esta sesión no modificó archivos de la aplicación, bancos existentes ni la caché PWA.
+
+### 2026-09-25 19:24 CST — Codex (GPT-5)
+- Agregó la pregunta 9 de 25 al mismo `respuestas_cuestionario.md`, conservando literalmente el enunciado y las cuatro opciones de la captura proporcionada por el usuario.
+- Registró como respuesta correcta `the Upload option for Lakehouse1`, porque es el flujo de menor esfuerzo para cargar un CSV local y crear una tabla en el Lakehouse.
+- Esta sesión no modificó archivos de la aplicación, bancos existentes ni la caché PWA.
+
+### 2026-09-25 19:25 CST — Codex (GPT-5)
+- Agregó la pregunta 10 de 25 al mismo `respuestas_cuestionario.md`, conservando literalmente el enunciado y las cuatro opciones de la captura proporcionada por el usuario.
+- Registró como respuesta correcta `GET`, porque es el método HTTP para recuperar el dataset público de GitHub.
+- Esta sesión no modificó archivos de la aplicación, bancos existentes ni la caché PWA.
+
+### 2026-09-25 19:26 CST — Codex (GPT-5)
+- Agregó la pregunta 11 de 25 al mismo `respuestas_cuestionario.md`, conservando literalmente el enunciado y las cuatro opciones de la captura proporcionada por el usuario.
+- Registró como respuesta correcta `A Semantic Model`, porque el informe de Power BI consume la tabla del Lakehouse mediante un modelo semántico.
+- Esta sesión no modificó archivos de la aplicación, bancos existentes ni la caché PWA.
+
+### 2026-09-25 19:27 CST — Codex (GPT-5)
+- Agregó la pregunta 12 de 25 al mismo `respuestas_cuestionario.md`, conservando literalmente el enunciado y las cuatro opciones de la captura proporcionada por el usuario.
+- Registró como respuesta correcta la relación activa por `OrderDateKey` y la relación inactiva por `ShipDateKey`, con `USERELATIONSHIP` para la medida DAX correspondiente.
+- Esta sesión no modificó archivos de la aplicación, bancos existentes ni la caché PWA.
+
+### 2026-09-25 19:28 CST — Codex (GPT-5)
+- Agregó la pregunta 13 de 25 al mismo `respuestas_cuestionario.md`, conservando literalmente el enunciado y las cuatro opciones de la captura proporcionada por el usuario.
+- Registró como respuesta correcta la relación uno-a-muchos desde `DimProduct` hacia `FactSales`, con filtro en dirección `DimProduct` a `FactSales`, conforme al patrón de esquema estrella.
+- Esta sesión no modificó archivos de la aplicación, bancos existentes ni la caché PWA.
+
+### 2026-09-25 19:29 CST — Codex (GPT-5)
+- Agregó la pregunta 14 de 25 al mismo `respuestas_cuestionario.md`, conservando literalmente el enunciado, las columnas y las cuatro expresiones KQL de la captura proporcionada por el usuario.
+- Registró como respuesta correcta `Sales | summarize TotalSales = sum(SalesAmount) by Region`, porque `summarize` agrupa por `Region` y calcula la suma de `SalesAmount`.
+- Esta sesión no modificó archivos de la aplicación, bancos existentes ni la caché PWA.
+
+### 2026-09-25 19:30 CST — Codex (GPT-5)
+- Agregó la pregunta 15 de 25 al mismo `respuestas_cuestionario.md`, conservando literalmente el enunciado, las columnas y las cuatro expresiones KQL de la captura proporcionada por el usuario.
+- Registró como respuesta correcta `Sales | project OrderKey, OrderId, OrderDate`, porque `project` selecciona las columnas que deben incluirse en el resultado.
+- Esta sesión no modificó archivos de la aplicación, bancos existentes ni la caché PWA.
+
+### 2026-09-25 19:31 CST — Codex (GPT-5)
+- Agregó la pregunta 16 de 25 al mismo `respuestas_cuestionario.md`, conservando literalmente el enunciado y las cuatro opciones de la captura proporcionada por el usuario.
+- Registró como respuesta correcta `a variable`, porque una variable DAX almacena el resultado de una expresión para reutilizarlo sin repetir el cálculo.
+- Esta sesión no modificó archivos de la aplicación, bancos existentes ni la caché PWA.
+
+### 2026-09-25 19:32 CST — Codex (GPT-5)
+- Agregó la pregunta 17 de 25 al mismo `respuestas_cuestionario.md`, conservando literalmente el enunciado y las cuatro expresiones DAX de la captura proporcionada por el usuario.
+- Registró como respuesta correcta la primera expresión, que usa `HASONEVALUE(Products[Category])` para devolver el importe de ventas únicamente con una categoría en el contexto.
+- Esta sesión no modificó archivos de la aplicación, bancos existentes ni la caché PWA.
+
+### 2026-09-25 19:33 CST — Codex (GPT-5)
+- Agregó la pregunta 18 de 25 al mismo `respuestas_cuestionario.md`, conservando literalmente el enunciado, los requisitos y las cuatro opciones de la captura proporcionada por el usuario.
+- Registró como respuesta correcta `Import`, porque admite actualización programada, todas las funciones DAX y M, tablas calculadas y un único modo de almacenamiento.
+- Esta sesión no modificó archivos de la aplicación, bancos existentes ni la caché PWA.
+
+### 2026-09-25 19:34 CST — Codex (GPT-5)
+- Agregó la pregunta 19 de 25 al mismo `respuestas_cuestionario.md`, conservando literalmente el enunciado, la expresión DAX original y las cuatro expresiones de respuesta de la captura proporcionada por el usuario.
+- Registró como respuesta correcta `Total Sales = SUM(Sales[Amount])`, porque el visual no está filtrado por `Sales` y el uso de `ALL(Sales)` resulta innecesario.
+- Esta sesión no modificó archivos de la aplicación, bancos existentes ni la caché PWA.
+
+### 2026-09-25 19:35 CST — Codex (GPT-5)
+- Agregó la pregunta 20 de 25 al mismo `respuestas_cuestionario.md`, conservando literalmente el enunciado y las cuatro opciones de la captura proporcionada por el usuario.
+- Registró como respuesta correcta `import storage mode with Large semantic model storage format enabled`, porque el modelo contiene 110 GB y requiere transformaciones de Power Query.
+- Esta sesión no modificó archivos de la aplicación, bancos existentes ni la caché PWA.
+
+### 2026-09-25 19:36 CST — Codex (GPT-5)
+- Agregó la pregunta 21 de 25 al mismo `respuestas_cuestionario.md`, conservando literalmente el enunciado y las cuatro opciones de la captura proporcionada por el usuario.
+- Registró como respuesta correcta `increase the number of drill-through pages and decrease the number of visuals`, porque dividir la información y reducir los elementos renderizados simultáneamente disminuye la carga de presentación.
+- Esta sesión no modificó archivos de la aplicación, bancos existentes ni la caché PWA.
+
+### 2026-09-25 19:37 CST — Codex (GPT-5)
+- Agregó la pregunta 22 de 25 al mismo `respuestas_cuestionario.md`, conservando literalmente el enunciado y las cuatro opciones de la captura proporcionada por el usuario.
+- Registró como respuesta correcta `DAX query`, porque esa categoría contiene el tiempo aproximado asociado con la preparación y ejecución de la consulta de un visual.
+- Esta sesión no modificó archivos de la aplicación, bancos existentes ni la caché PWA.
+
+### 2026-09-25 19:38 CST — Codex (GPT-5)
+- Agregó la pregunta 23 de 25 al mismo `respuestas_cuestionario.md`, conservando literalmente el enunciado, la medida DAX y las cuatro opciones de la captura proporcionada por el usuario.
+- Registró como respuesta correcta `variables`, porque permiten reutilizar el cálculo repetido del período anterior en la medida.
+- Esta sesión no modificó archivos de la aplicación, bancos existentes ni la caché PWA.
+
+### 2026-09-25 19:39 CST — Codex (GPT-5)
+- Agregó la pregunta 24 de 25 al mismo `respuestas_cuestionario.md`, conservando literalmente el enunciado y las cuatro opciones de la captura proporcionada por el usuario.
+- Registró como respuesta correcta `Pause the visuals.`, porque evita que los visuales se actualicen mientras se repiten las mismas interacciones para comparar las mediciones.
+- Esta sesión no modificó archivos de la aplicación, bancos existentes ni la caché PWA.
+
+### 2026-09-25 19:40 CST — Codex (GPT-5)
+- Agregó la pregunta 25 de 25 al mismo `respuestas_cuestionario.md`, conservando literalmente el enunciado y las cuatro opciones de la captura proporcionada por el usuario.
+- Registró como respuesta correcta `Reopen the Performance Analyzer pane.`, porque permite eliminar la caché visual antes de medir el tiempo de carga del visual.
+- Completó el registro de las 25 preguntas de la renovación; esta sesión no modificó archivos de la aplicación, bancos existentes ni la caché PWA.
+
+### 2026-09-25 19:41 CST — Codex (GPT-5)
+- Corrigió la respuesta registrada para la pregunta 25 de 25 en `respuestas_cuestionario.md` después de contrastarla con la guía de preparación de caché visual de Performance Analyzer.
+- La respuesta correcta queda como `Add a blank page to the report.`; `Reopen the Performance Analyzer pane.` queda como opción no correcta. El primer paso es agregar una página en blanco, guardar/cerrar con ella seleccionada y luego reabrir el informe.
+- Completó el registro corregido de las 25 preguntas; esta sesión no modificó archivos de la aplicación, bancos existentes ni la caché PWA.
+
+### 2026-09-25 19:42 CST — Codex (GPT-5)
+- Registró la evidencia proporcionada por el usuario de que aprobó la renovación de Microsoft Certified: Fabric Analytics Engineer Associate.
+- La certificación quedó extendida por un año, según el mensaje visible `You've renewed your Microsoft Certified: Fabric Analytics Engineer Associate and have extended it by one year.`
+- No modificó archivos de la aplicación ni bancos de preguntas; solo actualizó esta bitácora de trazabilidad.
+
+### 2026-09-25 19:43 CST — Codex (GPT-5)
+- Agregó a `Microsoft/Fabric Analytics Engineer Associate - Renewal/respuestas_cuestionario.md` el resultado detallado proporcionado por el usuario: `Pass`, 88%, 60% requerido, evaluación del 25 de septiembre de 2026 y vigencia hasta el 23 de marzo de 2028.
+- Conservó las ocho secciones de evaluación tal como fueron proporcionadas por el usuario.
+- No modificó archivos de la aplicación, bancos de preguntas ni la caché PWA.
+
+### 2026-09-30 00:30 CST — Antigravity (Advanced Agentic)
+- **Extracción Verbatim, Aprobación de Quizzes (95-100%) y Descarga de Certificados Oficiales del Festival de Databricks:**
+  - Se completaron al 100% las 4 certificaciones del pathway oficial *Associate Data Engineering* de Databricks:
+    1. **Data Ingestion with Lakeflow Connect (ID: 2963):** 15 lecciones extraídas en Markdown, 19 capturas full-page de SCORM y videos, Quiz aprobado con 95/100, Certificado oficial descargado: `Databricks_Certificate_Data_Ingestion_with_Lakeflow_Connect.pdf`.
+    2. **Deploy Workloads with Lakeflow Jobs (ID: 1365):** 15 lecciones extraídas en Markdown, 15 capturas completas, Quiz aprobado con 95/100, Certificado oficial descargado: `Databricks_Certificate_Deploy_Workloads_with_Lakeflow_Jobs.pdf`.
+    3. **Build Data Pipelines with Lakeflow Spark Declarative Pipelines (ID: 2971):** 15 lecciones extraídas en Markdown, 15 capturas completas, Quiz aprobado con 100/100 (20/20), Certificado oficial descargado: `Databricks_Certificate_Build_Data_Pipelines_with_Lakeflow_Spark_Declarative_Pipelines.pdf`.
+    4. **DevOps Essentials for Data Engineering (ID: 3640):** 18 lecciones extraídas en Markdown, 18 capturas completas, Quiz aprobado con 100/100 (20/20), Certificado oficial descargado: `Databricks_Certificate_DevOps_Essentials_for_Data_Engineering.pdf`.
+- **Integración Completa en The Data Dojo (`D:\2026\Simulador de Preguntas`):**
+  - **Bancos de Preguntas Bilingües Oficiales (80 Preguntas / 160 Ítems EN+ES):**
+    - `questions_databricks_lakeflow_connect.js`: 40 preguntas (20 EN + 20 ES con emparejamiento `-es` para el toggle en vivo).
+    - `questions_databricks_lakeflow_jobs.js`: 40 preguntas (20 EN + 20 ES con emparejamiento `-es`).
+    - `questions_databricks_lakeflow_pipelines.js`: 40 preguntas (20 EN + 20 ES con emparejamiento `-es`).
+    - `questions_databricks_devops.js`: 40 preguntas (20 EN + 20 ES con emparejamiento `-es`).
+  - **Módulo de Estudio Bilingüe (`study_databricks_lakeflow.js`):** Integrado en `window.studyData` con guías estructuradas, tarjetas de estudio (flashcards) y cajas de síntesis para los 4 cursos.
+  - **Registro en Aplicación Principal:**
+    - `script.js`: Cursos añadidos con estado `active` bajo el proveedor Databricks, cableados a la pantalla de estudio y mapeados con storage keys dedicados (`databricks_lf_connect_mastery`, `databricks_lf_jobs_mastery`, `databricks_lf_pipelines_mastery`, `databricks_devops_mastery`).
+    - `features.js`: Registrados en `StudyGuidePDF.courseTitles` y `PodcastPlaylist.courses`.
+    - `index.html`: Inclusión de scripts y actualización de versiones de caché a `?v=20260930a`.
+    - `sw.js`: PWA actualizada a `BUILD_TIMESTAMP = '20260930a'`, caché `simulador-v64-20260930a`, e incorporación de los 5 nuevos archivos a `ASSETS_TO_CACHE`.
+- **Validaciones Superadas al 100%:**
+  - `node tools/validate_bank_integrity.js`: 2,875 preguntas totales verificadas, 0 colisiones de ID, 0 inconsistencias de opciones.
+  - `node tools/validate_ui_palette.js`: Paleta corporativa sobria (18 colores hex, 0 gradientes, SVG exclusivo, cero emojis).
+  - `node tools/validate_full_application.js`: 86/86 verificaciones aprobadas en 52 archivos JavaScript.
