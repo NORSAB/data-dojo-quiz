@@ -969,3 +969,30 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
   - `node tools/validate_bank_integrity.js`: 2,875 preguntas totales verificadas, 0 colisiones de ID, 0 inconsistencias de opciones.
   - `node tools/validate_ui_palette.js`: Paleta corporativa sobria (18 colores hex, 0 gradientes, SVG exclusivo, cero emojis).
   - `node tools/validate_full_application.js`: 86/86 verificaciones aprobadas en 52 archivos JavaScript.
+
+### 2026-09-30 06:25 CST — Antigravity (Advanced Agentic)
+- **Extracción de Información Oficial del Examen y Guía Oficial de Databricks DEA (Course 820):**
+  - Se extrajo el contenido literal del curso 820 (*Exam Information: Databricks Certified Associate Data Engineer (available for additional fee)*) y se descargó la Guía Oficial de Estudio de Databricks (May 2026) en PDF (`Exam Information - Databricks Certified Associate Data Engineer/`).
+  - Documentos creados: `01_Exam_Information.md` (detalles y costos del examen), `02_Exam_Guide_May_2026.md` (temario oficial y subdominios) y `03_Sample_Questions_Official.md` (5 preguntas de muestra oficiales retiradas).
+- **Unificación y Clasificación por los 7 Dominios Oficiales de Databricks DEA:**
+  - Se estructuró el banco unificado `questions_databricks_dea.js` con **190 preguntas bilingües** (95 EN + 95 ES twins con sufijo `-es` para toggle en tiempo real).
+  - Cubre la totalidad de las 80 preguntas de los 4 cursos oficiales (Lakeflow Connect, Jobs, Pipelines, DevOps) + 5 preguntas oficiales de muestra + 10 preguntas dedicadas a Governance & Security:
+    - Domain 1: Databricks Intelligence Platform (6%) — 10 Qs
+    - Domain 2: Data Ingestion and Loading (21%) — 15 Qs
+    - Domain 3: Data Transformation and Modeling (22%) — 18 Qs
+    - Domain 4: Working with Lakeflow Jobs (16%) — 15 Qs
+    - Domain 5: Implementing CI/CD (10%) — 12 Qs
+    - Domain 6: Troubleshooting, Monitoring, and Optimization (10%) — 15 Qs
+    - Domain 7: Governance and Security (15%) — 10 Qs
+- **Centro de Estudio Unificado DEA (`study_databricks_dea.js`):**
+  - Módulo completo registrado en `window.studyData['databricks-data-engineer-associate']` con los 7 dominios desglosados en subtemas bilingües (`langSection('en', ...)`, `langSection('es', ...)`).
+- **Integración en Aplicación y PWA:**
+  - `index.html`: Carga de scripts, selector global de búsqueda y casilla en administración.
+  - `script.js`: Curso `databricks-data-engineer-associate` activo, cableado en modo estudio y mapeo de mastery key `databricks_dea_mastery`.
+  - `features.js`: Registrado en `StudyGuidePDF.courseTitles` y `PodcastPlaylist.courses`.
+  - `sw.js`: PWA actualizada a `BUILD_TIMESTAMP = '20260930b'`, caché `simulador-v65-20260930b`, e incorporación a `ASSETS_TO_CACHE`.
+- **Verificación Completa de Suites:**
+  - `node tools/validate_bank_integrity.js`: **3,065 preguntas totales** sin colisiones y con todas las respuestas y opciones validadas.
+  - `node tools/validate_ui_palette.js`: Aprobado (18 colores hex, 0 gradientes).
+  - `node tools/validate_full_application.js`: **88/88 checks pasados** al 100%.
+

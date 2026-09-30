@@ -202,9 +202,9 @@ document.addEventListener("DOMContentLoaded", () => {
           status: "active",
         },
         {
-          id: "databricks-de",
+          id: "databricks-data-engineer-associate",
           name: "Databricks Certified Data Engineer Associate",
-          status: "coming",
+          status: "active",
         },
         {
           id: "databricks-da",
@@ -3818,7 +3818,7 @@ function renderReview(questions, finalPct, passed) {
     // Dojo Data Study Mode — Unified Inline Renderer
     // Supports: UNIR, UNAH, and Databricks courses
     // ===================================================================
-    if (courseId === "unir-viz-interactiva" || courseId === "unir-herramientas-viz" || courseId === "unah-tesis" || courseId === "databricks-da" || courseId === "databricks-fundamentals" || courseId === "dp-600" || courseId === "databricks-genai-engineer" || courseId === "azure-ai-103" || courseId === "databricks-lakeflow-connect" || courseId === "databricks-lakeflow-jobs" || courseId === "databricks-lakeflow-pipelines" || courseId === "databricks-devops-de") {
+    if (courseId === "unir-viz-interactiva" || courseId === "unir-herramientas-viz" || courseId === "unah-tesis" || courseId === "databricks-da" || courseId === "databricks-fundamentals" || courseId === "dp-600" || courseId === "databricks-genai-engineer" || courseId === "azure-ai-103" || courseId === "databricks-lakeflow-connect" || courseId === "databricks-lakeflow-jobs" || courseId === "databricks-lakeflow-pipelines" || courseId === "databricks-devops-de" || courseId === "databricks-data-engineer-associate") {
       const startScreen = document.getElementById("start-screen");
       const studyScreen = document.getElementById("study-screen");
       startScreen.classList.add("hidden");
@@ -3841,7 +3841,7 @@ function renderReview(questions, finalPct, passed) {
       };
 
       // XP / Mastery state from localStorage — each course has its own key
-      const storageKey = courseId === 'unir-herramientas-viz' ? 'unir_herr_mastery' : (courseId === 'unah-tesis' ? 'unah_tesis_mastery' : (courseId === 'databricks-da' ? 'databricks_da_mastery' : (courseId === 'databricks-fundamentals' ? 'databricks_fund_mastery' : (courseId === 'dp-600' ? 'dp600_mastery' : (courseId === 'databricks-genai-engineer' ? 'databricks_genai_mastery' : (courseId === 'azure-ai-103' ? 'azure_ai103_mastery' : (courseId === 'databricks-lakeflow-connect' ? 'databricks_lf_connect_mastery' : (courseId === 'databricks-lakeflow-jobs' ? 'databricks_lf_jobs_mastery' : (courseId === 'databricks-lakeflow-pipelines' ? 'databricks_lf_pipelines_mastery' : (courseId === 'databricks-devops-de' ? 'databricks_devops_mastery' : 'unir_viz_mastery'))))))))));
+      const storageKey = courseId === 'unir-herramientas-viz' ? 'unir_herr_mastery' : (courseId === 'unah-tesis' ? 'unah_tesis_mastery' : (courseId === 'databricks-da' ? 'databricks_da_mastery' : (courseId === 'databricks-fundamentals' ? 'databricks_fund_mastery' : (courseId === 'dp-600' ? 'dp600_mastery' : (courseId === 'databricks-genai-engineer' ? 'databricks_genai_mastery' : (courseId === 'azure-ai-103' ? 'azure_ai103_mastery' : (courseId === 'databricks-lakeflow-connect' ? 'databricks_lf_connect_mastery' : (courseId === 'databricks-lakeflow-jobs' ? 'databricks_lf_jobs_mastery' : (courseId === 'databricks-lakeflow-pipelines' ? 'databricks_lf_pipelines_mastery' : (courseId === 'databricks-devops-de' ? 'databricks_devops_mastery' : (courseId === 'databricks-data-engineer-associate' ? 'databricks_dea_mastery' : 'unir_viz_mastery')))))))))));
       let mastery = JSON.parse(localStorage.getItem(storageKey) || '{}');
       if (!mastery.xp) mastery = { xp: 0, sectionsViewed: [], flashcardsViewed: 0, personajesViewed: [], conceptosViewed: [], comandosViewed: [], achievements: [] };
       if (!mastery.personajesViewed) mastery.personajesViewed = []; // Migrate existing data
@@ -3882,7 +3882,7 @@ function renderReview(questions, finalPct, passed) {
       const isAzureAi103 = courseId === 'azure-ai-103';
       const isDatabricksGenAI = courseId === 'databricks-genai-engineer';
       const isDP600 = courseId === 'dp-600';
-      const isDatabricksDA = courseId === 'databricks-da' || courseId === 'databricks-fundamentals' || courseId === 'databricks-aibi' || courseId === 'databricks-sql-analytics' || courseId === 'databricks-lakeflow-connect' || courseId === 'databricks-lakeflow-jobs' || courseId === 'databricks-lakeflow-pipelines' || courseId === 'databricks-devops-de';
+      const isDatabricksDA = courseId === 'databricks-da' || courseId === 'databricks-fundamentals' || courseId === 'databricks-aibi' || courseId === 'databricks-sql-analytics' || courseId === 'databricks-lakeflow-connect' || courseId === 'databricks-lakeflow-jobs' || courseId === 'databricks-lakeflow-pipelines' || courseId === 'databricks-devops-de' || courseId === 'databricks-data-engineer-associate';
       const isGenAICourse = isDatabricksGenAI || isAzureAi103;
       const isDatabricksCourse = isDatabricksDA || isDatabricksGenAI || isDP600;
       const hasPersonajes = courseId === 'unir-viz-interactiva' && window.personajesUnirViz;

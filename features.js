@@ -3129,6 +3129,7 @@ window.StudyGuidePDF = {
         'databricks-lakeflow-jobs': 'Databricks: Deploy Workloads with Lakeflow Jobs',
         'databricks-lakeflow-pipelines': 'Databricks: Build Data Pipelines with Lakeflow Spark Declarative Pipelines',
         'databricks-devops-de': 'Databricks: DevOps Essentials for Data Engineering',
+        'databricks-data-engineer-associate': 'Databricks Certified Data Engineer Associate',
         'unir-viz-interactiva': 'UNIR — Visualización Interactiva de la Información',
         'unir-herramientas-viz': 'UNIR — Herramientas de Visualización de Datos',
         'unah-tesis': 'UNAH — Tesis Doctoral Modelo Híbrido'
@@ -6100,6 +6101,7 @@ window.PodcastPlaylist = {
         { id: 'databricks-lakeflow-jobs', name: 'Databricks Deploy Workloads with Lakeflow Jobs' },
         { id: 'databricks-lakeflow-pipelines', name: 'Databricks Build Data Pipelines with Lakeflow SDP' },
         { id: 'databricks-devops-de', name: 'Databricks DevOps Essentials for Data Engineering' },
+        { id: 'databricks-data-engineer-associate', name: 'Databricks Certified Data Engineer Associate' },
         { id: 'unir-viz-interactiva', name: 'UNIR Visualización Interactiva' },
         { id: 'unir-herramientas-viz', name: 'UNIR Herramientas de Visualización' },
         { id: 'unah-tesis', name: 'UNAH Tesis de Maestría' }
