@@ -32,16 +32,17 @@
 // Antigravity (Advanced Agentic) | 2026-09-30 00:30 CST | Integra 4 cursos oficiales de Associate Data Engineering (Lakeflow Connect, Jobs, Pipelines, DevOps) con 80 preguntas bilingües y centro de estudio.
 // Antigravity (Advanced Agentic) | 2026-10-01 14:25 CST | Header compacto con menú desplegable, opciones de examen Pearson VUE y filtro horizontal de categorías.
 // Antigravity (Advanced Agentic) | 2026-10-01 14:40 CST | Selector global permanente de categorías y rutas de aprendizaje formativas amarradas.
-const BUILD_TIMESTAMP = '20261001d';
-const CACHE_NAME = `simulador-v69-${BUILD_TIMESTAMP}`;
+// Antigravity (Advanced Agentic) | 2026-10-01 14:52 CST | Pestaña dedicada 'Rutas de Aprendizaje' en la barra segmentada principal.
+const BUILD_TIMESTAMP = '20261001e';
+const CACHE_NAME = `simulador-v70-${BUILD_TIMESTAMP}`;
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './styles.css?v=20261001d',
-  './app_i18n.js?v=20261001d',
-  './script.js?v=20261001d',
-  './features.js?v=20261001d',
-  './quiz_style.css?v=20261001d',
+  './styles.css?v=20261001e',
+  './app_i18n.js?v=20261001e',
+  './script.js?v=20261001e',
+  './features.js?v=20261001e',
+  './quiz_style.css?v=20261001e',
   './hero_data.js',
   './auto_restore_data.js',
   './manifest.json',
@@ -97,8 +98,8 @@ const ASSETS_TO_CACHE = [
   './conceptos_databricks.js',
   './personajes_unir_viz.js',
   './translations_databricks_es.js',
-  './translate_toggle.js?v=20261001d',
-  './supabase-sync.js?v=20261001d',
+  './translate_toggle.js?v=20261001e',
+  './supabase-sync.js?v=20261001e',
   './comandos_sql_databricks.js',
   './comandos_sql_genai.js',
   './centro_quizzes_genai.html',

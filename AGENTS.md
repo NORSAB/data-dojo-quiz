@@ -1289,5 +1289,23 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
     - `tools/validate_bank_integrity.js`: OK (3,123 preguntas íntegras, 0 errores).
     - `tools/validate_full_application.js`: 96/96 pruebas pasadas al 100%.
 
+### 2026-10-01 14:55 CST — Antigravity (Advanced Agentic Coding)
+- **Rutas de Aprendizaje Promovidas a Tab Principal en Navegación Segmentada:**
+  - **Pestaña Dedicada en .dojo-segmented-nav:**
+    - Se añadió el botón `Rutas de Aprendizaje` (con icono SVG de libro y mapa de ruta) como pestaña de primer nivel en `.dojo-segmented-nav`, ubicada entre *Simulador & Cursos* y *Centro de Estudio*.
+    - Se creó el panel dedicado `#view-learning-paths` con encabezado descriptivo y contenedor de tarjetas formativas `#learning-paths-list`.
+  - **Despeje y Enfoque en Cursos Individuales:**
+    - Se retiró el contenedor de rutas de adentro del panel `#view-courses`, permitiendo que el catálogo de cursos individuales y los simuladores de examen tengan su propio espacio sin saturación vertical.
+  - **Sincronización Reactiva con Selector Superior de Categorías:**
+    - Las rutas se filtran instantáneamente según la categoría activa en la barra permanente (Databricks, Microsoft, UNIR, UNAH).
+    - Para categorías sin rutas formativas cargadas, se implementó un estado informativo con diseño limpio `.study-hub-empty` que orienta al usuario a explorar las categorías con rutas oficiales.
+  - **Actualización de PWA y Suites de Verificación:**
+    - `BUILD_TIMESTAMP` actualizado a `20261001e` (`simulador-v70-20261001e`) en `sw.js` e `index.html`.
+    - `tools/validate_ui_palette.js`: OK (18 colores hex únicos, 0 gradientes).
+    - `tools/audit_code_structure.js`: OK (0 funciones duplicadas, 0 IDs duplicados, 88 handlers inline).
+    - `tools/validate_bank_integrity.js`: OK (3,123 preguntas, 0 colisiones).
+    - `tools/validate_full_application.js`: 96/96 pruebas pasadas al 100%.
+
+
 
 

@@ -1666,22 +1666,37 @@ const badgesConfig = [
     const container = document.getElementById("learning-paths-container");
     const list = document.getElementById("learning-paths-list");
     const title = document.getElementById("learning-paths-title");
+    const viewTitle = document.getElementById("learning-paths-view-title");
+    const viewSubtitle = document.getElementById("learning-paths-view-subtitle");
     if (!container || !list) return;
 
     const paths = providerLearningPaths[providerId] || [];
-    if (paths.length === 0) {
-      container.style.display = "none";
-      list.innerHTML = "";
-      return;
-    }
-
     const provider = providerData.find((p) => p.id === providerId);
-    if (title && provider) {
-      title.textContent = `Rutas de Aprendizaje · ${provider.name}`;
+    const providerName = provider ? provider.name : "esta categoría";
+
+    if (viewTitle) {
+      viewTitle.textContent = `Rutas de Aprendizaje · ${providerName}`;
+    }
+    if (viewSubtitle) {
+      viewSubtitle.textContent = `Rutas formativas multicurso oficiales de ${providerName} para preparar certificaciones y dominar especializaciones completas.`;
+    }
+    if (title) {
+      title.textContent = `Rutas Disponibles · ${providerName}`;
     }
 
     container.style.display = "block";
     list.innerHTML = "";
+
+    if (paths.length === 0) {
+      const empty = document.createElement("div");
+      empty.className = "study-hub-empty";
+      empty.innerHTML = `
+        <p>Próximamente se publicarán rutas formativas estructuradas para <strong>${providerName}</strong>.</p>
+        <small style="color: var(--text-muted); display: block; margin-top: 0.5rem;">Explora las rutas oficiales disponibles seleccionando <strong>Databricks</strong>, <strong>Microsoft</strong>, <strong>UNIR</strong> o <strong>UNAH</strong> en la barra superior de categorías.</small>
+      `;
+      list.appendChild(empty);
+      return;
+    }
 
     const lang = getActiveLanguage();
 

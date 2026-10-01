@@ -17,7 +17,7 @@
     <title>Quiz Simulator</title>
     <link rel="manifest" href="manifest.json" />
     <meta name="theme-color" content="#3157d5" />
-    <link rel="stylesheet" href="styles.css?v=20261001d" />
+    <link rel="stylesheet" href="styles.css?v=20261001e" />
     <style>
       /* =======================================================================
          TRUE 100% FULL-WIDTH FLUID RESPONSIVE SYSTEM
@@ -583,6 +583,14 @@
               </svg>
               <span>Simulador & Cursos</span>
             </button>
+            <button type="button" class="dojo-seg-tab" data-view-target="view-learning-paths" role="tab" aria-selected="false" aria-controls="view-learning-paths">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                <path d="M8 7h8M8 11h6"/>
+              </svg>
+              <span>Rutas de Aprendizaje</span>
+            </button>
             <button type="button" class="dojo-seg-tab" data-view-target="view-study" role="tab" aria-selected="false" aria-controls="view-study">
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
@@ -749,22 +757,6 @@
                         </div>
                     </div>
                     <div id="dashboard-recommendation" class="dashboard-recommendation"></div>
-                </div>
-
-                <!-- LEARNING PATHS (Bound to active category) -->
-                <div id="learning-paths-container" class="learning-paths-container" style="display:none;">
-                  <div class="learning-paths-header">
-                    <h3 class="section-title">
-                      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-                      </svg>
-                      <span id="learning-paths-title">Rutas de Aprendizaje</span>
-                    </h3>
-                    <span class="learning-paths-tag">Multicurso secuencial</span>
-                  </div>
-                  <div id="learning-paths-list" class="learning-paths-grid">
-                    <!-- Injected via JS based on selected category -->
-                  </div>
                 </div>
               </div>
 
@@ -1057,6 +1049,31 @@
                     <!-- Injected via JS -->
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- VIEW PANEL: RUTAS DE APRENDIZAJE -->
+          <div id="view-learning-paths" class="dojo-view-panel hidden" role="tabpanel">
+            <div class="dojo-panel-intro">
+              <div class="dojo-panel-intro-header">
+                <h3 id="learning-paths-view-title">Rutas de Aprendizaje</h3>
+                <p id="learning-paths-view-subtitle">Rutas formativas multicurso estructuradas para preparar certificaciones oficiales y dominar áreas de especialización completas.</p>
+              </div>
+            </div>
+
+            <div id="learning-paths-container" class="learning-paths-container" style="margin-top: 1rem; border-top: none; padding-top: 0;">
+              <div class="learning-paths-header">
+                <h3 class="section-title">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                  </svg>
+                  <span id="learning-paths-title">Rutas Disponibles</span>
+                </h3>
+                <span class="learning-paths-tag">Multicurso secuencial</span>
+              </div>
+              <div id="learning-paths-list" class="learning-paths-grid">
+                <!-- Injected via JS based on selected category -->
               </div>
             </div>
           </div>
@@ -2779,14 +2796,14 @@
     <script src="flashcards_unah_tesis.js"></script>
     <!-- Auto Restore Master Data -->
     <script src="auto_restore_data.js"></script>
-    <script src="app_i18n.js?v=20261001d"></script>
-    <script src="script.js?v=20261001d"></script>
-    <script src="features.js?v=20261001d"></script>
+    <script src="app_i18n.js?v=20261001e"></script>
+    <script src="script.js?v=20261001e"></script>
+    <script src="features.js?v=20261001e"></script>
     <!-- Supabase Cloud Backup -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="supabase-sync.js?v=20261001d"></script>
+    <script src="supabase-sync.js?v=20261001e"></script>
     <!-- Databricks Spanish Translation Toggle -->
     <script src="translations_databricks_es.js"></script>
-    <script src="translate_toggle.js?v=20261001d"></script>
+    <script src="translate_toggle.js?v=20261001e"></script>
   </body>
 </html>
