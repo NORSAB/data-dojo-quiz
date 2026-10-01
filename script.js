@@ -193,27 +193,6 @@ document.addEventListener("DOMContentLoaded", () => {
       ],
     },
     {
-      id: "learning-paths",
-      name: "Learning Paths",
-      courses: [
-        {
-          id: "lp-data-engineer-associate",
-          name: "Ruta: Databricks Certified Data Engineer Associate (DEA)",
-          status: "active",
-        },
-        {
-          id: "lp-data-engineer-professional",
-          name: "Ruta: Databricks Certified Data Engineer Professional (DEP)",
-          status: "active",
-        },
-        {
-          id: "lp-genai-engineer",
-          name: "Ruta: Databricks Certified Generative AI Engineer",
-          status: "active",
-        },
-      ],
-    },
-    {
       id: "databricks",
       name: "Databricks",
       courses: [
@@ -394,6 +373,117 @@ document.addEventListener("DOMContentLoaded", () => {
       ],
     },
   ];
+
+  // Learning Paths catalog bound to providers/categories
+  const providerLearningPaths = {
+    databricks: [
+      {
+        id: "lp-data-engineer-associate",
+        name: "Databricks Certified Data Engineer Associate (DEA)",
+        badge: "Fundamentos a Certificación",
+        description: "Ruta formativa oficial que cubre desde fundamentos del Lakehouse hasta Lakeflow Connect, Spark Declarative Pipelines, Jobs y preparación para el examen DEA.",
+        courseIds: [
+          "databricks-fundamentals",
+          "databricks-lakeflow-connect",
+          "databricks-lakeflow-pipelines",
+          "databricks-lakeflow-jobs",
+          "databricks-devops-de",
+          "databricks-data-engineer-associate"
+        ],
+        estimatedHours: "40h",
+        level: "Intermedio"
+      },
+      {
+        id: "lp-data-engineer-professional",
+        name: "Databricks Certified Data Engineer Professional (DEP)",
+        badge: "Arquitectura & Producción",
+        description: "Ruta avanzada de ingeniería de datos: pipelines declarativos complejos, optimización de rendimiento, seguridad/privacidad, DABs, Workflows y preparación DEP.",
+        courseIds: [
+          "databricks-advanced-pipelines",
+          "databricks-performance",
+          "databricks-privacy",
+          "databricks-dabs",
+          "databricks-workflows",
+          "databricks-governance",
+          "databricks-apps",
+          "databricks-data-engineer-professional"
+        ],
+        estimatedHours: "60h",
+        level: "Avanzado"
+      },
+      {
+        id: "lp-genai-engineer",
+        name: "Databricks Generative AI Engineer Associate",
+        badge: "IA Generativa & RAG",
+        description: "Ruta de especialización en GenAI: LLMs en el Lakehouse, RAG, evaluación de modelos, gobernanza de IA y preparación para la certificación oficial bilingüe.",
+        courseIds: [
+          "databricks-fundamentals",
+          "databricks-genai-engineer"
+        ],
+        estimatedHours: "35h",
+        level: "Intermedio - Avanzado"
+      },
+      {
+        id: "lp-data-analyst",
+        name: "Databricks Data Analyst & BI Specialist",
+        badge: "Analítica Lakehouse",
+        description: "Ruta integral para analistas: Databricks SQL Analytics, dashboards inteligentes AI/BI y preparación para la certificación Data Analyst Associate.",
+        courseIds: [
+          "databricks-fundamentals",
+          "databricks-sql-analytics",
+          "databricks-aibi",
+          "databricks-da"
+        ],
+        estimatedHours: "30h",
+        level: "Intermedio"
+      }
+    ],
+    microsoft: [
+      {
+        id: "lp-ms-fabric-engineer",
+        name: "Microsoft Fabric Analytics & Data Engineer",
+        badge: "Fabric Ecosystem",
+        description: "Ruta de análisis y transformación end-to-end con Microsoft Fabric: Lakehouse, Direct Lake, modelos semánticos y preparación para la certificación DP-600.",
+        courseIds: ["dp-600"],
+        estimatedHours: "35h",
+        level: "Intermedio"
+      },
+      {
+        id: "lp-ms-azure-ai",
+        name: "Azure AI Apps & Intelligent Agents Developer",
+        badge: "Azure AI Apps",
+        description: "Ruta integral para desarrollo de soluciones y agentes de IA en Azure: Azure AI Studio, Azure OpenAI, Retrieval-Augmented Generation y certificación AI-103.",
+        courseIds: ["azure-ai-103"],
+        estimatedHours: "40h",
+        level: "Avanzado"
+      }
+    ],
+    unir: [
+      {
+        id: "lp-unir-master-viz",
+        name: "Maestría en Visualización de Datos UNIR",
+        badge: "Especialización Académica",
+        description: "Ruta completa de posgrado UNIR: fundamentos teóricos de visualización interactiva y dominio de herramientas analíticas de vanguardia.",
+        courseIds: [
+          "unir-viz-interactiva",
+          "unir-herramientas-viz"
+        ],
+        estimatedHours: "50h",
+        level: "Posgrado"
+      }
+    ],
+    unah: [
+      {
+        id: "lp-unah-investigacion",
+        name: "Investigación Científica de Posgrado UNAH",
+        badge: "Investigación & Tesis",
+        description: "Ruta de investigación metodológica y modelado estocástico: TCROC, cadenas de Markov y dinámica caótica para tesis doctoral.",
+        courseIds: ["unah-tesis"],
+        estimatedHours: "80h",
+        level: "Doctoral"
+      }
+    ]
+  };
 
   // --- State ---
   let providerData = JSON.parse(JSON.stringify(defaultProviderData));
@@ -1546,6 +1636,7 @@ const badgesConfig = [
     const provider = providerData.find((p) => p.id === providerId);
     courseSectionTitle.textContent = `Cursos de ${provider.name}`;
     renderCourses(provider.courses);
+    renderLearningPaths(providerId);
     renderStudyHub();
     renderHistory(); // Update history view (shows all when category changes)
 
@@ -1569,6 +1660,83 @@ const badgesConfig = [
         if (typeof setupLessonsLearnedLauncher === 'function') setupLessonsLearnedLauncher(firstActiveCourse.id);
       } catch(e) { console.warn('Feature auto-init error:', e); }
     }
+  }
+
+  function renderLearningPaths(providerId) {
+    const container = document.getElementById("learning-paths-container");
+    const list = document.getElementById("learning-paths-list");
+    const title = document.getElementById("learning-paths-title");
+    if (!container || !list) return;
+
+    const paths = providerLearningPaths[providerId] || [];
+    if (paths.length === 0) {
+      container.style.display = "none";
+      list.innerHTML = "";
+      return;
+    }
+
+    const provider = providerData.find((p) => p.id === providerId);
+    if (title && provider) {
+      title.textContent = `Rutas de Aprendizaje · ${provider.name}`;
+    }
+
+    container.style.display = "block";
+    list.innerHTML = "";
+
+    const lang = getActiveLanguage();
+
+    paths.forEach((lp) => {
+      const card = document.createElement("div");
+      card.className = "learning-path-card";
+
+      // Contar preguntas disponibles en la ruta
+      const availableQuestions = questionsData.filter(
+        (q) => lp.courseIds.includes(q.courseId) && (q.lang === lang || q.lang === (lang === "es" ? "en" : "es"))
+      ).length;
+
+      card.innerHTML = `
+        <div class="learning-path-card-header">
+          <span class="learning-path-badge">${lp.badge}</span>
+          <span class="learning-path-meta">${lp.estimatedHours} · ${lp.level}</span>
+        </div>
+        <h4 class="learning-path-card-title">${lp.name}</h4>
+        <p class="learning-path-card-desc">${lp.description}</p>
+        <div class="learning-path-courses-tags">
+          ${lp.courseIds
+            .map(
+              (cid) =>
+                `<span class="learning-path-course-chip">${cid.replace(/^databricks-|^lp-/, "")}</span>`
+            )
+            .join("")}
+        </div>
+        <div class="learning-path-card-footer">
+          <span class="learning-path-questions-count">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+            ${availableQuestions > 0 ? `${availableQuestions} preguntas` : `${lp.courseIds.length} módulos`}
+          </span>
+          <button type="button" class="btn-learning-path-start" data-lp-id="${lp.id}">
+            <span>Iniciar Ruta</span>
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </button>
+        </div>
+      `;
+
+      const startBtn = card.querySelector(".btn-learning-path-start");
+      if (startBtn) {
+        startBtn.onclick = (e) => {
+          e.stopPropagation();
+          window.startCourse(lp.id);
+        };
+      }
+
+      list.appendChild(card);
+    });
   }
 
   function renderCourses(courses) {
@@ -1967,31 +2135,14 @@ const badgesConfig = [
 
     // Multi-course resolution for Learning Paths
     let targetCourseIds = [courseId];
-    if (courseId === "lp-data-engineer-associate") {
-      targetCourseIds = [
-        "databricks-fundamentals",
-        "databricks-lakeflow-connect",
-        "databricks-lakeflow-pipelines",
-        "databricks-lakeflow-jobs",
-        "databricks-devops-de",
-        "databricks-data-engineer-associate"
-      ];
-    } else if (courseId === "lp-data-engineer-professional") {
-      targetCourseIds = [
-        "databricks-advanced-pipelines",
-        "databricks-performance",
-        "databricks-privacy",
-        "databricks-dabs",
-        "databricks-workflows",
-        "databricks-governance",
-        "databricks-apps",
-        "databricks-data-engineer-professional"
-      ];
-    } else if (courseId === "lp-genai-engineer") {
-      targetCourseIds = [
-        "databricks-fundamentals",
-        "databricks-genai-engineer"
-      ];
+    if (courseId.startsWith("lp-")) {
+      for (const providerKey in providerLearningPaths) {
+        const found = providerLearningPaths[providerKey].find((p) => p.id === courseId);
+        if (found) {
+          targetCourseIds = found.courseIds;
+          break;
+        }
+      }
     }
 
     // Filter questions strictly by courseIds and language

@@ -1263,4 +1263,31 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
     - `tools/validate_bank_integrity.js`: OK (3,123 preguntas, 0 colisiones).
     - `tools/validate_full_application.js`: 96/96 pruebas pasadas al 100%.
 
+### 2026-10-01 14:42 CST — Antigravity (Advanced Agentic Coding)
+- **Selector Permanente Global de Categorías & Learning Paths Formativos Amarrados:**
+  - **Selector Global Permanente:**
+    - Se extrajo `#category-list` del panel interno `view-courses` y se reubicó en `.global-category-container` con barra horizontal compacta `.global-category-bar` justo antes de `.dojo-segmented-nav`.
+    - Ahora el selector de categoría es permanente y accesible desde todas las pestañas: *Simulador & Cursos*, *Centro de Estudio*, *Diagnóstico & Retención* y *Práctica Especializada*.
+    - Al alternar de categoría (ej. Databricks, Microsoft, UNIR, UNAH), `selectCategory()` actualiza automáticamente el tema global, el catálogo de cursos, los módulos teóricos del Centro de Estudio (`renderStudyHub()`), las rutas de aprendizaje y el historial de progreso.
+  - **Learning Paths Amarrados a Categorías:**
+    - Se eliminó el proveedor suelto `learning-paths` de la barra superior para no contaminar la lista de proveedores principales.
+    - Se creó la estructura `providerLearningPaths` con rutas oficiales catalogadas:
+      - **Databricks:** DEA (6 cursos), DEP (8 módulos avanzados), GenAI Associate (bilingüe), Data Analyst & BI (4 cursos).
+      - **Microsoft:** Fabric Analytics Engineer (DP-600), Azure AI Apps & Intelligent Agents (AI-103).
+      - **UNIR:** Maestría en Visualización de Datos (Visualización Interactiva + Herramientas).
+      - **UNAH:** Investigación Científica de Posgrado (Tesis de modelado estocástico).
+    - Se añadió `#learning-paths-container` y `#learning-paths-list` dentro del área de cursos de *Simulador & Cursos*, renderizando tarjetas informativas con metadata de duración, nivel, tags de cursos incluidos y botón de inicio directo.
+    - En `window.startCourse`, se implementó la resolución dinámica multicurso para compilar instantáneamente las preguntas de todos los cursos de la ruta activa.
+  - **Paleta y Directrices Anti-Slop:**
+    - Cero emojis en interfaz (solo SVGs inline con `currentColor`).
+    - Cero gradientes decorativos y exactamente 18 colores hex institucionales en `styles.css`.
+    - Sin barras de énfasis laterales ni decoraciones superfluas.
+  - **Actualización de PWA y Suites de Verificación:**
+    - `BUILD_TIMESTAMP` actualizado a `20261001d` (`simulador-v69-20261001d`) en `sw.js` e `index.html`.
+    - `tools/validate_ui_palette.js`: OK (18 colores hex únicos, 0 gradientes).
+    - `tools/audit_code_structure.js`: OK (0 funciones duplicadas, 0 IDs duplicados, 88 handlers inline).
+    - `tools/validate_bank_integrity.js`: OK (3,123 preguntas íntegras, 0 errores).
+    - `tools/validate_full_application.js`: 96/96 pruebas pasadas al 100%.
+
+
 
