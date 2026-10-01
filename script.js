@@ -193,17 +193,43 @@ document.addEventListener("DOMContentLoaded", () => {
       ],
     },
     {
+      id: "learning-paths",
+      name: "Learning Paths",
+      courses: [
+        {
+          id: "lp-data-engineer-associate",
+          name: "Ruta: Databricks Certified Data Engineer Associate (DEA)",
+          status: "active",
+        },
+        {
+          id: "lp-data-engineer-professional",
+          name: "Ruta: Databricks Certified Data Engineer Professional (DEP)",
+          status: "active",
+        },
+        {
+          id: "lp-genai-engineer",
+          name: "Ruta: Databricks Certified Generative AI Engineer",
+          status: "active",
+        },
+      ],
+    },
+    {
       id: "databricks",
       name: "Databricks",
       courses: [
         {
-          id: "databricks-genai-engineer",
-          name: "Databricks Certified Generative AI Engineer Associate",
+          id: "databricks-data-engineer-professional",
+          name: "Databricks Certified Data Engineer Professional (DEP)",
           status: "active",
         },
         {
           id: "databricks-data-engineer-associate",
-          name: "Databricks Certified Data Engineer Associate",
+          name: "Databricks Certified Data Engineer Associate (DEA)",
+          status: "active",
+        },
+        {
+          id: "databricks-genai-engineer",
+          name: "Databricks Certified Generative AI Engineer Associate",
           status: "active",
         },
         {
@@ -217,23 +243,8 @@ document.addEventListener("DOMContentLoaded", () => {
           status: "active",
         },
         {
-          id: "databricks-aibi",
-          name: "AI/BI for Data Analysts",
-          status: "active",
-        },
-        {
-          id: "databricks-sql-analytics",
-          name: "SQL Analytics on Databricks",
-          status: "active",
-        },
-        {
           id: "databricks-lakeflow-connect",
           name: "Data Ingestion with Lakeflow Connect",
-          status: "active",
-        },
-        {
-          id: "databricks-lakeflow-jobs",
-          name: "Deploy Workloads with Lakeflow Jobs",
           status: "active",
         },
         {
@@ -242,8 +253,58 @@ document.addEventListener("DOMContentLoaded", () => {
           status: "active",
         },
         {
+          id: "databricks-lakeflow-jobs",
+          name: "Deploy Workloads with Lakeflow Jobs",
+          status: "active",
+        },
+        {
           id: "databricks-devops-de",
           name: "DevOps Essentials for Data Engineering",
+          status: "active",
+        },
+        {
+          id: "databricks-advanced-pipelines",
+          name: "Advanced Techniques with Apache Spark Declarative Pipelines",
+          status: "active",
+        },
+        {
+          id: "databricks-performance",
+          name: "Databricks Performance Optimization",
+          status: "active",
+        },
+        {
+          id: "databricks-privacy",
+          name: "Databricks Data Privacy & Compliance",
+          status: "active",
+        },
+        {
+          id: "databricks-dabs",
+          name: "Automated Deployment with Declarative Automation Bundles (DABs)",
+          status: "active",
+        },
+        {
+          id: "databricks-workflows",
+          name: "Automate Production Workflows",
+          status: "active",
+        },
+        {
+          id: "databricks-governance",
+          name: "Get Started with Data Governance on Databricks",
+          status: "active",
+        },
+        {
+          id: "databricks-apps",
+          name: "Building Enterprise Applications with Databricks Apps",
+          status: "active",
+        },
+        {
+          id: "databricks-aibi",
+          name: "AI/BI for Data Analysts",
+          status: "active",
+        },
+        {
+          id: "databricks-sql-analytics",
+          name: "SQL Analytics on Databricks",
           status: "active",
         },
         {
@@ -420,6 +481,7 @@ document.addEventListener("DOMContentLoaded", () => {
         loadConfig();
         renderCategories();
         renderStudyHub();
+        initDojoViewNavigation();
 
         if (adminBtn) adminBtn.addEventListener("click", openAdmin);
         
@@ -1449,6 +1511,7 @@ const badgesConfig = [
 
   // SVG brand icons for providers
   const providerIcons = {
+    'learning-paths': '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>',
     microsoft: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none"><rect x="1" y="1" width="10" height="10" fill="#f25022"/><rect x="13" y="1" width="10" height="10" fill="#7fba00"/><rect x="1" y="13" width="10" height="10" fill="#00a4ef"/><rect x="13" y="13" width="10" height="10" fill="#ffb900"/></svg>',
     google: '<svg viewBox="0 0 24 24" width="16" height="16"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09A6.97 6.97 0 015.47 12c0-.72.12-1.42.35-2.09V7.07H2.18A11.01 11.01 0 001 12c0 1.77.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38a5.97 5.97 0 014.21 1.64l3.15-3.15A10.6 10.6 0 0012 1 10.99 10.99 0 002.18 7.07l3.66 2.84C6.71 7.31 9.14 5.38 12 5.38z" fill="#EA4335"/></svg>',
     databricks: '<svg viewBox="0 0 24 24" width="16" height="16" fill="#FF3621"><path d="M12 2L2 7.5v9L12 22l10-5.5v-9L12 2zm0 2.18l7.09 3.9L12 12.01 4.91 8.08 12 4.18zM4 9.41l7 3.86v7.32L4 16.73V9.41zm9 11.18v-7.32l7-3.86v7.32l-7 3.86z"/></svg>',
@@ -1674,12 +1737,54 @@ const badgesConfig = [
     });
   }
 
+  function initDojoViewNavigation() {
+    const tabs = document.querySelectorAll('.dojo-seg-tab');
+    const panels = document.querySelectorAll('.dojo-view-panel');
+    if (!tabs.length || !panels.length) return;
+
+    function switchView(targetId) {
+      tabs.forEach(tab => {
+        const isActive = tab.getAttribute('data-view-target') === targetId;
+        tab.classList.toggle('active', isActive);
+        tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
+      });
+      panels.forEach(panel => {
+        const isTarget = panel.id === targetId;
+        panel.classList.toggle('hidden', !isTarget);
+        panel.classList.toggle('active', isTarget);
+      });
+      try {
+        localStorage.setItem('dojoActiveView', targetId);
+      } catch (e) {}
+    }
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const targetId = tab.getAttribute('data-view-target');
+        if (targetId) switchView(targetId);
+      });
+    });
+
+    const saved = localStorage.getItem('dojoActiveView');
+    if (saved && document.getElementById(saved)) {
+      switchView(saved);
+    } else {
+      switchView('view-courses');
+    }
+
+    window.switchDojoView = switchView;
+  }
+
   function openStudyHub() {
     const onboardingScreen = document.getElementById("onboarding-screen");
     const studyScreen = document.getElementById("study-screen");
     if (onboardingScreen) onboardingScreen.classList.add("hidden");
     if (studyScreen) studyScreen.classList.add("hidden");
     returnToMenu();
+
+    if (typeof window.switchDojoView === 'function') {
+      window.switchDojoView('view-study');
+    }
 
     if (studyHub) {
       studyHub.tabIndex = -1;
@@ -1860,15 +1965,44 @@ const badgesConfig = [
     renderHistory(); // Filter history for this course immediately
     const lang = getActiveLanguage();
 
-    // Filter questions strictly by courseId and language
+    // Multi-course resolution for Learning Paths
+    let targetCourseIds = [courseId];
+    if (courseId === "lp-data-engineer-associate") {
+      targetCourseIds = [
+        "databricks-fundamentals",
+        "databricks-lakeflow-connect",
+        "databricks-lakeflow-pipelines",
+        "databricks-lakeflow-jobs",
+        "databricks-devops-de",
+        "databricks-data-engineer-associate"
+      ];
+    } else if (courseId === "lp-data-engineer-professional") {
+      targetCourseIds = [
+        "databricks-advanced-pipelines",
+        "databricks-performance",
+        "databricks-privacy",
+        "databricks-dabs",
+        "databricks-workflows",
+        "databricks-governance",
+        "databricks-apps",
+        "databricks-data-engineer-professional"
+      ];
+    } else if (courseId === "lp-genai-engineer") {
+      targetCourseIds = [
+        "databricks-fundamentals",
+        "databricks-genai-engineer"
+      ];
+    }
+
+    // Filter questions strictly by courseIds and language
     let filtered = questionsData.filter(
-      (q) => q.courseId === courseId && q.lang === lang
+      (q) => targetCourseIds.includes(q.courseId) && q.lang === lang
     );
 
     if (filtered.length === 0) {
         const fallbackLanguage = lang === 'es' ? 'en' : 'es';
         console.warn(`No questions found for ${lang}, trying fallback to '${fallbackLanguage}'`);
-        filtered = questionsData.filter(q => q.courseId === courseId && q.lang === fallbackLanguage);
+        filtered = questionsData.filter(q => targetCourseIds.includes(q.courseId) && q.lang === fallbackLanguage);
     }
 
     if (filtered.length === 0) {

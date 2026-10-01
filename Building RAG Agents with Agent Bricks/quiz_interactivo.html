@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Quiz · Building RAG Agents with Agent Bricks</title>
+  <style>
+    :root{font-family:Arial,Helvetica,sans-serif;color:#111827;background:#fff}body{margin:0;background:#fff}.app{max-width:760px;margin:0 auto;padding:24px 20px 48px}.top{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #e5e7eb;padding-bottom:16px;margin-bottom:22px}h1{font-size:20px;margin:0}.lang{display:flex;border:1px solid #d1d5db;border-radius:6px;overflow:hidden}.lang button{border:0;background:#fff;padding:8px 11px;cursor:pointer}.lang button.active{background:#111827;color:#fff}.progress{font-size:14px;color:#4b5563;margin-bottom:14px}.card{border:1px solid #d1d5db;border-radius:8px;overflow:hidden}.card-head{padding:17px 24px;border-bottom:1px solid #e5e7eb;font-size:16px}.body{padding:24px}.prompt{font-size:16px;line-height:1.65;white-space:pre-line;margin:0 0 24px}.choice{display:flex;gap:14px;align-items:flex-start;width:100%;text-align:left;margin:12px 0;padding:13px 14px;border:2px solid #e5e7eb;border-radius:8px;background:#fff;font:inherit;line-height:1.45;cursor:pointer}.choice input{margin-top:4px;accent-color:#d94801;width:19px;height:19px;flex:0 0 auto}.choice.correct{border-color:#d94801;background:#fffaf5}.choice .mark{display:none;color:#b93800;font-weight:bold;margin-left:auto}.choice.correct .mark{display:block}.explanation{margin-top:22px;padding:14px 16px;border-left:4px solid #3157d5;background:#f7f9ff;line-height:1.5}.nav{display:flex;justify-content:space-between;gap:12px;margin-top:22px}.nav button{border:1px solid #cbd5e1;border-radius:6px;background:#fff;padding:10px 14px;font:inherit;cursor:pointer}.nav button:disabled{opacity:.45;cursor:not-allowed}.error{padding:18px;border:1px solid #f59e0b;background:#fffbeb;border-radius:8px;color:#78350f}@media(max-width:520px){.app{padding:16px 12px}.body{padding:18px}.card-head{padding:14px 18px}.choice{padding:12px}}
+  </style>
+<link rel="stylesheet" href="../quiz_style.css?v=20260920b"></head>
+<body>
+  <main class="app">
+    <header class="top"><h1 id="title">Building RAG Agents with Agent Bricks</h1><div class="lang"><button class="active" data-lang="en">EN</button><button data-lang="es">ES</button></div></header>
+    <div class="progress" id="progress">Loading quiz…</div>
+    <section class="card" id="quiz"></section>
+  </main>
+  <script>
+    const correct=[
+      'Manage state across turns by summarizing history, pruning irrelevant or stale context, and keeping persistent instructions in the window while staying within the token budget.',
+      'Pass the full ai_parse_document VARIANT per document, not the flattened elements, because ai_prep_search transforms the structured parse output into semantic chunks.',
+      'Use smaller, focused chunks with modest overlap that fit within the embedding model\'s token limit, improving precision and reducing the lost in the middle effect.',
+      'Embed chunk_to_embed for findability from the added context, and give the LLM chunk_to_retrieve as clean original text for accurate generation.',
+      'The table must be a streaming table or have Change Data Feed enabled, with a content column (BINARY or STRING) and a metadata struct.',
+      'They remove short, low-signal elements so classification and extraction operate on blocks with enough text to be meaningful, and extraction uses a higher bar because it needs more surrounding context.',
+      'The value should be serving-endpoints, so the base_url becomes {host}/serving-endpoints.',
+      'Recall dropped because query and index embeddings must come from the same model to share a vector space, and cosine similarity ranks chunks by how small the angle is between the query vector and each chunk vector.',
+      'The MLflow trace captures the input and output (including retrieved context and the generated answer), and the Knowledge Assistant returns citations back to source documents.',
+      'The AI Search index must use a supported Databricks embedding model, such as databricks-gte-large-en, rather than an unsupported third-party model.',
+      'The first team should use a Knowledge Assistant (declarative, managed), and the second should build a code-first custom agent for full control.',
+      'A base LLM is limited by its training cutoff and has no access to the credit union\'s private, changing documents, so it cannot know current policies and fills gaps by hallucinating.',
+      'ext:response.vendor, because ai_extract returns a VARIANT with a response object whose fields match the requested names.',
+      'A VARIANT of structured JSON (document elements and pages); the version pins output to the v2.0 schema, which supports descriptions and bounding boxes.',
+      'Enable Change Data Feed on the source table, because Delta Sync indexes on standard endpoints require CDF, which lets AI Search process only the changed rows for efficient incremental sync.',
+      'Retrieve, Augment, Generate',
+      'Compliance: TRIGGERED (sync on demand, cost control for batch); Trading desk: CONTINUOUS (near-real-time freshness at higher compute cost).',
+      'variant_explode, which converts a VARIANT array or object into rows exposing pos, key, and value columns.',
+      'It is context engineering, a broader discipline that manages the entire input environment, whereas the first engineer is doing prompt engineering, which targets only the instruction text.',
+      'Files larger than 50 MB are automatically skipped, so the three oversized manuals were never ingested.'
+    ];
+    const correctIndex=[3,1,3,0,1,0,2,1,2,3,1,0,3,1,0,1,2,1,0,2];
+    const explain=[
+      'Context engineering preserves the current, relevant state within the available token budget.',
+      'ai_prep_search needs the structured document parse, not isolated flattened elements.',
+      'Focused chunks improve retrieval precision and avoid embedding truncation.',
+      'Use enriched text for retrieval and clean source text for answer generation.',
+      'Knowledge Assistant needs compatible content, metadata, and an update mechanism.',
+      'Short elements add noise; extraction needs enough surrounding context.',
+      'Databricks Model Serving uses the serving-endpoints path.',
+      'Different embedding models produce incompatible vector spaces; cosine compares direction.',
+      'MLflow traces reveal retrieved context and citations tie answers to source documents.',
+      'Knowledge Assistant requires a supported Databricks embedding model for an attached index.',
+      'Knowledge Assistant is managed and declarative; code-first agents support custom orchestration.',
+      'Prompts cannot provide private, recently changed knowledge unavailable to the base model.',
+      'ai_extract returns a VARIANT response object with the requested field names.',
+      'Version 2.0 fixes the structured output schema and its layout-aware fields.',
+      'CDF enables incremental Delta Sync updates instead of full rebuilds.',
+      'RAG retrieves evidence, augments the prompt, and then generates the answer.',
+      'TRIGGERED controls batch costs; CONTINUOUS prioritizes near-real-time freshness.',
+      'variant_explode expands a VARIANT array or object into rows.',
+      'Context engineering manages instructions, retrieved data, history, and tool outputs together.',
+      'Files above the per-file limit are skipped during ingestion.'
+    ];
+    const esExplain=['La ingeniería de contexto conserva el estado relevante dentro del presupuesto de tokens.','ai_prep_search necesita el documento estructurado, no elementos aislados.','Los fragmentos enfocados mejoran precisión y evitan truncamiento.','Usa texto enriquecido para buscar y texto limpio para responder.','Se necesitan contenido, metadatos y mecanismo de actualización compatibles.','Los elementos cortos agregan ruido y extraer requiere contexto suficiente.','Databricks Model Serving usa la ruta serving-endpoints.','Modelos distintos generan espacios vectoriales incompatibles; coseno compara dirección.','Las trazas muestran contexto y las citas enlazan fuentes.','El índice debe usar un modelo de embeddings Databricks compatible.','Knowledge Assistant es administrado; code-first permite orquestación personalizada.','Los prompts no aportan conocimiento privado ni actualizado.','ai_extract devuelve un objeto VARIANT response con campos nombrados.','La versión 2.0 fija el esquema estructurado y campos de diseño.','CDF permite actualizar de forma incremental.','RAG recupera, aumenta el prompt y genera.','TRIGGERED controla costo; CONTINUOUS prioriza frescura.','variant_explode expande VARIANT en filas.','La ingeniería de contexto administra todo el entorno de entrada.','Los archivos que superan el límite se omiten durante la ingesta.'];
+    let items=[],current=0,lang='en';
+    const norm=s=>s.replace(/\\_/g,'_').replace(/\\\./g,'.').replace(/\s+/g,' ').trim();
+    function splitOptions(rest){return norm(rest).replace(/\.([A-Z])/g,'. $1').replace('RetrieveGenerate,','Retrieve\nGenerate,').split(/(?<=\.)\s+(?=[A-Z])|\n(?=[A-Z])/).filter(Boolean)}
+    function parse(raw){const blocks=raw.split(/(?=Pregunta \d+ de 20)/).filter(x=>x.startsWith('Pregunta'));return blocks.map((b,i)=>{const lines=b.split('\n').filter(Boolean);const p=lines.findIndex(x=>x.includes('Which ')||x.includes('What ')||x.includes('How ')||x.includes('These three'));const prompt=lines.slice(1,p+1).join('\n');const rest=lines.slice(p+1).join(' ');const opts=splitOptions(rest);return {prompt,opts,correct:correct[i],correctIndex:correctIndex[i]};});}
+    function t(en,es){return lang==='es'?es:en}
+    function render(){const q=items[current],box=document.querySelector('#quiz');if(!q){box.innerHTML='<div class="body error">No fue posible cargar el examen.</div>';return}document.querySelector('#progress').textContent=t(`Question ${current+1} of ${items.length} (required)`,`Pregunta ${current+1} de ${items.length} (obligatorio)`);box.innerHTML=`<div class="card-head">${t('Question','Pregunta')} ${current+1} ${t('of','de')} ${items.length}</div><div class="body"><p class="prompt">${q.prompt}</p>${q.opts.map((o,i)=>`<button class="choice ${i===q.correctIndex?'correct':''}" disabled><input type="radio" ${i===q.correctIndex?'checked':''}><span>${o}</span><span class="mark">${t('Correct','Correcta')}</span></button>`).join('')}<div class="explanation"><strong>${t('Justification','Justificación')}:</strong> ${lang==='es'?esExplain[current]:explain[current]}</div><div class="nav"><button ${current===0?'disabled':''} id="prev">${t('Previous','Anterior')}</button><button ${current===items.length-1?'disabled':''} id="next">${t('Next','Siguiente')}</button></div></div>`;document.querySelector('#prev')?.addEventListener('click',()=>{current--;render()});document.querySelector('#next')?.addEventListener('click',()=>{current++;render()});}
+    document.querySelectorAll('[data-lang]').forEach(b=>b.addEventListener('click',()=>{lang=b.dataset.lang;document.querySelectorAll('[data-lang]').forEach(x=>x.classList.toggle('active',x===b));render()}));
+    fetch('cuestionario_original_en.txt').then(r=>r.text()).then(raw=>{items=parse(raw);render()}).catch(()=>{document.querySelector('#quiz').innerHTML='<div class="body error">Abre este archivo desde la misma carpeta que cuestionario_original_en.txt.</div>'});
+  </script>
+</body>
+</html>

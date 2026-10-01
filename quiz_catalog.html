@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Catálogo de quizzes GenAI</title>
+  <script>location.replace('centro_quizzes_genai.html');</script>
+  <style>
+    :root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#17212b;background:#f5f7fa}
+    body{max-width:980px;margin:0 auto;padding:24px}h1{margin:0 0 6px;font-size:1.65rem}p{color:#52606d}
+    .controls{display:grid;grid-template-columns:1fr 2fr;gap:10px;margin:20px 0}
+    input,select{width:100%;box-sizing:border-box;padding:11px;border:1px solid #cbd5e1;border-radius:6px;background:white;font:inherit}
+    #status{font-size:.9rem;color:#52606d;margin:10px 0}.card{background:white;border:1px solid #dbe2ea;border-radius:8px;padding:15px;margin:10px 0}
+    .exam{font-size:.8rem;color:#3157d5;font-weight:650}.question{margin:7px 0 10px;font-weight:600}.answer{font-size:.92rem;color:#334e68}
+    a{color:#3157d5;text-decoration:none}a:hover{text-decoration:underline}.empty{padding:25px;text-align:center;color:#52606d}
+    @media(max-width:620px){.controls{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <h1>Catálogo de quizzes GenAI</h1>
+  <p>Busca una pregunta por texto o filtra por examen.</p>
+  <div class="controls">
+    <select id="exam"><option value="">Todos los exámenes</option></select>
+    <input id="search" type="search" placeholder="Buscar pregunta, tema o respuesta…" autocomplete="off">
+  </div>
+  <div id="status">Cargando cuestionarios…</div>
+  <main id="results"></main>
+  <script>
+    const sources = [
+      ['Building RAG Agents with Agent Bricks','Building RAG Agents with Agent Bricks/respuestas_cuestionario.md',20],
+      ['Generative AI Application Deployment and Monitoring','GENERATIVE AI ENGINEERING/Generative AI Application Deployment and Monitoring/respuestas_cuestionario.md',20],
+      ['Generative AI Application Evaluation and Governance','GENERATIVE AI ENGINEERING/Generative AI Application Evaluation and Governance/respuestas_cuestionario.md',20],
+      ['Building Single-Agent Applications on Databricks','GENERATIVE AI ENGINEERING/Building Single-Agent Applications on Databricks/respuestas_cuestionario.md',20],
+      ['Building Retrieval Agents on Databricks','GENERATIVE AI ENGINEERING/Building Retrieval Agents on Databricks/respuestas_cuestionario.md',20],
+      ['Generative AI Fundamentals Accreditation','GENERATIVE AI ENGINEERING/Generative AI Fundamentals Accreditation/respuestas_cuestionario.md',10]
+    ];
+    let questions=[];
+    const clean=s=>s.replace(/\[x\]|\[ \]|[*_`#]/g,'').replace(/\s+/g,' ').trim();
+    function parseExam(name,path,text,count){
+      const blocks=text.split(/(?=^## (?:Question|Pregunta) \d+ of \d+|^## Pregunta \d+ de \d+|^\d+\. \*\*)/m).filter(x=>/^## (?:Question|Pregunta)|^\d+\. \*\*/.test(x));
+      return blocks.map((b,i)=>{const qm=b.match(/\*\*(?:Question|Pregunta):\*\*\s*(.+)/)||b.match(/^\d+\. \*\*(.+?)\*\*/m);const am=b.match(/\*\*(?:Correct answer|Respuesta correcta):\*\*\s*(.+)/)||b.match(/- \*\*Correcta:\*\*\s*(.+)/);const opts=[...b.matchAll(/^[-*]\s+\[([ x])\]\s+(.+)$/gm)].map(m=>({ok:m[1].toLowerCase()==='x',text:clean(m[2])}));const jm=b.match(/\*\*(?:Justification|Justificación):\*\*\s*([\s\S]*?)(?=\n\s*\*\*|\n\s*---|$)/);const js=b.match(/- \*\*Justificación:\*\*\s*(.+)/);return {exam:name,path,n:i+1,total:count,q:clean(qm?qm[1]:''),a:clean(am?am[1]:''),opts,just:clean(jm?jm[1]:(js?js[1]:''))};});
+    }
+    async function load(){
+      const exam=document.querySelector('#exam');
+      sources.forEach(([name])=>exam.add(new Option(name,name)));
+      for(const [name,path,count] of sources){try{const r=await fetch(encodeURI(path));if(!r.ok)throw Error(r.status);questions.push(...parseExam(name,path,await r.text(),count));}catch(e){console.warn('No se pudo cargar',path,e);questions.push({exam:name,path,n:0,total:count,q:'Contenido disponible en el documento fuente. Abre el cuestionario para ver preguntas, opciones y justificaciones.',a:'',opts:[],just:''});}}
+      render();
+      const loaded=questions.filter(x=>x.n>0).length; document.querySelector('#status').textContent=`${loaded} preguntas cargadas de ${sources.length} exámenes. Si un examen no muestra preguntas al abrirlo como archivo local, usa “Abrir cuestionario” o ejecuta el catálogo desde un servidor local.`;
+    }
+    function render(){const term=document.querySelector('#search').value.toLowerCase().trim(), ex=document.querySelector('#exam').value;const rows=questions.filter(x=>(!ex||x.exam===ex)&&(!term||(x.q+' '+x.a+' '+x.exam).toLowerCase().includes(term)));const out=document.querySelector('#results');out.innerHTML=rows.length?rows.map(x=>`<article class="card"><div class="exam">${x.exam} · Pregunta ${x.n} de ${x.total}</div><div class="question">${x.q||'Pregunta sin texto extraíble'}</div>${x.opts.length?`<div><strong>Opciones:</strong><ul>${x.opts.map(o=>`<li>${o.ok?'[x]':'[ ]'} ${o.text}</li>`).join('')}</ul></div>`:''}<div class="answer"><strong>Respuesta correcta:</strong> ${x.a||'Ver documento completo'}</div>${x.just?`<div class="answer"><strong>Justificación:</strong> ${x.just}</div>`:''}<a href="${encodeURI(x.path)}" target="_blank" rel="noopener">Abrir cuestionario</a></article>`).join(''):'<div class="empty">No hay coincidencias.</div>';}
+    document.querySelector('#search').addEventListener('input',render);document.querySelector('#exam').addEventListener('change',render);load();
+  </script>
+</body>
+</html>

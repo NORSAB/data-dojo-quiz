@@ -2491,7 +2491,8 @@ html[data-theme="dark"] .modal-content,
    ============================================================================= */
 .certificate-container {
   background: #111827;
-  border: 4px double var(--primary-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
   padding: 3rem;
   width: 90%;
   max-width: 700px;
@@ -3132,29 +3133,37 @@ body.zen-mode .zen-exit-btn {
   align-items: center;
   gap: 12px;
   width: 100%;
-  padding: 16px 20px;
-  background: var(--primary-color);
-  color: #ffffff;
-  border: none;
+  max-width: var(--layout-max-md);
+  padding: 14px 20px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
+  color: var(--text-color);
   cursor: pointer;
   text-align: left;
   margin-top: 16px;
   transition: all var(--transition-fast);
-  box-shadow: 0 4px 12px rgba(49, 87, 213, 0.3);
+  box-shadow: var(--box-shadow);
 }
 .btn-exam-simulate:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(49, 87, 213, 0.4);
+  background: var(--primary-light);
+  border-color: var(--primary-color);
+  transform: translateY(-1px);
+  box-shadow: var(--box-shadow-lg);
+}
+.btn-exam-simulate svg {
+  color: var(--primary-color);
+  flex-shrink: 0;
 }
 .btn-exam-simulate strong {
   display: block;
-  font-size: 1rem;
+  font-size: 0.95rem;
+  color: var(--primary-color);
 }
 .btn-exam-simulate small {
   display: block;
-  font-size: 0.8rem;
-  opacity: 0.85;
+  font-size: 0.78rem;
+  color: var(--text-muted);
   margin-top: 2px;
 }
 .timer-warning {
@@ -3336,36 +3345,38 @@ body.zen-mode .zen-exit-btn {
     align-items: center;
     gap: 12px;
     width: 100%;
-    padding: 16px 20px;
-    background: var(--primary-color);
-    color: #ffffff;
-    border: none;
+    max-width: var(--layout-max-md);
+    padding: 14px 20px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
     border-radius: var(--radius-md);
+    color: var(--text-color);
     cursor: pointer;
     text-align: left;
     margin-top: 10px;
     transition: all var(--transition-fast);
-    box-shadow: 0 4px 12px rgba(49, 87, 213, 0.3);
+    box-shadow: var(--box-shadow);
 }
 .btn-flashcard-quick:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(49, 87, 213, 0.4);
+    background: var(--primary-light);
+    border-color: var(--primary-color);
+    transform: translateY(-1px);
+    box-shadow: var(--box-shadow-lg);
 }
 .btn-flashcard-quick svg {
-    color: #ffffff;
+    color: var(--primary-color);
     flex-shrink: 0;
 }
 .btn-flashcard-quick strong {
     display: block;
-    font-size: 1rem;
-    color: #ffffff;
+    font-size: 0.95rem;
+    color: var(--primary-color);
 }
 .btn-flashcard-quick small {
     display: block;
-    font-size: 0.8rem;
-    opacity: 0.85;
+    font-size: 0.78rem;
+    color: var(--text-muted);
     margin-top: 2px;
-    color: #ffffff;
 }
 
 .course-selection-area > .btn-flashcard-quick {
@@ -6538,4 +6549,112 @@ html, body {
   border: 1px solid var(--primary-color);
   margin-left: 0.5rem;
   vertical-align: middle;
+}
+
+/* =============================================================================
+   DOJO SEGMENTED VIEW NAVIGATION (Clean Anti-Slop Segmented Control)
+   ============================================================================= */
+.dojo-segmented-nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 6px;
+  margin: 1.25rem 0 1.5rem 0;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.dojo-segmented-nav::-webkit-scrollbar {
+  display: none;
+}
+.dojo-seg-tab {
+  flex: 1;
+  min-width: 160px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+  user-select: none;
+}
+.dojo-seg-tab svg {
+  flex-shrink: 0;
+  color: currentColor;
+  transition: transform var(--transition-fast);
+}
+.dojo-seg-tab:hover {
+  color: var(--text-color);
+  background: rgba(49, 87, 213, 0.05);
+}
+.dojo-seg-tab.active {
+  background: var(--bg-card);
+  color: var(--primary-color);
+  border-color: var(--border-color);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  font-weight: 700;
+}
+.dojo-seg-tab.active svg {
+  color: var(--primary-color);
+}
+
+/* =============================================================================
+   DOJO QUICK ACTIONS BAR (Grid on Start View)
+   ============================================================================= */
+.dojo-quick-actions-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+.dojo-quick-actions-bar .btn-quick-quiz {
+  margin: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* =============================================================================
+   DOJO VIEW PANELS & INTRO HEADERS
+   ============================================================================= */
+.dojo-view-panel {
+  width: 100%;
+  animation: fadeIn 0.2s ease-out;
+}
+.dojo-view-panel.hidden {
+  display: none !important;
+}
+.dojo-panel-intro {
+  margin-bottom: 1.5rem;
+}
+.dojo-panel-intro-header {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+}
+.dojo-panel-intro-header h3 {
+  margin: 0 0 6px 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-color);
+}
+.dojo-panel-intro-header p {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.5;
 }

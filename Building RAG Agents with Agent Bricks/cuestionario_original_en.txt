@@ -1,0 +1,160 @@
+te ire pasando la ingormacion para que guardes y use el mismo formato que las anteriore preguntas opciones cual es la correcta y juustificacion&#x20;
+
+Pregunta 1 de 20 (obligatorio)
+A multi-turn support agent for a telecom company starts strong but degrades over long conversations: it forgets earlier constraints, exceeds token budgets, and sometimes answers from stale tool output instead of the newest retrieval. A teammate proposes simply raising the model's maximum output tokens.
+Which change most directly addresses the underlying context engineering problem?
+Switch to a different foundation model with a reputation for creativity.Remove the system instructions so the model has more room for conversation history.Increase maximum output tokens so the model can restate everything it has seen on every turn.
+Manage state across turns by summarizing history, pruning irrelevant or stale context, and keeping persistent instructions in the window while staying within the token budget.
+
+Pregunta 2 de 20 (obligatorio)
+An engineer already has a flattened table of individual parsed elements (one text block per row). They try to chunk it by calling ai\_prep\_search on the single-block text column, but the chunking does not behave as expected.
+What is the correct input for ai\_prep\_search, and why?
+Pass the embedding vector of each element, because chunking operates in vector space.
+Pass the full ai\_parse\_document VARIANT per document, not the flattened elements, because ai\_prep\_search transforms the structured parse output into semantic chunks.
+Pass the AI Search index name, because ai\_prep\_search reads chunks from the index.Pass a comma-separated string of all element contents, because ai\_prep\_search expects one long string.
+
+Pregunta 3 de 20 (obligatorio)
+A team indexes long standards documents. With very large chunks, retrieval returns big passages where the key sentence is buried and sometimes overlooked; the chunks also risk exceeding the embedding model's token limit and being silently truncated.
+Which adjustment best addresses these issues?
+Remove all overlap between chunks to guarantee no repeated text.Switch the embedding model to one with a smaller context window to force shorter inputs.Increase chunk size further so each chunk contains the entire document.
+Use smaller, focused chunks with modest overlap that fit within the embedding model's token limit, improving precision and reducing the lost in the middle effect.
+
+Pregunta 4 de 20 (obligatorio)
+From ai\_prep\_search, each chunk has chunk\_to\_embed (context-enriched text with titles, headers, and page metadata) and chunk\_to\_retrieve (raw chunk text). An engineer is choosing which column to send to the embedding model and which to show the LLM at answer time.
+Which assignment maximizes retrieval quality and answer readability?
+Embed chunk\_to\_embed for findability from the added context, and give the LLM chunk\_to\_retrieve as clean original text for accurate generation.
+Embed chunk\_to\_retrieve and give the LLM chunk\_to\_embed, so the model reads the metadata.Embed and retrieve using chunk\_to\_embed for both, so the model always sees the metadata.Embed and retrieve using chunk\_to\_retrieve for both, since metadata is never useful.
+
+Pregunta 5 de 20 (obligatorio)
+A law firm ingests contracts from a document connector that lands file contents into a Unity Catalog table with a content column and a metadata struct. New contracts arrive continuously, and the firm wants a Knowledge Assistant to use this table directly as a knowledge source.
+What must be true of that Unity Catalog table for the Knowledge Assistant to use it as a file table source?
+The table must be stored as Parquet and partitioned by contract date.
+The table must be a streaming table or have Change Data Feed enabled, with a content column (BINARY or STRING) and a metadata struct.
+The table must be converted into a Unity Catalog Volume before it can be used.The table must already contain a precomputed embedding column produced by databricks-gte-large-en.
+
+Pregunta 6 de 20 (obligatorio)
+When classifying parsed elements, an engineer adds WHERE LENGTH(content) > 50 and, for extraction, uses a higher threshold such as LENGTH(content) > 100. Short items like page numbers and single-word headers had been producing noisy labels.
+What is the rationale for these length filters?
+They remove short, low-signal elements so classification and extraction operate on blocks with enough text to be meaningful, and extraction uses a higher bar because it needs more surrounding context.
+They are required syntax; ai\_classify and ai\_extract fail without a LENGTH filter.They convert content to lowercase before classification.They cap the maximum number of characters sent to the model to avoid truncation.
+
+Pregunta 7 de 20 (obligatorio)
+A developer at a healthcare startup wants to call a Knowledge Assistant's serving endpoint from a notebook using the OpenAI Python client, with MLflow tracing enabled.
+import mlflow
+from openai import OpenAI
+
+mlflow\.openai.autolog()
+token = dbutils.notebook.entry\_point.getDbutils().notebook().getContext().apiToken().get()
+host = w\.config.host
+
+client = OpenAI(
+    api\_key=token,
+    base\_url=f"{host}/\_\_\_\_\_\_",
+)
+What should replace **\_\_** so requests route to Databricks Model Serving instead of the public OpenAI API?
+The value should be api/2.0/mlflow, the MLflow REST base.The value should be v1/chat, pointing at the public OpenAI-compatible path.
+The value should be serving-endpoints, so the base\_url becomes {host}/serving-endpoints.
+The value should be workspace/agents, the Agents UI route.
+
+Pregunta 8 de 20 (obligatorio)
+A search team notices poor recall after switching the query-time embedding model to a different one than was used to build the index. They also want to understand how ranking is decided.
+Which statement is correct?
+Any embedding model can be used at query time as long as the dimension count matches, regardless of which model built the index.
+Recall dropped because query and index embeddings must come from the same model to share a vector space, and cosine similarity ranks chunks by how small the angle is between the query vector and each chunk vector.
+Ranking uses exact nearest neighbors only, so approximate search is never involved.Cosine similarity ranks by the raw magnitude of the vectors, so longer text always ranks higher.
+
+Pregunta 9 de 20 (obligatorio)
+After enabling mlflow\.openai.autolog() and calling a Knowledge Assistant endpoint, a data scientist wants to confirm what context was retrieved, see the grounded answer, and verify the response is backed by source documents.
+Which pair of capabilities supports this?
+Autologging disables tracing to save cost, and citations are only available in fine-tuned models.Traces are only visible after registering the model in Unity Catalog, and citations require CONTINUOUS sync.
+The MLflow trace captures the input and output (including retrieved context and the generated answer), and the Knowledge Assistant returns citations back to source documents.
+The trace shows only latency metrics, and citations must be computed manually with a separate SQL query.
+
+Pregunta 10 de 20 (obligatorio)
+A retailer already owns a custom RAG pipeline and a vector search index. They want to attach that existing index to a Knowledge Assistant as a source, but the index was built with a third-party embedding model.
+What is the key requirement they must satisfy?
+The index must contain fewer than 10 columns to attach as a source.The index must be copied into a Unity Catalog Volume as PDFs first.The index must be rebuilt in CONTINUOUS pipeline mode before it can be attached.
+The AI Search index must use a supported Databricks embedding model, such as databricks-gte-large-en, rather than an unsupported third-party model.
+
+Pregunta 11 de 20 (obligatorio)
+A pharmaceutical team needs a production-grade question-answering assistant over standard operating procedure PDFs within days, and does not want to hand-build parsing, chunking, embedding, and serving. A separate team needs a novel multi-step, tool-heavy agent with unusual orchestration.
+Which choice best fits each team?
+Both teams should use a Knowledge Assistant, since custom agents are not supported on Databricks.
+The first team should use a Knowledge Assistant (declarative, managed), and the second should build a code-first custom agent for full control.
+The first team should build a code-first agent, and the second should use a Knowledge Assistant.Both teams should build code-first custom agents, since Knowledge Assistants cannot serve production traffic.
+
+Pregunta 12 de 20 (obligatorio)
+A regional credit union wants an internal assistant to answer staff questions about its latest lending policies, which are updated monthly. A pilot using only a base LLM with carefully worded prompts keeps returning outdated rules and occasionally invents policy details that do not exist.
+Which explanation best describes why prompt refinement alone cannot fix these two problems?
+A base LLM is limited by its training cutoff and has no access to the credit union's private, changing documents, so it cannot know current policies and fills gaps by hallucinating.
+The model needs a higher temperature to stop inventing details and a lower one to stay current.The prompts are too long, so the model runs out of context window before it can read the policy question.The model must be fine-tuned on general financial text before any prompt can produce accurate answers.
+
+Pregunta 13 de 20 (obligatorio)
+A procurement analyst extracts fields from parsed vendor purchase orders and wants each field as its own column.
+SELECT
+  content,
+  ai\_extract(content, '["po\_number","vendor","total"]') AS ext
+FROM elements
+
+Which expression correctly pulls the extracted vendor value into a column?
+ext[1], because ai\_extract returns an ordered array with vendor in the second position.ai\_extract(ext, 'vendor'), because you must call the function a second time to read a field.ext:vendor::ARRAY, because each extracted field is returned as an array of candidates.
+ext:response.vendor, because ai\_extract returns a VARIANT with a response object whose fields match the requested names.
+
+Pregunta 14 de 20 (obligatorio)
+A clinical research team parses scanned consent-form PDFs stored in a Unity Catalog Volume and wants layout-aware output pinned to the current schema, including figure descriptions and bounding boxes.
+SELECT
+  path,
+  ai\_parse\_document(content, MAP('version', '2.0')) AS parsed
+FROM READ\_FILES('/Volumes/research/trials/consent\_forms', format => 'binaryFile')
+
+What does the parsed column contain, and why pass MAP('version', '2.0')?
+A DOUBLE similarity score; the version chooses the embedding model.
+A VARIANT of structured JSON (document elements and pages); the version pins output to the v2.0 schema, which supports descriptions and bounding boxes.
+An ARRAY of page images; the version selects a higher image resolution.A STRING of plain text; the version pins the output to raw OCR only.
+
+Pregunta 15 de 20 (obligatorio)
+A team creates a Delta Sync index on a standard AI Search endpoint. After the initial sync, incremental updates fail to propagate, and they discover the source table was created without Change Data Feed. A colleague suggests dropping and rebuilding the whole index on every update instead.
+What is the correct fix, and why?
+Enable Change Data Feed on the source table, because Delta Sync indexes on standard endpoints require CDF, which lets AI Search process only the changed rows for efficient incremental sync.
+Set num\_results higher so more rows are returned per sync.Move the table to a Unity Catalog Volume, because indexes can only sync from volumes.Switch the query\_type to FULL\_TEXT, because vector indexes cannot sync incrementally.
+
+Pregunta 16 de 20 (obligatorio)
+A property and casualty insurer is designing a claims assistant. When an adjuster asks a question, the system first searches an index of policy documents, then places the most relevant passages into the model's prompt, and finally has the model write an answer grounded in those passages.
+These three steps map to which pattern, in order?
+Retrieve, Generate, Augment
+Retrieve, Augment, Generate
+Augment, Generate, RetrieveGenerate, Retrieve, Augment
+
+Pregunta 17 de 20 (obligatorio)
+A compliance team updates a chunks table in nightly batches and wants to control exactly when the index refreshes to keep costs predictable. A separate trading-desk team needs the index to reflect new documents within seconds of arrival.
+Which pipeline\_type fits each team?
+Compliance: CONTINUOUS; Trading desk: TRIGGERED.Both should use CONTINUOUS, since TRIGGERED cannot sync updated rows.
+Compliance: TRIGGERED (sync on demand, cost control for batch); Trading desk: CONTINUOUS (near-real-time freshness at higher compute cost).
+Both should use TRIGGERED, since CONTINUOUS is only for one-time backfills.
+
+Pregunta 18 de 20 (obligatorio)
+An auditor has a parsed VARIANT column from consent forms and needs one row per content block so each block can be filtered and classified.
+SELECT
+  element.value:type::STRING AS element\_type,
+  element.value:content::STRING AS content
+FROM parsed\_docs,
+  LATERAL \_\_\_\_\_\_(parsed\_docs.parsed:document:elements) AS element
+WHERE element.value:content IS NOT NULL
+
+Which function belongs in the blank to turn the elements array into one row per element?
+explode\_outer, because it is the only function that works on VARIANT columns.
+variant\_explode, which converts a VARIANT array or object into rows exposing pos, key, and value columns.
+posexplode, which requires the column to already be an ARRAY type, not VARIANT.from\_json, which parses a JSON string into a struct without producing multiple rows.
+
+Pregunta 19 de 20 (obligatorio)
+Two engineers at a logistics firm debate their agent design. One focuses only on rewording the instruction text sent to the model. The other argues they must design the whole information environment: retrieved shipment records, system instructions, conversation history, and tool outputs, while keeping the token budget under control.
+How is the second engineer's approach best characterized relative to the first?
+It is context engineering, a broader discipline that manages the entire input environment, whereas the first engineer is doing prompt engineering, which targets only the instruction text.
+Both are prompt engineering, since anything placed in the context window is a prompt.It is fine-tuning, because managing conversation history changes the model's weights over time.It is prompt engineering, and the first engineer is doing context engineering by keeping the instructions short.
+
+Pregunta 20 de 20 (obligatorio)
+A manufacturer points a Knowledge Assistant at a Unity Catalog Volume of equipment manuals. Most are a few megabytes, but three consolidated manuals are about 80 MB each. After indexing, answers never cite the three large manuals.
+What is the most likely reason?
+The volume must be smaller than 50 MB in total, so the whole volume was skipped.The Knowledge Assistant only indexes the first file in any volume.
+Files larger than 50 MB are automatically skipped, so the three oversized manuals were never ingested.
+PDF files are never supported as a Knowledge Assistant source.
