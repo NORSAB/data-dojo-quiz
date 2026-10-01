@@ -6809,3 +6809,23 @@ document.addEventListener('click', (e) => {
     }
   }
 });
+
+// Antigravity (Advanced Agentic) | 2026-10-01 14:25 CST | Controlador del menú desplegable del header para reducir densidad visual.
+window.toggleHeaderMoreMenu = function(e, forceState) {
+  if (e && e.stopPropagation) e.stopPropagation();
+  const menu = document.getElementById("header-more-menu");
+  const btn = document.getElementById("header-more-btn");
+  if (!menu) return;
+  const isCurrentlyOpen = !menu.classList.contains("hidden");
+  const nextOpen = typeof forceState === 'boolean' ? forceState : !isCurrentlyOpen;
+  menu.classList.toggle("hidden", !nextOpen);
+  if (btn) btn.setAttribute("aria-expanded", String(nextOpen));
+};
+
+document.addEventListener("click", (e) => {
+  const dropdown = document.getElementById("header-more-dropdown");
+  const menu = document.getElementById("header-more-menu");
+  if (dropdown && menu && !menu.classList.contains("hidden") && !dropdown.contains(e.target)) {
+    window.toggleHeaderMoreMenu(null, false);
+  }
+});

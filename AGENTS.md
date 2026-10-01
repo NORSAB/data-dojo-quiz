@@ -1244,3 +1244,23 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
     - `tools/validate_bank_integrity.js`: OK (3,123 preguntas íntegras, 26 archivos).
     - `tools/validate_full_application.js`: 96/96 pruebas pasadas al 100%.
 
+### 2026-10-01 14:26 CST — Antigravity (Advanced Agentic Coding)
+- **Fase 2 de Pulido UI/UX (Header Compacto, Tarjetas Pearson VUE y Filtros de Categoría):**
+  - **Header Superior Compacto y Agrupación de Utilidades:**
+    - Se redujo la densidad del encabezado consolidando los accesos secundarios (`badges-btn`, `stats-page-btn`, `zen-mode-toggle`, `admin-btn`) dentro de un menú desplegable flotante discreto (`#header-more-btn` / `#header-more-menu`), manteniendo el 100% de los IDs, atributos y manejadores de evento intactos.
+    - Se mantuvieron visibles los accesos principales de navegación (`Inicio`, `Estudio`, `Búsqueda`, `Idioma ES/EN`, `Live Sync`, `Tema` y `Perfil`).
+    - Controlador añadido en `script.js`: `window.toggleHeaderMoreMenu` con cierre automático al hacer clic fuera del menú.
+  - **Tarjetas de Opciones Pearson VUE / Apple (`#quiz-screen`):**
+    - Rediseñado `.option-item` con borde sutil de 1px (`var(--border-color)`), esquinas redondeadas ergonómicas de 12px, altura de línea optimizada (`line-height: 1.55`) y espaciado de 12px.
+    - Letras de opción (`.option-key-badge`) rediseñadas como insignias circulares perfectas (28px x 28px, `border-radius: 50%`) con tipografía nítida y estados interactivos sincronizados (`:hover`, `.selected`, `.correct`, `.incorrect`).
+  - **Filtro Horizontal de Categorías y Grilla Fluida:**
+    - `.category-sidebar` y `.category-list` optimizados como barra horizontal de chips/pills discretos sobre la cuadrícula de cursos.
+    - Eliminado padding lateral excesivo en `.course-selection-area`, permitiendo que `.course-list` use el ancho completo con tarjetas fluidas.
+  - **Actualización de PWA y Suites de Verificación:**
+    - `BUILD_TIMESTAMP` actualizado a `20261001c` (`simulador-v68-20261001c`) en `sw.js` e `index.html`.
+    - `tools/validate_ui_palette.js`: OK (18 colores hex únicos, 0 gradientes).
+    - `tools/audit_code_structure.js`: OK (0 funciones duplicadas, 0 IDs duplicados, 88 handlers inline).
+    - `tools/validate_bank_integrity.js`: OK (3,123 preguntas, 0 colisiones).
+    - `tools/validate_full_application.js`: 96/96 pruebas pasadas al 100%.
+
+
