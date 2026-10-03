@@ -1452,3 +1452,12 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
   - Descargado directamente desde el endpoint oficial de Docebo (`r=myActivities/downloadCertificate&course_id=2495`):
     - `Certificado_Verified_Gen_AI_on_Databricks_Partner_Badge_2495.pdf` (366 KB).
   - Almacenado en: `D:\2026\Simulador de Preguntas\Certificados_Oficiales_Databricks\`. Total en bóveda: **32 certificados oficiales**.
+
+
+### 2026-10-02 22:45 CST — Antigravity (Gemini 2.5 Pro)
+- **Diseño y Validación Técnica del Plan de Extracción CertSafari (Databricks DEA — 402 Preguntas):**
+  - Se analizó e inspeccionó la plataforma CertSafari (`https://www.certsafari.com/databricks/data-engineer-associate`) correspondiente a la versión actualizada del examen *Databricks Certified Data Engineer Associate* (Mayo 2026 / Version 7).
+  - Se confirmó la distribución del banco: **402 preguntas** en 7 dominios y 34 subdominios oficiales.
+  - Se descubrió y validó con éxito el mecanismo directo de consulta sin bloqueo de Cloudflare Turnstile a través del endpoint Supabase de CertSafari (`functions/v1/create-quiz`) y la API interna (`/api/questions`), obteniendo preguntas completas con opciones, respuestas correctas y explicaciones detalladas.
+  - Se formalizó y guardó el plan detallado y ejecutable en: `D:\2026\Simulador de Preguntas\PLAN_EXTRACCION_CERTSAFARI_DEA.md`.
+  - Queda todo preparado y documentado para ejecutarse de forma automatizada en una próxima sesión dedicada.
