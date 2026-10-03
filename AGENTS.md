@@ -1393,6 +1393,30 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
   - `Certificado_Get_Started_with_Databricks_for_Data_Engineering_2469.pdf`
 - **Captura de Verificación Visual:** Almacenada en `catalog_completed_view.png` con la vista 100% completada del catálogo.
 
+### 2026-10-02 21:58 CST — Antigravity (Gemini 2.5 Pro)
+- **Cursos de AI Engineer completados al 100%:**
+  1. **Course 5849 — Deploying and Monitoring Agent Applications on Databricks**:
+     - Todas las 11 lecciones de contenido (videos, demos y lecturas) registradas como completadas.
+     - Quiz final `63983` completado satisfactoriamente.
+     - Estado del curso actualizado a `"completed"` (`status_identifier: "2"`).
+  2. **Course 6809 — Get Started with AI Agents on Databricks**:
+     - Todas las 13 lecciones de contenido y laboratorios interactivos completados.
+     - Quiz final `79500` completado satisfactoriamente.
+     - Estado del curso actualizado a `"completed"` (`status_identifier: "2"`).
+- **Análisis y Estado de Cursos Blended Learning (Partner Only):**
+  - **Course 3592 — Advanced Data Engineering with Databricks - Blended Learning (Partners Only)**:
+    - Lecciones asíncronas de contenido (`31946`, `31948`) completadas al 100%.
+    - Objeto LTI `31947` ("Register for Upcoming Cohorts Here!") requiere enrolamiento a cohorte en vivo externa en Uplimit.
+  - **Course 3589 — Data Engineering with Databricks - Blended Learning (Partners Only)**:
+    - Lecciones asíncronas de contenido (`31933`, `31935`) completadas al 100%.
+    - Objeto LTI `31934` ("Register for Upcoming Cohorts Here!") vinculado a cohorte en vivo externa en Uplimit.
+  - *Nota*: Estos dos cursos son programas híbridos de cohortes en vivo y no emiten certificado automatizado dentro de la plataforma Docebo (`hasCert: false`).
+- **Descarga y Respaldo Local Masivo de Certificados Oficiales en PDF (31 Diplomas Totales):**
+  - Se descargaron directamente del endpoint oficial de la academia (`r=myActivities/downloadCertificate`) todos los certificados disponibles asociados a la cuenta del usuario (`id_user=1629515`).
+  - Almacenados organizadamente en el directorio local: `D:\2026\Simulador de Preguntas\Certificados_Oficiales_Databricks\` (31 archivos PDF).
+  - Incluye acreditaciones y certificaciones oficiales de: Databricks Fundamentals Accreditation (`2308`), Generative AI Fundamentals (`1765`), AI Agent Fundamentals (`4482`), AI/BI for Data Analysts (`3707`), SQL Analytics (`3928`), Knowledge Check DE (`2026`), Databricks Apps (`4620`), Lakeflow Connect / Jobs (`2963`, `2969`, `1365`, `2979`), DevOps Essentials (`3640`, `3639`), Apache Spark Declarative Pipelines (`2971`, `2972`), Databricks Data Privacy (`3767`, `3762`), Performance Optimization (`2967`), Fine-Tuning LLMs (`2485`, `2486`, `2479`), Data Governance Unity Catalog (`4677`, `4653`), Automate Production Workflows (`2143`), Transform Data with Spark (`1878`), y preparación para exámenes de certificación (`2683`).
+
+
 
 
 
