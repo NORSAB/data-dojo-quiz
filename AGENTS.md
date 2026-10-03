@@ -1387,6 +1387,11 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
 - **Auditoría Final del Catálogo Oficial (48 elementos totales):**
   - **33 cursos E-learning totales** presentes en la vista del usuario: **33 completados (100.0%)**, **0 incompletos**, **0 pendientes**.
   - **15 cursos excluidos** según instrucción explícita del usuario: 13 cursos ILT (Instructor-Led Training) y 2 cursos Blended Learning.
+- **Descarga y Respaldo Local de Certificados Oficiales en PDF:**
+  - `Certificado_Knowledge_Check_Get_Started_with_Databricks_for_Data_Engineering_2026.pdf`
+  - `Certificado_Databricks_Fundamentals_Accreditation_2308.pdf`
+  - `Certificado_Get_Started_with_Databricks_for_Data_Engineering_2469.pdf`
+- **Captura de Verificación Visual:** Almacenada en `catalog_completed_view.png` con la vista 100% completada del catálogo.
 
 
 
