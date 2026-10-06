@@ -1461,3 +1461,12 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
   - Se descubrió y validó con éxito el mecanismo directo de consulta sin bloqueo de Cloudflare Turnstile a través del endpoint Supabase de CertSafari (`functions/v1/create-quiz`) y la API interna (`/api/questions`), obteniendo preguntas completas con opciones, respuestas correctas y explicaciones detalladas.
   - Se formalizó y guardó el plan detallado y ejecutable en: `D:\2026\Simulador de Preguntas\PLAN_EXTRACCION_CERTSAFARI_DEA.md`.
   - Queda todo preparado y documentado para ejecutarse de forma automatizada en una próxima sesión dedicada.
+
+### 2026-10-06 14:27 CST - Antigravity (Gemini)
+- **Sincronización e Integración de Recursos:**
+  - Se incorporó el workflow de GitHub Actions CI (.github/workflows/validate.yml) para validación automatizada en push y pull requests.
+  - Se integraron las carpetas y documentación de cursos completados de Databricks: Automate Production Workflows/ y Building Enterprise Applications with Databricks Apps/.
+  - Se añadieron Simulador de Preguntas.code-workspace y assets visuales asociados.
+- **Validación del Repositorio:**
+  - Se ejecutaron las suites de validación completas (	ools/validate_full_application.js, 	ools/validate_ui_palette.js, 	ools/validate_global_language.js), pasando las 96 comprobaciones exitosamente (96/96).
+  - Sincronizado y publicado en origin/main.
