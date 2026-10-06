@@ -739,12 +739,170 @@ body:has(#onboarding-screen:not(.hidden)) #global-language-toggle {
 }
 
 /* =============================================================================
-   COURSE LIST — Floating Cards
+   COURSE LIST & ROLE-ORGANIZED SECTIONS
    ============================================================================= */
-.course-list {
+.role-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding: 0.25rem 0 0.85rem 0;
+  margin-bottom: 1.25rem;
+  width: 100%;
+  scrollbar-width: thin;
+}
+
+.role-filter-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.85rem;
+  border-radius: 9999px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-color);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.role-filter-pill:hover {
+  border-color: var(--primary-color);
+  background: var(--bg-hover);
+}
+
+.role-filter-pill.active {
+  background: var(--primary-color);
+  color: #ffffff;
+  border-color: var(--primary-color);
+}
+
+.role-filter-pill svg {
+  flex-shrink: 0;
+}
+
+.role-pill-count {
+  font-size: 0.75rem;
+  padding: 0.1rem 0.45rem;
+  border-radius: 9999px;
+  background: rgba(0, 0, 0, 0.06);
+  font-weight: 600;
+}
+
+.role-filter-pill.active .role-pill-count {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
+.role-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+.role-section-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid var(--border-color);
+  width: 100%;
+}
+
+.role-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.role-icon-box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--primary-color);
+  flex-shrink: 0;
+}
+
+.role-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-color);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.role-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-muted);
+}
+
+.role-badge.role-badge-active {
+  color: var(--primary-color);
+}
+
+.role-badge.role-badge-coming {
+  color: var(--text-muted);
+  opacity: 0.8;
+}
+
+.role-desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin: 0;
+  padding-left: 2.65rem;
+}
+
+.role-courses-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
   gap: 1.25rem;
+  width: 100%;
+}
+
+.course-header-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
+}
+
+.course-role-chip {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--primary-color);
+  background: var(--bg-surface);
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+}
+
+.course-item.selected-course {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 1px var(--primary-color);
+}
+
+.course-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
   max-width: 100% !important;
   margin: 0 !important;
   width: 100% !important;

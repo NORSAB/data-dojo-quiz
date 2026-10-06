@@ -163,16 +163,22 @@ document.addEventListener("DOMContentLoaded", () => {
           id: "dp-600",
           name: "Microsoft Certified: Fabric Analytics Engineer Associate (DP-600)",
           status: "active",
+          role: "Analytics Engineer",
+          roleDesc: "Ingeniería analítica, modelos semánticos y Power BI con Fabric",
         },
         {
           id: "azure-ai-103",
           name: "Microsoft Certified: Azure AI Apps and Agents Developer Associate (AI-103)",
           status: "active",
+          role: "AI & Agents Developer",
+          roleDesc: "Desarrollo de aplicaciones inteligentes, RAG y agentes de IA en Azure",
         },
         {
           id: "dp-700",
           name: "Microsoft Certified: Fabric Data Engineer Associate (DP-700)",
           status: "coming",
+          role: "Data Engineer",
+          roleDesc: "Arquitectura e ingesta de datos a escala empresarial en Fabric",
         },
       ],
     },
@@ -181,14 +187,18 @@ document.addEventListener("DOMContentLoaded", () => {
       name: "Google",
       courses: [
         {
-          id: "gcp-ml",
-          name: "Google Cloud Professional Machine Learning Engineer",
-          status: "coming",
-        },
-        {
           id: "gcp-data",
           name: "Google Cloud Certified - Associate Data Practitioner",
           status: "coming",
+          role: "Data Engineer",
+          roleDesc: "Fundamentos y prácticas de ingeniería de datos en Google Cloud",
+        },
+        {
+          id: "gcp-ml",
+          name: "Google Cloud Professional Machine Learning Engineer",
+          status: "coming",
+          role: "Machine Learning Engineer",
+          roleDesc: "Diseño, entrenamiento e implementación de modelos en Vertex AI",
         },
       ],
     },
@@ -197,104 +207,144 @@ document.addEventListener("DOMContentLoaded", () => {
       name: "Databricks",
       courses: [
         {
-          id: "databricks-data-engineer-professional",
-          name: "Databricks Certified Data Engineer Professional (DEP)",
-          status: "active",
-        },
-        {
           id: "databricks-data-engineer-associate",
           name: "Databricks Certified Data Engineer Associate (DEA)",
           status: "active",
+          role: "Data Engineer",
+          roleDesc: "Pipelines ETL, Delta Lake, Lakeflow y Apache Spark en producción",
         },
         {
-          id: "databricks-genai-engineer",
-          name: "Databricks Certified Generative AI Engineer Associate",
+          id: "databricks-data-engineer-professional",
+          name: "Databricks Certified Data Engineer Professional (DEP)",
           status: "active",
-        },
-        {
-          id: "databricks-da",
-          name: "Databricks Certified Data Analyst Associate",
-          status: "active",
-        },
-        {
-          id: "databricks-fundamentals",
-          name: "Databricks Fundamentals",
-          status: "active",
+          role: "Data Engineer",
+          roleDesc: "Pipelines ETL, Delta Lake, Lakeflow y Apache Spark en producción",
         },
         {
           id: "databricks-lakeflow-connect",
           name: "Data Ingestion with Lakeflow Connect",
           status: "active",
+          role: "Data Engineer",
+          roleDesc: "Pipelines ETL, Delta Lake, Lakeflow y Apache Spark en producción",
         },
         {
           id: "databricks-lakeflow-pipelines",
           name: "Build Data Pipelines with Lakeflow Spark Declarative Pipelines",
           status: "active",
+          role: "Data Engineer",
+          roleDesc: "Pipelines ETL, Delta Lake, Lakeflow y Apache Spark en producción",
         },
         {
           id: "databricks-lakeflow-jobs",
           name: "Deploy Workloads with Lakeflow Jobs",
           status: "active",
-        },
-        {
-          id: "databricks-devops-de",
-          name: "DevOps Essentials for Data Engineering",
-          status: "active",
+          role: "Data Engineer",
+          roleDesc: "Pipelines ETL, Delta Lake, Lakeflow y Apache Spark en producción",
         },
         {
           id: "databricks-advanced-pipelines",
           name: "Advanced Techniques with Apache Spark Declarative Pipelines",
           status: "active",
+          role: "Data Engineer",
+          roleDesc: "Pipelines ETL, Delta Lake, Lakeflow y Apache Spark en producción",
         },
         {
-          id: "databricks-performance",
-          name: "Databricks Performance Optimization",
+          id: "databricks-devops-de",
+          name: "DevOps Essentials for Data Engineering",
           status: "active",
+          role: "Data Engineer",
+          roleDesc: "Pipelines ETL, Delta Lake, Lakeflow y Apache Spark en producción",
         },
         {
-          id: "databricks-privacy",
-          name: "Databricks Data Privacy & Compliance",
+          id: "databricks-genai-engineer",
+          name: "Databricks Certified Generative AI Engineer Associate",
           status: "active",
+          role: "Generative AI Engineer",
+          roleDesc: "Sistemas RAG, LLMs empresariales, evaluación y gobernanza con Mosaic AI",
         },
         {
-          id: "databricks-dabs",
-          name: "Automated Deployment with Declarative Automation Bundles (DABs)",
+          id: "databricks-da",
+          name: "Databricks Certified Data Analyst Associate",
           status: "active",
-        },
-        {
-          id: "databricks-workflows",
-          name: "Automate Production Workflows",
-          status: "active",
-        },
-        {
-          id: "databricks-governance",
-          name: "Get Started with Data Governance on Databricks",
-          status: "active",
-        },
-        {
-          id: "databricks-apps",
-          name: "Building Enterprise Applications with Databricks Apps",
-          status: "active",
+          role: "Data Analyst",
+          roleDesc: "Analítica SQL en Lakehouse, visualizaciones y paneles AI/BI",
         },
         {
           id: "databricks-aibi",
           name: "AI/BI for Data Analysts",
           status: "active",
+          role: "Data Analyst",
+          roleDesc: "Analítica SQL en Lakehouse, visualizaciones y paneles AI/BI",
         },
         {
           id: "databricks-sql-analytics",
           name: "SQL Analytics on Databricks",
           status: "active",
+          role: "Data Analyst",
+          roleDesc: "Analítica SQL en Lakehouse, visualizaciones y paneles AI/BI",
+        },
+        {
+          id: "databricks-fundamentals",
+          name: "Databricks Fundamentals",
+          status: "active",
+          role: "Platform & Governance",
+          roleDesc: "Arquitectura Lakehouse, Unity Catalog, automatización y seguridad",
+        },
+        {
+          id: "databricks-governance",
+          name: "Get Started with Data Governance on Databricks",
+          status: "active",
+          role: "Platform & Governance",
+          roleDesc: "Arquitectura Lakehouse, Unity Catalog, automatización y seguridad",
+        },
+        {
+          id: "databricks-privacy",
+          name: "Databricks Data Privacy & Compliance",
+          status: "active",
+          role: "Platform & Governance",
+          roleDesc: "Arquitectura Lakehouse, Unity Catalog, automatización y seguridad",
+        },
+        {
+          id: "databricks-performance",
+          name: "Databricks Performance Optimization",
+          status: "active",
+          role: "Platform & Governance",
+          roleDesc: "Arquitectura Lakehouse, Unity Catalog, automatización y seguridad",
+        },
+        {
+          id: "databricks-dabs",
+          name: "Automated Deployment with Declarative Automation Bundles (DABs)",
+          status: "active",
+          role: "Platform & Governance",
+          roleDesc: "Arquitectura Lakehouse, Unity Catalog, automatización y seguridad",
+        },
+        {
+          id: "databricks-workflows",
+          name: "Automate Production Workflows",
+          status: "active",
+          role: "Platform & Governance",
+          roleDesc: "Arquitectura Lakehouse, Unity Catalog, automatización y seguridad",
+        },
+        {
+          id: "databricks-apps",
+          name: "Building Enterprise Applications with Databricks Apps",
+          status: "active",
+          role: "Platform & Governance",
+          roleDesc: "Arquitectura Lakehouse, Unity Catalog, automatización y seguridad",
         },
         {
           id: "databricks-ml-a",
           name: "Databricks Certified Machine Learning Associate",
           status: "coming",
+          role: "Machine Learning Engineer",
+          roleDesc: "Modelado predictivo, MLflow y feature engineering en Lakehouse",
         },
         {
           id: "databricks-ml-p",
           name: "Databricks Certified Machine Learning Professional",
           status: "coming",
+          role: "Machine Learning Engineer",
+          roleDesc: "Modelado predictivo, MLflow y feature engineering en Lakehouse",
         },
       ],
     },
@@ -302,10 +352,10 @@ document.addEventListener("DOMContentLoaded", () => {
       id: "python",
       name: "Python",
       courses: [
-        { id: "py-basic", name: "Básico", status: "coming" },
-        { id: "py-inter", name: "Intermedio", status: "coming" },
-        { id: "py-adv", name: "Avanzado", status: "coming" },
-        { id: "py-ml", name: "Machine Learning", status: "coming" },
+        { id: "py-basic", name: "Básico", status: "coming", role: "Software Developer", roleDesc: "Sintaxis, estructuras de datos y lógica fundamental" },
+        { id: "py-inter", name: "Intermedio", status: "coming", role: "Software Developer", roleDesc: "POO, manejo funcional y módulos estándar" },
+        { id: "py-adv", name: "Avanzado", status: "coming", role: "Software Developer", roleDesc: "Concurrencia, metaprogramación y optimización" },
+        { id: "py-ml", name: "Machine Learning", status: "coming", role: "Data Scientist & ML", roleDesc: "Scikit-Learn, Pandas, NumPy y pipelines de modelado" },
       ],
     },
     {
@@ -316,11 +366,15 @@ document.addEventListener("DOMContentLoaded", () => {
           id: "tab-found",
           name: "Salesforce Certified Tableau Desktop Foundations",
           status: "coming",
+          role: "Data Visualizer",
+          roleDesc: "Principios de visualización, conexiones y diseño de vistas",
         },
         {
           id: "tab-data",
           name: "Salesforce Certified Tableau Data Analyst",
           status: "coming",
+          role: "Data Analyst",
+          roleDesc: "Cálculos complejos, parámetros, LOD y dashboards avanzados",
         },
       ],
     },
@@ -329,19 +383,25 @@ document.addEventListener("DOMContentLoaded", () => {
       name: "AWS",
       courses: [
         {
-          id: "aws-ml-spec",
-          name: "AWS Certified Machine Learning - Specialty",
+          id: "aws-data",
+          name: "AWS Certified Data Engineer - Associate",
           status: "coming",
+          role: "Data Engineer",
+          roleDesc: "Ingeniería de datos en AWS: Glue, EMR, Athena y Redshift",
         },
         {
           id: "aws-ml-eng",
           name: "AWS Certified Machine Learning Engineer - Associate",
           status: "coming",
+          role: "Machine Learning Engineer",
+          roleDesc: "Operaciones y despliegue de ML en SageMaker",
         },
         {
-          id: "aws-data",
-          name: "AWS Certified Data Engineer - Associate",
+          id: "aws-ml-spec",
+          name: "AWS Certified Machine Learning - Specialty",
           status: "coming",
+          role: "Machine Learning Engineer",
+          roleDesc: "Arquitectura e ingeniería de ML avanzada en AWS",
         },
       ],
     },
@@ -353,11 +413,15 @@ document.addEventListener("DOMContentLoaded", () => {
           id: "unir-viz-interactiva",
           name: "Visualización Interactiva de la Información",
           status: "active",
+          role: "Visualización Académica",
+          roleDesc: "Fundamentos teóricos, percepción visual, D3.js y modelos cognitivos",
         },
         {
           id: "unir-herramientas-viz",
           name: "Herramientas de Visualización",
           status: "active",
+          role: "Visualización Académica",
+          roleDesc: "Herramientas avanzadas de visualización analítica y exploración de datos",
         },
       ],
     },
@@ -369,10 +433,27 @@ document.addEventListener("DOMContentLoaded", () => {
           id: "unah-tesis",
           name: "Tesis: Modelo Híbrido TCROC-Markov-SSRC",
           status: "active",
+          role: "Investigación & Tesis Doctoral",
+          roleDesc: "Modelado estocástico, caos determinista y simulación avanzada",
         },
       ],
     },
   ];
+
+  const roleIcons = {
+    "Data Engineer": '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>',
+    "Generative AI Engineer": '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="3"/></svg>',
+    "Data Analyst": '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>',
+    "Platform & Governance": '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
+    "Machine Learning Engineer": '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="6" r="3"/><circle cx="12" cy="18" r="3"/><path d="M8.5 7.5l7 0M7.5 8.5l3.5 7M16.5 8.5l-3.5 7"/></svg>',
+    "AI & Agents Developer": '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4M8 15h.01M16 15h.01"/></svg>',
+    "Analytics Engineer": '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 3v18h18"/><path d="M18 9l-5 5-4-4-5 5"/></svg>',
+    "Software Developer": '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>',
+    "Data Scientist & ML": '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10 2v7.31a2 2 0 0 1-.58 1.41L4.2 16.03A3 3 0 0 0 6.32 21h11.36a3 3 0 0 0 2.12-4.97l-5.22-5.31A2 2 0 0 1 14 9.31V2"/></svg>',
+    "Data Visualizer": '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 10 10H12z"/></svg>',
+    "Visualización Académica": '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>',
+    "Investigación & Tesis Doctoral": '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>',
+  };
 
   // Learning Paths catalog bound to providers/categories
   const providerLearningPaths = {
@@ -491,6 +572,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let currentProviderId = null;
   let currentCourseId = null;
+  let activeRoleFilter = "all";
   let currentLanguage = window.AppI18n ? window.AppI18n.getLanguage() : "es";
 
   // Codex (GPT-5) | 2026-08-23 22:09 CST | Fuente única para el idioma activo en navegación, examen y estudio.
@@ -1628,6 +1710,7 @@ const badgesConfig = [
   function selectCategory(providerId) {
     currentProviderId = providerId;
     currentCourseId = null; // Reset course selection
+    activeRoleFilter = "all"; // Reset role filter when changing category
     setGlobalTheme(providerId); // Apply Theme Globally
     
     document.querySelectorAll(".category-item").forEach((el) => {
@@ -1754,68 +1837,229 @@ const badgesConfig = [
     });
   }
 
+  function renderRoleFilterBar(roleGroups, allCourses) {
+    const filterBar = document.getElementById("role-filter-bar");
+    if (!filterBar) return;
+    filterBar.innerHTML = "";
+
+    // If only 1 role or 0, hide the filter bar to keep UI super clean
+    if (roleGroups.length <= 1) {
+      filterBar.style.display = "none";
+      return;
+    }
+
+    filterBar.style.display = "flex";
+
+    // "Todos los roles" pill
+    const allPill = document.createElement("button");
+    allPill.type = "button";
+    allPill.className = `role-filter-pill ${activeRoleFilter === "all" ? "active" : ""}`;
+    allPill.innerHTML = `
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 10 10H12z"/>
+      </svg>
+      <span>Todos los roles</span>
+      <span class="role-pill-count">${allCourses.length}</span>
+    `;
+    allPill.onclick = () => {
+      activeRoleFilter = "all";
+      updateRoleFilterVisibility();
+    };
+    filterBar.appendChild(allPill);
+
+    // Individual role pills
+    roleGroups.forEach((rg) => {
+      const pill = document.createElement("button");
+      pill.type = "button";
+      pill.className = `role-filter-pill ${activeRoleFilter === rg.role ? "active" : ""}`;
+      const iconSvg = roleIcons[rg.role] || "";
+      pill.innerHTML = `
+        ${iconSvg}
+        <span>${rg.role}</span>
+        <span class="role-pill-count">${rg.courses.length}</span>
+      `;
+      pill.onclick = () => {
+        activeRoleFilter = rg.role;
+        updateRoleFilterVisibility();
+      };
+      filterBar.appendChild(pill);
+    });
+  }
+
+  function updateRoleFilterVisibility() {
+    const filterBar = document.getElementById("role-filter-bar");
+    if (filterBar) {
+      filterBar.querySelectorAll(".role-filter-pill").forEach((pill, idx) => {
+        if (idx === 0) {
+          pill.classList.toggle("active", activeRoleFilter === "all");
+        } else {
+          const roleName = pill.querySelector("span:not(.role-pill-count)")?.textContent?.trim();
+          pill.classList.toggle("active", activeRoleFilter === roleName);
+        }
+      });
+    }
+
+    const sections = courseList.querySelectorAll(".role-section");
+    sections.forEach((sec) => {
+      const secRole = sec.dataset.role;
+      const isVisible = activeRoleFilter === "all" || activeRoleFilter === secRole;
+      sec.style.display = isVisible ? "flex" : "none";
+      sec.classList.toggle("hidden-by-role", !isVisible);
+    });
+  }
+
+  function selectCourseCard(courseId) {
+    currentCourseId = courseId;
+    document.querySelectorAll(".course-item").forEach((card) => {
+      card.classList.toggle("selected-course", card.dataset.courseId === courseId);
+    });
+    try {
+      if (typeof renderDomainCards === "function") renderDomainCards(courseId);
+      if (typeof setupRealExamButton === "function") setupRealExamButton(courseId);
+      if (typeof updateWeaknessPanel === "function") updateWeaknessPanel(courseId);
+      if (typeof renderProgressDashboard === "function") renderProgressDashboard(courseId);
+      if (typeof updateStreakDisplay === "function") updateStreakDisplay();
+      if (typeof showFlashcardButton === "function") showFlashcardButton(courseId);
+      if (typeof renderStudyPlan === "function") renderStudyPlan(courseId);
+      if (typeof setupMarathonButton === "function") setupMarathonButton(courseId);
+      if (typeof renderStudyCoach === "function") renderStudyCoach(courseId);
+      if (typeof setupLessonsLearnedLauncher === "function") setupLessonsLearnedLauncher(courseId);
+    } catch (e) {
+      console.warn("Error updating preview panels for course:", courseId, e);
+    }
+  }
+
   function renderCourses(courses) {
     courseList.innerHTML = "";
-    // Sort: Active first, then others
+
+    // Sort courses: Active first, then others, then alphabetically
     const sortedCourses = [...courses].sort((a, b) => {
-        if (a.status === 'active' && b.status !== 'active') return -1;
-        if (a.status !== 'active' && b.status === 'active') return 1;
-        return 0;
+      if (a.status === "active" && b.status !== "active") return -1;
+      if (a.status !== "active" && b.status === "active") return 1;
+      return a.name.localeCompare(b.name, "es");
     });
 
-    sortedCourses.forEach((course) => {
-      const div = document.createElement("div");
-      div.className = `course-item ${
-        course.status === "coming" ? "disabled" : ""
-      }`;
-      const statusLabel =
-        course.status === "active" ? "Activo" : "Próximamente";
-      const statusClass =
-        course.status === "active" ? "status-active" : "status-coming";
-      const isCertified = certifiedCourses.includes(course.id);
-      div.innerHTML = `
-                <div class="course-info">
-                    <h4>${course.name}${isCertified ? ' <span class="cert-badge" title="Certificación obtenida"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span>' : ''}</h4>
-                    <p>${
-                      isCertified
-                        ? "Certificación obtenida"
-                        : course.status === "active"
-                        ? "Banco de preguntas completo"
-                        : "No disponible"
-                    }</p>
-                </div>
-                <div class="course-action">
-                    ${
-                      course.status === "active"
-                        ? `<div style="display:flex; gap:0.5rem;">
-                             <button class="btn btn-primary btn-sm course-btn-exam" data-course-id="${course.id}" style="position:relative; z-index:5;">Iniciar Examen</button>
-                             ${
-                               window.studyData && window.studyData[course.id]
-                                 ? `<button class="btn btn-secondary btn-sm course-btn-study" data-course-id="${course.id}" style="position:relative; z-index:5;">Estudiar</button>`
-                                 : ""
-                              }
-                           </div>`
-                        : `<span class="status-badge ${statusClass}">${statusLabel}</span>`
-                    }
-                </div>
-            `;
-      courseList.appendChild(div);
+    // Group courses by role
+    const rolesMap = new Map();
+    sortedCourses.forEach((c) => {
+      const roleName = c.role || "General";
+      if (!rolesMap.has(roleName)) {
+        rolesMap.set(roleName, {
+          role: roleName,
+          roleDesc: c.roleDesc || "",
+          courses: [],
+        });
+      }
+      rolesMap.get(roleName).courses.push(c);
+    });
 
-      // Attach event listeners directly (more reliable than inline onclick)
-      const examBtn = div.querySelector('.course-btn-exam');
-      if (examBtn) {
-        examBtn.addEventListener('click', function(e) {
-          e.stopPropagation();
-          window.startCourse(course.id);
-        });
+    const roleGroups = Array.from(rolesMap.values());
+    renderRoleFilterBar(roleGroups, courses);
+
+    // Render grouped role sections
+    roleGroups.forEach((group) => {
+      const isVisible = activeRoleFilter === "all" || activeRoleFilter === group.role;
+
+      const section = document.createElement("section");
+      section.className = `role-section${isVisible ? "" : " hidden-by-role"}`;
+      section.dataset.role = group.role;
+      if (!isVisible) {
+        section.style.display = "none";
       }
-      const studyBtn = div.querySelector('.course-btn-study');
-      if (studyBtn) {
-        studyBtn.addEventListener('click', function(e) {
-          e.stopPropagation();
-          window.openStudyMode(course.id);
+
+      const activeCount = group.courses.filter((c) => c.status === "active").length;
+      const totalCount = group.courses.length;
+      const iconSvg =
+        roleIcons[group.role] ||
+        '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>';
+
+      section.innerHTML = `
+        <div class="role-section-header">
+          <div class="role-title-row">
+            <span class="role-icon-box" aria-hidden="true">${iconSvg}</span>
+            <h4 class="role-title">${group.role}</h4>
+            <span class="role-badge ${activeCount > 0 ? "role-badge-active" : "role-badge-coming"}">
+              ${activeCount > 0 ? `${activeCount} de ${totalCount} activo(s)` : `${totalCount} próximamente`}
+            </span>
+          </div>
+          ${group.roleDesc ? `<p class="role-desc">${group.roleDesc}</p>` : ""}
+        </div>
+        <div class="role-courses-grid"></div>
+      `;
+
+      const grid = section.querySelector(".role-courses-grid");
+
+      group.courses.forEach((course) => {
+        const div = document.createElement("div");
+        const isSelected = currentCourseId === course.id;
+        div.className = `course-item ${
+          course.status === "coming" ? "disabled" : ""
+        } ${isSelected ? "selected-course" : ""}`;
+        div.dataset.courseId = course.id;
+
+        const statusLabel =
+          course.status === "active" ? "Activo" : "Próximamente";
+        const statusClass =
+          course.status === "active" ? "status-active" : "status-coming";
+        const isCertified = certifiedCourses.includes(course.id);
+
+        div.innerHTML = `
+          <div class="course-info">
+            <div class="course-header-meta">
+              <span class="course-role-chip">${group.role}</span>
+            </div>
+            <h4>${course.name}${isCertified ? ' <span class="cert-badge" title="Certificación obtenida"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span>' : ''}</h4>
+            <p>${
+              isCertified
+                ? "Certificación obtenida"
+                : course.status === "active"
+                ? "Banco de preguntas completo"
+                : "No disponible"
+            }</p>
+          </div>
+          <div class="course-action">
+            ${
+              course.status === "active"
+                ? `<div style="display:flex; gap:0.5rem;">
+                     <button class="btn btn-primary btn-sm course-btn-exam" data-course-id="${course.id}" style="position:relative; z-index:5;">Iniciar Examen</button>
+                     ${
+                       window.studyData && window.studyData[course.id]
+                         ? `<button class="btn btn-secondary btn-sm course-btn-study" data-course-id="${course.id}" style="position:relative; z-index:5;">Estudiar</button>`
+                         : ""
+                     }
+                   </div>`
+                : `<span class="status-badge ${statusClass}">${statusLabel}</span>`
+            }
+          </div>
+        `;
+
+        // Click card to select course & preview panels
+        div.addEventListener("click", function (e) {
+          if (e.target.closest("button")) return;
+          if (course.status === "active") {
+            selectCourseCard(course.id);
+          }
         });
-      }
+
+        const examBtn = div.querySelector(".course-btn-exam");
+        if (examBtn) {
+          examBtn.addEventListener("click", function (e) {
+            e.stopPropagation();
+            window.startCourse(course.id);
+          });
+        }
+        const studyBtn = div.querySelector(".course-btn-study");
+        if (studyBtn) {
+          studyBtn.addEventListener("click", function (e) {
+            e.stopPropagation();
+            window.openStudyMode(course.id);
+          });
+        }
+
+        grid.appendChild(div);
+      });
+
+      courseList.appendChild(section);
     });
   }
 

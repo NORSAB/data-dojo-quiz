@@ -33,16 +33,17 @@
 // Antigravity (Advanced Agentic) | 2026-10-01 14:25 CST | Header compacto con menú desplegable, opciones de examen Pearson VUE y filtro horizontal de categorías.
 // Antigravity (Advanced Agentic) | 2026-10-01 14:40 CST | Selector global permanente de categorías y rutas de aprendizaje formativas amarradas.
 // Antigravity (Advanced Agentic) | 2026-10-01 14:52 CST | Pestaña dedicada 'Rutas de Aprendizaje' en la barra segmentada principal.
-const BUILD_TIMESTAMP = '20261001e';
-const CACHE_NAME = `simulador-v70-${BUILD_TIMESTAMP}`;
+// Antigravity (Gemini 3.8 Flash) | 2026-10-06 15:35 CST | Jerarquía por roles en cursos: organización por categorías, roles y cursos sin alterar bancos ni almacenamiento.
+const BUILD_TIMESTAMP = '20261006a';
+const CACHE_NAME = `simulador-v71-${BUILD_TIMESTAMP}`;
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './styles.css?v=20261001e',
-  './app_i18n.js?v=20261001e',
-  './script.js?v=20261001e',
-  './features.js?v=20261001e',
-  './quiz_style.css?v=20261001e',
+  './styles.css?v=20261006a',
+  './app_i18n.js?v=20261006a',
+  './script.js?v=20261006a',
+  './features.js?v=20261006a',
+  './quiz_style.css?v=20261006a',
   './hero_data.js',
   './auto_restore_data.js',
   './manifest.json',
@@ -98,8 +99,8 @@ const ASSETS_TO_CACHE = [
   './conceptos_databricks.js',
   './personajes_unir_viz.js',
   './translations_databricks_es.js',
-  './translate_toggle.js?v=20261001e',
-  './supabase-sync.js?v=20261001e',
+  './translate_toggle.js?v=20261006a',
+  './supabase-sync.js?v=20261006a',
   './comandos_sql_databricks.js',
   './comandos_sql_genai.js',
   './centro_quizzes_genai.html',

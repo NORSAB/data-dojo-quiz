@@ -1468,5 +1468,15 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
   - Se integraron las carpetas y documentación de cursos completados de Databricks: Automate Production Workflows/ y Building Enterprise Applications with Databricks Apps/.
   - Se añadieron Simulador de Preguntas.code-workspace y assets visuales asociados.
 - **Validación del Repositorio:**
-  - Se ejecutaron las suites de validación completas (	ools/validate_full_application.js, 	ools/validate_ui_palette.js, 	ools/validate_global_language.js), pasando las 96 comprobaciones exitosamente (96/96).
+  - Se ejecutaron las suites de validación completas (tools/validate_full_application.js, tools/validate_ui_palette.js, tools/validate_global_language.js), pasando las 96 comprobaciones exitosamente (96/96).
   - Sincronizado y publicado en origin/main.
+
+### 2026-10-06 15:38 CST — Antigravity (Gemini 3.8 Flash)
+- **Organización Jerárquica de Cursos (Categoría ➔ Rol ➔ Cursos):**
+  - Se incorporó la jerarquía profesional por Roles (`role` y `roleDesc`) a todos los cursos de `defaultProviderData` en `script.js` (Data Engineer, Generative AI Engineer, Data Analyst, Platform & Governance, Machine Learning Engineer, Analytics Engineer, AI & Agents Developer, etc.) sin alterar identificadores de cursos (`id`), estados (`status`) ni los bancos de preguntas.
+  - Se implementó en `script.js` el renderizado modular por roles (`role-section`) con encabezados semánticos, badges de estado y conteo de cursos activos, manteniendo botones directos ("Iniciar Examen", "Estudiar") y selección de tarjetas con sincronización automática de paneles de repaso.
+  - Se incorporó la barra interactiva de filtrado rápido por rol (`#role-filter-bar`) con pills dinámicos y conteos por rol para alternar entre roles o visualizarlos todos juntos.
+  - Se actualizaron los estilos en `styles.css` y el layout responsive full-width en `index.html` cumpliendo rigurosamente el design system: 18 colores hex únicos, 0 gradientes decorativos e iconografía 100% SVG inline (cero emojis en la interfaz).
+  - Se actualizó el ciclo de caché PWA a `BUILD_TIMESTAMP = '20261006a'`, caché `simulador-v71-20261006a` y versionado de assets estáticos en `index.html` y `sw.js`.
+  - Validación completa superada con éxito (96/96 verificaciones en `validate_full_application.js`, paleta aprobada en `validate_ui_palette.js`, integridad de bancos y enlaces de traducciones 100% intactos).
+
