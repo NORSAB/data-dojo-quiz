@@ -28,6 +28,7 @@ runFile('questions_azure_ai103_rationales.js');
 runFile('study_azure_ai103.js');
 runFile('study_azure_ai103_exam_topics.js');
 runFile('study_azure_ai103_resources.js');
+runFile('study_azure_ai103_glossary.js');
 
 const allQuestions = sandbox.window.questionsData.filter(q => q.courseId === 'azure-ai-103');
 const enQuestions = allQuestions.filter(q => q.lang === 'en');

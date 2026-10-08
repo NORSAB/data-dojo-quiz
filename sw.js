@@ -59,6 +59,7 @@ const ASSETS_TO_CACHE = [
   './study_azure_ai103.js',
   './study_azure_ai103_exam_topics.js',
   './study_azure_ai103_resources.js',
+  './study_azure_ai103_glossary.js',
   './questions_databricks.js',
   './questions_databricks_fundamentals.js',
   './questions_databricks_fundamentals_en.js',

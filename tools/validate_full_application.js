@@ -147,6 +147,7 @@ const studyFiles = [
   'study_azure_ai103.js',
   'study_azure_ai103_exam_topics.js',
   'study_azure_ai103_resources.js',
+  'study_azure_ai103_glossary.js',
   'study_unir_herr.js',
   'study_unah_tesis.js'
 ];
