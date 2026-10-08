@@ -54,6 +54,21 @@ const DataSync = {
   lastSyncTime: 0,
   DEBOUNCE_MS: 1500,
   pendingSync: null,
+  initAttempts: 0,
+  MAX_INIT_ATTEMPTS: 10,
+  status: 'connecting',
+
+  /**
+   * Claude (Opus 5.5) | 2026-10-08 | Publica el estado real de la nube para el indicador de la
+   * cabecera. Antes el indicador solo miraba navigator.onLine y decia "Sincronizado" aunque la
+   * libreria de Supabase no hubiera cargado o el guardado fallara.
+   * Estados: connecting | synced | error | unavailable.
+   */
+  setStatus(status) {
+    this.status = status;
+    if (typeof window === 'undefined' || typeof window.dispatchEvent !== 'function' || typeof CustomEvent !== 'function') return;
+    window.dispatchEvent(new CustomEvent('datasync:status', { detail: { status } }));
+  },
 
   /**
    * Initialize the sync engine
@@ -62,11 +77,18 @@ const DataSync = {
     if (!SUPABASE_URL || !SUPABASE_KEY) {
       console.log('[DataSync] Supabase not configured.');
       this.isConfigured = false;
+      this.setStatus('unavailable');
       return;
     }
 
     try {
       if (typeof supabase === 'undefined' || !supabase.createClient) {
+        this.initAttempts += 1;
+        if (this.initAttempts >= this.MAX_INIT_ATTEMPTS) {
+          console.warn('[DataSync] Supabase client library unavailable; working locally only.');
+          this.setStatus('unavailable');
+          return;
+        }
         console.warn('[DataSync] Supabase client library not loaded. Retrying in 1s...');
         setTimeout(() => this.init(), 1000);
         return;
@@ -82,6 +104,7 @@ const DataSync = {
     } catch (err) {
       console.error('[DataSync] Init failed:', err);
       this.isConfigured = false;
+      this.setStatus('unavailable');
     }
   },
 
@@ -148,12 +171,15 @@ const DataSync = {
 
       if (error) {
         console.error('[DataSync] Save failed:', error.message);
+        this.setStatus('error');
       } else {
         this.lastSyncTime = Date.now();
+        this.setStatus('synced');
         console.log('[DataSync] Saved to cloud at', new Date().toLocaleTimeString());
       }
     } catch (err) {
       console.error('[DataSync] Save error:', err);
+      this.setStatus('error');
     } finally {
       this.syncInProgress = false;
     }
@@ -178,11 +204,13 @@ const DataSync = {
           this.saveToCloud();
         } else {
           console.error('[DataSync] Load failed:', error.message);
+          this.setStatus('error');
         }
         return;
       }
 
       if (data) {
+        this.setStatus('synced');
         const cloudTime = new Date(data.updated_at).getTime();
         const localTime = parseInt(localStorage.getItem('_last_sync') || '0');
 
@@ -236,6 +264,7 @@ const DataSync = {
       }
     } catch (err) {
       console.error('[DataSync] Load error:', err);
+      this.setStatus('error');
     }
   },
 
