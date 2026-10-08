@@ -2712,7 +2712,7 @@ const badgesConfig = [
       timerDisplay.textContent = formatted;
     }
     if (totalSeconds < 60) timerDisplay.style.color = "var(--danger-color)";
-    else timerDisplay.style.color = "inherit";
+    else timerDisplay.style.color = "var(--text-color)";
 
     updatePacingTracker();
   }
@@ -2737,16 +2737,18 @@ const badgesConfig = [
     const mAvg = Math.floor(avgSec / 60);
     const sAvg = avgSec % 60;
     const paceStr = `${mAvg > 0 ? mAvg + 'm ' : ''}${sAvg}s/q`;
+    // Punto de estado en SVG (regla del proyecto: cero emojis en la UI); toma el color de la clase pacing-*.
+    const paceDot = '<svg width="8" height="8" viewBox="0 0 8 8" aria-hidden="true"><circle cx="4" cy="4" r="4" fill="currentColor"/></svg>';
 
     if (avgSec <= 85) {
       pacingPill.className = "quiz-pacing-pill pacing-good";
-      pacingPill.textContent = `🟢 ${paceStr}`;
+      pacingPill.innerHTML = `${paceDot}<span>${paceStr}</span>`;
     } else if (avgSec <= 110) {
       pacingPill.className = "quiz-pacing-pill pacing-warn";
-      pacingPill.textContent = `🟡 ${paceStr}`;
+      pacingPill.innerHTML = `${paceDot}<span>${paceStr}</span>`;
     } else {
       pacingPill.className = "quiz-pacing-pill pacing-slow";
-      pacingPill.textContent = `🔴 ${paceStr}`;
+      pacingPill.innerHTML = `${paceDot}<span>${paceStr}</span>`;
     }
   }
 
@@ -7238,4 +7240,4 @@ document.addEventListener("click", (e) => {
   if (dropdown && menu && !menu.classList.contains("hidden") && !dropdown.contains(e.target)) {
     window.toggleHeaderMoreMenu(null, false);
   }
-});
+});
