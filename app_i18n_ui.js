@@ -4140,6 +4140,18 @@
  {
   "es": "Similitud Semántica & Vector Search",
   "en": "Semantic Similarity & Vector Search"
+ },
+ {
+  "es": "Practicar una subhabilidad",
+  "en": "Practice one subskill"
+ },
+ {
+  "es": "Todas las subhabilidades",
+  "en": "All subskills"
+ },
+ {
+  "es": "Solo caso de estudio",
+  "en": "Case study only"
  }
 ];
   if (window.AppI18n && window.AppI18n.addPhrases) window.AppI18n.addPhrases(pairs.concat(studyChrome));

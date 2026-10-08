@@ -36,17 +36,17 @@
 // Antigravity (Gemini 3.8 Flash) | 2026-10-06 15:35 CST | Jerarquía por roles en cursos: organización por categorías, roles y cursos sin alterar bancos ni almacenamiento.
 // Claude (Opus 5.5) | 2026-10-08 | Revisión: 30 preguntas DEA visibles, indicador de sync real, reloj visible y layout móvil.
 // Claude (Opus 5.5) | 2026-10-08 | Mejoras visuales: inicio compacto, logos monocromos, anillo de puntaje y filas de dominio.
-const BUILD_TIMESTAMP = '20261008f';
-const CACHE_NAME = `simulador-v77-${BUILD_TIMESTAMP}`;
+const BUILD_TIMESTAMP = '20261008g';
+const CACHE_NAME = `simulador-v78-${BUILD_TIMESTAMP}`;
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './styles.css?v=20261008f',
-  './app_i18n.js?v=20261008f',
+  './styles.css?v=20261008g',
+  './app_i18n.js?v=20261008g',
   './app_i18n_ui.js',
-  './script.js?v=20261008f',
-  './features.js?v=20261008f',
-  './quiz_style.css?v=20261008f',
+  './script.js?v=20261008g',
+  './features.js?v=20261008g',
+  './quiz_style.css?v=20261008g',
   './hero_data.js',
   './auto_restore_data.js',
   './manifest.json',
@@ -55,9 +55,11 @@ const ASSETS_TO_CACHE = [
   './questions_dp600_twins.js',
   './questions_azure_ai103.js',
   './questions_azure_ai103_es.js',
+  './questions_azure_ai103_rationales.js',
   './study_azure_ai103.js',
   './study_azure_ai103_exam_topics.js',
   './study_azure_ai103_resources.js',
+  './study_azure_ai103_glossary.js',
   './questions_databricks.js',
   './questions_databricks_fundamentals.js',
   './questions_databricks_fundamentals_en.js',
@@ -110,8 +112,8 @@ const ASSETS_TO_CACHE = [
   './conceptos_databricks.js',
   './personajes_unir_viz.js',
   './translations_databricks_es.js',
-  './translate_toggle.js?v=20261008f',
-  './supabase-sync.js?v=20261008f',
+  './translate_toggle.js?v=20261008g',
+  './supabase-sync.js?v=20261008g',
   './comandos_sql_databricks.js',
   './comandos_sql_genai.js',
   './centro_quizzes_genai.html',

@@ -17,7 +17,7 @@
     <title>Quiz Simulator</title>
     <link rel="manifest" href="manifest.json" />
     <meta name="theme-color" content="#3157d5" />
-    <link rel="stylesheet" href="styles.css?v=20261008f" />
+    <link rel="stylesheet" href="styles.css?v=20261008g" />
     <style>
       /* =======================================================================
          TRUE 100% FULL-WIDTH FLUID RESPONSIVE SYSTEM
@@ -1602,6 +1602,18 @@
                 <div id="config-domain-checkboxes" class="quiz-config-domains-list">
                   <!-- Dynamically populated by JS -->
                 </div>
+                <!-- Claude (Opus 5.5) | 2026-10-08 | práctica por subhabilidad y modo solo caso de estudio -->
+                <div id="config-subskill-box" class="quiz-config-subskill hidden">
+                  <label for="config-subskill-select" class="quiz-config-subskill-label">Practicar una subhabilidad</label>
+                  <select id="config-subskill-select" class="form-control">
+                    <option value="">Todas las subhabilidades</option>
+                  </select>
+                </div>
+                <label id="config-case-only-label" class="filter-chip-checkbox quiz-config-case-chip hidden">
+                  <input type="checkbox" id="config-case-only" style="display:none;" onchange="this.parentElement.classList.toggle('checked', this.checked);" />
+                  <span>Solo caso de estudio</span>
+                  <span id="config-case-count" class="quiz-config-card-badge">0</span>
+                </label>
               </div>
             </div>
           </div>
@@ -2759,9 +2771,11 @@
     <!-- DP-600 & Microsoft Azure AI-103 -->
     <script src="questions_azure_ai103.js"></script>
     <script src="questions_azure_ai103_es.js"></script>
+    <script src="questions_azure_ai103_rationales.js"></script>
     <script src="study_azure_ai103.js"></script>
     <script src="study_azure_ai103_exam_topics.js"></script>
     <script src="study_azure_ai103_resources.js"></script>
+    <script src="study_azure_ai103_glossary.js"></script>
     <script src="study_databricks.js"></script>
     <script src="study_databricks_urgent.js"></script> <!-- Urgent exam topics deep-dive -->
     <script src="study_databricks_expanded.js"></script> <!-- Full domain gap coverage -->
@@ -2819,15 +2833,15 @@
     <script src="i18n_study_resources.js"></script>
     <!-- Auto Restore Master Data -->
     <script src="auto_restore_data.js"></script>
-    <script src="app_i18n.js?v=20261008f"></script>
+    <script src="app_i18n.js?v=20261008g"></script>
     <script src="app_i18n_ui.js"></script>
-    <script src="script.js?v=20261008f"></script>
-    <script src="features.js?v=20261008f"></script>
+    <script src="script.js?v=20261008g"></script>
+    <script src="features.js?v=20261008g"></script>
     <!-- Supabase Cloud Backup -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="supabase-sync.js?v=20261008f"></script>
+    <script src="supabase-sync.js?v=20261008g"></script>
     <!-- Databricks Spanish Translation Toggle -->
     <script src="translations_databricks_es.js"></script>
-    <script src="translate_toggle.js?v=20261008f"></script>
+    <script src="translate_toggle.js?v=20261008g"></script>
   </body>
 </html>

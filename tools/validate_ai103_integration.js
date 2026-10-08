@@ -24,9 +24,11 @@ function runFile(relPath) {
 
 runFile('questions_azure_ai103.js');
 runFile('questions_azure_ai103_es.js');
+runFile('questions_azure_ai103_rationales.js');
 runFile('study_azure_ai103.js');
 runFile('study_azure_ai103_exam_topics.js');
 runFile('study_azure_ai103_resources.js');
+runFile('study_azure_ai103_glossary.js');
 
 const allQuestions = sandbox.window.questionsData.filter(q => q.courseId === 'azure-ai-103');
 const enQuestions = allQuestions.filter(q => q.lang === 'en');
@@ -36,6 +38,23 @@ console.log('--- AI-103 Validation Results ---');
 console.log(`Total questions for azure-ai-103: ${allQuestions.length}`);
 console.log(`English questions: ${enQuestions.length}`);
 console.log(`Spanish questions: ${esQuestions.length}`);
+
+// Claude (Opus 5.5) | 2026-10-08 | las 158 preguntas del PDF y sus gemelas deben traer optionRationales completos
+const pdfQuestions = allQuestions.filter(q => q.pdfNum);
+const missingRationales = pdfQuestions.filter(q => {
+  const r = q.optionRationales;
+  if (!r) return true;
+  let keys;
+  if (Array.isArray(q.slots) && q.slots.length) keys = q.slots.map(sl => sl.id);
+  else if (q.type === 'matrix_statements') keys = (q.statements || []).map((_, i) => String(i));
+  else keys = (q.options || []).map(o => o.id);
+  return keys.some(k => !r[k] || !String(r[k]).trim());
+});
+console.log(`PDF questions with complete option rationales: ${pdfQuestions.length - missingRationales.length}/${pdfQuestions.length}`);
+if (pdfQuestions.length !== 316 || missingRationales.length) {
+  console.error('ERROR: missing option rationales: ' + missingRationales.slice(0, 10).map(q => q.id).join(', '));
+  process.exit(1);
+}
 
 if (enQuestions.length !== 515 || esQuestions.length !== 515) {
   console.error(`FAIL: Expected 515 EN and 515 ES, got ${enQuestions.length} and ${esQuestions.length}`);

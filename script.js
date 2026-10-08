@@ -2472,6 +2472,31 @@ const badgesConfig = [
         });
     }
 
+    // Claude (Opus 5.5) | 2026-10-08 | subhabilidades oficiales y modo solo caso de estudio
+    const subskillBox = document.getElementById("config-subskill-box");
+    const subskillSelect = document.getElementById("config-subskill-select");
+    const caseOnlyLabel = document.getElementById("config-case-only-label");
+    const caseOnlyCb = document.getElementById("config-case-only");
+    const subskillCounts = {};
+    filtered.forEach(q => { if (q.subdomain) subskillCounts[q.subdomain] = (subskillCounts[q.subdomain] || 0) + 1; });
+    const subskillKey = s => (String(s).match(/(\d+)\.(\d+)/) || [0, 99, 99]).slice(1).map(Number);
+    const uniqueSubskills = Object.keys(subskillCounts).sort((a, b) => {
+        const ka = subskillKey(a), kb = subskillKey(b);
+        return ka[0] - kb[0] || ka[1] - kb[1] || a.localeCompare(b);
+    });
+    if (subskillSelect) {
+        const allLabel = lang === "es" ? "Todas las subhabilidades" : "All subskills";
+        subskillSelect.innerHTML = `<option value="">${allLabel}</option>` + uniqueSubskills.map(s =>
+            `<option value="${s.replace(/"/g, '&quot;')}">${s} (${subskillCounts[s]})</option>`).join("");
+        subskillSelect.value = "";
+    }
+    if (subskillBox) subskillBox.classList.toggle("hidden", uniqueSubskills.length < 2);
+    const caseCount = filtered.filter(q => q.caseStudy).length;
+    if (caseOnlyCb) { caseOnlyCb.checked = false; caseOnlyLabel.classList.remove("checked"); }
+    if (caseOnlyLabel) caseOnlyLabel.classList.toggle("hidden", caseCount === 0);
+    const caseCountEl = document.getElementById("config-case-count");
+    if (caseCountEl) caseCountEl.textContent = caseCount;
+
     // Helper for quick question presets (10, 25, 50, 100, Todas)
     window.setQuizConfigPreset = function(preset) {
         const slider = document.getElementById("config-slider");
@@ -2544,6 +2569,11 @@ const badgesConfig = [
             filtered = []; // None selected
         }
         
+        // 1b. Subskill and case-study filters
+        const subskill = subskillSelect ? subskillSelect.value : "";
+        if (subskill) filtered = filtered.filter(q => q.subdomain === subskill);
+        if (caseOnlyCb && caseOnlyCb.checked) filtered = filtered.filter(q => q.caseStudy);
+
         // 2. Keyword Filter
         if (searchTerm) {
             filtered = filtered.filter(q => {
@@ -2585,6 +2615,11 @@ const badgesConfig = [
     updateSliderRange();
 
     if (domainCheckboxesContainer) domainCheckboxesContainer.onchange = updateSliderRange;
+    if (subskillSelect) subskillSelect.onchange = updateSliderRange;
+    if (caseOnlyCb) caseOnlyCb.onchange = () => {
+        caseOnlyLabel.classList.toggle("checked", caseOnlyCb.checked);
+        updateSliderRange();
+    };
     if (searchInput) searchInput.oninput = updateSliderRange;
     if (rangeStart) rangeStart.onchange = updateSliderRange;
     if (rangeEnd) rangeEnd.onchange = updateSliderRange;
@@ -3499,6 +3534,60 @@ const badgesConfig = [
 
   // Claude (Opus 5.5) | 2026-10-08 | Preguntas con Answer Area por casillas (hotspot y arrastrar y soltar).
   // Cada casilla (slot) tiene su respuesta correcta en slot.correct, que es un id de q.options.
+  // Claude (Opus 5.5) | 2026-10-08 | por qué cada opción es correcta o incorrecta (optionRationales)
+  function renderOptionRationales(q, lang) {
+    const rats = q.optionRationales;
+    const host = document.getElementById("feedback-explanation");
+    if (!rats || !host) return;
+    const prev = host.querySelector(".option-rationales");
+    if (prev) prev.remove();
+    const esc = (t) => String(t == null ? "" : t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    const fmt = (t) => esc(t).replace(/`([^`]+)`/g, "<code>$1</code>");
+    const ans = userAnswers[currentQuestionIndex] || {};
+    const picked = new Set(ans.selected || []);
+    const rows = [];
+    if (Array.isArray(q.slots) && q.slots.length) {
+      const sel = ans.slotSelections || {};
+      q.slots.forEach((sl, i) => {
+        if (!rats[sl.id]) return;
+        const ok = sel[sl.id] === sl.correct;
+        rows.push({ key: String(i + 1), label: sl.label || "", text: rats[sl.id], correct: true, picked: !!sel[sl.id] && !ok, wrongPick: !!sel[sl.id] && !ok });
+      });
+    } else if (q.type === "matrix_statements" && Array.isArray(q.statements)) {
+      const ms = ans.matrixSelections || {};
+      q.statements.forEach((st, i) => {
+        const t = rats[String(i)];
+        if (!t) return;
+        const choice = ms[st.id];
+        rows.push({ key: String(i + 1), label: "", text: t, correct: true, picked: !!choice && choice !== st.correct, wrongPick: !!choice && choice !== st.correct });
+      });
+    } else {
+      (q.options || []).forEach(o => {
+        if (!rats[o.id]) return;
+        const isOk = (q.correctIds || []).includes(o.id);
+        rows.push({ key: String(o.id).toUpperCase(), label: "", text: rats[o.id], correct: isOk, picked: picked.has(o.id), wrongPick: picked.has(o.id) && !isOk });
+      });
+    }
+    if (!rows.length) return;
+    const isOptions = !(Array.isArray(q.slots) && q.slots.length) && q.type !== "matrix_statements";
+    const title = isOptions
+      ? (lang === "es" ? "Por qué cada opción es correcta o incorrecta" : "Why each option is right or wrong")
+      : (lang === "es" ? "Por qué es la respuesta correcta en cada casilla" : "Why each box has that answer");
+    const yourPick = isOptions
+      ? (lang === "es" ? "tu elección" : "your choice")
+      : (lang === "es" ? "la fallaste" : "you missed this");
+    const box = document.createElement("div");
+    box.className = "option-rationales";
+    box.innerHTML = `<div class="option-rationales-title">${title}</div>` + rows.map(r => `
+      <div class="option-rationale${r.correct ? " is-correct" : ""}${r.picked ? " is-picked" : ""}">
+        <span class="option-rationale-key">${esc(r.key)}</span>
+        <div>${r.label ? `<strong>${esc(r.label)}</strong> ` : ""}${fmt(r.text)}${r.wrongPick ? ` <span class="option-rationale-tag">(${yourPick})</span>` : ""}</div>
+      </div>`).join("");
+    host.appendChild(box);
+  }
+
+  window.renderOptionRationales = renderOptionRationales;
+
   function slotOptionText(q, optId) {
     const opt = (q.options || []).find(o => o.id === optId);
     return opt ? opt.text : "";
@@ -3753,6 +3842,8 @@ const badgesConfig = [
          document.getElementById("feedback-explanation").innerHTML = explanation;
     }
     
+    renderOptionRationales(q, lang);
+
     // Documentation Link
     if (q.docLink) {
         const docDiv = document.createElement("div");
