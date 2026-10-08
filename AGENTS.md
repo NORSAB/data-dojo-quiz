@@ -1492,3 +1492,11 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
   - **Validación:** pasan las 7 suites de `tools/`. QA en Chromium a 390 px y 1440 px, en claro y oscuro, con las llamadas a Supabase bloqueadas para no escribir en producción.
   - **Pendiente de la revisión** (no se tocó): el manifest usa `theme_color #4f6ef7`; falta `.github/workflows/validate.yml`, que la bitácora del 2026-10-06 da por agregado; `auto_restore_data.js` muestra el perfil de Norman a cualquier visitante; y hay colores hex inline en `script.js` y `features.js` que `validate_ui_palette.js` no revisa.
 
+### 2026-10-08 — Claude (Opus 5.5) — mejoras visuales
+- **Rama `mejora/visual-inicio-resultados`, apilada sobre `fix/revision-movil-y-banco-dea`:**
+  - **Inicio:** la racha pasa dentro de la tarjeta de perfil, bajo el cinturón, con singular y plural ("1 día"). Se redujo el espacio vertical entre la tarjeta, las categorías y las pestañas. La barra de XP usa siempre `var(--primary-color)`; el color del cinturón queda solo en el escudo.
+  - **Categorías:** los logos de marca se pintan con `currentColor` (gris en reposo, blanco sobre el acento). Esto también arregla el logo de AWS, que desaparecía en modo oscuro.
+  - **Resultados:** el puntaje va dentro de un anillo SVG (`renderScoreRing`) en verde si aprueba y en rojo si no. Las debilidades son filas compactas, ordenadas del peor dominio al mejor, en lugar de tarjetas altas de color.
+  - **Otros:** la leyenda "Actual" del mapa de preguntas ahora es azul, como el nodo. El cinturón blanco tiene contorno. "Estudiar" pasa a ser un botón de borde. Cancelar y Comenzar quedan fijos al fondo del modal de configuración.
+  - **Caché PWA:** `BUILD_TIMESTAMP = '20261008b'`, caché `simulador-v73-20261008b`. `validate_ui_palette.js` se mantiene en 18 colores hex y 0 gradientes.
+

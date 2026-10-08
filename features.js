@@ -819,6 +819,12 @@ function updateStreakDisplay() {
     if (streak > 0) {
         widget.style.display = 'inline-flex';
         countEl.textContent = streak;
+        // Claude (Opus 5.5) | 2026-10-08 | Singular/plural ("1 días" se leía mal).
+        const labelEl = widget.querySelector('.streak-label');
+        if (labelEl) {
+            const isEn = document.documentElement.dataset.appLanguage === 'en';
+            labelEl.textContent = isEn ? (streak === 1 ? 'day' : 'days') : (streak === 1 ? 'día' : 'días');
+        }
         if (streak >= 7) widget.classList.add('on-fire');
         else widget.classList.remove('on-fire');
     } else {

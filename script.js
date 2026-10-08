@@ -1273,12 +1273,35 @@ function saveExamResult(score, total, passed, missedIds = [], questionIds = [], 
 
 
   // Helper: generate SVG belt icon from color (replaces emoji belt icons)
+  // Claude (Opus 5.5) | 2026-10-08 | Anillo de puntaje en SVG con color semántico (aprobado / no aprobado).
+  function renderScoreRing(pct, passed) {
+    const scoreEl = document.getElementById("final-score");
+    if (!scoreEl) return;
+    const box = scoreEl.parentElement;
+    box.classList.add("score-ring");
+    box.classList.toggle("is-pass", !!passed);
+    box.classList.toggle("is-fail", !passed);
+    let svg = box.querySelector(".score-ring-svg");
+    if (!svg) {
+      box.insertAdjacentHTML("afterbegin",
+        '<svg class="score-ring-svg" viewBox="0 0 120 120" aria-hidden="true">' +
+        '<circle class="score-ring-track" cx="60" cy="60" r="52"/>' +
+        '<circle class="score-ring-value" cx="60" cy="60" r="52" pathLength="100"/></svg>');
+      svg = box.querySelector(".score-ring-svg");
+    }
+    const clamped = Math.max(0, Math.min(100, pct));
+    svg.querySelector(".score-ring-value").style.strokeDasharray = `${clamped} 100`;
+  }
+
   window.getBeltSvgIcon = function(belt) {
     const c = belt.color || '#999';
     if (belt.name.includes('Dragón')) {
       return `<svg viewBox="0 0 24 24" width="28" height="28" fill="${c}"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg>`;
     }
-    return `<svg viewBox="0 0 24 24" width="28" height="28" fill="${c}"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>`;
+    // Claude (Opus 5.5) | 2026-10-08 | El cinturón blanco (#f0f0f0) desaparecía sobre fondos claros: se le da contorno.
+    const isLight = ['#f0f0f0', '#ffffff', '#fff'].includes(String(c).toLowerCase());
+    const outline = isLight ? ' stroke="var(--secondary-color)" stroke-width="1.5"' : '';
+    return `<svg viewBox="0 0 24 24" width="28" height="28" fill="${c}"${outline}><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>`;
   };
 
   // --- Advanced Badge Configuration ---
@@ -2024,7 +2047,7 @@ const badgesConfig = [
                      <button class="btn btn-primary btn-sm course-btn-exam" data-course-id="${course.id}" style="position:relative; z-index:5;">Iniciar Examen</button>
                      ${
                        window.studyData && window.studyData[course.id]
-                         ? `<button class="btn btn-secondary btn-sm course-btn-study" data-course-id="${course.id}" style="position:relative; z-index:5;">Estudiar</button>`
+                         ? `<button class="btn btn-outline btn-sm course-btn-study" data-course-id="${course.id}" style="position:relative; z-index:5;">Estudiar</button>`
                          : ""
                      }
                    </div>`
@@ -3989,6 +4012,7 @@ const badgesConfig = [
 
 
         document.getElementById("final-score").textContent = finalPct;
+        renderScoreRing(finalPct, passed);
         const scoreFraction = document.getElementById("score-fraction");
         if (scoreFraction) {
             scoreFraction.textContent = `${correctCount} / ${total} correctas`;
@@ -4112,25 +4136,24 @@ const badgesConfig = [
                 domainList.style.flexDirection = "column";
                 domainList.style.gap = "0.75rem";
 
-                Object.entries(domainStats).forEach(([domain, stats]) => {
-                    const pct = Math.round((stats.correct / stats.total) * 100);
+                // Claude (Opus 5.5) | 2026-10-08 | Una fila compacta por dominio, del peor al mejor,
+                // en vez de tarjetas altas de color: se ve de un vistazo qué repasar primero.
+                domainList.className = "domain-rows";
+                domainList.style.gap = "0";
+                Object.entries(domainStats)
+                    .map(([domain, stats]) => [domain, stats, Math.round((stats.correct / stats.total) * 100)])
+                    .sort((a, b) => a[2] - b[2])
+                    .forEach(([domain, stats, pct]) => {
                     const isStrength = pct >= 70;
-                    
 
                     const item = document.createElement("div");
-                    item.className = isStrength ? "result-bar strength" : "result-bar weakness";
-                    
+                    item.className = `domain-row ${isStrength ? "is-strength" : "is-weakness"}`;
                     item.innerHTML = `
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
-                            <strong style="font-size: 0.95rem;">${domain}</strong>
-                            <span class="badge ${isStrength ? 'bg-success' : 'bg-danger'}">
-                                ${isStrength ? lbls.strength : lbls.weakness}
-                            </span>
-                        </div>
-                        <div class="progress-track">
-                            <div class="progress-fill ${isStrength ? 'fill-success' : 'fill-danger'}" style="width: ${pct}%;"></div>
-                        </div>
-                        <div style="text-align: right; font-weight: bold; font-size: 0.85rem; margin-top: 4px;">${pct}%</div>
+                        <span class="domain-row-name">${domain}</span>
+                        <span class="domain-row-count">${stats.correct}/${stats.total}</span>
+                        <span class="domain-row-track"><span class="domain-row-fill" style="width: ${pct}%;"></span></span>
+                        <span class="domain-row-pct">${pct}%</span>
+                        <span class="domain-row-tag">${isStrength ? lbls.strength : lbls.weakness}</span>
                     `;
 
                     domainList.appendChild(item);
@@ -5995,7 +6018,10 @@ function renderReview(questions, finalPct, passed) {
       if(document.getElementById("results-screen")) document.getElementById("results-screen").classList.remove("hidden");
       
       // 4. Update Header
-      if(document.getElementById("final-score")) document.getElementById("final-score").textContent = item.score;
+      if(document.getElementById("final-score")) {
+        document.getElementById("final-score").textContent = item.score;
+        renderScoreRing(Number(item.score) || 0, !!item.passed);
+      }
       
       const resMsg = document.getElementById("result-message");
       if (resMsg) { 
@@ -6093,14 +6119,19 @@ function renderReview(questions, finalPct, passed) {
           const xpPercent = nextBelt ? Math.min(100, Math.round((xp / nextBelt.minXP) * 100)) : 100;
           const initials = p.nick.split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2);
           const avatarColor = belt.color || '#1e293b';
-          // Use a visible gradient for very light belt colors (white belt)
-          const isLightBelt = belt.color === '#f0f0f0' || belt.color === '#ffffff' || !belt.color;
-          const xpBarColor = isLightBelt ? '#3157d5' : avatarColor;
+          // Claude (Opus 5.5) | 2026-10-08 | La barra de XP usa siempre el acento; el color del cinturón queda en el escudo.
+          const xpBarColor = 'var(--primary-color)';
           const savedPhoto = localStorage.getItem('profilePhoto');
           const avatarContent = savedPhoto 
               ? `<img src="${savedPhoto}" alt="Foto de perfil"/>${initials}` 
               : initials;
           
+          // La racha vive dentro de la tarjeta: se saca antes de re-pintar para no destruir el nodo.
+          const streakWidget = document.getElementById('streak-display');
+          if (streakWidget && profileCard.contains(streakWidget)) {
+              profileCard.parentNode.insertBefore(streakWidget, profileCard.nextSibling);
+          }
+
           profileCard.innerHTML = `
             <div class="profile-avatar" style="background:${avatarColor};" onclick="document.getElementById('avatar-upload-input').click();" title="Haz clic para cambiar tu foto de perfil">
                 ${avatarContent}
@@ -6117,6 +6148,8 @@ function renderReview(questions, finalPct, passed) {
                 <div class="xp-bar"><div class="xp-bar-fill" style="width:${xpPercent}%; background:${xpBarColor};"></div></div>
                 <span class="xp-text">${xpText}</span>
             </div>`;
+
+          if (streakWidget) profileCard.querySelector('.profile-info').appendChild(streakWidget);
 
           // Create hidden file input if it doesn't exist
           if (!document.getElementById('avatar-upload-input')) {
