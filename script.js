@@ -3882,7 +3882,7 @@ const badgesConfig = [
         ${lang === 'es' ? 'Desglose Situacional de Examen Oficial' : 'Official Exam Situational Breakdown'}
       </div>
       <div style="margin-bottom:6px;"><strong><svg viewBox="0 0 24 24" width="13" height="13" fill="#3157d5" style="vertical-align:middle;margin-right:4px"><circle cx="12" cy="12" r="10" fill="none" stroke="#3157d5" stroke-width="2"/><circle cx="12" cy="12" r="6" fill="none" stroke="#3157d5" stroke-width="2"/><circle cx="12" cy="12" r="2" fill="#3157d5"/></svg>${lang === 'es' ? 'Clave de Certificación' : 'Exam Key'}:</strong> ${coachData ? coachData.examKey : ''}</div>
-      <div style="margin-bottom:6px;"><strong><svg viewBox="0 0 24 24" width="13" height="13" fill="#d97706" style="vertical-align:middle;margin-right:4px"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>${lang === 'es' ? 'Trampa Frecuente' : 'Common Pitfall'}:</strong> ${coachData ? coachData.pitfalls : ''}</div>
+      <div style="margin-bottom:6px;"><strong><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" style="color:var(--warning-color);vertical-align:middle;margin-right:4px"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>${lang === 'es' ? 'Trampa Frecuente' : 'Common Pitfall'}:</strong> ${coachData ? coachData.pitfalls : ''}</div>
       <div><strong><svg viewBox="0 0 24 24" width="13" height="13" fill="#3157d5" style="vertical-align:middle;margin-right:4px"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg>${lang === 'es' ? 'Regla Mnemotécnica' : 'Rule of Thumb'}:</strong> ${coachData ? coachData.ruleOfThumb : ''}</div>
     `;
     document.getElementById("feedback-explanation").appendChild(coachBox);
@@ -4062,7 +4062,7 @@ const badgesConfig = [
           ? (lang === 'es' ? ' <span style="color:var(--danger-color);font-weight:600;">' + unansweredCount + ' pendientes</span>.' : ' <span style="color:var(--danger-color);font-weight:600;">' + unansweredCount + ' pending</span>.')
           : '';
         const flagStr = flaggedCount > 0
-          ? (lang === 'es' ? ' <span style="color:#d97706;font-weight:600;">' + flaggedCount + ' marcadas para revisión</span>.' : ' <span style="color:#d97706;font-weight:600;">' + flaggedCount + ' flagged</span>.')
+          ? (lang === 'es' ? ' <span style="color:var(--warning-color);font-weight:600;">' + flaggedCount + ' marcadas para revisión</span>.' : ' <span style="color:var(--warning-color);font-weight:600;">' + flaggedCount + ' flagged</span>.')
           : '';
         msgEl.innerHTML = lang === 'es'
           ? 'Tienes <strong>' + answeredCount + '/' + total + '</strong> respondidas.' + pendingStr + flagStr
@@ -4114,7 +4114,7 @@ const badgesConfig = [
         ${idx === currentQuestionIndex ? 'box-shadow: 0 0 0 2px var(--primary-color);' : ''}
       `;
 
-      let flagIndicator = isFlagged ? `<span style="display:inline-flex;margin-left:2px;">${svgIcon(SVG.star, 10, '#d97706')}</span>` : '';
+      let flagIndicator = isFlagged ? `<span style="display:inline-flex;margin-left:2px;color:var(--warning-color);"><svg viewBox="0 0 24 24" width="10" height="10" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>` : '';
       btn.innerHTML = `<span>${idx + 1}</span>${flagIndicator}`;
       btn.title = `Pregunta ${idx + 1}: ${isAnswered ? 'Respondida' : 'Sin responder'}${isFlagged ? ' (Marcada)' : ''}`;
       
@@ -4526,7 +4526,7 @@ function renderReview(questions, finalPct, passed) {
         
         let statusLabel = lbls.skipped;
         let statusClass = "text-secondary";
-        let borderColor = "#ccc";
+        let borderColor = "var(--border-color)";
 
         if (ansObj) {
             if (ansObj.isCorrect) {
@@ -4983,7 +4983,7 @@ function renderReview(questions, finalPct, passed) {
           .unir-item-button { width: 100%; min-height: 50px; padding: 12px 22px; border: 0; background: transparent; color: inherit; cursor: pointer; font: inherit; text-align: left; display: flex; align-items: center; gap: 12px; }
           .unir-section-items > li.unir-topic-item:hover { background: var(--study-accent-soft); color: var(--study-accent); }
           .unir-section-items > li.unir-topic-item.active { background: var(--primary-light, rgba(49,87,213,0.1)); color: var(--primary-color, #3157d5); font-weight: 700; }
-          .unir-section-items .li-check { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #d1d5db; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+          .unir-section-items .li-check { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--border-color); flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
           .unir-section-items .li-check.done { background: var(--study-success); border-color: var(--study-success); }
 
           /* Content display — inserted after active item inside ul */

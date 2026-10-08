@@ -92,6 +92,35 @@ if (buildMatch && cssVersionMatch && scriptVersionMatch && appI18nVersionMatch &
   assert(serviceWorker.includes(`'./features.js?v=${buildMatch[1]}'`), 'PWA: los paneles derivados versionados no están precargados en el service worker.');
 }
 
+
+/* Claude (Opus 5.5) | 2026-10-08 | Revisa también los colores hex escritos directamente en script.js y features.js. */
+// Se ignoran los valores de respaldo dentro de var(--token, #hex), los logotipos de marca (providerIcons)
+// y la escala de cinturones, que son las excepciones documentadas en AGENTS.md.
+const inlineAllowed = new Set([
+  ...uniqueStyleHex,
+  '#fff', '#000', '#000000',
+  // Neutros de apoyo para superficies, bordes y texto secundario.
+  '#64748b', '#94a3b8', '#cbd5e1', '#e2e8f0', '#e5e7eb', '#f1f5f9', '#f3f4f6', '#f8fafc',
+  '#0f172a', '#1e293b', '#334155',
+  // Fondo del bloque de código del sandbox SQL (tema oscuro tipo editor).
+  '#0d1117',
+]);
+const stripExceptions = (source) => source
+  .replace(/var\(\s*--[\w-]+\s*,\s*#[0-9a-f]{3,8}\s*\)/gi, '')
+  .replace(/\{\s*name:\s*"Cinturón[^}]*\}/g, '')
+  .replace(/\/\/[^\n]*cintur[oó]n[^\n]*/gi, '')
+  .replace(/const isLight = \[[^\]]*\]/g, '')
+  .replace(/(?:belt|newBelt)\.color\s*\|\|\s*'#[0-9a-f]{3,8}'/gi, '')
+  .replace(/color:\s*'#a0a0a0'/gi, '');
+const scriptForInline = scriptWithoutBrandLogos;
+const inlineReport = {};
+for (const [file, source] of [['script.js', scriptForInline], ['features.js', features]]) {
+  const found = (stripExceptions(source).match(/#[0-9a-f]{6}\b|#[0-9a-f]{3}\b/gi) || []).map((v) => v.toLowerCase());
+  const outside = [...new Set(found.filter((v) => !inlineAllowed.has(v)))];
+  inlineReport[file] = new Set(found).size;
+  assert(outside.length === 0, `${file}: usa colores hex fuera de la paleta: ${outside.join(', ')}.`);
+}
+
 if (failures.length > 0) {
   console.error('VALIDACIÓN DE PALETA: FALLÓ');
   failures.forEach((failure) => console.error(`- ${failure}`));
@@ -102,3 +131,4 @@ console.log('VALIDACIÓN DE PALETA: OK');
 console.log(`- styles.css: ${uniqueStyleHex.length} colores hex únicos, 0 gradientes decorativos`);
 console.log('- Centro de Estudio: acento principal, SVG currentColor y cajas informativas unificadas');
 console.log('- Selector EN/ES y caché PWA: coherentes con el design system');
+console.log(`- Colores inline: script.js ${inlineReport['script.js']} y features.js ${inlineReport['features.js']} valores, todos dentro de la paleta`);
