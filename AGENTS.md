@@ -1500,3 +1500,36 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
   - **Otros:** la leyenda "Actual" del mapa de preguntas ahora es azul, como el nodo. El cinturón blanco tiene contorno. "Estudiar" pasa a ser un botón de borde. Cancelar y Comenzar quedan fijos al fondo del modal de configuración.
   - **Caché PWA:** `BUILD_TIMESTAMP = '20261008b'`, caché `simulador-v73-20261008b`. `validate_ui_palette.js` se mantiene en 18 colores hex y 0 gradientes.
 
+
+### 2026-10-08 — Claude (Opus 5.5) — traducción completa EN/ES
+- **Pedido de Norman:** que todo exista en inglés y en español. Rama `feat/traduccion-completa-en-es`.
+- **Bancos de preguntas (gemelas nuevas, sin tocar los archivos originales):**
+  - `questions_dp600_twins.js`: 198 gemelas ES de las preguntas DP-600 en inglés y 80 gemelas EN de las que solo estaban en español. DP-600 queda con 278 + 278.
+  - `questions_databricks_fundamentals_en.js`: las 50 preguntas de Fundamentals que solo estaban en español. Queda con 60 + 60.
+  - `questions_unir_viz_en.js` (55), `questions_unir_herr_en.js` (160) y `questions_unah_tesis_en.js` (28): versión en inglés de UNIR y UNAH, con los dominios traducidos ("Tema 1: Introducción" pasa a "Topic 1: Introduction").
+  - Cada gemela lleva `twinOf` con el id original. Su id es `<id>-es` o `<id>-en`.
+- **Emparejamiento:** `findQuestionTwin` en `translate_toggle.js` acepta `id`/`id-es`, `id`/`id-en` y `twinOf`, de modo que el selector EN/ES cambia la pregunta en pantalla en todos los cursos. `getCanonicalQuestionId` (en `features.js`) también normaliza el sufijo `-en`.
+- **Estudio y flashcards:** `i18n_study_content.js` envuelve en bloques `.lang-section` el estudio de DP-600, UNIR Visualización, UNIR Herramientas y UNAH Tesis. También vuelve bilingües las flashcards de Databricks DA, UNIR y UNAH (`front`/`back` con `.fc-language-block`, más `pregunta_en`/`pregunta_es`). La lectura en voz alta de una flashcard usa solo el idioma activo.
+- **Interfaz:** `app_i18n_ui.js` registra unas 1,040 frases que solo existían en español: pestañas del inicio, tarjetas de Estudio, Diagnóstico y Práctica, rutas, roles, logros y cinturones, modales, tooltips y títulos del Centro de Estudio. Usa el nuevo `AppI18n.addPhrases`. `app_i18n.js` suma patrones para los textos con números ("7 de 7 activo(s)", "Paso 1 de 4", "Desafío CLI 1/3: …"). Además, `splitBilingual` detecta los títulos que vienen como "Español / English" y los muestra bien en ambos idiomas.
+- **Nuevo validador:** `tools/validate_bilingual_coverage.js` falla si una pregunta no tiene pareja en el otro idioma, o si un módulo de estudio o una flashcard no tienen ambos idiomas. `databricks-da` cuenta su diccionario `translations_databricks_es.js`.
+- **Caché PWA:** `BUILD_TIMESTAMP = '20261008c'`, caché `simulador-v74-20261008c`.
+- **Verificación:** pasan las 9 suites (103/103 checks en `validate_full_application.js`). Se recorrió la app en Chromium en inglés: inicio, las 5 vistas, 7 categorías, 13 modales, todas las pestañas del Centro de Estudio de 10 cursos y un examen. Quedan 0 textos en español, salvo el propio selector ES/EN. En español no desapareció ningún texto respecto de `main`. El selector cambia la pregunta en pantalla en DP-600, UNIR, UNAH y Fundamentals, en ambos sentidos.
+- **Traducción:** hecha a mano por agentes en lotes JSONL (el patrón de la sección 8). Cada lote se validó con un script que compara ids, opciones y etiquetas HTML. Los nombres de producto, el código, las fórmulas y LaTeX quedaron sin traducir.
+
+### 2026-10-08 — Claude (Opus 5.5) — recursos de estudio EN/ES y paneles undefined
+- **Pedido de Norman:** traducir todo lo que faltaba y, si todo queda en ambos idiomas, publicarlo. Misma rama `feat/traduccion-completa-en-es` (PR #3).
+- **Nuevo `i18n_study_resources.js`** (se carga después de `i18n_study_content.js`). Vuelve bilingües, sin tocar los archivos originales:
+  - los conceptos de Databricks (`conceptosDatabricks`), con categoría, tipo, tema, contribución y dato de examen;
+  - los personajes de UNIR Visualización (`personajesUnirViz`);
+  - los términos y escenarios de DP-600 (`conceptosDP600`, `dp600Patterns`), que además se normalizan al formato que espera el renderizador. Antes mostraban paneles vacíos;
+  - los escenarios de Databricks DA (`databricksDAPatterns`) y las lecciones de `lessonsData.databricks`;
+  - unas 30 frases sueltas de la interfaz (podcast, sandbox SQL, etiquetas LEÍDO/CLAVE/IMPORTANTE, "Dato para el examen:", Expandir/Contraer Todos).
+- **Paneles con "undefined" corregidos:**
+  - flashcards de DP-600 (usaban `question_en`/`answer_en` y el visor espera `front`/`back` y `tema`);
+  - filtro de temas de las flashcards de AI-103 (no tenían `tema`; ahora usa `category`);
+  - un comando DP-600 que solo tenía `definicion_en`.
+- **`script.js`:** la pestaña de escenarios de Databricks DA ya no aparece en UNIR, UNAH ni en los demás cursos que no son DA.
+- **AI-103 en español, traducción real:** 132 de las 133 preguntas del examen 2026 (`ai103-pdf-*-es`) tenían una traducción palabra por palabra ("Usted tiene un Microsoft Foundry project that…") y la explicación en inglés. Se retradujeron completas desde el inglés: enunciado, opciones, explicación, respuesta aceptada, afirmaciones de matriz y caso de estudio Contoso. Se trabajó en 7 lotes y se fusionó en `questions_azure_ai103_es.js` sin cambiar ids, `correctIds` ni el orden. Los dominios quedan en inglés en ambos bancos, como ya estaban, para que el filtro agrupe igual.
+- **Problemas de contenido que vienen del banco original (no se tocaron):** `ai103-pdf-15`, `-30`, `-32`, `-84`, `-92`, `-93`, `-106` y `-110` tienen como opciones cuatro pasos de despliegue de contenedores en Kubernetes que no corresponden al enunciado. `ai103-pdf-119` y `-122` tienen afirmaciones de relleno (OpenTelemetry, Prompt Shields, MCP) que no corresponden al enunciado. Están mal igual en inglés y en español.
+- **Caché PWA:** `BUILD_TIMESTAMP = '20261008d'`, caché `simulador-v75-20261008d`.
+- **Verificación:** pasan las 9 suites (104/104 en `validate_full_application.js`). Se recorrió en Chromium cada pestaña del Centro de Estudio de 15 cursos, con todo desplegado, más los modales. En inglés solo quedan nombres propios (Encyclopédie, USA Today, El Mundo, The Guantánamo Docket).

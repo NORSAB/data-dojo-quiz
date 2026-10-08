@@ -4468,7 +4468,7 @@ function renderReview(questions, finalPct, passed) {
           ? (window.databricksGenAIPatterns || [])
           : (isDP600
             ? (window.dp600Patterns || [])
-            : (window.databricksDAPatterns || [])));
+            : (isDatabricksDA ? (window.databricksDAPatterns || []) : [])));
       const comandosSql = isAzureAi103
         ? (window.comandosAzureAi103 || [])
         : (isDatabricksGenAI
@@ -5717,8 +5717,12 @@ function renderReview(questions, finalPct, passed) {
         if (!fcFiltered || fcFiltered.length === 0) return;
         const fc = fcFiltered[fcIdx];
         if (!fc) return;
-        const text = side === 'front' ? (fc.front || fc.pregunta) : (fc.back || fc.respuesta);
-        window.speakText(text, getActiveLanguage());
+        // Claude (Opus 5.5) | 2026-10-08 | Las tarjetas bilingues leen solo el idioma activo.
+        const lang = getActiveLanguage();
+        const text = side === 'front'
+          ? (fc['pregunta_' + lang] || fc.front || fc.pregunta)
+          : (fc['respuesta_' + lang] || fc.back || fc.respuesta);
+        window.speakText(text, lang);
       };
 
       function loadFC() {
