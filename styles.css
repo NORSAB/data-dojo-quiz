@@ -7531,3 +7531,80 @@ body:has(#onboarding-screen:not(.hidden)) .global-language-divider {
   background: var(--card-bg);
   z-index: 2;
 }
+
+/* Claude (Opus 5.5) | 2026-10-08 | práctica por subhabilidad y modo solo caso de estudio */
+.quiz-config-subskill {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 12px;
+}
+.quiz-config-subskill-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+.quiz-config-subskill select {
+  width: 100%;
+  font-size: 0.85rem;
+}
+.quiz-config-case-chip {
+  margin-top: 10px;
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.option-rationales {
+  margin-top: 0.9rem;
+  border-top: 1px solid var(--border-color);
+  padding-top: 0.75rem;
+}
+.option-rationales-title {
+  font-weight: 700;
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
+}
+.option-rationale {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 8px 10px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  margin-bottom: 6px;
+  font-size: 0.84rem;
+  line-height: 1.5;
+  background: var(--bg-card);
+}
+.option-rationale.is-correct {
+  border-color: var(--success-color);
+}
+.option-rationale.is-picked:not(.is-correct) {
+  border-color: var(--danger-color);
+}
+.option-rationale-key {
+  flex-shrink: 0;
+  min-width: 26px;
+  height: 26px;
+  border-radius: 13px;
+  padding: 0 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.75rem;
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+}
+.option-rationale.is-correct .option-rationale-key {
+  border-color: var(--success-color);
+  color: var(--success-color);
+}
+.option-rationale-tag {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-left: 4px;
+}

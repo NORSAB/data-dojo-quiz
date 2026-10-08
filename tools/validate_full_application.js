@@ -125,7 +125,8 @@ const questionBankFiles = [
   'questions_unir_herr.js',
   'questions_unah_tesis.js',
   'questions_azure_ai103.js',
-  'questions_azure_ai103_es.js'
+  'questions_azure_ai103_es.js',
+  'questions_azure_ai103_rationales.js'
 ];
 
 for (const qf of questionBankFiles) {
@@ -146,6 +147,7 @@ const studyFiles = [
   'study_azure_ai103.js',
   'study_azure_ai103_exam_topics.js',
   'study_azure_ai103_resources.js',
+  'study_azure_ai103_glossary.js',
   'study_unir_herr.js',
   'study_unah_tesis.js'
 ];

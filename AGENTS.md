@@ -1560,6 +1560,16 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
 - **Caché PWA:** `BUILD_TIMESTAMP = '20261008f'`, caché `simulador-v77-20261008f`.
 - **Verificación:** pasan las 9 suites y `audit_code_structure.js`. En Chromium (Supabase bloqueado) se abrió un tema nuevo en ES y en EN, sin errores de consola.
 
+### 2026-10-08 — Claude (Opus 5.5) — AI-103: por qué cada opción, práctica por subhabilidad, modo caso de estudio y glosario
+- **Pedido de Norman:** terminar lo pendiente de la ruta de estudio de AI-103 antes del examen del 16 de octubre.
+- **Por qué cada opción es correcta o incorrecta:** nuevo `questions_azure_ai103_rationales.js` (se carga después de los dos bancos). Agrega `optionRationales` a las 158 preguntas del PDF y a sus gemelas `-es`, sin tocar el texto literal. Las claves son el id de la opción (`a`, `b`…), el id de la casilla (`hotspot`, `drag_drop`) o el índice de la afirmación (`matrix_statements`). `script.js` las muestra después de responder (`renderOptionRationales`), marca la opción correcta y la que eligió el usuario. `translate_toggle.js` reescribía la explicación al cambiar de idioma y borraba el bloque; ahora lo vuelve a dibujar. En las preguntas con clave dudosa del PDF, la explicación sigue la clave y agrega una nota con lo que dice Microsoft Learn. Los redactores también marcaron como dudosas la 112 (rotar claves de consulta) y la 157 (respuestas idénticas: custom question answering).
+- **Práctica por subhabilidad:** el modal de configuración tiene una lista con las 14 subhabilidades oficiales y su cantidad de preguntas (`#config-subskill-select`, filtra por `subdomain`). Se oculta en cursos con menos de 2 subhabilidades.
+- **Modo solo caso de estudio:** el chip `#config-case-only` deja solo las preguntas con `caseStudy` (las 11 de Contoso). Se oculta en cursos sin casos.
+- **Glosario:** nuevo `study_azure_ai103_glossary.js` (se carga después de `study_azure_ai103_resources.js`). La pestaña Términos pasa de 14 entradas armadas con una pregunta de ejemplo a 71 términos bilingües, de 4 a 6 por subhabilidad, con definición y dato para el examen.
+- **Validadores:** `validate_ai103_integration.js` exige rationales completos en las 316 preguntas del PDF (EN + ES). `validate_full_application.js` incluye los dos archivos nuevos.
+- **Caché PWA:** `BUILD_TIMESTAMP = '20261008g'`, caché `simulador-v78-20261008g`.
+- **Verificación:** pasan las 9 suites y `audit_code_structure.js` (107/107 en `validate_full_application.js`). En Chromium con Supabase bloqueado, en ES y en EN: opción única, lista desplegable y Sí/No muestran el bloque, el filtro de subhabilidad deja 48 preguntas en 2.1, el modo caso deja 11 y abre el caso, y la pestaña Términos muestra 71 términos con títulos en el idioma activo.
+
 ### 2026-10-08 — Claude (Opus 5.5) — pendientes de la revisión
 - **Pedido de Norman:** terminar lo que quedó pendiente de la revisión. Rama `fix/pendientes-revision`.
 - **Manifest:** `theme_color` pasa de `#4f6ef7` a `#3157d5`, el acento del sistema de diseño.
@@ -1568,5 +1578,5 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
 - **Error corregido:** al abrir la revisión antes de entregar, la cuadrícula llamaba a `svgIcon` y `SVG`, que solo existen dentro del Centro de Estudio. Si había una pregunta marcada, se producía un `ReferenceError`. Ahora la estrella se dibuja con un SVG en línea.
 - **AI-103:** las opciones de Kubernetes que no correspondían y las afirmaciones de relleno de la 119 y la 122 ya estaban corregidas por el PR #4, que dejó las preguntas con el texto literal del PDF. Se verificó en los dos bancos; no hizo falta cambiar nada.
 - **Queda para decidir con Norman:** `auto_restore_data.js` carga el perfil y el progreso de Norman en cualquier navegador vacío.
-- **Caché PWA:** `BUILD_TIMESTAMP = '20261008g'`, caché `simulador-v78-20261008g`.
+- **Caché PWA:** `BUILD_TIMESTAMP = '20261008h'`, caché `simulador-v79-20261008h` (el PR #7 ya había usado `20261008g`/`v78`).
 - **Verificación:** pasan las 9 suites, más `node --check` de los módulos principales.
