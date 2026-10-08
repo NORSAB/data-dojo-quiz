@@ -296,15 +296,15 @@
             {
               titulo_en: "Instrumentation with GenAI semantic attributes",
               titulo_es: "Instrumentación con atributos semánticos de GenAI",
-              sql: "from opentelemetry import trace\nfrom azure.monitor.opentelemetry import configure_azure_monitor\n\nconfigure_azure_monitor(connection_string='InstrumentationKey=...;IngestionEndpoint=...')\ntracer = trace.get_tracer('azure.ai.app')\n\nwith tracer.start_as_current_span('chat_completion') as span:\n    span.set_attribute('gen_ai.system', 'az.ai.openai')\n    span.set_attribute('gen_ai.request.model', 'gpt-4o')\n    span.set_attribute('gen_ai.request.temperature', 0.2)\n    \n    response = client.chat.completions.create(model='gpt-4o', messages=messages)\n    \n    span.set_attribute('gen_ai.usage.prompt_tokens', response.usage.prompt_tokens)\n    span.set_attribute('gen_ai.usage.completion_tokens', response.usage.completion_tokens)\n    span.set_attribute('gen_ai.response.finish_reasons', [choice.finish_reason for choice in response.choices])",
+              sql: "from opentelemetry import trace\nfrom azure.monitor.opentelemetry import configure_azure_monitor\n\nconfigure_azure_monitor(connection_string='InstrumentationKey=...;IngestionEndpoint=...')\ntracer = trace.get_tracer('azure.ai.app')\n\nwith tracer.start_as_current_span('chat_completion') as span:\n    span.set_attribute('gen_ai.system', 'az.ai.openai')\n    span.set_attribute('gen_ai.request.model', 'gpt-4o')\n    span.set_attribute('gen_ai.request.temperature', 0.2)\n    \n    response = client.chat.completions.create(model='gpt-4o', messages=messages)\n    \n    span.set_attribute('gen_ai.usage.input_tokens', response.usage.prompt_tokens)\n    span.set_attribute('gen_ai.usage.output_tokens', response.usage.completion_tokens)\n    span.set_attribute('gen_ai.response.finish_reasons', [choice.finish_reason for choice in response.choices])",
               lineas: [
                 { code: "from opentelemetry import trace", en: "Import standard OpenTelemetry trace API", es: "Importa la API estándar de trazas de OpenTelemetry" },
                 { code: "configure_azure_monitor(...)", en: "Configure Azure Monitor exporter for Application Insights", es: "Configura el exportador de Azure Monitor para Application Insights" },
                 { code: "with tracer.start_as_current_span('chat_completion') as span:", en: "Start distributed span for model invocation", es: "Inicia el span distribuido para la invocación del modelo" },
                 { code: "    span.set_attribute('gen_ai.system', 'az.ai.openai')", en: "Set standard provider identifier", es: "Establece el identificador de proveedor estándar" },
                 { code: "    span.set_attribute('gen_ai.request.model', 'gpt-4o')", en: "Set foundation model deployment identifier", es: "Establece el identificador del despliegue del modelo" },
-                { code: "    span.set_attribute('gen_ai.usage.prompt_tokens', ...)", en: "Log exact prompt tokens consumed", es: "Registra los tokens exactos de entrada consumidos" },
-                { code: "    span.set_attribute('gen_ai.usage.completion_tokens', ...)", en: "Log completion tokens produced", es: "Registra los tokens de respuesta producidos" }
+                { code: "    span.set_attribute('gen_ai.usage.input_tokens', ...)", en: "Log exact prompt tokens consumed", es: "Registra los tokens exactos de entrada consumidos" },
+                { code: "    span.set_attribute('gen_ai.usage.output_tokens', ...)", en: "Log completion tokens produced", es: "Registra los tokens de respuesta producidos" }
               ]
             }
           ]
