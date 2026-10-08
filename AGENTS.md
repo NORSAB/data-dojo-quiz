@@ -1545,3 +1545,8 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
 - **Informe:** `/mnt/project-files/ai103-pdf-2026-10-08/verificacion-ai103.md` (tabla pregunta por pregunta). Claves dudosas del propio PDF, sin cambiar: 35, 112, 114 y 147; la 119 y la 120 no traen explicación.
 - **Caché PWA:** `BUILD_TIMESTAMP = '20261008e'`, caché `simulador-v76-20261008e`.
 - **Verificación:** pasan las 9 suites y `audit_code_structure.js`. Probado en Chromium (Supabase bloqueado): lista desplegable y arrastrar y soltar en ES y EN, antes y después de responder.
+
+### 2026-10-08 — Claude (Opus 5.5) — AI-103: subhabilidades unificadas y pesos oficiales
+- Las preguntas del PDF usaban "1.1 …" y las anteriores "Subdomain 1.1: …", así que el filtro mostraba 28 subhabilidades. Ahora todas usan el formato anterior: 14 en inglés y 14 en español ("Subdominio 1.1: …"). La única pregunta con "Subdomain 3.2: Train and deploy Custom Vision models" pasa a la 3.2 oficial.
+- `study_azure_ai103.js`: los pesos de los dominios pasan a los oficiales (25–30%, 30–35%, 10–15%) en los dos idiomas.
+- Ruta de estudio bilingüe de AI-103 escrita como documento para Norman, con los huecos del Centro de Estudio y qué construir después.

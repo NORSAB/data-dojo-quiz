@@ -187,7 +187,7 @@
         },
         // DOMAIN 1
         {
-            title: 'Domain 1: Plan and manage an Azure AI solution / Dominio 1: Planificar y administrar una solución de Azure AI (25%)',
+            title: 'Domain 1: Plan and manage an Azure AI solution (25–30%) / Dominio 1: Planificar y administrar una solución de Azure AI (25–30%)',
             items: [
                 {
                     title: "1.1 Foundry Services & Architecture / Servicios y Arquitectura de Azure AI Foundry (Hubs vs Projects)",
@@ -264,7 +264,7 @@
         },
         // DOMAIN 2
         {
-            title: 'Domain 2: Implement generative AI and agentic solutions / Dominio 2: Implementar soluciones generativas y agénticas (30%)',
+            title: 'Domain 2: Implement generative AI and agentic solutions (30–35%) / Dominio 2: Implementar soluciones generativas y agénticas (30–35%)',
             items: [
                 {
                     title: "2.1 Agent Service Lifecycle & Execution Model / Ciclo de Vida y Ejecución de Azure AI Agent Service",
@@ -349,7 +349,7 @@
         },
         // DOMAIN 3
         {
-            title: 'Domain 3: Implement computer vision solutions / Dominio 3: Implementar soluciones de visión por computadora (10%)',
+            title: 'Domain 3: Implement computer vision solutions (10–15%) / Dominio 3: Implementar soluciones de visión por computadora (10–15%)',
             items: [
                 {
                     title: "3.1 Multimodal Vision & Visual Grounding / Visión Multimodal y Fundamentación Visual (GPT-4o & Phi-3.5-vision)",
@@ -391,7 +391,7 @@
         },
         // DOMAIN 4
         {
-            title: 'Domain 4: Implement text analysis solutions / Dominio 4: Implementar soluciones de análisis de texto (10%)',
+            title: 'Domain 4: Implement text analysis solutions (10–15%) / Dominio 4: Implementar soluciones de análisis de texto (10–15%)',
             items: [
                 {
                     title: "4.1 Language Analysis & PII Masking / Análisis de Lenguaje y Enmascaramiento de PII",
@@ -433,7 +433,7 @@
         },
         // DOMAIN 5
         {
-            title: 'Domain 5: Implement information extraction solutions / Dominio 5: Implementar soluciones de extracción de información (10%)',
+            title: 'Domain 5: Implement information extraction solutions (10–15%) / Dominio 5: Implementar soluciones de extracción de información (10–15%)',
             items: [
                 {
                     title: "5.1 Azure AI Search: Advanced Indexing & Vector Search / Búsqueda Vectorial Avanzada y Algoritmos de Indexación",
