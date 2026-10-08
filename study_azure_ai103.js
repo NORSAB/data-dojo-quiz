@@ -23,7 +23,7 @@
             title: 'D0. Decision Matrices & Golden Rules / D0. Reglas de Oro y Matrices de Decisión (AI-103 2026)',
             items: [
                 {
-                    title: "0.1 Azure OpenAI Deployment Decision Matrix / Matriz de Despliegue de Azure OpenAI (Serverless vs PTU vs Provisioned)",
+                    title: "0.1 Azure OpenAI Deployment Decision Matrix / Matriz de Despliegue de Azure OpenAI (Standard vs Provisioned vs Batch)",
                     content: `
                         ${langSection('en', `
                             ${styleBox('blue', 'Azure OpenAI Deployment Decision Matrix')}
@@ -31,13 +31,13 @@
                             </div>
                             <table class="table table-bordered">
                                 <tr class="table-header"><th>Deployment Option</th><th>Billing Model</th><th>Best Use Case</th><th>Latency SLA</th></tr>
-                                <tr><td><strong>Standard (Pay-as-you-go)</strong></td><td>Per 1k tokens (prompt + completion)</td><td>Development, low-to-medium variable traffic</td><td>Variable / subject to regional spikes</td></tr>
+                                <tr><td><strong>Standard (Regional, pay-as-you-go)</strong></td><td>Per 1k tokens (prompt + completion)</td><td>Data must be processed inside one Azure region; low-to-medium variable traffic</td><td>Variable / subject to regional spikes</td></tr>
                                 <tr><td><strong>Global Standard</strong></td><td>Per 1k tokens, routed across global regions</td><td>Production apps with bursty traffic wanting higher rate limits</td><td>Dynamic routing for max availability</td></tr>
                                 <tr><td><strong>Global Provisioned (PTU)</strong></td><td>Hourly reserved Provisioned Throughput Units</td><td>High-volume enterprise production, predictable budget</td><td>Guaranteed consistent latency</td></tr>
-                                <tr><td><strong>Data Zone Standard / Batch</strong></td><td>Discounted per-token batch pricing</td><td>Asynchronous 24h batch jobs, offline document analysis</td><td>No real-time SLA (processed within 24h)</td></tr>
+                                <tr><td><strong>Data Zone Standard</strong></td><td>Per 1k tokens, real time</td><td>Processing must stay inside a data zone (for example the EU or the US)</td><td>Real time, routed within the data zone</td></tr><tr><td><strong>Global Batch / Data Zone Batch</strong></td><td>About 50% cheaper per token than Standard</td><td>Asynchronous jobs, offline document analysis</td><td>No real-time SLA (24-hour target)</td></tr>
                             </table>
                             ${styleBox('yellow', 'Golden Rule for AI-103')}
-                                For predictable latency and guaranteed throughput at scale: <strong>Global Provisioned PTU</strong>. For variable/low traffic with zero idle compute cost: <strong>Serverless / Global Standard</strong>.
+                                For predictable latency and guaranteed throughput at scale: <strong>Global Provisioned PTU</strong>. For variable/low traffic with zero idle compute cost: <strong>Global Standard</strong>. If data must stay in one region: <strong>Standard</strong>. Global Standard can route traffic to any region.
                             </div>
                         `)}
                         ${langSection('es', `
@@ -46,13 +46,13 @@
                             </div>
                             <table class="table table-bordered">
                                 <tr class="table-header"><th>Opción de Despliegue</th><th>Modelo de Facturación</th><th>Mejor Caso de Uso</th><th>SLA de Latencia</th></tr>
-                                <tr><td><strong>Estándar (Pago por uso)</strong></td><td>Por cada 1k tokens (prompt + respuesta)</td><td>Desarrollo, tráfico variable de bajo a medio</td><td>Variable / sujeto a picos regionales</td></tr>
+                                <tr><td><strong>Standard (regional, pago por uso)</strong></td><td>Por cada 1k tokens (prompt + respuesta)</td><td>Los datos deben procesarse dentro de una región de Azure; tráfico variable de bajo a medio</td><td>Variable / sujeto a picos regionales</td></tr>
                                 <tr><td><strong>Global Standard</strong></td><td>Por cada 1k tokens, enrutado globalmente</td><td>Apps en producción con tráfico por ráfagas que necesitan mayores límites</td><td>Enrutamiento dinámico para máxima disponibilidad</td></tr>
                                 <tr><td><strong>Global Provisioned (PTU)</strong></td><td>Unidades de Rendimiento Aprovisionadas (PTU) reservadas por hora</td><td>Producción empresarial de alto volumen, presupuesto predecible</td><td>Latencia constante garantizada</td></tr>
-                                <tr><td><strong>Data Zone Standard / Batch</strong></td><td>Precios con descuento por token para lotes</td><td>Trabajos por lotes asíncronos en 24h, análisis offline de documentos</td><td>Sin SLA en tiempo real (procesado en 24h)</td></tr>
+                                <tr><td><strong>Data Zone Standard</strong></td><td>Por cada 1k tokens, en tiempo real</td><td>El procesamiento debe quedar dentro de una zona de datos (por ejemplo, la UE o EE. UU.)</td><td>Tiempo real, enrutado dentro de la zona de datos</td></tr><tr><td><strong>Global Batch / Data Zone Batch</strong></td><td>Cerca de 50% más barato por token que Standard</td><td>Trabajos asíncronos, análisis offline de documentos</td><td>Sin SLA en tiempo real (objetivo de 24 horas)</td></tr>
                             </table>
                             ${styleBox('yellow', 'Regla de Oro de AI-103')}
-                                Para latencia predecible y rendimiento garantizado a escala: <strong>Global Provisioned PTU</strong>. Para tráfico variable/bajo con cero costo de cómputo inactivo: <strong>Serverless / Global Standard</strong>.
+                                Para latencia predecible y rendimiento garantizado a escala: <strong>Global Provisioned PTU</strong>. Para tráfico variable/bajo con cero costo de cómputo inactivo: <strong>Global Standard</strong>. Si los datos deben quedarse en una región: <strong>Standard</strong>. Global Standard puede enrutar el tráfico a cualquier región.
                             </div>
                         `)}
                     `
@@ -126,7 +126,7 @@
                                 <tr><td><strong>Authentication</strong></td><td><strong>User-Assigned Managed Identity (UAMI)</strong> assigned to AI services</td><td>Eliminates hardcoded API keys; supports granular RBAC role assignments across Search, Storage, and OpenAI</td></tr>
                                 <tr><td><strong>Network Perimeter</strong></td><td><strong>Private Endpoints + VNet</strong>; disable public network access</td><td>Ensures all traffic between application backend, Azure AI Search, and Azure OpenAI stays on the Azure backbone</td></tr>
                                 <tr><td><strong>Data Encryption</strong></td><td><strong>Customer-Managed Keys (CMK)</strong> backed by Azure Key Vault with Soft-Delete</td><td>Satisfies strict financial/insurance regulatory requirements for cryptographic control over data at rest</td></tr>
-                                <tr><td><strong>Content Safety</strong></td><td>Custom Blocklists with regex patterns + Groundedness Detection API</td><td>Enforces zero tolerance for proprietary insurance terms leaking and blocks prompt injections from claim attachments</td></tr>
+                                <tr><td><strong>Content Safety</strong></td><td>Custom Blocklists with regex patterns + Prompt Shields for documents</td><td>Enforces zero tolerance for proprietary insurance terms leaking and blocks prompt injections hidden in claim attachments (groundedness detection is a different check: it compares answers against their sources)</td></tr>
                             </table>
                         `)}
                         ${langSection('es', `
@@ -139,7 +139,7 @@
                                 <tr><td><strong>Autenticación</strong></td><td><strong>User-Assigned Managed Identity (UAMI)</strong> asignada a los servicios de IA</td><td>Elimina claves API en código; permite asignaciones RBAC granulares entre Search, Storage y OpenAI</td></tr>
                                 <tr><td><strong>Perímetro de Red</strong></td><td><strong>Private Endpoints + VNet</strong>; deshabilitar acceso a redes públicas</td><td>Garantiza que todo el tráfico entre backend, Azure AI Search y Azure OpenAI viaje por el backbone privado de Azure</td></tr>
                                 <tr><td><strong>Cifrado de Datos</strong></td><td><strong>Customer-Managed Keys (CMK)</strong> con Azure Key Vault y Soft-Delete</td><td>Cumple normativas financieras y de seguros para control criptográfico estricto sobre datos en reposo</td></tr>
-                                <tr><td><strong>Content Safety</strong></td><td>Listas de Bloqueo Personalizadas con regex + API de Detección de Fundamentación (Groundedness)</td><td>Garantiza cero fuga de términos confidenciales y bloquea inyecciones de avisos en adjuntos de reclamos</td></tr>
+                                <tr><td><strong>Content Safety</strong></td><td>Listas de Bloqueo Personalizadas con regex + Prompt Shields para documentos</td><td>Garantiza cero fuga de términos confidenciales y bloquea inyecciones de instrucciones ocultas en adjuntos de reclamos (la detección de fundamentación es otro control: compara las respuestas con sus fuentes)</td></tr>
                             </table>
                         `)}
                     `
@@ -155,8 +155,8 @@
                                 <tr class="table-header"><th>Semantic Attribute</th><th>Standard OpenTelemetry Key</th><th>Description & Purpose</th></tr>
                                 <tr><td><strong>System Provider</strong></td><td><code>gen_ai.system</code></td><td>Identifies LLM provider (e.g., <code>az.ai.openai</code> or <code>az.ai.agents</code>)</td></tr>
                                 <tr><td><strong>Model Identifier</strong></td><td><code>gen_ai.request.model</code></td><td>Deployment name or foundation model (e.g., <code>gpt-4o</code>)</td></tr>
-                                <tr><td><strong>Prompt Tokens</strong></td><td><code>gen_ai.usage.prompt_tokens</code></td><td>Number of tokens ingested in the request context</td></tr>
-                                <tr><td><strong>Completion Tokens</strong></td><td><code>gen_ai.usage.completion_tokens</code></td><td>Number of tokens generated by the model</td></tr>
+                                <tr><td><strong>Prompt Tokens</strong></td><td><code>gen_ai.usage.input_tokens</code> (older name: prompt_tokens)</td><td>Number of tokens ingested in the request context</td></tr>
+                                <tr><td><strong>Completion Tokens</strong></td><td><code>gen_ai.usage.output_tokens</code> (older name: completion_tokens)</td><td>Number of tokens generated by the model</td></tr>
                                 <tr><td><strong>Finish Reason</strong></td><td><code>gen_ai.response.finish_reasons</code></td><td>Completion status: <code>stop</code>, <code>length</code>, <code>tool_calls</code>, or <code>content_filter</code></td></tr>
                             </table>
                             ${styleBox('yellow', 'Semantic Kernel Filter Pipeline')}
@@ -172,8 +172,8 @@
                                 <tr class="table-header"><th>Atributo Semántico</th><th>Clave Estándar OpenTelemetry</th><th>Descripción y Propósito</th></tr>
                                 <tr><td><strong>Proveedor de Sistema</strong></td><td><code>gen_ai.system</code></td><td>Identifica el proveedor del LLM (ej. <code>az.ai.openai</code> o <code>az.ai.agents</code>)</td></tr>
                                 <tr><td><strong>Identificador de Modelo</strong></td><td><code>gen_ai.request.model</code></td><td>Nombre del despliegue o modelo base (ej. <code>gpt-4o</code>)</td></tr>
-                                <tr><td><strong>Tokens de Prompt</strong></td><td><code>gen_ai.usage.prompt_tokens</code></td><td>Cantidad de tokens consumidos en el contexto de entrada</td></tr>
-                                <tr><td><strong>Tokens de Respuesta</strong></td><td><code>gen_ai.usage.completion_tokens</code></td><td>Cantidad de tokens generados por el modelo</td></tr>
+                                <tr><td><strong>Tokens de Prompt</strong></td><td><code>gen_ai.usage.input_tokens</code> (older name: prompt_tokens)</td><td>Cantidad de tokens consumidos en el contexto de entrada</td></tr>
+                                <tr><td><strong>Tokens de Respuesta</strong></td><td><code>gen_ai.usage.output_tokens</code> (older name: completion_tokens)</td><td>Cantidad de tokens generados por el modelo</td></tr>
                                 <tr><td><strong>Razón de Finalización</strong></td><td><code>gen_ai.response.finish_reasons</code></td><td>Estado de culminación: <code>stop</code>, <code>length</code>, <code>tool_calls</code> o <code>content_filter</code></td></tr>
                             </table>
                             ${styleBox('yellow', 'Pipeline de Filtros en Semantic Kernel')}
@@ -273,7 +273,7 @@
                             ${styleBox('blue', 'Agent Execution Architecture')}
                                 1. <strong>Agent:</strong> Configured with system instructions, model deployment (e.g., GPT-4o), temperature, and tools.<br>
                                 2. <strong>Thread:</strong> State container that persists conversation history, user messages, and assistant replies.<br>
-                                3. <strong>Run:</strong> Execution lifecycle object. Status sequence: <code>queued</code> -> <code>in_progress</code> -> <code>requires_action</code> (when a function call must be executed by client) -> <code>completed</code> (or <code>failed</code>/<code>expired</code>).<br>
+                                3. <strong>Run:</strong> Execution lifecycle object. Status sequence: <code>queued</code> -> <code>in_progress</code> -> <code>requires_action</code> (when a function call must be executed by client) -> <code>completed</code> (or <code>failed</code>, <code>expired</code>, <code>cancelling</code>, <code>cancelled</code>, <code>incomplete</code>).<br>
                                 4. <strong>Run Steps:</strong> Granular logs representing individual model thought steps or tool invocations.<br>
                                 5. <strong>Truncation Strategy:</strong> Prevents context window exhaustion by automatically retaining the last N messages (<code>type: "last_messages"</code>) or capping max prompt tokens.
                             </div>
@@ -282,7 +282,7 @@
                             ${styleBox('blue', 'Arquitectura de Ejecución de Agentes')}
                                 1. <strong>Agent:</strong> Configurado con instrucciones de sistema, despliegue de modelo (ej. GPT-4o), temperatura y herramientas.<br>
                                 2. <strong>Thread:</strong> Contenedor de estado que almacena el historial de la conversación, mensajes de usuario y respuestas del asistente.<br>
-                                3. <strong>Run:</strong> Objeto del ciclo de vida de ejecución. Secuencia de estados: <code>queued</code> -> <code>in_progress</code> -> <code>requires_action</code> (cuando el cliente debe ejecutar una función local) -> <code>completed</code>.<br>
+                                3. <strong>Run:</strong> Objeto del ciclo de vida de ejecución. Secuencia de estados: <code>queued</code> -> <code>in_progress</code> -> <code>requires_action</code> (cuando el cliente debe ejecutar una función local) -> <code>completed</code> (o <code>failed</code>, <code>expired</code>, <code>cancelling</code>, <code>cancelled</code>, <code>incomplete</code>).<br>
                                 4. <strong>Run Steps:</strong> Registros detallados de pasos individuales de razonamiento del modelo o invocación de herramientas.<br>
                                 5. <strong>Estrategia de Truncamiento:</strong> Evita el desbordamiento de la ventana de contexto reteniendo automáticamente los últimos N mensajes (<code>type: "last_messages"</code>) o limitando los tokens máximos del prompt.
                             </div>
@@ -352,20 +352,20 @@
             title: 'Domain 3: Implement computer vision solutions (10–15%) / Dominio 3: Implementar soluciones de visión por computadora (10–15%)',
             items: [
                 {
-                    title: "3.1 Multimodal Vision & Visual Grounding / Visión Multimodal y Fundamentación Visual (GPT-4o & Phi-3.5-vision)",
+                    title: "3.1 Multimodal Vision & Object Locations / Visión Multimodal y Ubicación de Objetos (GPT-4o & Phi-3.5-vision)",
                     content: `
                         ${langSection('en', `
                             ${styleBox('blue', 'Multimodal Vision Applications')}
-                                <strong>GPT-4o Vision:</strong> Analyzes multiple high-resolution images simultaneously. Supports image captioning, chart reading, spatial object detection, and visual reasonings.<br>
+                                <strong>GPT-4o Vision:</strong> Analyzes multiple high-resolution images simultaneously. Supports image captioning, chart reading and visual reasoning. It describes where things are, but it does not return precise detection coordinates.<br>
                                 <strong>Phi-3.5-vision:</strong> Lightweight small language model (SLM) optimized for text-dense documents, charts, tables, and low-latency edge/local deployments.<br>
-                                <strong>Visual Grounding:</strong> Returning normalized bounding box coordinates <code>[ymin, xmin, ymax, xmax]</code> (scaled 0 to 1000) around detected items to support visual highlights in user interfaces.
+                                <strong>Exact object locations:</strong> When you need bounding boxes (for example, to highlight items in a UI), use Azure Vision object detection or a Custom Vision object detection model. Both return a rectangle for each detected object.
                             </div>
                         `)}
                         ${langSection('es', `
                             ${styleBox('blue', 'Aplicaciones de Visión Multimodal')}
-                                <strong>GPT-4o Vision:</strong> Analiza múltiples imágenes de alta resolución en paralelo. Soporta descripción de imágenes, lectura de diagramas, detección espacial de objetos y razonamiento visual.<br>
+                                <strong>GPT-4o Vision:</strong> Analiza múltiples imágenes de alta resolución en paralelo. Soporta descripción de imágenes, lectura de diagramas y razonamiento visual. Describe dónde están las cosas, pero no devuelve coordenadas de detección precisas.<br>
                                 <strong>Phi-3.5-vision:</strong> Modelo de lenguaje pequeño (SLM) optimizado para documentos con densidad de texto, tablas, gráficos y despliegues en el borde de baja latencia.<br>
-                                <strong>Fundamentación Visual (Visual Grounding):</strong> Retorna coordenadas de cajas delimitadoras normalizadas <code>[ymin, xmin, ymax, xmax]</code> (escaladas de 0 a 1000) alrededor de los objetos detectados para resaltado en la UI.
+                                <strong>Ubicación exacta de objetos:</strong> Cuando necesites cuadros delimitadores (por ejemplo, para resaltar elementos en la UI), usa la detección de objetos de Azure Vision o un modelo de detección de objetos de Custom Vision. Ambos devuelven un rectángulo por cada objeto detectado.
                             </div>
                         `)}
                     `
@@ -375,13 +375,13 @@
                     content: `
                         ${langSection('en', `
                             ${styleBox('blue', 'Azure Content Understanding Architecture')}
-                                <strong>Pro Mode vs Standard:</strong> Pro Mode allows developers to define custom target schemas using JSON. Azure Content Understanding automatically routes visual documents (invoices, architectural plans, technical diagrams) to specialized multimodal extractors.<br>
+                                <strong>Pro Mode vs Standard:</strong> Both modes extract fields defined in a field schema. Pro mode adds multiple input documents, reference data and multi-step reasoning. It accepts documents only and returns no confidence scores or grounding.<br>
                                 <strong>Key-Value Pair Extraction:</strong> Automatically isolates printed and handwritten key-value associations without training custom ML models.
                             </div>
                         `)}
                         ${langSection('es', `
                             ${styleBox('blue', 'Arquitectura de Azure Content Understanding')}
-                                <strong>Modo Pro vs Estándar:</strong> El Modo Pro permite a los desarrolladores definir esquemas destino personalizados con JSON. Azure Content Understanding enruta automáticamente documentos visuales (facturas, planos, diagramas técnicos) a extractores multimodales especializados.<br>
+                                <strong>Modo Pro vs Estándar:</strong> Los dos modos extraen los campos definidos en un esquema de campos. El modo Pro agrega varios documentos de entrada, datos de referencia y razonamiento en varios pasos. Solo acepta documentos y no devuelve puntuaciones de confianza ni fundamentación.<br>
                                 <strong>Extracción de Pares Clave-Valor:</strong> Aísla automáticamente asociaciones clave-valor impresas y manuscritas sin necesidad de entrenar modelos de ML personalizados.
                             </div>
                         `)}
@@ -398,14 +398,14 @@
                     content: `
                         ${langSection('en', `
                             ${styleBox('blue', 'Azure AI Language Capabilities')}
-                                <strong>PII Redaction:</strong> Automatically replaces sensitive personal identifiers (SSNs, credit card numbers, email addresses, names) with entity tags (e.g., <code>[SSN]</code>) or redaction characters before passing prompts to LLMs.<br>
-                                <strong>Text Analytics for Health:</strong> Extracts medical entities (Dosage, MedicationName, Condition) and maps relations (e.g., Medication 'DosageOf' Condition) to standardized SNOMED-CT / ICD-10 ontologies.
+                                <strong>PII Redaction:</strong> Automatically replaces sensitive personal identifiers (SSNs, credit card numbers, email addresses, names) before passing prompts to LLMs. The default <code>policyKind</code> is <code>characterMask</code> (asterisks); <code>entityMask</code> uses entity-type tags such as <code>[PERSON_1]</code>.<br>
+                                <strong>Text Analytics for Health:</strong> Extracts medical entities (Dosage, MedicationName, Condition) and relations (e.g., DosageOfMedication links a Dosage to a Medication). Concepts link to UMLS, which includes SNOMED CT and ICD-10.
                             </div>
                         `)}
                         ${langSection('es', `
                             ${styleBox('blue', 'Capacidades de Azure AI Language')}
-                                <strong>Enmascaramiento de PII:</strong> Reemplaza automáticamente identificadores personales sensibles (números de seguro social, tarjetas de crédito, correos, nombres) con etiquetas de entidad (ej. <code>[SSN]</code>) o caracteres de censura antes de enviar los prompts al LLM.<br>
-                                <strong>Text Analytics for Health:</strong> Extrae entidades médicas (Dosis, NombreMedicamento, Condición) y mapea relaciones (ej. Medicamento 'DosageOf' Condición) hacia ontologías estandarizadas SNOMED-CT / ICD-10.
+                                <strong>Enmascaramiento de PII:</strong> Reemplaza automáticamente identificadores personales sensibles (números de seguro social, tarjetas de crédito, correos, nombres) antes de enviar los prompts al LLM. El <code>policyKind</code> predeterminado es <code>characterMask</code> (asteriscos); <code>entityMask</code> usa etiquetas del tipo de entidad, como <code>[PERSON_1]</code>.<br>
+                                <strong>Text Analytics for Health:</strong> Extrae entidades médicas (Dosis, NombreMedicamento, Condición) y relaciones (ej. DosageOfMedication une una Dosis con un Medicamento). Los conceptos se vinculan con UMLS, que incluye SNOMED CT e ICD-10.
                             </div>
                         `)}
                     `
@@ -417,14 +417,14 @@
                             ${styleBox('blue', 'Azure AI Speech Integration')}
                                 <strong>Real-Time Speech-to-Text:</strong> Streaming audio transcription over WebSockets using the Speech SDK with automatic interim results and language identification.<br>
                                 <strong>Neural Text-to-Speech:</strong> Human-like synthesis supporting Speech Synthesis Markup Language (SSML) for pitch, rate, pause, and expressive styles (e.g., <code>style="customerservice"</code>).<br>
-                                <strong>Audio Transcription Pipeline:</strong> Fast transcription API for asynchronous batch processing of recorded call center audio files stored in Azure Blob Storage.
+                                <strong>Audio Transcription Pipeline:</strong> Batch transcription processes many recorded call center files stored in Azure Blob Storage asynchronously. Fast transcription is a different, synchronous API for a single file.
                             </div>
                         `)}
                         ${langSection('es', `
                             ${styleBox('blue', 'Integración de Azure AI Speech')}
                                 <strong>Speech-to-Text en Tiempo Real:</strong> Transcripción de audio por streaming sobre WebSockets utilizando el Speech SDK con resultados intermedios automáticos e identificación de idioma.<br>
                                 <strong>Text-to-Speech Neuronal:</strong> Síntesis con voz natural que soporta Speech Synthesis Markup Language (SSML) para tono, velocidad, pausas y estilos expresivos (ej. <code>style="customerservice"</code>).<br>
-                                <strong>Pipeline de Transcripción de Audio:</strong> API de transcripción rápida para procesamiento por lotes asíncrono de grabaciones de centros de llamadas almacenadas en Azure Blob Storage.
+                                <strong>Pipeline de Transcripción de Audio:</strong> La transcripción por lotes procesa de forma asíncrona muchas grabaciones de centros de llamadas guardadas en Azure Blob Storage. La transcripción rápida es otra API, síncrona, para un solo archivo.
                             </div>
                         `)}
                     `
@@ -467,18 +467,18 @@
                     content: `
                         ${langSection('en', `
                             ${styleBox('blue', 'Automated Ingestion Pipeline (Skillset)')}
-                                <strong>SplitSkill:</strong> Splits long raw documents into chunks by page count or sentence length with overlapping token windows.<br>
+                                <strong>SplitSkill:</strong> Splits long documents with <code>textSplitMode</code> set to <code>pages</code> or <code>sentences</code>, sized by <code>maximumPageLength</code> and overlapped by <code>pageOverlapLength</code>.<br>
                                 <strong>AzureOpenAIEmbeddingSkill:</strong> Calls an Azure OpenAI embedding deployment to compute dense vectors for each chunk during indexing.<br>
                                 <strong>Index Projections:</strong> Defines 1-to-many document mappings so each generated chunk becomes an independent searchable document in the index while retaining the parent document ID.<br>
-                                <strong>Change Tracking Policies:</strong> HighWaterMark policy (using <code>_ts</code> timestamp) or Native Blob Soft Delete to detect updates and deletions automatically.
+                                <strong>Change Tracking Policies:</strong> Blob indexers detect changes from LastModified automatically and detect deletions with native blob soft delete or a soft-delete metadata column. The HighWaterMark policy on <code>_ts</code> applies to Cosmos DB.
                             </div>
                         `)}
                         ${langSection('es', `
                             ${styleBox('blue', 'Pipeline de Ingesta Automatizado (Skillset)')}
-                                <strong>SplitSkill:</strong> Divide documentos largos en fragmentos por número de páginas o longitud de oraciones con solapamiento de tokens.<br>
+                                <strong>SplitSkill:</strong> Divide documentos largos con <code>textSplitMode</code> en <code>pages</code> o <code>sentences</code>, con tamaño <code>maximumPageLength</code> y solapamiento <code>pageOverlapLength</code>.<br>
                                 <strong>AzureOpenAIEmbeddingSkill:</strong> Llama a un despliegue de embeddings de Azure OpenAI para generar vectores densos por cada fragmento durante la indexación.<br>
                                 <strong>Index Projections (Proyecciones de Índice):</strong> Define mapeos 1-a-muchos para que cada fragmento generado se convierta en un documento independiente dentro del índice preservando el ID del documento padre.<br>
-                                <strong>Políticas de Detección de Cambios:</strong> Política HighWaterMark (usando timestamp <code>_ts</code>) o borrado suave nativo de Blob Storage para detectar altas, bajas y cambios automáticamente.
+                                <strong>Políticas de Detección de Cambios:</strong> Los indexadores de Blob detectan cambios con LastModified de forma automática y detectan eliminaciones con el borrado suave nativo de Blob o una columna de metadatos de borrado suave. La política HighWaterMark sobre <code>_ts</code> se usa con Cosmos DB.
                             </div>
                         `)}
                     `
@@ -489,14 +489,14 @@
                         ${langSection('en', `
                             ${styleBox('blue', 'Layout to Markdown for RAG Optimization')}
                                 The <code>prebuilt-layout</code> model parses complex multi-column documents, tables, selection marks, and reading order, outputting native Markdown optimized for LLM RAG context injection.<br>
-                                <strong>Table Extraction:</strong> Converts complex merged table cells into GitHub-flavored Markdown tables, preventing LLMs from misinterpreting column values.<br>
+                                <strong>Table Extraction:</strong> Renders tables as HTML tables inside the Markdown output, so merged cells stay correct, preventing LLMs from misinterpreting column values.<br>
                                 <strong>Reading Order:</strong> Automatically handles multi-column journal articles and newsletters, ensuring sentences are not incorrectly combined horizontally across columns.
                             </div>
                         `)}
                         ${langSection('es', `
                             ${styleBox('blue', 'Diseño a Markdown para Optimización RAG')}
                                 El modelo <code>prebuilt-layout</code> analiza documentos complejos de varias columnas, tablas, marcas de selección y orden de lectura, generando Markdown nativo optimizado para inyección de contexto en RAG.<br>
-                                <strong>Extracción de Tablas:</strong> Convierte celdas combinadas complejas en tablas Markdown estándar, evitando que los LLMs interpreten erróneamente valores entre columnas adyacentes.<br>
+                                <strong>Extracción de Tablas:</strong> Representa las tablas como tablas HTML dentro de la salida Markdown, para que las celdas combinadas queden bien, evitando que los LLMs interpreten erróneamente valores entre columnas adyacentes.<br>
                                 <strong>Orden de Lectura:</strong> Gestiona automáticamente artículos y boletines con formato en columnas múltiples, asegurando que las frases no se concatenen horizontalmente de forma incorrecta.
                             </div>
                         `)}

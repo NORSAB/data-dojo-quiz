@@ -25,6 +25,7 @@ function runFile(relPath) {
 runFile('questions_azure_ai103.js');
 runFile('questions_azure_ai103_es.js');
 runFile('study_azure_ai103.js');
+runFile('study_azure_ai103_exam_topics.js');
 runFile('study_azure_ai103_resources.js');
 
 const allQuestions = sandbox.window.questionsData.filter(q => q.courseId === 'azure-ai-103');

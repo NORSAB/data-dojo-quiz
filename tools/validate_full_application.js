@@ -144,6 +144,7 @@ const studyFiles = [
   'study_databricks_genai.js',
   'study_databricks_genai_resources.js',
   'study_azure_ai103.js',
+  'study_azure_ai103_exam_topics.js',
   'study_azure_ai103_resources.js',
   'study_unir_herr.js',
   'study_unah_tesis.js'
