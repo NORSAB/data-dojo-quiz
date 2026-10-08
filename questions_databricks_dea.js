@@ -4975,6 +4975,7 @@
   {
     "id": "db-dea-81",
     "courseId": "databricks-data-engineer-associate",
+    "lang": "en",
     "domain": "Troubleshooting, Monitoring, and Optimization",
     "subdomain": "Spark UI & Data Skew",
     "type": "single_choice",
@@ -5005,6 +5006,7 @@
   {
     "id": "db-dea-82",
     "courseId": "databricks-data-engineer-associate",
+    "lang": "en",
     "domain": "Databricks Intelligence Platform",
     "subdomain": "Delta Lake & Architecture",
     "type": "single_choice",
@@ -5035,6 +5037,7 @@
   {
     "id": "db-dea-83",
     "courseId": "databricks-data-engineer-associate",
+    "lang": "en",
     "domain": "Data Ingestion and Loading",
     "subdomain": "Cloud Object Storage & Ingestion Patterns",
     "type": "single_choice",
@@ -5065,6 +5068,7 @@
   {
     "id": "db-dea-84",
     "courseId": "databricks-data-engineer-associate",
+    "lang": "en",
     "domain": "Databricks Intelligence Platform",
     "subdomain": "Compute & Cluster Types",
     "type": "single_choice",
@@ -5095,6 +5099,7 @@
   {
     "id": "db-dea-85",
     "courseId": "databricks-data-engineer-associate",
+    "lang": "en",
     "domain": "Implementing CI/CD",
     "subdomain": "Databricks Asset Bundles (DABs)",
     "type": "single_choice",
@@ -5125,6 +5130,7 @@
   {
     "id": "db-dea-81-es",
     "courseId": "databricks-data-engineer-associate",
+    "lang": "es",
     "domain": "Resolución de Problemas, Monitoreo y Optimización",
     "subdomain": "Spark UI y Sesgo de Datos (Data Skew)",
     "type": "single_choice",
@@ -5155,6 +5161,7 @@
   {
     "id": "db-dea-82-es",
     "courseId": "databricks-data-engineer-associate",
+    "lang": "es",
     "domain": "Plataforma de Inteligencia Databricks",
     "subdomain": "Delta Lake y Arquitectura",
     "type": "single_choice",
@@ -5185,6 +5192,7 @@
   {
     "id": "db-dea-83-es",
     "courseId": "databricks-data-engineer-associate",
+    "lang": "es",
     "domain": "Ingesta y Carga de Datos",
     "subdomain": "Almacenamiento de Objetos en Nube y Patrones de Ingesta",
     "type": "single_choice",
@@ -5215,6 +5223,7 @@
   {
     "id": "db-dea-84-es",
     "courseId": "databricks-data-engineer-associate",
+    "lang": "es",
     "domain": "Plataforma de Inteligencia Databricks",
     "subdomain": "Cómputo y Tipos de Clúster",
     "type": "single_choice",
@@ -5245,6 +5254,7 @@
   {
     "id": "db-dea-85-es",
     "courseId": "databricks-data-engineer-associate",
+    "lang": "es",
     "domain": "Implementación de CI/CD",
     "subdomain": "Databricks Asset Bundles (DABs)",
     "type": "single_choice",
@@ -5275,6 +5285,7 @@
   {
     "id": "db-dea-86",
     "courseId": "databricks-data-engineer-associate",
+    "lang": "en",
     "domain": "Governance and Security",
     "subdomain": "Managed vs External Tables",
     "type": "single_choice",
@@ -5305,6 +5316,7 @@
   {
     "id": "db-dea-87",
     "courseId": "databricks-data-engineer-associate",
+    "lang": "en",
     "domain": "Governance and Security",
     "subdomain": "External Tables & Locations",
     "type": "single_choice",
@@ -5335,6 +5347,7 @@
   {
     "id": "db-dea-88",
     "courseId": "databricks-data-engineer-associate",
+    "lang": "en",
     "domain": "Governance and Security",
     "subdomain": "Unity Catalog Privilege Hierarchy",
     "type": "single_choice",
@@ -5365,6 +5378,7 @@
   {
     "id": "db-dea-89",
     "courseId": "databricks-data-engineer-associate",
+    "lang": "en",
     "domain": "Governance and Security",
     "subdomain": "Dynamic Views & Row-Level Security",
     "type": "single_choice",
@@ -5395,6 +5409,7 @@
   {
     "id": "db-dea-90",
     "courseId": "databricks-data-engineer-associate",
+    "lang": "en",
     "domain": "Governance and Security",
     "subdomain": "Column Masking",
     "type": "single_choice",
@@ -5425,6 +5440,7 @@
   {
     "id": "db-dea-91",
     "courseId": "databricks-data-engineer-associate",
+    "lang": "en",
     "domain": "Governance and Security",
     "subdomain": "Storage Credentials & External Locations",
     "type": "single_choice",
@@ -5455,6 +5471,7 @@
   {
     "id": "db-dea-92",
     "courseId": "databricks-data-engineer-associate",
+    "lang": "en",
     "domain": "Governance and Security",
     "subdomain": "Unity Catalog Volumes",
     "type": "single_choice",
@@ -5485,6 +5502,7 @@
   {
     "id": "db-dea-93",
     "courseId": "databricks-data-engineer-associate",
+    "lang": "en",
     "domain": "Governance and Security",
     "subdomain": "Data Lineage in Unity Catalog",
     "type": "single_choice",
@@ -5515,6 +5533,7 @@
   {
     "id": "db-dea-94",
     "courseId": "databricks-data-engineer-associate",
+    "lang": "en",
     "domain": "Governance and Security",
     "subdomain": "Attribute-Based Access Control (ABAC)",
     "type": "single_choice",
@@ -5545,6 +5564,7 @@
   {
     "id": "db-dea-95",
     "courseId": "databricks-data-engineer-associate",
+    "lang": "en",
     "domain": "Governance and Security",
     "subdomain": "Service Principals & CI/CD Authentication",
     "type": "single_choice",
@@ -5575,6 +5595,7 @@
   {
     "id": "db-dea-86-es",
     "courseId": "databricks-data-engineer-associate",
+    "lang": "es",
     "domain": "Gobernanza y Seguridad",
     "subdomain": "Tablas Administradas vs Tablas Externas",
     "type": "single_choice",
@@ -5605,6 +5626,7 @@
   {
     "id": "db-dea-87-es",
     "courseId": "databricks-data-engineer-associate",
+    "lang": "es",
     "domain": "Gobernanza y Seguridad",
     "subdomain": "Tablas Externas y Ubicaciones Externas",
     "type": "single_choice",
@@ -5635,6 +5657,7 @@
   {
     "id": "db-dea-88-es",
     "courseId": "databricks-data-engineer-associate",
+    "lang": "es",
     "domain": "Gobernanza y Seguridad",
     "subdomain": "Jerarquía de Privilegios en Unity Catalog",
     "type": "single_choice",
@@ -5665,6 +5688,7 @@
   {
     "id": "db-dea-89-es",
     "courseId": "databricks-data-engineer-associate",
+    "lang": "es",
     "domain": "Gobernanza y Seguridad",
     "subdomain": "Vistas Dinámicas y Seguridad a Nivel de Fila (RLS)",
     "type": "single_choice",
@@ -5695,6 +5719,7 @@
   {
     "id": "db-dea-90-es",
     "courseId": "databricks-data-engineer-associate",
+    "lang": "es",
     "domain": "Gobernanza y Seguridad",
     "subdomain": "Enmascaramiento de Columnas (Column Masking)",
     "type": "single_choice",
@@ -5725,6 +5750,7 @@
   {
     "id": "db-dea-91-es",
     "courseId": "databricks-data-engineer-associate",
+    "lang": "es",
     "domain": "Gobernanza y Seguridad",
     "subdomain": "Credenciales de Almacenamiento y Ubicaciones Externas",
     "type": "single_choice",
@@ -5755,6 +5781,7 @@
   {
     "id": "db-dea-92-es",
     "courseId": "databricks-data-engineer-associate",
+    "lang": "es",
     "domain": "Gobernanza y Seguridad",
     "subdomain": "Volúmenes en Unity Catalog (Volumes)",
     "type": "single_choice",
@@ -5785,6 +5812,7 @@
   {
     "id": "db-dea-93-es",
     "courseId": "databricks-data-engineer-associate",
+    "lang": "es",
     "domain": "Gobernanza y Seguridad",
     "subdomain": "Linaje de Datos en Unity Catalog",
     "type": "single_choice",
@@ -5815,6 +5843,7 @@
   {
     "id": "db-dea-94-es",
     "courseId": "databricks-data-engineer-associate",
+    "lang": "es",
     "domain": "Gobernanza y Seguridad",
     "subdomain": "Control de Acceso Basado en Atributos (ABAC)",
     "type": "single_choice",
@@ -5845,6 +5874,7 @@
   {
     "id": "db-dea-95-es",
     "courseId": "databricks-data-engineer-associate",
+    "lang": "es",
     "domain": "Gobernanza y Seguridad",
     "subdomain": "Entidades de Servicio y Autenticación CI/CD",
     "type": "single_choice",
