@@ -45,7 +45,8 @@ function getLocalizedCourseQuestions(courseId) {
 }
 
 function getCanonicalQuestionId(questionId) {
-    return String(questionId || '').replace(/-es$/, '');
+    // Claude (Opus 5.5) | 2026-10-08 | Incluye las gemelas -en de los bancos que nacieron en espanol.
+    return String(questionId || '').replace(/-(es|en)$/, '');
 }
 
 // =============================================
@@ -7081,8 +7082,8 @@ window.MemoryDecayTracker = {
             const missedIds = h.missedIds || [];
 
             qIds.forEach(id => {
-                const canonicalId = (id || '').replace(/-es$/, '');
-                const q = courseQuestions.find(cq => (cq.id || '').replace(/-es$/, '') === canonicalId);
+                const canonicalId = String(id || '').replace(/-(es|en)$/, '');
+                const q = courseQuestions.find(cq => String(cq.id || '').replace(/-(es|en)$/, '') === canonicalId);
                 if (q && domainMap[q.domain]) {
                     const d = domainMap[q.domain];
                     d.attempts++;

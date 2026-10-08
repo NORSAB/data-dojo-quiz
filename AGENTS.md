@@ -1500,3 +1500,18 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
   - **Otros:** la leyenda "Actual" del mapa de preguntas ahora es azul, como el nodo. El cinturón blanco tiene contorno. "Estudiar" pasa a ser un botón de borde. Cancelar y Comenzar quedan fijos al fondo del modal de configuración.
   - **Caché PWA:** `BUILD_TIMESTAMP = '20261008b'`, caché `simulador-v73-20261008b`. `validate_ui_palette.js` se mantiene en 18 colores hex y 0 gradientes.
 
+
+### 2026-10-08 — Claude (Opus 5.5) — traducción completa EN/ES
+- **Pedido de Norman:** que todo exista en inglés y en español. Rama `feat/traduccion-completa-en-es`.
+- **Bancos de preguntas (gemelas nuevas, sin tocar los archivos originales):**
+  - `questions_dp600_twins.js`: 198 gemelas ES de las preguntas DP-600 en inglés y 80 gemelas EN de las que solo estaban en español. DP-600 queda con 278 + 278.
+  - `questions_databricks_fundamentals_en.js`: las 50 preguntas de Fundamentals que solo estaban en español. Queda con 60 + 60.
+  - `questions_unir_viz_en.js` (55), `questions_unir_herr_en.js` (160) y `questions_unah_tesis_en.js` (28): versión en inglés de UNIR y UNAH, con los dominios traducidos ("Tema 1: Introducción" pasa a "Topic 1: Introduction").
+  - Cada gemela lleva `twinOf` con el id original. Su id es `<id>-es` o `<id>-en`.
+- **Emparejamiento:** `findQuestionTwin` en `translate_toggle.js` acepta `id`/`id-es`, `id`/`id-en` y `twinOf`, de modo que el selector EN/ES cambia la pregunta en pantalla en todos los cursos. `getCanonicalQuestionId` (en `features.js`) también normaliza el sufijo `-en`.
+- **Estudio y flashcards:** `i18n_study_content.js` envuelve en bloques `.lang-section` el estudio de DP-600, UNIR Visualización, UNIR Herramientas y UNAH Tesis. También vuelve bilingües las flashcards de Databricks DA, UNIR y UNAH (`front`/`back` con `.fc-language-block`, más `pregunta_en`/`pregunta_es`). La lectura en voz alta de una flashcard usa solo el idioma activo.
+- **Interfaz:** `app_i18n_ui.js` registra unas 1,040 frases que solo existían en español: pestañas del inicio, tarjetas de Estudio, Diagnóstico y Práctica, rutas, roles, logros y cinturones, modales, tooltips y títulos del Centro de Estudio. Usa el nuevo `AppI18n.addPhrases`. `app_i18n.js` suma patrones para los textos con números ("7 de 7 activo(s)", "Paso 1 de 4", "Desafío CLI 1/3: …"). Además, `splitBilingual` detecta los títulos que vienen como "Español / English" y los muestra bien en ambos idiomas.
+- **Nuevo validador:** `tools/validate_bilingual_coverage.js` falla si una pregunta no tiene pareja en el otro idioma, o si un módulo de estudio o una flashcard no tienen ambos idiomas. `databricks-da` cuenta su diccionario `translations_databricks_es.js`.
+- **Caché PWA:** `BUILD_TIMESTAMP = '20261008c'`, caché `simulador-v74-20261008c`.
+- **Verificación:** pasan las 9 suites (103/103 checks en `validate_full_application.js`). Se recorrió la app en Chromium en inglés: inicio, las 5 vistas, 7 categorías, 13 modales, todas las pestañas del Centro de Estudio de 10 cursos y un examen. Quedan 0 textos en español, salvo el propio selector ES/EN. En español no desapareció ningún texto respecto de `main`. El selector cambia la pregunta en pantalla en DP-600, UNIR, UNAH y Fundamentals, en ambos sentidos.
+- **Traducción:** hecha a mano por agentes en lotes JSONL (el patrón de la sección 8). Cada lote se validó con un script que compara ids, opciones y etiquetas HTML. Los nombres de producto, el código, las fórmulas y LaTeX quedaron sin traducir.

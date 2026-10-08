@@ -17,10 +17,15 @@
   function findQuestionTwin(question, targetLanguage) {
     if (!question || !window.questionsData) return null;
     if (question.lang === targetLanguage) return question;
-    const baseId = String(question.id || '').replace(/-es$/, '');
-    const targetId = targetLanguage === 'es' ? `${baseId}-es` : baseId;
+    // Claude (Opus 5.5) | 2026-10-08 | Las gemelas pueden ir en cualquier direccion: id / id-es,
+    // id / id-en (bancos que nacieron en espanol) o el campo twinOf de los bancos generados.
+    const id = String(question.id || '');
+    const baseId = question.twinOf !== undefined ? String(question.twinOf) : id.replace(/-(es|en)$/, '');
+    const candidates = new Set([baseId, `${baseId}-es`, `${baseId}-en`]);
     return window.questionsData.find(candidate =>
-      candidate.id === targetId && candidate.courseId === question.courseId
+      candidate.courseId === question.courseId &&
+      candidate.lang === targetLanguage &&
+      (candidates.has(String(candidate.id)) || String(candidate.twinOf) === id)
     ) || null;
   }
 

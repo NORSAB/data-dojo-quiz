@@ -251,6 +251,32 @@
     [/^Precisión: (\d+)% · Cobertura: (\d+)\/(\d+) dominios$/, 'Accuracy: $1% · Coverage: $2/$3 domains', /^Accuracy: (\d+)% · Coverage: (\d+)\/(\d+) domains$/, 'Precisión: $1% · Cobertura: $2/$3 dominios'],
     [/^(.+) \(Estudio\)$/, '$1 (Study)', /^(.+) \(Study\)$/, '$1 (Estudio)'],
     [/^Desbloqueados: (.+)$/, 'Unlocked: $1', /^Unlocked: (.+)$/, 'Desbloqueados: $1'],
+    // Claude (Opus 5.5) | 2026-10-08 | Textos con numeros que arman script.js y features.js.
+    [/^(\d+) de (\d+) activo\(s\)$/, '$1 of $2 active', /^(\d+) of (\d+) active$/, '$1 de $2 activo(s)'],
+    [/^(\d+) próximamente$/, '$1 coming soon', /^(\d+) coming soon$/, '$1 próximamente'],
+    [/^Paso (\d+) de (\d+)$/, 'Step $1 of $2', /^Step (\d+) of (\d+)$/, 'Paso $1 de $2'],
+    [/^(\d+)% Probabilidad de Aprobación$/, '$1% Pass Probability', /^(\d+)% Pass Probability$/, '$1% Probabilidad de Aprobación'],
+    [/^(\d+)% Retención$/, '$1% Retention', /^(\d+)% Retention$/, '$1% Retención'],
+    [/^(\d+) preguntas en (\d+) dominio\(s\) • Idioma:$/, '$1 questions in $2 domain(s) • Language:', /^(\d+) questions in (\d+) domain\(s\) • Language:$/, '$1 preguntas en $2 dominio(s) • Idioma:'],
+    [/^En Pausa • (\d+) pistas en lista$/, 'Paused • $1 tracks in queue', /^Paused • (\d+) tracks in queue$/, 'En Pausa • $1 pistas en lista'],
+    [/^Reproduciendo • (\d+) pistas en lista$/, 'Playing • $1 tracks in queue', /^Playing • (\d+) tracks in queue$/, 'Reproduciendo • $1 pistas en lista'],
+    [/^Temas en este Episodio \((\d+) Pistas\):$/, 'Topics in This Episode ($1 Tracks):', /^Topics in This Episode \((\d+) Tracks\):$/, 'Temas en este Episodio ($1 Pistas):'],
+    [/^3\. Episodio \/ Capítulo \((\d+) Disponibles\):$/, '3. Episode / Chapter ($1 Available):', /^3\. Episode \/ Chapter \((\d+) Available\):$/, '3. Episodio / Capítulo ($1 Disponibles):'],
+    [/^4\. Voz del Sistema \((\d+) voces en Español\):$/, '4. System Voice ($1 Spanish voices):', /^4\. System Voice \((\d+) Spanish voices\):$/, '4. Voz del Sistema ($1 voces en Español):'],
+    [/^4\. Voz del Sistema \((\d+) voces en Inglés\):$/, '4. System Voice ($1 English voices):', /^4\. System Voice \((\d+) English voices\):$/, '4. Voz del Sistema ($1 voces en Inglés):'],
+    [/^Lee todos los conceptos \((\d+)\)$/, 'Read all concepts ($1)', /^Read all concepts \((\d+)\)$/, 'Lee todos los conceptos ($1)'],
+    [/^Lee todos los personajes \((\d+)\)$/, 'Read all people ($1)', /^Read all people \((\d+)\)$/, 'Lee todos los personajes ($1)'],
+    [/^Responde ([\d,]+) preguntas$/, 'Answer $1 questions', /^Answer ([\d,]+) questions$/, 'Responde $1 preguntas'],
+    [/^Estudia (\d+) secciones de dominio$/, 'Study $1 domain sections', /^Study (\d+) domain sections$/, 'Estudia $1 secciones de dominio'],
+    [/^Racha de (\d+) días seguidos$/, '$1-day streak', /^(\d+)-day streak$/, 'Racha de $1 días seguidos'],
+    [/^Racha de (\d+) aciertos seguidos$/, '$1 correct answers in a row', /^(\d+) correct answers in a row$/, 'Racha de $1 aciertos seguidos'],
+    [/^Desafío CLI (\d+)\/(\d+): (.+)$/, (m, a, b, t) => `CLI Challenge ${a}/${b}: ${translatePhrase(t, 'en')}`, /^CLI Challenge (\d+)\/(\d+): (.+)$/, (m, a, b, t) => `Desafío CLI ${a}/${b}: ${translatePhrase(t, 'es')}`],
+    [/^Desafío (\d+) de (\d+)$/, 'Challenge $1 of $2', /^Challenge (\d+) of (\d+)$/, 'Desafío $1 de $2'],
+    [/^(\d+)\/(\d+) read — \+5 XP por personaje nuevo$/, '$1/$2 read — +5 XP per new person', /^(\d+)\/(\d+) read — \+5 XP per new person$/, '$1/$2 read — +5 XP por personaje nuevo'],
+    [/^Lee (\d+) (comando SQL|comandos SQL|explicaciones|secciones|conceptos|personajes)$/, (m, n, w) => `Read ${n} ${({ 'comando SQL': 'SQL command', 'comandos SQL': 'SQL commands', explicaciones: 'explanations', secciones: 'sections', conceptos: 'concepts', personajes: 'people' })[w]}`, /^Read (\d+) (SQL command|SQL commands|explanations|sections|concepts|people)$/, (m, n, w) => `Lee ${n} ${({ 'SQL command': 'comando SQL', 'SQL commands': 'comandos SQL', explanations: 'explicaciones', sections: 'secciones', concepts: 'conceptos', people: 'personajes' })[w]}`],
+    [/^Valida (\d+) arquitecturas correctamente$/, 'Validate $1 architectures correctly', /^Validate (\d+) architectures correctly$/, 'Valida $1 arquitecturas correctamente'],
+    [/^(\d+)h · (Avanzado|Intermedio - Avanzado|Intermedio|Básico)$/, (m, h, l) => `${h}h · ${({ Avanzado: 'Advanced', 'Intermedio - Avanzado': 'Intermediate - Advanced', Intermedio: 'Intermediate', 'Básico': 'Basic' })[l]}`, /^(\d+)h · (Advanced|Intermediate - Advanced|Intermediate|Basic)$/, (m, h, l) => `${h}h · ${({ Advanced: 'Avanzado', 'Intermediate - Advanced': 'Intermedio - Avanzado', Intermediate: 'Intermedio', Basic: 'Básico' })[l]}`],
+    [/^Último repaso: hace (\d+) días • Precisión: (\d+)%$/, 'Last review: $1 days ago • Accuracy: $2%', /^Last review: (\d+) days ago • Accuracy: (\d+)%$/, 'Último repaso: hace $1 días • Precisión: $2%'],
   ];
 
   let language = SUPPORTED_LANGUAGES.has(localStorage.getItem(STORAGE_KEY))
@@ -382,11 +408,29 @@
     return `<span${className ? ` class="${escapeAttribute(className)}"` : ''} data-app-i18n-en="${escapeAttribute(english)}" data-app-i18n-es="${escapeAttribute(spanish)}">${escapeAttribute(selected)}</span>`;
   }
 
+  // Claude (Opus 5.5) | 2026-10-08 | Varios titulos vienen como "Espanol / English" aunque se pidan
+  // en orden en-es; si la primera mitad se ve claramente espanola y la segunda no, se invierten.
+  const SPANISH_HINT = /[áéíóúñ¿¡]|\b(de|del|la|las|los|el|y|para|con|por|reglas|matriz|estrategias|evaluación|elegir|escribir|aumentar|sistemas|memoria|dominio)\b/i;
+  function looksSpanish(text) { return SPANISH_HINT.test(text); }
+
   function splitBilingual(value, order = 'en-es') {
     const cleanValue = String(value ?? '').replace(/<svg[\s\S]*?<\/svg>/gi, '').trim();
     const parts = cleanValue.split(/\s+\/\s+/, 2);
     if (parts.length < 2) return { en: cleanValue, es: cleanValue };
-    return order === 'es-en' ? { es: parts[0], en: parts[1] } : { en: parts[0], es: parts[1] };
+    let first = order === 'es-en' ? 'es' : 'en';
+    if (first === 'en' && looksSpanish(parts[0]) && !looksSpanish(parts[1])) first = 'es';
+    else if (first === 'es' && looksSpanish(parts[1]) && !looksSpanish(parts[0])) first = 'en';
+    return first === 'es' ? { es: parts[0], en: parts[1] } : { en: parts[0], es: parts[1] };
+  }
+
+  // Claude (Opus 5.5) | 2026-10-08 | Permite que app_i18n_ui.js registre frases sin tocar este archivo.
+  function addPhrases(pairs) {
+    (pairs || []).forEach(pair => {
+      if (!pair || !pair.es || !pair.en || pair.es === pair.en) return;
+      if (!esToPair.has(pair.es)) esToPair.set(pair.es, pair);
+      if (!enToPair.has(pair.en)) enToPair.set(pair.en, pair);
+    });
+    if (document.body) apply(document.body);
   }
 
   function observe() {
@@ -410,6 +454,7 @@
   }
 
   window.AppI18n = {
+    addPhrases,
     apply,
     getLanguage,
     localizedMarkup,
