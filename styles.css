@@ -6733,6 +6733,10 @@ html, body {
   background: var(--warning-color);
 }
 
+.sync-dot.error {
+  background: var(--danger-color);
+}
+
 .sync-dot.syncing {
   background: var(--primary-color);
   animation: pulseSync 1s infinite alternate;
@@ -7062,4 +7066,130 @@ html, body {
   font-size: 0.88rem;
   color: var(--text-muted);
   line-height: 1.5;
+}
+
+/* =============================================================================
+   Claude (Opus 5.5) | 2026-10-08 | Revisión visual: selector de idioma en la
+   bienvenida, campos del perfil, examen y cabecera en pantallas angostas.
+   ============================================================================= */
+
+/* La bienvenida tiene fondo claro y la cabecera queda transparente encima:
+   el "EN" blanco al 65 % no se leía. */
+body:has(#onboarding-screen:not(.hidden)) .global-language-toggle {
+  border-color: var(--border-color);
+  background: var(--card-bg);
+}
+
+body:has(#onboarding-screen:not(.hidden)) .global-language-option:not(.active) {
+  color: var(--text-muted);
+}
+
+body:has(#onboarding-screen:not(.hidden)) .global-language-divider {
+  color: var(--border-color);
+}
+
+/* Campos de texto del perfil (antes sin estilo: blancos en modo oscuro). */
+.search-input {
+  box-sizing: border-box;
+  padding: 0.6rem 0.8rem;
+  font: inherit;
+  font-size: 0.95rem;
+  color: var(--text-color);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+/* Examen: la tarjeta y el mapa se apilan en vez de empujar el mapa fuera de pantalla. */
+@media (max-width: 900px) {
+  #quiz-ui {
+    flex-direction: column;
+    gap: 1rem !important;
+  }
+
+  #quiz-ui > .question-container,
+  #quiz-ui > .sidebar {
+    flex: none;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+}
+
+/* Celular: los controles de la cabecera pasan a una barra inferior fija. */
+@media (max-width: 640px) {
+  .main-container {
+    padding: 1rem !important;
+    padding-bottom: calc(76px + env(safe-area-inset-bottom)) !important;
+  }
+
+  #question-card {
+    padding: 1.25rem;
+  }
+
+  body:not(.zen-mode):not(:has(#onboarding-screen:not(.hidden))) .header-controls {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+    justify-content: space-around;
+    gap: 0;
+    padding: 6px 4px calc(6px + env(safe-area-inset-bottom));
+    background: #111827;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  body:not(.zen-mode) .header-controls .btn-icon-modern {
+    min-width: 40px;
+    padding: 4px 2px;
+  }
+
+  body:not(.zen-mode) .header-controls .global-language-toggle {
+    min-width: 0;
+    height: 34px;
+    padding: 2px 3px;
+  }
+
+  /* Solo el punto de estado; el detalle sigue en el popover al tocarlo. */
+  .sync-status-pill {
+    position: relative;
+    padding: 8px;
+    margin-right: 0 !important;
+  }
+
+  #sync-status-text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  /* El reloj del examen se queda arriba, junto al título. */
+  body:not(.zen-mode) #timer-display:not(.hidden) {
+    position: fixed;
+    top: 10px;
+    right: 12px;
+    z-index: 1001;
+  }
+
+  .header-more-popover {
+    top: auto;
+    bottom: calc(100% + 10px);
+  }
+
+  /* Bienvenida: "Disciplina" y "Maestría" quedaban cortados a los lados. */
+  .dojo-values {
+    flex-wrap: wrap;
+    gap: 0.75rem 1rem;
+  }
 }
