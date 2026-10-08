@@ -624,12 +624,12 @@ for (const [baseId, enQ] of enMap.entries()) {
 }
 
 // Add sample questions (81 to 85)
-sampleQuestionsEN.forEach(q => unifiedList.push(q));
-sampleQuestionsES.forEach(q => unifiedList.push(q));
+sampleQuestionsEN.forEach(q => unifiedList.push({ ...q, lang: 'en' }));
+sampleQuestionsES.forEach(q => unifiedList.push({ ...q, lang: 'es' }));
 
 // Add governance questions (86 to 95)
-governanceQuestionsEN.forEach(q => unifiedList.push(q));
-governanceQuestionsES.forEach(q => unifiedList.push(q));
+governanceQuestionsEN.forEach(q => unifiedList.push({ ...q, lang: 'en' }));
+governanceQuestionsES.forEach(q => unifiedList.push({ ...q, lang: 'es' }));
 
 console.log(`Generated unified bank: ${unifiedList.length} total questions (95 EN + 95 ES).`);
 

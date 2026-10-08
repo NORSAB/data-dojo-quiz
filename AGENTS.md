@@ -1480,3 +1480,15 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
   - Se actualizó el ciclo de caché PWA a `BUILD_TIMESTAMP = '20261006a'`, caché `simulador-v71-20261006a` y versionado de assets estáticos en `index.html` y `sw.js`.
   - Validación completa superada con éxito (96/96 verificaciones en `validate_full_application.js`, paleta aprobada en `validate_ui_palette.js`, integridad de bancos y enlaces de traducciones 100% intactos).
 
+### 2026-10-08 — Claude (Opus 5.5)
+- **Revisión de errores y mejoras visuales (pedido de Norman), rama `fix/revision-movil-y-banco-dea`:**
+  - **Banco DEA:** `db-dea-81` a `db-dea-95` y sus `-es` (30 preguntas "Official Exam Question") no tenían `lang`, y el motor filtra por `q.lang === idioma`, así que nunca aparecían. Se agregó `lang` al banco y a `tools/build_dea_unified_bank.js`. `tools/validate_bank_integrity.js` ahora falla si una pregunta no declara `lang` "en" o "es".
+  - **Reloj del examen:** `updateTimerDisplay` ponía `color: inherit` y heredaba el blanco de la cabecera sobre fondo claro. Ahora usa `var(--text-color)`.
+  - **Píldora de ritmo:** se reemplazaron los emojis de colores por un punto SVG con `currentColor`.
+  - **Indicador de sync:** `DataSync.setStatus()` emite `datasync:status` (connecting, synced, error, unavailable). `LiveSyncStatus` lo combina con `navigator.onLine` y traduce el texto a ES/EN. La carga de la librería deja de reintentar tras 10 intentos y queda en "Solo local". "Forzar sincronización" ahora llama a `DataSync.saveToCloud()` (antes llamaba a `window.syncWithSupabase`, que no existe).
+  - **Móvil (menos de 640 px):** los controles de la cabecera pasan a una barra inferior fija, el menú "Más" abre hacia arriba y el reloj queda fijo arriba. Por debajo de 900 px, la tarjeta del examen y el mapa se apilan.
+  - **Perfil y bienvenida:** `.search-input` tiene estilo del sistema de diseño, y el selector ES/EN se lee sobre el fondo claro de la bienvenida.
+  - **Caché PWA:** `BUILD_TIMESTAMP = '20261008a'`, caché `simulador-v72-20261008a`.
+  - **Validación:** pasan las 7 suites de `tools/`. QA en Chromium a 390 px y 1440 px, en claro y oscuro, con las llamadas a Supabase bloqueadas para no escribir en producción.
+  - **Pendiente de la revisión** (no se tocó): el manifest usa `theme_color #4f6ef7`; falta `.github/workflows/validate.yml`, que la bitácora del 2026-10-06 da por agregado; `auto_restore_data.js` muestra el perfil de Norman a cualquier visitante; y hay colores hex inline en `script.js` y `features.js` que `validate_ui_palette.js` no revisa.
+

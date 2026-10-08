@@ -113,6 +113,14 @@ Q.forEach(q => {
   }
 });
 
+// ── 4b. Idioma valido: el simulador filtra por q.lang, sin el la pregunta nunca aparece ──
+Q.forEach(q => {
+  if (q.lang !== 'en' && q.lang !== 'es') {
+    anotar('Idioma ausente o invalido',
+      `${q.id} [${q.courseId}] — lang=${JSON.stringify(q.lang)}; el simulador nunca la mostrara`);
+  }
+});
+
 // ── 5. Cursos de prueba que no deberian llegar a produccion ────────────────
 const CURSOS_PROHIBIDOS = ['demo', 'test', 'sample', 'placeholder'];
 const porCurso = {};
@@ -143,6 +151,7 @@ if (!problemas.length) {
   console.log('  ✓ Sin opciones gemelas con distinto veredicto');
   console.log('  ✓ Todas las correctIds existen entre las opciones');
   console.log('  ✓ Todas las preguntas tienen respuesta y al menos 2 opciones');
+  console.log('  ✓ Todas las preguntas declaran lang "en" o "es"');
   console.log('  ✓ Sin cursos de prueba en producción');
   console.log('');
   console.log(' INTEGRIDAD DEL BANCO VERIFICADA ✓');

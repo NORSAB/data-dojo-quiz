@@ -6849,24 +6849,53 @@ window.MistakesExporter = {
 // =============================================================================
 // F43: LIVE SYNC & ONLINE STATUS PILL
 // =============================================================================
+// Claude (Opus 5.5) | 2026-10-08 | El indicador refleja el estado real de DataSync
+// (evento 'datasync:status') combinado con navigator.onLine, en el idioma activo.
 window.LiveSyncStatus = {
     isOnline: true,
-    lastSyncTime: new Date().toLocaleTimeString(),
+    cloudStatus: 'connecting',
+    lastSyncTime: null,
+
+    LABELS: {
+        online: { es: 'Sincronizado', en: 'Synced' },
+        offline: { es: 'Modo Offline', en: 'Offline' },
+        syncing: { es: 'Conectando...', en: 'Connecting...' },
+        error: { es: 'Error de sync', en: 'Sync error' },
+        unavailable: { es: 'Solo local', en: 'Local only' }
+    },
+
+    lang() {
+        return (document.documentElement.dataset.appLanguage || 'es') === 'en' ? 'en' : 'es';
+    },
 
     init() {
         if (typeof window === 'undefined') return;
         this.isOnline = typeof navigator !== 'undefined' ? navigator.onLine : true;
-        if (typeof window !== 'undefined') {
-            window.addEventListener('online', () => {
-                this.isOnline = true;
-                this.updateUI('online');
-            });
-            window.addEventListener('offline', () => {
-                this.isOnline = false;
-                this.updateUI('offline');
-            });
+        if (window.DataSync && window.DataSync.status) this.cloudStatus = window.DataSync.status;
+        window.addEventListener('online', () => { this.isOnline = true; this.refresh(); });
+        window.addEventListener('offline', () => { this.isOnline = false; this.refresh(); });
+        window.addEventListener('datasync:status', (e) => {
+            this.cloudStatus = (e.detail && e.detail.status) || 'error';
+            if (this.cloudStatus === 'synced') this.lastSyncTime = new Date().toLocaleTimeString();
+            this.refresh();
+        });
+        // El idioma se cambia escribiendo data-app-language en <html>; se re-traduce el texto.
+        if (typeof MutationObserver === 'function') {
+            new MutationObserver(() => this.refresh())
+                .observe(document.documentElement, { attributes: true, attributeFilter: ['data-app-language'] });
         }
-        this.updateUI(this.isOnline ? 'online' : 'offline');
+        this.refresh();
+    },
+
+    currentState() {
+        if (!this.isOnline) return 'offline';
+        if (this.cloudStatus === 'synced') return 'online';
+        if (this.cloudStatus === 'connecting') return 'syncing';
+        return this.cloudStatus; // error | unavailable
+    },
+
+    refresh() {
+        this.updateUI(this.currentState());
     },
 
     updateUI(status) {
@@ -6875,16 +6904,10 @@ window.LiveSyncStatus = {
         const text = document.getElementById('sync-status-text');
         if (!dot || !text) return;
 
-        if (status === 'online') {
-            dot.className = 'sync-dot';
-            text.textContent = 'Sincronizado';
-        } else if (status === 'offline') {
-            dot.className = 'sync-dot offline';
-            text.textContent = 'Modo Offline';
-        } else if (status === 'syncing') {
-            dot.className = 'sync-dot syncing';
-            text.textContent = 'Sincronizando...';
-        }
+        const DOT_CLASS = { online: 'sync-dot', offline: 'sync-dot offline', syncing: 'sync-dot syncing', error: 'sync-dot error', unavailable: 'sync-dot offline' };
+        const label = this.LABELS[status] || this.LABELS.error;
+        dot.className = DOT_CLASS[status] || 'sync-dot error';
+        text.textContent = label[this.lang()];
     },
 
     togglePopover() {
@@ -6896,13 +6919,13 @@ window.LiveSyncStatus = {
                 <div style="font-size:0.88rem; line-height:1.5; color:var(--text-color);">
                     <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
                         <span style="color:var(--text-muted);">Estado Actual:</span>
-                        <strong style="color:${this.isOnline ? 'var(--success-color)' : 'var(--warning-color)'};">
-                            ${this.isOnline ? 'Conectado a Supabase Cloud' : 'Sin Conexión (Guardando en Caché)'}
+                        <strong style="color:${this.currentState() === 'online' ? 'var(--success-color)' : 'var(--warning-color)'};">
+                            ${({ online: 'Conectado a Supabase Cloud', offline: 'Sin Conexión (Guardando en Caché)', syncing: 'Conectando con Supabase...', error: 'Supabase respondió con error (datos guardados en este navegador)', unavailable: 'Nube no disponible (datos guardados en este navegador)' })[this.currentState()]}
                         </strong>
                     </div>
                     <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
                         <span style="color:var(--text-muted);">Último Respaldo:</span>
-                        <span>${this.lastSyncTime}</span>
+                        <span>${this.lastSyncTime || 'Sin respaldo en esta sesión'}</span>
                     </div>
                     <div style="display:flex; justify-content:space-between; margin-bottom:14px;">
                         <span style="color:var(--text-muted);">Almacenamiento:</span>
@@ -7002,14 +7025,15 @@ window.LiveSyncStatus = {
         }
     },
 
+    // Antes simulaba el guardado con un setTimeout y llamaba a window.syncWithSupabase, que no existe.
     forceSync() {
-        this.updateUI('syncing');
-        setTimeout(() => {
-            this.lastSyncTime = new Date().toLocaleTimeString();
-            this.updateUI('online');
-            this.closePopover();
-            if (typeof window.syncWithSupabase === 'function') window.syncWithSupabase();
-        }, 600);
+        this.closePopover();
+        if (window.DataSync && window.DataSync.isConfigured) {
+            this.updateUI('syncing');
+            window.DataSync.saveToCloud();
+        } else {
+            this.refresh();
+        }
     }
 };
 
