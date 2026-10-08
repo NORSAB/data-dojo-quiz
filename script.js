@@ -2826,6 +2826,8 @@ const badgesConfig = [
                 type_scenario: "Lea el escenario y responda.",
                 type_matrix: "Para cada declaración, seleccione Sí o No.",
                 type_case_study: "Analice el caso de estudio y responda.",
+                type_hotspot: "Seleccione la opción correcta en cada lista del área de respuesta.",
+                type_drag_drop: "Arrastre cada opción al destino correcto del área de respuesta.",
                 needs_review: "Revisar",
               }
             : {
@@ -2855,6 +2857,8 @@ const badgesConfig = [
                 type_scenario: "Read the scenario and answer.",
                 type_matrix: "For each statement, select Yes or No.",
                 type_case_study: "Analyze the case study and answer.",
+                type_hotspot: "Select the correct option in each list of the answer area.",
+                type_drag_drop: "Drag each option to the correct target in the answer area.",
                 needs_review: "In Review",
               };
     
@@ -2993,6 +2997,12 @@ const badgesConfig = [
             break;
           case "case_study":
             instructionText = lbls.type_case_study;
+            break;
+          case "hotspot":
+            instructionText = lbls.type_hotspot;
+            break;
+          case "drag_drop":
+            instructionText = lbls.type_drag_drop;
             break;
           default:
             instructionText = lbls.type_single;
@@ -3263,6 +3273,9 @@ const badgesConfig = [
           });
           tableWrap.appendChild(table);
           optionsList.appendChild(tableWrap);
+        } else if ((q.type === "hotspot" || q.type === "drag_drop") && Array.isArray(q.slots)) {
+          // Claude (Opus 5.5) | 2026-10-08 | Answer Area de examen: listas desplegables (hotspot) y arrastrar y soltar
+          renderSlotQuestion(q, answeredData, isSubmitted, lang);
         } else if (q.type === "ordering") {
           const info = document.createElement("div");
           info.style.fontStyle = "italic";
@@ -3484,6 +3497,171 @@ const badgesConfig = [
     updateQuestionMap();
   }
 
+  // Claude (Opus 5.5) | 2026-10-08 | Preguntas con Answer Area por casillas (hotspot y arrastrar y soltar).
+  // Cada casilla (slot) tiene su respuesta correcta en slot.correct, que es un id de q.options.
+  function slotOptionText(q, optId) {
+    const opt = (q.options || []).find(o => o.id === optId);
+    return opt ? opt.text : "";
+  }
+
+  function evaluateSlotAnswer(q, ans) {
+    const sel = (ans && ans.slotSelections) || {};
+    const filled = q.slots.filter(s => sel[s.id]).length;
+    ans.selected = q.slots.map(s => sel[s.id] || "");
+    ans.isCorrect = filled === q.slots.length && q.slots.every(s => sel[s.id] === s.correct);
+  }
+
+  function setSlotSelection(q, slotId, optId) {
+    if (!userAnswers[currentQuestionIndex]) {
+      userAnswers[currentQuestionIndex] = { selected: [], slotSelections: {}, isCorrect: false, submitted: false };
+    }
+    const ans = userAnswers[currentQuestionIndex];
+    if (!ans.slotSelections) ans.slotSelections = {};
+    if (optId) ans.slotSelections[slotId] = optId;
+    else delete ans.slotSelections[slotId];
+    evaluateSlotAnswer(q, ans);
+    updateQuestionMap();
+  }
+
+  function renderSlotLabel(label) {
+    const wrap = document.createElement("div");
+    wrap.className = "slot-label";
+    if (label.indexOf("\n") !== -1 || /[=(){}]/.test(label)) {
+      const pre = document.createElement("pre");
+      pre.className = "slot-code";
+      pre.textContent = label;
+      wrap.appendChild(pre);
+    } else {
+      wrap.textContent = label;
+    }
+    return wrap;
+  }
+
+  function renderSlotQuestion(q, answeredData, isSubmitted, lang) {
+    const es = lang === "es";
+    const sel = (answeredData && answeredData.slotSelections) || {};
+    const area = document.createElement("div");
+    area.className = "slot-area slot-area-" + q.type;
+
+    const title = document.createElement("div");
+    title.className = "slot-area-title";
+    title.textContent = es ? "Área de respuesta" : "Answer Area";
+
+    let picked = null; // drag_drop: elemento elegido con clic o teclado, esperando destino
+    let bank = null;
+
+    if (q.type === "drag_drop") {
+      bank = document.createElement("div");
+      bank.className = "dd-bank";
+      const bankTitle = document.createElement("div");
+      bankTitle.className = "slot-area-title";
+      bankTitle.textContent = es ? "Opciones" : "Options";
+      area.appendChild(bankTitle);
+      const itemIds = q.slots[0] ? q.slots[0].options : [];
+      itemIds.forEach(optId => {
+        const chip = document.createElement("button");
+        chip.type = "button";
+        chip.className = "dd-item";
+        chip.dataset.id = optId;
+        chip.textContent = slotOptionText(q, optId);
+        chip.disabled = !!isSubmitted;
+        if (!isSubmitted) {
+          chip.draggable = true;
+          chip.addEventListener("dragstart", e => {
+            e.dataTransfer.setData("text/plain", optId);
+            e.dataTransfer.effectAllowed = "copy";
+          });
+          chip.addEventListener("click", () => {
+            picked = picked === optId ? null : optId;
+            bank.querySelectorAll(".dd-item").forEach(c => c.classList.toggle("selected", c.dataset.id === picked));
+          });
+        }
+        bank.appendChild(chip);
+      });
+      area.appendChild(bank);
+      const hint = document.createElement("p");
+      hint.className = "slot-hint";
+      hint.textContent = es
+        ? "Arrastre cada opción a su destino, o selecciónela y luego toque el destino. Toque un destino lleno para vaciarlo."
+        : "Drag each option to its target, or select it and then tap the target. Tap a filled target to clear it.";
+      area.appendChild(hint);
+    }
+
+    area.appendChild(title);
+    const rows = document.createElement("div");
+    rows.className = "slot-rows";
+
+    q.slots.forEach(slot => {
+      const row = document.createElement("div");
+      row.className = "slot-row";
+      row.dataset.slotId = slot.id;
+      row.appendChild(renderSlotLabel(slot.label));
+      const chosen = sel[slot.id] || "";
+      const state = isSubmitted ? (chosen === slot.correct ? " is-correct" : " is-incorrect") : "";
+
+      if (q.type === "hotspot") {
+        const select = document.createElement("select");
+        select.className = "slot-select" + state;
+        select.setAttribute("aria-label", slot.label.split("\n")[0]);
+        const ph = document.createElement("option");
+        ph.value = "";
+        ph.textContent = es ? "Seleccione una opción" : "Select an option";
+        select.appendChild(ph);
+        slot.options.forEach(optId => {
+          const o = document.createElement("option");
+          o.value = optId;
+          o.textContent = slotOptionText(q, optId);
+          if (optId === chosen) o.selected = true;
+          select.appendChild(o);
+        });
+        select.disabled = !!isSubmitted;
+        if (!isSubmitted) select.addEventListener("change", () => setSlotSelection(q, slot.id, select.value));
+        row.appendChild(select);
+      } else {
+        const zone = document.createElement("button");
+        zone.type = "button";
+        zone.className = "dd-zone" + (chosen ? " filled" : "") + state;
+        zone.textContent = chosen ? slotOptionText(q, chosen) : (es ? "Suelte aquí" : "Drop here");
+        zone.disabled = !!isSubmitted;
+        if (!isSubmitted) {
+          const place = optId => {
+            setSlotSelection(q, slot.id, optId);
+            zone.textContent = optId ? slotOptionText(q, optId) : (es ? "Suelte aquí" : "Drop here");
+            zone.classList.toggle("filled", !!optId);
+          };
+          zone.addEventListener("dragover", e => { e.preventDefault(); zone.classList.add("drag-over"); });
+          zone.addEventListener("dragleave", () => zone.classList.remove("drag-over"));
+          zone.addEventListener("drop", e => {
+            e.preventDefault();
+            zone.classList.remove("drag-over");
+            const optId = e.dataTransfer.getData("text/plain");
+            if (optId) place(optId);
+          });
+          zone.addEventListener("click", () => {
+            if (picked) {
+              place(picked);
+              picked = null;
+              bank.querySelectorAll(".dd-item").forEach(c => c.classList.remove("selected"));
+            } else if (zone.classList.contains("filled")) {
+              place("");
+            }
+          });
+        }
+        row.appendChild(zone);
+      }
+
+      if (isSubmitted && chosen !== slot.correct) {
+        const fix = document.createElement("div");
+        fix.className = "slot-correct";
+        fix.textContent = (es ? "Respuesta correcta: " : "Correct answer: ") + slotOptionText(q, slot.correct);
+        row.appendChild(fix);
+      }
+      rows.appendChild(row);
+    });
+    area.appendChild(rows);
+    optionsList.appendChild(area);
+  }
+
   function checkAnswer() {
     if (window.timeAttackInterval) {
         clearInterval(window.timeAttackInterval);
@@ -3496,6 +3674,9 @@ const badgesConfig = [
     const q = currentQuizQuestions[currentQuestionIndex];
     if (q && q.type === 'ordering' && !userAnswers[currentQuestionIndex]) {
          selectOption(null, 'ordering');
+    }
+    if (q && Array.isArray(q.slots) && userAnswers[currentQuestionIndex]) {
+         evaluateSlotAnswer(q, userAnswers[currentQuestionIndex]);
     }
     if (q && q.type === 'matrix_statements' && userAnswers[currentQuestionIndex]) {
          const selections = userAnswers[currentQuestionIndex].matrixSelections || {};
@@ -3554,8 +3735,14 @@ const badgesConfig = [
       : lbls.inc;
     let explanation = q.explanation;
     if (!isCorrect) {
+      let correctText = q.correctIds.join(", ");
+      if (Array.isArray(q.slots)) {
+        correctText = q.slots.map(sl => slotOptionText(q, sl.correct)).join(" | ");
+      } else if (q.type === "matrix_statements" && Array.isArray(q.statements)) {
+        correctText = q.statements.map((st, i) => `${i + 1}: ${st.correct === "Yes" ? (lang === "es" ? "Sí" : "Yes") : "No"}`).join(" | ");
+      }
       explanation =
-        `<strong>${lbls.ans}</strong> ${q.correctIds.join(", ")}. ` +
+        `<strong>${lbls.ans}</strong> ${correctText}. ` +
         explanation;
     }
     if (q.explanationBlocks) {
