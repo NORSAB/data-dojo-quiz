@@ -4468,7 +4468,7 @@ function renderReview(questions, finalPct, passed) {
           ? (window.databricksGenAIPatterns || [])
           : (isDP600
             ? (window.dp600Patterns || [])
-            : (window.databricksDAPatterns || [])));
+            : (isDatabricksDA ? (window.databricksDAPatterns || []) : [])));
       const comandosSql = isAzureAi103
         ? (window.comandosAzureAi103 || [])
         : (isDatabricksGenAI

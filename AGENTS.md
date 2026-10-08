@@ -1515,3 +1515,21 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
 - **Caché PWA:** `BUILD_TIMESTAMP = '20261008c'`, caché `simulador-v74-20261008c`.
 - **Verificación:** pasan las 9 suites (103/103 checks en `validate_full_application.js`). Se recorrió la app en Chromium en inglés: inicio, las 5 vistas, 7 categorías, 13 modales, todas las pestañas del Centro de Estudio de 10 cursos y un examen. Quedan 0 textos en español, salvo el propio selector ES/EN. En español no desapareció ningún texto respecto de `main`. El selector cambia la pregunta en pantalla en DP-600, UNIR, UNAH y Fundamentals, en ambos sentidos.
 - **Traducción:** hecha a mano por agentes en lotes JSONL (el patrón de la sección 8). Cada lote se validó con un script que compara ids, opciones y etiquetas HTML. Los nombres de producto, el código, las fórmulas y LaTeX quedaron sin traducir.
+
+### 2026-10-08 — Claude (Opus 5.5) — recursos de estudio EN/ES y paneles undefined
+- **Pedido de Norman:** traducir todo lo que faltaba y, si todo queda en ambos idiomas, publicarlo. Misma rama `feat/traduccion-completa-en-es` (PR #3).
+- **Nuevo `i18n_study_resources.js`** (se carga después de `i18n_study_content.js`). Vuelve bilingües, sin tocar los archivos originales:
+  - los conceptos de Databricks (`conceptosDatabricks`), con categoría, tipo, tema, contribución y dato de examen;
+  - los personajes de UNIR Visualización (`personajesUnirViz`);
+  - los términos y escenarios de DP-600 (`conceptosDP600`, `dp600Patterns`), que además se normalizan al formato que espera el renderizador. Antes mostraban paneles vacíos;
+  - los escenarios de Databricks DA (`databricksDAPatterns`) y las lecciones de `lessonsData.databricks`;
+  - unas 30 frases sueltas de la interfaz (podcast, sandbox SQL, etiquetas LEÍDO/CLAVE/IMPORTANTE, "Dato para el examen:", Expandir/Contraer Todos).
+- **Paneles con "undefined" corregidos:**
+  - flashcards de DP-600 (usaban `question_en`/`answer_en` y el visor espera `front`/`back` y `tema`);
+  - filtro de temas de las flashcards de AI-103 (no tenían `tema`; ahora usa `category`);
+  - un comando DP-600 que solo tenía `definicion_en`.
+- **`script.js`:** la pestaña de escenarios de Databricks DA ya no aparece en UNIR, UNAH ni en los demás cursos que no son DA.
+- **AI-103 en español, traducción real:** 132 de las 133 preguntas del examen 2026 (`ai103-pdf-*-es`) tenían una traducción palabra por palabra ("Usted tiene un Microsoft Foundry project that…") y la explicación en inglés. Se retradujeron completas desde el inglés: enunciado, opciones, explicación, respuesta aceptada, afirmaciones de matriz y caso de estudio Contoso. Se trabajó en 7 lotes y se fusionó en `questions_azure_ai103_es.js` sin cambiar ids, `correctIds` ni el orden. Los dominios quedan en inglés en ambos bancos, como ya estaban, para que el filtro agrupe igual.
+- **Problemas de contenido que vienen del banco original (no se tocaron):** `ai103-pdf-15`, `-30`, `-32`, `-84`, `-92`, `-93`, `-106` y `-110` tienen como opciones cuatro pasos de despliegue de contenedores en Kubernetes que no corresponden al enunciado. `ai103-pdf-119` y `-122` tienen afirmaciones de relleno (OpenTelemetry, Prompt Shields, MCP) que no corresponden al enunciado. Están mal igual en inglés y en español.
+- **Caché PWA:** `BUILD_TIMESTAMP = '20261008d'`, caché `simulador-v75-20261008d`.
+- **Verificación:** pasan las 9 suites (104/104 en `validate_full_application.js`). Se recorrió en Chromium cada pestaña del Centro de Estudio de 15 cursos, con todo desplegado, más los modales. En inglés solo quedan nombres propios (Encyclopédie, USA Today, El Mundo, The Guantánamo Docket).
