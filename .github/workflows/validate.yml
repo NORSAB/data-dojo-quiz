@@ -1,0 +1,45 @@
+# Claude (Opus 5.5) | 2026-10-08 | Corre las suites de tools/ en cada push y pull request.
+name: Validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Sintaxis de los módulos principales
+        run: |
+          for f in script.js features.js app_i18n.js app_i18n_ui.js translate_toggle.js supabase-sync.js sw.js; do
+            node --check "$f"
+          done
+
+      - name: Suites de validación
+        run: |
+          node tools/validate_full_application.js
+          node tools/validate_ui_palette.js
+          node tools/validate_global_language.js
+          node tools/validate_bank_integrity.js
+          node tools/validate_bank.js
+          node tools/validate_genai_integration.js
+          node tools/validate_ai103_integration.js
+          node tools/validate_bilingual_coverage.js
+          node tools/audit_code_structure.js
+
+      - name: Versión de caché coherente entre sw.js e index.html
+        run: |
+          build=$(grep -oP "BUILD_TIMESTAMP\s*=\s*'\K[^']+" sw.js)
+          echo "BUILD_TIMESTAMP=$build"
+          stale=$(grep -oP '\?v=\K[0-9a-z]+' index.html | sort -u | grep -vx "$build" || true)
+          if [ -n "$stale" ]; then
+            echo "index.html tiene versiones distintas a $build: $stale"
+            exit 1
+          fi

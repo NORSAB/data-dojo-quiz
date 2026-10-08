@@ -1559,3 +1559,14 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
 - **Claves del PDF que no coinciden con Microsoft Learn** (las preguntas siguen literales; los temas lo explican): 1, 35, 47, 72, 90, 91, 107, 111, 114, 147, 23 a 26.
 - **Caché PWA:** `BUILD_TIMESTAMP = '20261008f'`, caché `simulador-v77-20261008f`.
 - **Verificación:** pasan las 9 suites y `audit_code_structure.js`. En Chromium (Supabase bloqueado) se abrió un tema nuevo en ES y en EN, sin errores de consola.
+
+### 2026-10-08 — Claude (Opus 5.5) — pendientes de la revisión
+- **Pedido de Norman:** terminar lo que quedó pendiente de la revisión. Rama `fix/pendientes-revision`.
+- **Manifest:** `theme_color` pasa de `#4f6ef7` a `#3157d5`, el acento del sistema de diseño.
+- **CI:** se crea `.github/workflows/validate.yml`, que no existía aunque la entrada del 2026-10-06 lo daba por agregado. En cada push a `main` y en cada pull request revisa la sintaxis de los módulos principales, corre las 9 suites de `tools/` y comprueba que todos los `?v=` de `index.html` coincidan con `BUILD_TIMESTAMP`.
+- **Paleta:** `tools/validate_ui_palette.js` ahora también revisa los colores hex escritos dentro de `script.js` y `features.js`. Ignora los respaldos `var(--token, #hex)`, los logos de marca (`providerIcons`) y la escala de cinturones. Se pasaron a tokens los colores que quedaban fuera de la paleta: `#d97706`, `#eab308`, `#ccc` y `#d1d5db` usan ahora `var(--warning-color)` o `var(--border-color)`, y `#fca5a5` pasa a `#f4aaa4`.
+- **Error corregido:** al abrir la revisión antes de entregar, la cuadrícula llamaba a `svgIcon` y `SVG`, que solo existen dentro del Centro de Estudio. Si había una pregunta marcada, se producía un `ReferenceError`. Ahora la estrella se dibuja con un SVG en línea.
+- **AI-103:** las opciones de Kubernetes que no correspondían y las afirmaciones de relleno de la 119 y la 122 ya estaban corregidas por el PR #4, que dejó las preguntas con el texto literal del PDF. Se verificó en los dos bancos; no hizo falta cambiar nada.
+- **Queda para decidir con Norman:** `auto_restore_data.js` carga el perfil y el progreso de Norman en cualquier navegador vacío.
+- **Caché PWA:** `BUILD_TIMESTAMP = '20261008g'`, caché `simulador-v78-20261008g`.
+- **Verificación:** pasan las 9 suites, más `node --check` de los módulos principales.
