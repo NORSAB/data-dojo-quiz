@@ -67,6 +67,8 @@
         scenario: 'Lea el escenario y responda.',
         matrix_statements: 'Para cada declaración, seleccione Sí o No.',
         case_study: 'Analice el caso de estudio y responda.',
+        hotspot: 'Seleccione la opción correcta en cada lista del área de respuesta.',
+        drag_drop: 'Arrastre cada opción al destino correcto del área de respuesta.',
       },
       en: {
         single_choice: 'Select one correct answer.',
@@ -76,6 +78,8 @@
         scenario: 'Read the scenario and answer.',
         matrix_statements: 'For each statement, select Yes or No.',
         case_study: 'Analyze the case study and answer.',
+        hotspot: 'Select the correct option in each list of the answer area.',
+        drag_drop: 'Drag each option to the correct target in the answer area.',
       },
     };
     instruction.textContent = labels[language][question.type] || labels[language].single_choice;
@@ -86,9 +90,12 @@
     const feedbackExplanation = document.getElementById('feedback-explanation');
     if (!feedbackArea || feedbackArea.classList.contains('hidden') || !feedbackExplanation || !sourceQuestion.explanation) return;
     const answer = window.userAnswers ? window.userAnswers[window.currentQuestionIndex] : null;
-    const correctIds = sourceQuestion.correctIds || [];
+    const optionText = id => ((sourceQuestion.options || []).find(o => o.id === id) || {}).text || id;
+    const correctText = Array.isArray(sourceQuestion.slots)
+      ? sourceQuestion.slots.map(slot => optionText(slot.correct)).join(' | ')
+      : (sourceQuestion.correctIds || []).join(', ');
     const prefix = answer && !answer.isCorrect
-      ? `<strong>${language === 'es' ? 'Respuesta Correcta:' : 'Correct Answer:'}</strong> ${correctIds.join(', ')}. `
+      ? `<strong>${language === 'es' ? 'Respuesta Correcta:' : 'Correct Answer:'}</strong> ${correctText}. `
       : '';
     renderMarkdown(feedbackExplanation, prefix + sourceQuestion.explanation);
   }
@@ -124,6 +131,32 @@
           const expEl = row.querySelector('.matrix-stmt-exp');
           if (expEl && stmtObj.explanation) expEl.textContent = stmtObj.explanation;
         }
+      });
+    }
+
+    // Claude (Opus 5.5) | 2026-10-08 | Answer Area de hotspot y arrastrar y soltar
+    if (Array.isArray(sourceQuestion.slots)) {
+      const optionText = id => ((sourceQuestion.options || []).find(o => o.id === id) || {}).text || '';
+      document.querySelectorAll('.slot-row').forEach(row => {
+        const slot = sourceQuestion.slots.find(s => s.id === row.dataset.slotId);
+        if (!slot) return;
+        const code = row.querySelector('.slot-code');
+        const label = row.querySelector('.slot-label');
+        if (code) code.textContent = slot.label;
+        else if (label) label.textContent = slot.label;
+        row.querySelectorAll('.slot-select option').forEach(o => {
+          if (o.value) o.textContent = optionText(o.value);
+          else o.textContent = language === 'es' ? 'Seleccione una opción' : 'Select an option';
+        });
+      });
+      document.querySelectorAll('.dd-item').forEach(chip => { chip.textContent = optionText(chip.dataset.id); });
+      const answer = window.userAnswers ? window.userAnswers[window.currentQuestionIndex] : null;
+      const chosen = (answer && answer.slotSelections) || {};
+      document.querySelectorAll('.slot-row').forEach(row => {
+        const zone = row.querySelector('.dd-zone');
+        if (!zone) return;
+        const id = chosen[row.dataset.slotId];
+        zone.textContent = id ? optionText(id) : (language === 'es' ? 'Suelte aquí' : 'Drop here');
       });
     }
 
