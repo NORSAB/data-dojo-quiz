@@ -7,7 +7,6 @@ const path = require('path');
 
 const root = path.resolve(__dirname, '..');
 const coreFiles = [
-  'auto_restore_data.js',
   'features.js',
   'hero_data.js',
   'script.js',
