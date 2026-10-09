@@ -1637,3 +1637,10 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
 - **Cambio:** se agregan notas "Microsoft Learn" en `questions_azure_ai103_rationales.js` para ai103-pdf-14 (tool_choice required), ai103-pdf-72 (evaluadores RAG y risk and safety), ai103-pdf-115 (Object y Table projection) y ai103-dd-159 (solicitud de aprobación; el paso de exportar modelo no aparece en la documentación de contenedores desconectados). Las claves no cambian.
 - **Pendiente sin verificar:** ai103-pdf-41 (max_tokens), ai103-pdf-93 (backoff ante 429) y ai103-pdf-95 (deployment standard). Sin nota por ahora.
 - **Caché PWA:** `BUILD_TIMESTAMP = '20261009e'`, caché `simulador-v83-20261009e`, `?v=20261009e` en `index.html` y `sw.js`.
+
+### 2026-10-09 — Claude (Haiku 5.5) — revisión de 41, 93 y 95 de AI-103
+- **Pedido de Norman:** buscar en Microsoft Learn las claves dudosas que faltaban. Las claves no cambian.
+- **41 (max_tokens):** no se pudo leer la página de referencia de Microsoft Learn; sin nota.
+- **95 (deployment standard):** Learn confirma autenticación con clave en Serverless API, pero no confirma el consumo de cuota vCPU de cada tipo; sin nota.
+- **93 (429):** Learn recomienda lógica de reintento; no detalla backoff ni jitter en la página revisada. Se agrega nota con esa limitación.
+- **Caché PWA:** `BUILD_TIMESTAMP = '20261009f'`, caché `simulador-v84-20261009f`.
