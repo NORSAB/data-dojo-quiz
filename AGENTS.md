@@ -1631,3 +1631,9 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
 - **Caché PWA:** `BUILD_TIMESTAMP = '20261009d'`, caché `simulador-v82-20261009d`, `?v=20261009d` en `index.html` y `sw.js`.
 - **Pendiente:** las claves dudosas del PDF de AI-103 no se cambiaron en esta entrada. Se mantiene la clave del PDF con la nota de Microsoft Learn donde ya existe.
 - **Verificación:** pasan las 9 suites y `node --check sw.js`.
+
+### 2026-10-09 — Claude (Haiku 5.5) — claves dudosas de AI-103 con nota de Microsoft Learn
+- **Pedido de Norman:** dejar la clave del PDF como aparece y mostrar, junto a ella, lo que dice Microsoft Learn. Rama `fix/notas-claves-ai103`.
+- **Cambio:** se agregan notas "Microsoft Learn" en `questions_azure_ai103_rationales.js` para ai103-pdf-14 (tool_choice required), ai103-pdf-72 (evaluadores RAG y risk and safety), ai103-pdf-115 (Object y Table projection) y ai103-dd-159 (solicitud de aprobación; el paso de exportar modelo no aparece en la documentación de contenedores desconectados). Las claves no cambian.
+- **Pendiente sin verificar:** ai103-pdf-41 (max_tokens), ai103-pdf-93 (backoff ante 429) y ai103-pdf-95 (deployment standard). Sin nota por ahora.
+- **Caché PWA:** `BUILD_TIMESTAMP = '20261009e'`, caché `simulador-v83-20261009e`, `?v=20261009e` en `index.html` y `sw.js`.
