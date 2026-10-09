@@ -4431,8 +4431,8 @@ window.DecisionNavigator = {
             },
             {
                 category: 'Modelos de IA',
-                decision: 'Language Studio vs Azure AI Speech vs Azure AI Vision',
-                whenToUse: 'Usa <strong>Language Studio</strong> para CLU, PII y Custom NER. Usa <strong>Azure AI Speech</strong> para transcripción STT con diarización de hablantes y síntesis TTS personalizada. Usa <strong>Azure AI Vision</strong> para OCR de markdown y dense captioning.'
+                decision: 'Azure Language vs Azure Speech vs Azure Vision',
+                whenToUse: 'Usa <strong>Azure Language (en Foundry)</strong> para CLU, PII y Custom NER. Usa <strong>Azure AI Speech</strong> para transcripción STT con diarización de hablantes y síntesis TTS personalizada. Usa <strong>Azure AI Vision</strong> para OCR (Read), captions y dense captions.'
             },
             {
                 category: 'Búsqueda & RAG',
@@ -4446,8 +4446,8 @@ window.DecisionNavigator = {
             },
             {
                 category: 'Agentes & Orquestación',
-                decision: 'Azure AI Agent Service vs Semantic Kernel vs AutoGen',
-                whenToUse: 'Usa <strong>Agent Service</strong> para agentes totalmente gestionados en la nube con Code Interpreter y Bing Search. Usa <strong>Semantic Kernel</strong> para código C#/Python con plugins corporativos. Usa <strong>AutoGen</strong> para conversaciones multi-agente asíncronas complejas.'
+                decision: 'Foundry Agent Service vs Microsoft Agent Framework',
+                whenToUse: 'Usa <strong>Foundry Agent Service</strong> para agentes totalmente gestionados en la nube con Code Interpreter y Bing Search. Usa <strong>Microsoft Agent Framework</strong> (sucesor de Semantic Kernel y AutoGen) para agentes y workflows multiagente en código C#/Python.'
             },
             {
                 category: 'Seguridad & Gobernanza',
@@ -4456,8 +4456,8 @@ window.DecisionNavigator = {
             },
             {
                 category: 'Cómputo & Despliegue',
-                decision: 'Pay-per-token (Serverless) vs Provisioned Throughput Units (PTU)',
-                whenToUse: 'Usa <strong>Pay-per-token</strong> para desarrollo, pruebas y tráfico esporádico. Usa <strong>PTU</strong> para cargas de producción con SLAs de latencia garantizados, alto volumen predecible y cumplimiento normativo estricto.'
+                decision: 'Pay-per-token (Standard / Global Standard) vs Provisioned Throughput Units (PTU)',
+                whenToUse: 'Usa <strong>Pay-per-token</strong> para desarrollo, pruebas y tráfico esporádico. Usa <strong>PTU</strong> para cargas de producción con latencia predecible y alto volumen estable.'
             },
             {
                 category: 'Seguridad & Redes',
@@ -4624,11 +4624,11 @@ window.CliSimulator = {
             },
             {
                 id: 'az-2',
-                title: 'Crear Índice en Azure AI Search',
-                desc: 'Crea un índice de búsqueda llamado "products-vector-idx" en el servicio "search-norsab" usando la definición en "schema.json".',
-                expectedPattern: /az\s+search\s+index\s+create\s+.*--name\s+products-vector-idx.*--service-name\s+search-norsab/i,
-                sampleCommand: 'az search index create --service-name search-norsab --name products-vector-idx --index-def schema.json',
-                hint: 'Usa `az search index create --service-name ... --name ...`.'
+                title: 'Crear Servicio de Azure AI Search',
+                desc: 'Crea un servicio de Azure AI Search llamado "search-norsab" en el grupo de recursos "rg-ai103" con SKU "standard" (los índices se crean después con la API REST o el SDK).',
+                expectedPattern: /az\s+search\s+service\s+create\s+.*--name\s+search-norsab.*--resource-group\s+rg-ai103/i,
+                sampleCommand: 'az search service create --name search-norsab --resource-group rg-ai103 --sku standard --location eastus',
+                hint: 'Usa `az search service create --name ... --resource-group ... --sku ...`.'
             },
             {
                 id: 'az-3',
@@ -4824,8 +4824,7 @@ window.CliSimulator = {
     autocomplete(input) {
         const val = input.value;
         const candidates = [
-            'az search index create',
-            'az search skillset create',
+            'az search service create',
             'az cognitiveservices account create',
             'az cognitiveservices account deployment create',
             'databricks vector-search indexes create',
@@ -4860,9 +4859,9 @@ window.OralExamMode = {
                 idealExplanation: 'Se ingieren documentos con Azure Document Intelligence, se generan embeddings con Azure OpenAI text-embedding-3, se indexan en Azure AI Search con Hybrid Search + Semantic Re-ranker, y se conectan al modelo GPT-4o usando Managed Identity y Content Safety Prompt Shields.'
             },
             {
-                scenario: 'Describe el proceso para construir y desplegar un agente autónomo multi-herramienta con Azure AI Agent Service y Semantic Kernel.',
-                expectedKeywords: ['agent service', 'semantic kernel', 'threads', 'runs', 'code interpreter', 'file search', 'function calling'],
-                idealExplanation: 'Se instancia el agente con Azure AI Agent Service, se configuran las herramientas de File Search y Code Interpreter, se definen Function Callings y se maneja el estado conversacional mediante Threads y Runs automáticos.'
+                scenario: 'Describe el proceso para construir y desplegar un agente autónomo multi-herramienta con Foundry Agent Service y Microsoft Agent Framework.',
+                expectedKeywords: ['agent service', 'agent framework', 'conversations', 'responses', 'code interpreter', 'file search', 'function calling'],
+                idealExplanation: 'Se crea una versión del agente en Foundry Agent Service (create_version con PromptAgentDefinition), se configuran las herramientas de File Search y Code Interpreter, se define Function Calling y el estado conversacional se maneja con conversations y la Responses API. (Clásico: threads y runs; aún aparecen en preguntas del examen.)'
             }
         ],
         'databricks-genai-engineer': [
@@ -5069,7 +5068,7 @@ window.ArchitectureCanvas = {
                 desc: 'Diseña el ciclo de ejecución de un agente de IA que invoca herramientas externas y sintetiza respuestas con datos en vivo.',
                 services: [
                     { id: 'ag1', name: 'User Prompt Input', desc: 'Consulta en lenguaje natural del usuario' },
-                    { id: 'ag2', name: 'Azure AI Agent Service', desc: 'Orquestación de estado, hilos e historial' },
+                    { id: 'ag2', name: 'Foundry Agent Service', desc: 'Orquestación de estado, conversaciones e historial' },
                     { id: 'ag3', name: 'Function Calling Tool', desc: 'Invocación de API de base de datos interna' },
                     { id: 'ag4', name: 'Bing Search Grounding', desc: 'Búsqueda web en vivo de hechos recientes' },
                     { id: 'ag5', name: 'Azure OpenAI Synthesis', desc: 'Consolidación de contexto y respuesta final' }
@@ -5084,12 +5083,12 @@ window.ArchitectureCanvas = {
                 services: [
                     { id: 'v1', name: 'Audio Stream / Micro', desc: 'Captura de audio de consulta médica' },
                     { id: 'v2', name: 'Azure AI Speech (STT)', desc: 'Transcripción con diarización de doctor y paciente' },
-                    { id: 'v3', name: 'Language Studio Custom NER', desc: 'Detección de síntomas, fármacos y dosis' },
+                    { id: 'v3', name: 'Text Analytics for Health (Azure Language)', desc: 'Detección de síntomas, fármacos y dosis' },
                     { id: 'v4', name: 'PII/PHI Masking Filter', desc: 'Anonimización de datos personales sensibles' },
                     { id: 'v5', name: 'Azure OpenAI Clinical Summary', desc: 'Generación del informe médico estructurado' }
                 ],
                 correctSequence: ['v1', 'v2', 'v3', 'v4', 'v5'],
-                explanation: 'Flujo oficial de Voz/Salud: 1. Captura de audio -> 2. Speech STT + Diarización -> 3. Language Studio NER -> 4. Anonimización PII/PHI -> 5. Resumen clínico final en Azure OpenAI.'
+                explanation: 'Flujo oficial de Voz/Salud: 1. Captura de audio -> 2. Speech STT + Diarización -> 3. Text Analytics for Health -> 4. Anonimización PII/PHI -> 5. Resumen clínico final en Azure OpenAI.'
             },
             {
                 id: 'arch-az-4',
@@ -7458,7 +7457,7 @@ window.TechComparatorEngine = {
                 ['BM25 (Full Text)', 'Coincidencia léxica exacta por frecuencia de términos e IDF inverso', 'Más bajo / < 15ms', 'Búsqueda de códigos exactos de producto, IDs, números de serie y SKU', 'Falla en sinonimia y consultas conceptuales'],
                 ['Vector Search', 'Similitud coseno / dot product con embeddings (ej: text-embedding-3-small)', 'Medio / < 30ms', 'Búsqueda por significado, conceptos abstractos y preguntas en lenguaje natural', 'Inmune a errores ortográficos y variaciones léxicas'],
                 ['Hybrid Search', 'Combina BM25 + Vector Search usando Reciprocal Rank Fusion (RRF)', 'Medio-Alto / < 40ms', 'Mejor precisión general para RAG empresarial (términos exactos + conceptos)', 'Estándar recomendado por Microsoft para asistentes de IA'],
-                ['Semantic Ranker', 'Modelo L2 de deep learning de Bing que reordena los top 50 resultados', 'Mayor costo (por consultas L2) / +20-50ms', 'Cuando se requiere comprensión semántica profunda de contexto y fragmentos precisos', 'Siempre se aplica sobre los resultados de Hybrid/Vector, nunca solo']
+                ['Semantic Ranker', 'Modelo L2 de deep learning de Bing que reordena los top 50 resultados', 'Mayor costo (por consultas L2) / +20-50ms', 'Cuando se requiere comprensión semántica profunda de contexto y fragmentos precisos', 'Solo reordena resultados ya recuperados de una consulta de texto (BM25) o híbrida; no recupera por sí solo']
             ]
         },
         {

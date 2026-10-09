@@ -209,21 +209,22 @@
       icon: "M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.5h-2v-2h2zm0-4h-2V7h2z",
       comandos: [
         {
-          nombre: "Create Agent with Code Interpreter & File Search",
-          descripcion_en: "Create an autonomous agent connected to Code Interpreter and Azure AI Search tools.",
-          descripcion_es: "Crea un agente autónomo conectado a las herramientas de Code Interpreter y Azure AI Search.",
+          nombre: "Create Agent with Code Interpreter (Foundry Agent Service)",
+          descripcion_en: "Create a versioned agent with the Code Interpreter tool in Foundry Agent Service (azure-ai-projects 2.x) and call it through the Responses API. Legacy / classic: create_agent(), threads and runs (azure-ai-projects 1.x) still appear in exam questions.",
+          descripcion_es: "Crea una versión de un agente con la herramienta Code Interpreter en Foundry Agent Service (azure-ai-projects 2.x) y la invoca con la Responses API. Clásico: create_agent(), threads y runs (azure-ai-projects 1.x) aún aparecen en preguntas del examen.",
           ejemplos: [
             {
-              titulo_en: "Agent creation using Azure AI Projects SDK",
-              titulo_es: "Creación de agente usando Azure AI Projects SDK",
-              sql: "from azure.ai.projects import AIProjectClient\nfrom azure.identity import DefaultAzureCredential\n\nproject_client = AIProjectClient.from_connection_string(\n    conn_str='eastus.api.azureml.ms;subscription_id;rg_name;project_name',\n    credential=DefaultAzureCredential()\n)\n\nagent = project_client.agents.create_agent(\n    model='gpt-4o',\n    name='financial-analyst-agent',\n    instructions='Analyze uploaded financial CSVs and generate summary plots.',\n    tools=[{'type': 'code_interpreter'}]\n)",
+              titulo_en: "Agent creation with create_version() and a Responses call",
+              titulo_es: "Creación de agente con create_version() y llamada a Responses",
+              sql: "from azure.ai.projects import AIProjectClient\nfrom azure.ai.projects.models import PromptAgentDefinition, CodeInterpreterTool\nfrom azure.identity import DefaultAzureCredential\n\nproject = AIProjectClient(\n    endpoint='https://my-foundry.services.ai.azure.com/api/projects/my-project',\n    credential=DefaultAzureCredential()\n)\n\nagent = project.agents.create_version(\n    agent_name='financial-analyst-agent',\n    definition=PromptAgentDefinition(\n        model='gpt-4o',\n        instructions='Analyze uploaded financial CSVs and generate summary plots.',\n        tools=[CodeInterpreterTool()]\n    )\n)\n\nopenai = project.get_openai_client()\nresponse = openai.responses.create(\n    input='Plot monthly revenue from sales.csv',\n    extra_body={'agent_reference': {'name': agent.name, 'type': 'agent_reference'}}\n)\nprint(response.output_text)",
               lineas: [
-                { code: "from azure.ai.projects import AIProjectClient", en: "Import Azure AI Foundry projects client", es: "Importa el cliente de proyectos de Azure AI Foundry" },
-                { code: "project_client = AIProjectClient.from_connection_string(...)", en: "Connect to Foundry project with managed credentials", es: "Conecta al proyecto de Foundry con credenciales administradas" },
-                { code: "agent = project_client.agents.create_agent(", en: "Create persistent agent entity", es: "Crea la entidad persistente del agente" },
-                { code: "    model='gpt-4o',", en: "Assign underlying foundation model deployment", es: "Asigna el despliegue del modelo fundacional subyacente" },
-                { code: "    instructions='Analyze uploaded...',", en: "Define agent role and guardrail instructions", es: "Define el rol e instrucciones de seguridad del agente" },
-                { code: "    tools=[{'type': 'code_interpreter'}])", en: "Equip agent with sandboxed Python code interpreter", es: "Equipa al agente con el intérprete de código Python en sandbox" }
+                { code: "from azure.ai.projects import AIProjectClient", en: "Import the Foundry projects client (azure-ai-projects 2.x)", es: "Importa el cliente de proyectos de Foundry (azure-ai-projects 2.x)" },
+                { code: "project = AIProjectClient(endpoint='https://...services.ai.azure.com/api/projects/...', credential=...)", en: "Connect to the Foundry project endpoint with an Entra ID credential", es: "Se conecta al endpoint del proyecto de Foundry con una credencial de Entra ID" },
+                { code: "agent = project.agents.create_version(", en: "Create a new version of the agent (create_agent() was removed in 2.0.0)", es: "Crea una nueva versión del agente (create_agent() se eliminó en 2.0.0)" },
+                { code: "    definition=PromptAgentDefinition(model='gpt-4o', ...)", en: "Agent definition: model deployment name, instructions and tools", es: "Definición del agente: nombre de la implementación del modelo, instrucciones y herramientas" },
+                { code: "        tools=[CodeInterpreterTool()]", en: "Equip the agent with the sandboxed Python Code Interpreter", es: "Equipa al agente con el Code Interpreter de Python en sandbox" },
+                { code: "openai = project.get_openai_client()", en: "Get the OpenAI-compatible client for conversations and responses", es: "Obtiene el cliente compatible con OpenAI para conversations y responses" },
+                { code: "response = openai.responses.create(..., extra_body={'agent_reference': ...})", en: "Run the agent through the Responses API (replaces threads and runs)", es: "Ejecuta el agente con la Responses API (reemplaza threads y runs)" }
               ]
             }
           ]
@@ -296,12 +297,12 @@
             {
               titulo_en: "Instrumentation with GenAI semantic attributes",
               titulo_es: "Instrumentación con atributos semánticos de GenAI",
-              sql: "from opentelemetry import trace\nfrom azure.monitor.opentelemetry import configure_azure_monitor\n\nconfigure_azure_monitor(connection_string='InstrumentationKey=...;IngestionEndpoint=...')\ntracer = trace.get_tracer('azure.ai.app')\n\nwith tracer.start_as_current_span('chat_completion') as span:\n    span.set_attribute('gen_ai.system', 'az.ai.openai')\n    span.set_attribute('gen_ai.request.model', 'gpt-4o')\n    span.set_attribute('gen_ai.request.temperature', 0.2)\n    \n    response = client.chat.completions.create(model='gpt-4o', messages=messages)\n    \n    span.set_attribute('gen_ai.usage.input_tokens', response.usage.prompt_tokens)\n    span.set_attribute('gen_ai.usage.output_tokens', response.usage.completion_tokens)\n    span.set_attribute('gen_ai.response.finish_reasons', [choice.finish_reason for choice in response.choices])",
+              sql: "from opentelemetry import trace\nfrom azure.monitor.opentelemetry import configure_azure_monitor\n\nconfigure_azure_monitor(connection_string='InstrumentationKey=...;IngestionEndpoint=...')\ntracer = trace.get_tracer('azure.ai.app')\n\nwith tracer.start_as_current_span('chat_completion') as span:\n    span.set_attribute('gen_ai.provider.name', 'azure.ai.openai')\n    span.set_attribute('gen_ai.request.model', 'gpt-4o')\n    span.set_attribute('gen_ai.request.temperature', 0.2)\n    \n    response = client.chat.completions.create(model='gpt-4o', messages=messages)\n    \n    span.set_attribute('gen_ai.usage.input_tokens', response.usage.prompt_tokens)\n    span.set_attribute('gen_ai.usage.output_tokens', response.usage.completion_tokens)\n    span.set_attribute('gen_ai.response.finish_reasons', [choice.finish_reason for choice in response.choices])",
               lineas: [
                 { code: "from opentelemetry import trace", en: "Import standard OpenTelemetry trace API", es: "Importa la API estándar de trazas de OpenTelemetry" },
                 { code: "configure_azure_monitor(...)", en: "Configure Azure Monitor exporter for Application Insights", es: "Configura el exportador de Azure Monitor para Application Insights" },
                 { code: "with tracer.start_as_current_span('chat_completion') as span:", en: "Start distributed span for model invocation", es: "Inicia el span distribuido para la invocación del modelo" },
-                { code: "    span.set_attribute('gen_ai.system', 'az.ai.openai')", en: "Set standard provider identifier", es: "Establece el identificador de proveedor estándar" },
+                { code: "    span.set_attribute('gen_ai.provider.name', 'azure.ai.openai')", en: "Set the standard provider attribute (replaces the deprecated gen_ai.system)", es: "Establece el atributo estándar del proveedor (reemplaza al obsoleto gen_ai.system)" },
                 { code: "    span.set_attribute('gen_ai.request.model', 'gpt-4o')", en: "Set foundation model deployment identifier", es: "Establece el identificador del despliegue del modelo" },
                 { code: "    span.set_attribute('gen_ai.usage.input_tokens', ...)", en: "Log exact prompt tokens consumed", es: "Registra los tokens exactos de entrada consumidos" },
                 { code: "    span.set_attribute('gen_ai.usage.output_tokens', ...)", en: "Log completion tokens produced", es: "Registra los tokens de respuesta producidos" }
@@ -316,22 +317,22 @@
       icon: "M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z",
       comandos: [
         {
-          nombre: "Detect Groundedness & Protected Material for Code",
-          descripcion_en: "Call Content Safety to detect hallucinations against context and verify code against public GitHub licenses.",
-          descripcion_es: "Llama a Content Safety para detectar alucinaciones frente al contexto y verificar código contra licencias de GitHub.",
+          nombre: "Detect Groundedness (preview REST API)",
+          descripcion_en: "Call Content Safety groundedness detection (preview, REST only) to flag LLM output that the grounding sources do not support.",
+          descripcion_es: "Llama a la detección de fundamentación de Content Safety (preview, solo REST) para marcar la salida del LLM que las fuentes no respaldan.",
           ejemplos: [
             {
-              titulo_en: "Groundedness Detection API in Python",
-              titulo_es: "API de Detección de Fundamentación (Groundedness) en Python",
-              sql: "from azure.ai.contentsafety import ContentSafetyClient\nfrom azure.ai.contentsafety.models import CheckGroundednessOptions\nfrom azure.identity import DefaultAzureCredential\n\nclient = ContentSafetyClient(\n    endpoint='https://my-content-safety.cognitiveservices.azure.com/',\n    credential=DefaultAzureCredential()\n)\n\noptions = CheckGroundednessOptions(\n    domain='Generic',\n    task='QnA',\n    qna={\n        'query': 'What is Contoso insurance claim policy?',\n        'context': 'Contoso auto policy claims must be filed within 30 days of incident.'\n    },\n    text='Contoso allows filing auto claims up to 90 days after incident.'\n)\n\nresult = client.check_groundedness(options)\nis_ungrounded = result.ungrounded_percentage > 0.3",
+              titulo_en: "Groundedness detection REST call from Python",
+              titulo_es: "Llamada REST de detección de fundamentación desde Python",
+              sql: "import requests\nfrom azure.identity import DefaultAzureCredential\n\nendpoint = 'https://my-content-safety.cognitiveservices.azure.com'\ntoken = DefaultAzureCredential().get_token('https://cognitiveservices.azure.com/.default').token\n\nbody = {\n    'domain': 'Generic',\n    'task': 'QnA',\n    'qna': {'query': 'What is the Contoso auto claim deadline?'},\n    'text': 'Contoso allows filing auto claims up to 90 days after incident.',\n    'groundingSources': ['Contoso auto policy claims must be filed within 30 days of incident.']\n}\n\nresp = requests.post(\n    f'{endpoint}/contentsafety/text:detectGroundedness?api-version=2024-09-15-preview',\n    headers={'Authorization': f'Bearer {token}'},\n    json=body\n)\nresult = resp.json()\nis_ungrounded = result['ungroundedDetected']",
               lineas: [
-                { code: "from azure.ai.contentsafety import ContentSafetyClient", en: "Import Azure AI Content Safety client", es: "Importa el cliente de Azure AI Content Safety" },
-                { code: "options = CheckGroundednessOptions(", en: "Create groundedness evaluation options payload", es: "Crea el payload de opciones para evaluar fundamentación" },
-                { code: "    task='QnA',", en: "Set evaluation task type: QnA or Summarization", es: "Fija el tipo de tarea: QnA o Summarization" },
-                { code: "    qna={'query': ..., 'context': ...},", en: "Provide original user question and retrieved ground-truth context", es: "Provee la pregunta original y el contexto fuente verificado" },
-                { code: "    text='Contoso allows filing...'", en: "Candidate text generated by the LLM", es: "Texto candidato generado por el modelo LLM" },
-                { code: "result = client.check_groundedness(options)", en: "Execute groundedness safety check", es: "Ejecuta la comprobación de fundamentación" },
-                { code: "is_ungrounded = result.ungrounded_percentage > 0.3", en: "Flag if ungrounded percentage exceeds tolerance threshold", es: "Marca error si el porcentaje no fundamentado supera el umbral" }
+                { code: "token = DefaultAzureCredential().get_token(...).token", en: "Get an Entra ID token (keyless) for Content Safety", es: "Obtiene un token de Entra ID (sin claves) para Content Safety" },
+                { code: "    'task': 'QnA',", en: "Task type: QnA or Summarization (default)", es: "Tipo de tarea: QnA o Summarization (predeterminada)" },
+                { code: "    'qna': {'query': ...},", en: "The original user question (only for QnA)", es: "La pregunta original del usuario (solo para QnA)" },
+                { code: "    'text': '...',", en: "The LLM output to check", es: "La salida del LLM que se va a comprobar" },
+                { code: "    'groundingSources': [...]", en: "Required array of source documents to check against", es: "Arreglo obligatorio de documentos fuente contra los que se compara" },
+                { code: "    f'{endpoint}/contentsafety/text:detectGroundedness?api-version=2024-09-15-preview',", en: "Preview REST operation for groundedness detection", es: "Operación REST en preview para la detección de fundamentación" },
+                { code: "is_ungrounded = result['ungroundedDetected']", en: "True if any claim is not supported; ungroundedPercentage (0 to 1) gives the share", es: "True si alguna afirmación no está respaldada; ungroundedPercentage (0 a 1) da la proporción" }
               ]
             }
           ]

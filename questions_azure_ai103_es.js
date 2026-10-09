@@ -6018,7 +6018,7 @@
       "num": 116,
       "courseId": "azure-ai-103",
       "lang": "es",
-      "type": "single_choice",
+      "type": "multiple_choice",
       "domain": "Domain 3: Implement computer vision solutions",
       "subdomain": "Subdominio 3.2: Diseñar e implementar flujos de trabajo de comprensión multimodal",
       "isLatest": true,
@@ -6046,7 +6046,8 @@
         }
       ],
       "correctIds": [
-        "a"
+        "a",
+        "d"
       ],
       "acceptedAnswer": {
         "text": "Agregar código para verificar el valor de read_result.status",
