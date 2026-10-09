@@ -1613,3 +1613,7 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
 - **Conteos verificados** cargando `questions_azure_ai103.js`, `_es.js` y `_retired.js` en un vm: 176 EN y 176 ES; subhabilidades de 5 a 19 preguntas (3.1 tiene solo 5, así que un fallo baja la nota por debajo del 90%).
 - **Advertencias incluidas en el documento:** banco pequeño por subhabilidad; claves dudosas del PDF (14, 25, 35, 41, 72, 88, 89, 93, 95, 105, 110, 112, 115, dd-157, dd-159) pendientes de decisión de Norman, sin cambiar ninguna clave; las 339 preguntas retiradas siguen ocultas y no borradas.
 - **Sin cambios de código ni de caché PWA:** solo se agrega el documento de roadmap.
+
+### 2026-10-09 — Claude (Haiku 5.5) — roadmap AI-103: claves del PDF y umbral único
+- **Decisión de Norman:** usar las claves del PDF tal como aparecen y aplicar el mismo 90% a todas las subhabilidades, dominios y al simulacro, sin umbrales según el número de preguntas.
+- `ROADMAP_AI103.md` actualizado: se eliminó la lista de claves dudosas como pendiente y la advertencia de que el banco pequeño exigía umbral distinto. Sin cambios en bancos, claves ni caché PWA.
