@@ -2574,6 +2574,18 @@ const badgesConfig = [
         if (subskill) filtered = filtered.filter(q => q.subdomain === subskill);
         if (caseOnlyCb && caseOnlyCb.checked) filtered = filtered.filter(q => q.caseStudy);
 
+        // 1c. Advanced chips (Falladas, No vistas, Código, Ordenación) now filter the real pool
+        const chipOn = id => { const el = document.getElementById(id); return !!(el && el.checked); };
+        const canon = id => String(id || "").replace(/-(es|en)$/, "");
+        if (chipOn("chip-filter-missed") || chipOn("chip-filter-unseen")) {
+            const latest = typeof window.getLatestAnswerByQuestion === "function" ? window.getLatestAnswerByQuestion(courseId) : new Map();
+            const wrongIds = new Set((JSON.parse(localStorage.getItem("userStats") || "{}").wrongQuestions || []).map(canon));
+            if (chipOn("chip-filter-missed")) filtered = filtered.filter(q => latest.get(canon(q.id)) === false || (!latest.has(canon(q.id)) && wrongIds.has(canon(q.id))));
+            if (chipOn("chip-filter-unseen")) filtered = filtered.filter(q => !latest.has(canon(q.id)) && !wrongIds.has(canon(q.id)));
+        }
+        if (chipOn("chip-filter-code")) filtered = filtered.filter(q => /```|<pre|<code/.test(q.prompt || q.question || "") || (q.code && q.code.length > 0));
+        if (chipOn("chip-filter-order")) filtered = filtered.filter(q => ["order", "reorder", "ordering"].includes(q.type));
+
         // 2. Keyword Filter
         if (searchTerm) {
             filtered = filtered.filter(q => {
@@ -2620,6 +2632,17 @@ const badgesConfig = [
         caseOnlyLabel.classList.toggle("checked", caseOnlyCb.checked);
         updateSliderRange();
     };
+    ["chip-filter-missed", "chip-filter-unseen", "chip-filter-code", "chip-filter-order"].forEach(id => {
+        const cb = document.getElementById(id);
+        if (!cb) return;
+        cb.checked = false;
+        cb.parentElement.classList.remove("checked");
+        cb.onchange = () => {
+            cb.parentElement.classList.toggle("checked", cb.checked);
+            updateSliderRange();
+        };
+    });
+    updateSliderRange();
     if (searchInput) searchInput.oninput = updateSliderRange;
     if (rangeStart) rangeStart.onchange = updateSliderRange;
     if (rangeEnd) rangeEnd.onchange = updateSliderRange;
@@ -3842,6 +3865,11 @@ const badgesConfig = [
          document.getElementById("feedback-explanation").innerHTML = explanation;
     }
     
+    appendFeedbackExtras(q, lang);
+  }
+
+  // Claude (Opus 5.5) | 2026-10-08 | extras debajo de la explicación; translate_toggle los vuelve a dibujar al cambiar de idioma
+  function appendFeedbackExtras(q, lang) {
     renderOptionRationales(q, lang);
 
     // Documentation Link
@@ -3887,6 +3915,7 @@ const badgesConfig = [
     `;
     document.getElementById("feedback-explanation").appendChild(coachBox);
   }
+  window.appendFeedbackExtras = appendFeedbackExtras;
 
   function renderQuestionMap() {
     questionMap.innerHTML = "";

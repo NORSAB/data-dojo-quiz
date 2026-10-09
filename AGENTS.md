@@ -1580,3 +1580,14 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
 - **Queda para decidir con Norman:** `auto_restore_data.js` carga el perfil y el progreso de Norman en cualquier navegador vacío.
 - **Caché PWA:** `BUILD_TIMESTAMP = '20261008h'`, caché `simulador-v79-20261008h` (el PR #7 ya había usado `20261008g`/`v78`).
 - **Verificación:** pasan las 9 suites, más `node --check` de los módulos principales.
+
+### 2026-10-08 — Claude (Opus 5.5) — AI-103: progreso por subhabilidad y filtros avanzados que funcionan
+- **Pedido de Norman:** terminar todo lo pendiente y publicarlo.
+- **Barras de progreso por subhabilidad:** al elegir un curso con `subdomain` (AI-103 tiene 14), el inicio muestra una barra por subhabilidad debajo de "Practicar por Área". Una pregunta cuenta como dominada si la última respuesta que se le dio fue correcta. La barra clara muestra las preguntas vistas. Tocar una barra abre un examen con las preguntas de esa subhabilidad, en orden aleatorio. Los textos están en ES y EN y se actualizan al cambiar de idioma. El código está en `renderSubskillProgress` y `getLatestAnswerByQuestion`, en `features.js`. Lee `quizHistory` (respuestas por índice, `isCorrect`) y normaliza las gemelas `-es`/`-en`.
+- **Filtros avanzados del modal de configuración:** Falladas, No vistas, Con Código/SDK y Ordenación solo cambiaban un contador de `features.js` y no filtraban las preguntas del examen. Ahora filtran el grupo real en `updateSliderRange` (`script.js`) y se reinician cada vez que se abre el modal.
+- **Botones después de la explicación:** al cambiar de idioma, `translate_toggle.js` reescribía la explicación y desaparecían los botones "Escuchar explicación" y "Desglose AI Coach", el enlace a la documentación y el bloque de por qué cada opción. Ahora todo eso se dibuja en `appendFeedbackExtras(q, lang)`, que se vuelve a llamar después de traducir.
+- **Caché PWA:** `BUILD_TIMESTAMP = '20261008i'`, caché `simulador-v80-20261008i`.
+- **Verificación:** pasan las 9 suites y `audit_code_structure.js`. En Chromium, con Supabase bloqueado y un historial de prueba, se probó lo siguiente en ES y en EN a 1280 px y a 390 px:
+  - se ven 14 barras;
+  - con el filtro Falladas quedan 10 preguntas y con No vistas quedan 485;
+  - los botones y el bloque de opciones siguen visibles después de cambiar de idioma.

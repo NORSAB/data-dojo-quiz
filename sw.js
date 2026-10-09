@@ -36,17 +36,17 @@
 // Antigravity (Gemini 3.8 Flash) | 2026-10-06 15:35 CST | Jerarquía por roles en cursos: organización por categorías, roles y cursos sin alterar bancos ni almacenamiento.
 // Claude (Opus 5.5) | 2026-10-08 | Revisión: 30 preguntas DEA visibles, indicador de sync real, reloj visible y layout móvil.
 // Claude (Opus 5.5) | 2026-10-08 | Mejoras visuales: inicio compacto, logos monocromos, anillo de puntaje y filas de dominio.
-const BUILD_TIMESTAMP = '20261008h';
-const CACHE_NAME = `simulador-v79-${BUILD_TIMESTAMP}`;
+const BUILD_TIMESTAMP = '20261008i';
+const CACHE_NAME = `simulador-v80-${BUILD_TIMESTAMP}`;
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './styles.css?v=20261008h',
-  './app_i18n.js?v=20261008h',
+  './styles.css?v=20261008i',
+  './app_i18n.js?v=20261008i',
   './app_i18n_ui.js',
-  './script.js?v=20261008h',
-  './features.js?v=20261008h',
-  './quiz_style.css?v=20261008h',
+  './script.js?v=20261008i',
+  './features.js?v=20261008i',
+  './quiz_style.css?v=20261008i',
   './hero_data.js',
   './auto_restore_data.js',
   './manifest.json',
@@ -112,8 +112,8 @@ const ASSETS_TO_CACHE = [
   './conceptos_databricks.js',
   './personajes_unir_viz.js',
   './translations_databricks_es.js',
-  './translate_toggle.js?v=20261008h',
-  './supabase-sync.js?v=20261008h',
+  './translate_toggle.js?v=20261008i',
+  './supabase-sync.js?v=20261008i',
   './comandos_sql_databricks.js',
   './comandos_sql_genai.js',
   './centro_quizzes_genai.html',

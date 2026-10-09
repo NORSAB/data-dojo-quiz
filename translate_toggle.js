@@ -99,7 +99,8 @@
       : '';
     renderMarkdown(feedbackExplanation, prefix + sourceQuestion.explanation);
     // Claude (Opus 5.5) | 2026-10-08 | vuelve a mostrar el por qué de cada opción tras reescribir la explicación
-    if (typeof window.renderOptionRationales === 'function') window.renderOptionRationales(sourceQuestion, language);
+    if (typeof window.appendFeedbackExtras === 'function') window.appendFeedbackExtras(sourceQuestion, language);
+    else if (typeof window.renderOptionRationales === 'function') window.renderOptionRationales(sourceQuestion, language);
   }
 
   function renderQuestionData(originalQuestion, sourceQuestion, language) {

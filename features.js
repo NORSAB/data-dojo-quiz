@@ -139,6 +139,7 @@ window.printReadinessReport = function() {
 // F2: DOMAIN PRACTICE CARDS
 // =============================================
 function renderDomainCards(courseId) {
+    renderSubskillProgress(courseId);
     const container = document.getElementById('domain-cards');
     const wrapper = document.getElementById('domain-cards-container');
     if (!container || !wrapper) return;
@@ -220,6 +221,100 @@ function renderDomainCards(courseId) {
     wrapper.style.display = 'block';
 }
 
+
+// Claude (Opus 5.5) | 2026-10-08 | Barras de progreso por subhabilidad oficial (AI-103 y cursos con subdomain).
+function getLatestAnswerByQuestion(courseId) {
+    // quizHistory guarda el intento más reciente primero; la primera respuesta encontrada es la última dada.
+    const latest = new Map();
+    const history = JSON.parse(localStorage.getItem('quizHistory') || '[]')
+        .filter(h => h.courseCheck === courseId && Array.isArray(h.questionIds));
+    history.forEach(h => {
+        const answers = h.userAnswers || {};
+        h.questionIds.forEach((qId, idx) => {
+            const key = getCanonicalQuestionId(qId);
+            if (latest.has(key)) return;
+            const ans = answers[idx] !== undefined ? answers[idx] : (answers[String(idx)] !== undefined ? answers[String(idx)] : answers[qId]);
+            if (ans && typeof ans === 'object' && 'isCorrect' in ans) latest.set(key, !!ans.isCorrect);
+        });
+    });
+    return latest;
+}
+window.getLatestAnswerByQuestion = getLatestAnswerByQuestion;
+
+function renderSubskillProgress(courseId) {
+    const wrapper = document.getElementById('subskill-progress-container');
+    const list = document.getElementById('subskill-progress-list');
+    if (!wrapper || !list) return;
+
+    const cid = courseId || window.currentCourseId;
+    const questions = getLocalizedCourseQuestions(cid) || [];
+    const groups = {};
+    questions.forEach(q => {
+        if (!q.subdomain) return;
+        if (!groups[q.subdomain]) groups[q.subdomain] = [];
+        groups[q.subdomain].push(q);
+    });
+    const names = Object.keys(groups);
+    if (names.length < 2) { wrapper.style.display = 'none'; return; }
+
+    const isEs = !window.AppI18n || window.AppI18n.getLanguage() === 'es';
+    const title = document.getElementById('subskill-progress-title');
+    const hint = document.getElementById('subskill-progress-hint');
+    if (title) title.textContent = isEs ? 'Progreso por subhabilidad' : 'Progress by subskill';
+    if (hint) hint.textContent = isEs
+        ? 'Cuenta como dominada la pregunta cuya última respuesta fue correcta. Toca una barra para practicar esa subhabilidad.'
+        : 'A question counts as mastered when your latest answer to it was correct. Tap a bar to practice that subskill.';
+
+    const latest = getLatestAnswerByQuestion(cid);
+    const key = s => (String(s).match(/(\d+)\.(\d+)/) || [0, 99, 99]).slice(1).map(Number);
+    names.sort((a, b) => { const ka = key(a), kb = key(b); return ka[0] - kb[0] || ka[1] - kb[1] || a.localeCompare(b); });
+
+    const esc = t => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    list.innerHTML = '';
+    names.forEach(name => {
+        const qs = groups[name];
+        let seen = 0, mastered = 0;
+        qs.forEach(q => {
+            const k = getCanonicalQuestionId(q.id);
+            if (!latest.has(k)) return;
+            seen++;
+            if (latest.get(k)) mastered++;
+        });
+        const total = qs.length;
+        const pct = Math.round((mastered / total) * 100);
+        const seenPct = Math.round((seen / total) * 100);
+        const label = name.replace(/^(Subdomain|Subdominio)\s+/i, '');
+        const detail = isEs
+            ? `${mastered} de ${total} dominadas · ${seen} vistas`
+            : `${mastered} of ${total} mastered · ${seen} seen`;
+
+        const row = document.createElement('button');
+        row.type = 'button';
+        row.className = 'subskill-progress-row';
+        row.setAttribute('aria-label', `${label}: ${detail}`);
+        row.innerHTML = `
+            <span class="subskill-progress-name">${esc(label)}</span>
+            <span class="subskill-progress-pct">${pct}%</span>
+            <span class="subskill-progress-bar" aria-hidden="true">
+                <span class="subskill-progress-seen" style="width:${seenPct}%"></span>
+                <span class="subskill-progress-fill" style="width:${pct}%"></span>
+            </span>
+            <span class="subskill-progress-detail">${detail}</span>
+        `;
+        row.onclick = () => {
+            const pool = [...qs].sort(() => Math.random() - 0.5);
+            launchDirectQuiz(pool, 'domain');
+        };
+        list.appendChild(row);
+    });
+    wrapper.style.display = 'block';
+}
+window.renderSubskillProgress = renderSubskillProgress;
+
+window.addEventListener('app-language-change', () => {
+    const wrapper = document.getElementById('subskill-progress-container');
+    if (wrapper && wrapper.style.display !== 'none') renderSubskillProgress(window.currentCourseId);
+});
 
 // =============================================
 // F3: COUNTDOWN TIMER FOR REAL EXAM
