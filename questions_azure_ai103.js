@@ -6018,7 +6018,7 @@
       "num": 116,
       "courseId": "azure-ai-103",
       "lang": "en",
-      "type": "single_choice",
+      "type": "multiple_choice",
       "domain": "Domain 3: Implement computer vision solutions",
       "subdomain": "Subdomain 3.2: Design and implement multimodal understanding workflows",
       "isLatest": true,
@@ -6046,7 +6046,8 @@
         }
       ],
       "correctIds": [
-        "a"
+        "a",
+        "d"
       ],
       "acceptedAnswer": {
         "text": "Add code to verify the read_result.status value",

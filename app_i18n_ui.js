@@ -1323,8 +1323,8 @@
   "en": "for STT transcription with speaker diarization and custom TTS synthesis. Use"
  },
  {
-  "es": "para OCR de markdown y dense captioning.",
-  "en": "for markdown OCR and dense captioning."
+  "es": "para OCR (Read), captions y dense captions.",
+  "en": "for OCR (Read), captions and dense captions."
  },
  {
   "es": "Búsqueda & RAG",
@@ -1355,8 +1355,8 @@
   "en": "for fully managed cloud agents with Code Interpreter and Bing Search. Use"
  },
  {
-  "es": "para código C#/Python con plugins corporativos. Usa",
-  "en": "for C#/Python code with enterprise plugins. Use"
+  "es": "(sucesor de Semantic Kernel y AutoGen) para agentes y workflows multiagente en código C#/Python.",
+  "en": "(successor to Semantic Kernel and AutoGen) for code-first agents and multi-agent workflows in C#/Python."
  },
  {
   "es": "para conversaciones multi-agente asíncronas complejas.",
@@ -1383,8 +1383,8 @@
   "en": "for development, testing and sporadic traffic. Use"
  },
  {
-  "es": "para cargas de producción con SLAs de latencia garantizados, alto volumen predecible y cumplimiento normativo estricto.",
-  "en": "for production workloads with guaranteed latency SLAs, high predictable volume and strict regulatory compliance."
+  "es": "para cargas de producción con latencia predecible y alto volumen estable.",
+  "en": "for production workloads with predictable latency and high, steady volume."
  },
  {
   "es": "cuando la identidad pertenece a un único recurso Azure (ej. un Search Service). Usa",
@@ -1603,12 +1603,16 @@
   "en": "Use `az cognitiveservices account create` with `--kind OpenAI`."
  },
  {
-  "es": "Crear Índice en Azure AI Search",
-  "en": "Create Index in Azure AI Search"
+  "es": "Crear Servicio de Azure AI Search",
+  "en": "Create Azure AI Search Service"
  },
  {
-  "es": "Crea un índice de búsqueda llamado \"products-vector-idx\" en el servicio \"search-norsab\" usando la definición en \"schema.json\".",
-  "en": "Create a search index named \"products-vector-idx\" in the \"search-norsab\" service using the definition in \"schema.json\"."
+  "es": "Usa `az search service create --name ... --resource-group ... --sku ...`.",
+  "en": "Use `az search service create --name ... --resource-group ... --sku ...`."
+ },
+ {
+  "es": "Crea un servicio de Azure AI Search llamado \"search-norsab\" en el grupo de recursos \"rg-ai103\" con SKU \"standard\" (los índices se crean después con la API REST o el SDK).",
+  "en": "Create an Azure AI Search service named \"search-norsab\" in the resource group \"rg-ai103\" with SKU \"standard\" (indexes are created afterwards with the REST API or the SDK)."
  },
  {
   "es": "Desplegar Modelo GPT-4o en Azure OpenAI",
@@ -1727,12 +1731,12 @@
   "en": "Documents are ingested with Azure Document Intelligence, embeddings are generated with Azure OpenAI text-embedding-3, indexed in Azure AI Search with Hybrid Search + Semantic Re-ranker, and connected to the GPT-4o model using Managed Identity and Content Safety Prompt Shields."
  },
  {
-  "es": "Describe el proceso para construir y desplegar un agente autónomo multi-herramienta con Azure AI Agent Service y Semantic Kernel.",
-  "en": "Describe the process for building and deploying an autonomous multi-tool agent with Azure AI Agent Service and Semantic Kernel."
+  "es": "Describe el proceso para construir y desplegar un agente autónomo multi-herramienta con Foundry Agent Service y Microsoft Agent Framework.",
+  "en": "Describe the process for building and deploying an autonomous multi-tool agent with Foundry Agent Service and Microsoft Agent Framework."
  },
  {
-  "es": "Se instancia el agente con Azure AI Agent Service, se configuran las herramientas de File Search y Code Interpreter, se definen Function Callings y se maneja el estado conversacional mediante Threads y Runs automáticos.",
-  "en": "The agent is instantiated with Azure AI Agent Service, the File Search and Code Interpreter tools are configured, Function Calling is defined, and conversational state is managed through automatic Threads and Runs."
+  "es": "Se crea una versión del agente en Foundry Agent Service (create_version con PromptAgentDefinition), se configuran las herramientas de File Search y Code Interpreter, se define Function Calling y el estado conversacional se maneja con conversations y la Responses API. (Clásico: threads y runs; aún aparecen en preguntas del examen.)",
+  "en": "An agent version is created in Foundry Agent Service (create_version with PromptAgentDefinition), the File Search and Code Interpreter tools are configured, Function Calling is defined, and conversational state is handled with conversations and the Responses API. (Legacy: threads and runs; they still appear in exam questions.)"
  },
  {
   "es": "Detalla cómo implementar y evaluar un pipeline de RAG empresarial en Databricks usando Unity Catalog y Mosaic AI.",
@@ -1827,8 +1831,8 @@
   "en": "User's natural language query"
  },
  {
-  "es": "Orquestación de estado, hilos e historial",
-  "en": "Orchestration of state, threads and history"
+  "es": "Orquestación de estado, conversaciones e historial",
+  "en": "Orchestration of state, conversations and history"
  },
  {
   "es": "Invocación de API de base de datos interna",
@@ -1875,8 +1879,8 @@
   "en": "Generation of the structured medical report"
  },
  {
-  "es": "Flujo oficial de Voz/Salud: 1. Captura de audio -> 2. Speech STT + Diarización -> 3. Language Studio NER -> 4. Anonimización PII/PHI -> 5. Resumen clínico final en Azure OpenAI.",
-  "en": "Official Voice/Health flow: 1. Audio capture -> 2. Speech STT + Diarization -> 3. Language Studio NER -> 4. PII/PHI anonymization -> 5. Final clinical summary in Azure OpenAI."
+  "es": "Flujo oficial de Voz/Salud: 1. Captura de audio -> 2. Speech STT + Diarización -> 3. Text Analytics for Health -> 4. Anonimización PII/PHI -> 5. Resumen clínico final en Azure OpenAI.",
+  "en": "Official Voice/Health flow: 1. Audio capture -> 2. Speech STT + Diarization -> 3. Text Analytics for Health -> 4. PII/PHI anonymization -> 5. Final clinical summary in Azure OpenAI."
  },
  {
   "es": "Evaluación y Red Teaming de Modelos en Foundry",
@@ -2891,8 +2895,8 @@
   "en": "When deep semantic understanding of context and precise snippets is required"
  },
  {
-  "es": "Siempre se aplica sobre los resultados de Hybrid/Vector, nunca solo",
-  "en": "Always applied on top of Hybrid/Vector results, never on its own"
+  "es": "Solo reordena resultados ya recuperados de una consulta de texto (BM25) o híbrida; no recupera por sí solo",
+  "en": "Only reorders results already retrieved by a text (BM25) or hybrid query; it never retrieves on its own"
  },
  {
   "es": "Árbol de decisión de menor costo y complejidad técnica en Databricks.",
