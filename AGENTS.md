@@ -1658,3 +1658,15 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
 - **Validador:** `validate_ai103_integration.js` exige 14 paradas, cada una con al menos un tema, que sumen las 176 preguntas vigentes.
 - **Caché PWA:** `BUILD_TIMESTAMP = '20261009g'`, caché `simulador-v85-20261009g`.
 - **Verificación:** pasan los 8 validadores de `tools/validate_*.js` y `audit_code_structure.js`. En Chromium, con Supabase bloqueado, en ES claro, EN oscuro y móvil a 390 px: la calle muestra 14 paradas y el estado sale del historial de prueba; un tema se abre desde la calle; "Practicar" lanza el quiz de la subhabilidad; "Iniciar el simulacro" da 50 preguntas y 100:00; un examen de AI-103 con 0% muestra "Se requiere un 90%".
+
+### 2026-10-09 — Claude (Opus 5.5) — AI-103: comparación con el temario oficial de Microsoft Learn
+- **Pedido de Norman:** confirmar si el contenido alcanza para estudiar AI-103, comparándolo con Microsoft Learn.
+- **Comparación:** se revisaron los 69 puntos del temario oficial (skills measured del 16 de abril de 2026, página actualizada el 14 de abril) contra los temas de Estudiar, el glosario y las 176 preguntas vigentes. Casi todo estaba cubierto. Faltaban o estaban muy poco tratados cuatro puntos.
+- **Temas nuevos en `study_azure_ai103_exam_topics.js` (EN/ES, al final de su dominio):**
+  - 1.3c: estado del indexer (`executionHistory`, 50 ejecuciones, Max failed items), métricas de Azure AI Search (`SearchLatency`, `ThrottledSearchQueriesPercentage`, `IndexVectorUsage`…), logs `OperationLogs` y deriva de calidad con evaluación continua.
+  - 1.4c: `allowed_tools`, `require_approval` y el flujo `mcp_approval_request` / `mcp_approval_response`, conexiones del proyecto y AI Red Teaming Agent (PyRIT, Attack Success Rate).
+  - 2.2d: evaluadores de agentes (`builtin.intent_resolution`, `task_adherence`, `tool_call_accuracy` y los demás), compuestos y análisis de errores con trazas.
+  - 4.2c: razonamiento sobre audio con `input_audio`, y cuándo usar Speech to text en su lugar.
+- **Sin cambios:** claves del PDF, preguntas retiradas y pesos del simulacro.
+- **Caché PWA:** `BUILD_TIMESTAMP = '20261009h'`, caché `simulador-v86-20261009h`.
+- **Verificación:** pasan los 8 validadores y `audit_code_structure.js`. En Chromium, con Supabase bloqueado, los cuatro temas cargan en su dominio y el recorrido los enlaza a sus paradas, sin errores de página.
