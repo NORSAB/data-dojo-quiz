@@ -2,7 +2,7 @@
 
 Examen / Exam: **16 de octubre de 2026 / October 16, 2026**
 Meta / Target: **90% o más en cada subhabilidad y en el simulacro final / 90% or more on every subskill and on the final mock exam**
-Fuente / Source: `questions_azure_ai103.js` y `questions_azure_ai103_es.js`: 176 preguntas vigentes en cada idioma / 176 current questions per language (158 del PDF, literales / verbatim, + 18 vigentes / current). Las 339 retiradas siguen en el repositorio, ocultas / The 339 retired items remain in the repo, hidden.
+Fuente / Source: `questions_azure_ai103.js` y `questions_azure_ai103_es.js`: 176 preguntas vigentes en cada idioma / 176 current questions per language (158 del PDF, literales / verbatim, + 18 vigentes / current). Las claves son las del PDF / Answer keys follow the PDF. Las 339 retiradas siguen en el repositorio, ocultas / The 339 retired items remain in the repo, hidden.
 
 ---
 
@@ -47,16 +47,16 @@ Orden sugerido / Suggested order: 2.2 → 2.1 → 2.3 → 1.2 → 5.1 → 5.2 �
 
 ---
 
-## Advertencias antes de confiar en el 90% / Caveats before trusting the 90% target
+## Advertencias / Caveats
 
 **ES**
-1. **Banco pequeño por subhabilidad.** Tiene entre 5 y 19 preguntas. Con 5 preguntas, un solo fallo ya baja del 90%. Para el 90% real, cuenta el resultado de la primera vez que haces cada pregunta, no los repasos.
-2. **Preguntas con clave dudosa del PDF.** La revisión del 2026-10-09 marcó como discutibles las preguntas 14, 25, 35, 41, 72, 88, 89, 93, 95, 105, 110, 112, 115, dd-157 y dd-159 (lista pendiente de confirmar con Norman; no se cambió ninguna clave). Si una de ellas coincide con tu razonamiento y el banco la marca mal, no es que no entiendas el tema. Decide con Norman qué clave se usa antes del examen.
-3. **Preguntas retiradas (ocultas, no borradas).** Las 339 preguntas obsoletas o repetidas están fuera del banco vigente, pero siguen en el repositorio. Si se usan para estudiar, pueden dar una idea de API vieja.
+1. **Mismo umbral para todos.** El 90% aplica igual a cada subhabilidad, dominio y al simulacro, sin importar cuántas preguntas tenga cada una (entre 5 y 19). Un fallo en una subhabilidad pequeña cuenta igual que en una grande.
+2. **Claves del PDF.** Se usan las claves del PDF tal como aparecen. Las notas de Microsoft Learn que difieran se muestran como nota dentro de la explicación, no cambian la respuesta.
+3. **Preguntas retiradas (ocultas, no borradas).** Las 339 obsoletas o repetidas están fuera del banco vigente, pero siguen en el repositorio. No las uses para estudiar APIs actuales.
 
 **EN**
-1. **Small bank per subskill.** It has 5 to 19 questions each. With 5 questions, one miss drops you below 90%. A real 90% counts only the first answer to each question, not repeats.
-2. **PDF questions with doubtful keys.** The 2026-10-09 review flagged 14, 25, 35, 41, 72, 88, 89, 93, 95, 105, 110, 112, 115, dd-157 and dd-159 (list pending Norman's confirmation; no key was changed). If your reasoning is right and the bank says otherwise, the key is at fault, not your understanding. Decide with Norman which key to use before the exam.
+1. **Same threshold for everyone.** 90% applies equally to every subskill, domain and the mock exam, regardless of how many questions each has (5 to 19). One miss in a small subskill counts the same as in a large one.
+2. **PDF answer keys.** The PDF keys are used as they appear. Microsoft Learn differences appear as a note in the explanation and do not change the answer.
 3. **Retired questions (hidden, not deleted).** The 339 obsolete or duplicate items are outside the current bank but remain in the repository. Do not use them to learn current APIs.
 
 ---
@@ -66,4 +66,3 @@ Orden sugerido / Suggested order: 2.2 → 2.1 → 2.3 → 1.2 → 5.1 → 5.2 �
 - [ ] 14 subhabilidades con 90% o más en dos intentos seguidos. / 14 subskills at 90%+ on two consecutive attempts.
 - [ ] Examen mixto por dominio con 90% o más. / Mixed quiz per domain at 90%+.
 - [ ] Simulacro de 50 preguntas con 90% o más dos veces. / 50-question mock at 90%+ twice.
-- [ ] Claves dudosas resueltas con Norman. / Doubtful keys resolved with Norman.
