@@ -126,7 +126,8 @@ const questionBankFiles = [
   'questions_unah_tesis.js',
   'questions_azure_ai103.js',
   'questions_azure_ai103_es.js',
-  'questions_azure_ai103_rationales.js'
+  'questions_azure_ai103_rationales.js',
+  'questions_azure_ai103_retired.js'
 ];
 
 for (const qf of questionBankFiles) {

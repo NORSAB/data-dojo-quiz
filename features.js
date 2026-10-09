@@ -302,8 +302,7 @@ function renderSubskillProgress(courseId) {
             <span class="subskill-progress-detail">${detail}</span>
         `;
         row.onclick = () => {
-            const pool = [...qs].sort(() => Math.random() - 0.5);
-            launchDirectQuiz(pool, 'domain');
+            launchDirectQuiz(prioritizeExamQuestions(qs), 'domain');
         };
         list.appendChild(row);
     });
@@ -364,6 +363,16 @@ function stopCountdownTimer() {
     }
 }
 
+
+// Claude (Opus 5.5) | 2026-10-09 | Las preguntas del examen real (pdfNum) van primero; el resto solo completa.
+function prioritizeExamQuestions(questions) {
+    const shuffle = arr => { for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; };
+    const real = shuffle(questions.filter(q => q.pdfNum));
+    const rest = shuffle(questions.filter(q => !q.pdfNum));
+    return real.concat(rest);
+}
+window.prioritizeExamQuestions = prioritizeExamQuestions;
+
 function setupRealExamButton(courseId) {
     const btn = document.getElementById('start-real-exam-btn');
     if (!btn) return;
@@ -379,12 +388,38 @@ function setupRealExamButton(courseId) {
         return;
     }
 
+    // Claude (Opus 5.5) | 2026-10-09 | AI-103: 50 preguntas, pesos oficiales y 100 min
+    const isAi103Real = cid === 'azure-ai-103' && questions.some(q => q.pdfNum);
+    const descEl = document.getElementById('start-real-exam-desc');
+    const setDesc = () => {
+        if (!descEl) return;
+        const isEs = !window.AppI18n || window.AppI18n.getLanguage() === 'es';
+        descEl.textContent = isAi103Real
+            ? (isEs ? '50 preguntas | Pesos oficiales por dominio | 100 min | Primero las del examen real'
+                    : '50 questions | Official domain weights | 100 min | Real exam questions first')
+            : (isEs ? '45 preguntas | 5 por dominio | 120 min | Preguntas actualizadas'
+                    : '45 questions | 5 per domain | 120 min | Updated questions');
+    };
+    setDesc();
+    if (!window._realExamDescListener) {
+        window._realExamDescListener = true;
+        window.addEventListener('app-language-change', () => setupRealExamButton(window.currentCourseId));
+    }
+
     btn.onclick = () => {
         // =====================================================
         // DOMAIN-BALANCED EXAM SELECTION (9 domains × 5 = 45)
         // Prioritizes higher IDs (200+) = most updated questions
         // =====================================================
         const QUESTIONS_PER_DOMAIN = 5;
+        // AI-103: 50 preguntas con los pesos oficiales por dominio, primero las del examen real
+        const hasRealExamQuestions = questions.some(q => q.pdfNum);
+        const AI103_WEIGHTS = { 1: 14, 2: 17, 3: 6, 4: 6, 5: 7 };
+        const perDomain = domain => {
+            if (!hasRealExamQuestions || cid !== 'azure-ai-103') return QUESTIONS_PER_DOMAIN;
+            const m = String(domain).match(/(?:Domain|Dominio)\s+(\d+)/i);
+            return (m && AI103_WEIGHTS[m[1]]) || QUESTIONS_PER_DOMAIN;
+        };
 
         // 1. Group questions by domain
         const domainMap = {};
@@ -410,22 +445,20 @@ function setupRealExamButton(courseId) {
             // Sort by numeric ID descending (newest first)
             pool.sort((a, b) => getNumericId(b) - getNumericId(a));
 
-            // Separate recent (ID >= 200) and older questions
-            const recent = pool.filter(q => getNumericId(q) >= 200);
-            const older = pool.filter(q => getNumericId(q) < 200);
+            // Real exam questions first, then recent (ID >= 200), then older
+            const real = pool.filter(q => q.pdfNum);
+            const recent = pool.filter(q => !q.pdfNum && getNumericId(q) >= 200);
+            const older = pool.filter(q => !q.pdfNum && getNumericId(q) < 200);
 
             // Shuffle within each tier for variety
+            real.sort(() => Math.random() - 0.5);
             recent.sort(() => Math.random() - 0.5);
             older.sort(() => Math.random() - 0.5);
 
-            // Pick from recent first, then supplement from older
+            const limit = perDomain(domain);
             const selected = [];
-            for (const q of recent) {
-                if (selected.length >= QUESTIONS_PER_DOMAIN) break;
-                selected.push(q);
-            }
-            for (const q of older) {
-                if (selected.length >= QUESTIONS_PER_DOMAIN) break;
+            for (const q of [...real, ...recent, ...older]) {
+                if (selected.length >= limit) break;
                 selected.push(q);
             }
 
@@ -443,7 +476,7 @@ function setupRealExamButton(courseId) {
         });
         console.log(`Exam Simulation: ${examQuestions.length} questions, distribution:`, dist);
 
-        launchDirectQuiz(examQuestions, 'simulated_exam', 120);
+        launchDirectQuiz(examQuestions, 'simulated_exam', isAi103Real ? 100 : 120);
     };
 }
 

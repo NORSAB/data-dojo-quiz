@@ -2724,7 +2724,13 @@ const badgesConfig = [
             // Prepare questions (Shuffle if needed)
             let finalQuestions = [...currentPool];
             if (orderMode === "random") {
+                // Claude (Opus 5.5) | 2026-10-09 | primero las preguntas del examen real (PDF), luego se mezcla lo elegido
+                if (typeof window.prioritizeExamQuestions === "function") {
+                    finalQuestions = window.prioritizeExamQuestions(finalQuestions).slice(0, count);
+                }
                 finalQuestions.sort(() => 0.5 - Math.random());
+            } else if (finalQuestions.some(q => q.pdfNum)) {
+                finalQuestions = finalQuestions.filter(q => q.pdfNum).concat(finalQuestions.filter(q => !q.pdfNum));
             }
             
             currentQuizQuestions = finalQuestions.slice(0, count);
