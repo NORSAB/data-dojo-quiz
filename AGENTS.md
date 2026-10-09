@@ -1624,3 +1624,10 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
 - Se elimina `ROADMAP_AI103.md`, que ya no es necesario fuera de la app.
 - PWA: `BUILD_TIMESTAMP = '20261009c'`, caché `simulador-v83-20261009c`, `?v=` actualizados en `index.html`.
 - Verificación: 9 validadores y `audit_code_structure.js` en 0; en Chromium con Supabase bloqueado, la sección aparece en EN y ES sin errores de página.
+
+### 2026-10-09 — Claude (Haiku 5.5) — quitar auto-restore del perfil
+- **Pedido de Norman:** los datos siempre son suyos y viven en la nube, así que se quita la carga automática del perfil y progreso en navegadores vacíos. Rama `fix/quitar-auto-restore`.
+- **Cambios:** se elimina `auto_restore_data.js` (siembra fija del perfil, certificaciones y estadísticas de Norman) y sus referencias en `index.html`, `sw.js` y `tools/audit_code_structure.js`. La recuperación queda en el emparejamiento (`DataSync.pairWith`) y en `DataSync.restoreMasterBackup()`, que leen de Supabase.
+- **Caché PWA:** `BUILD_TIMESTAMP = '20261009d'`, caché `simulador-v82-20261009d`, `?v=20261009d` en `index.html` y `sw.js`.
+- **Pendiente:** las claves dudosas del PDF de AI-103 no se cambiaron en esta entrada. Se mantiene la clave del PDF con la nota de Microsoft Learn donde ya existe.
+- **Verificación:** pasan las 9 suites y `node --check sw.js`.
