@@ -1617,3 +1617,10 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
 ### 2026-10-09 — Claude (Haiku 5.5) — roadmap AI-103: claves del PDF y umbral único
 - **Decisión de Norman:** usar las claves del PDF tal como aparecen y aplicar el mismo 90% a todas las subhabilidades, dominios y al simulacro, sin umbrales según el número de preguntas.
 - `ROADMAP_AI103.md` actualizado: se eliminó la lista de claves dudosas como pendiente y la advertencia de que el banco pequeño exigía umbral distinto. Sin cambios en bancos, claves ni caché PWA.
+
+### 2026-10-09 — Claude (Haiku 5.5) — roadmap AI-103 dentro de la app
+- **Pedido de Norman:** todo debe quedar dentro de la app, sin crear apps nuevas; desplegar en Vercel, GitHub y local.
+- `study_azure_ai103_exam_topics.js`: el roadmap progresivo se agrega como primera sección del Centro de Estudio de AI-103 (EN y ES): método, orden por dominio y peso, tabla de subhabilidades, plan de siete días y meta de 90% en dos intentos seguidos.
+- Se elimina `ROADMAP_AI103.md`, que ya no es necesario fuera de la app.
+- PWA: `BUILD_TIMESTAMP = '20261009c'`, caché `simulador-v83-20261009c`, `?v=` actualizados en `index.html`.
+- Verificación: 9 validadores y `audit_code_structure.js` en 0; en Chromium con Supabase bloqueado, la sección aparece en EN y ES sin errores de página.
