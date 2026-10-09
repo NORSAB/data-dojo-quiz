@@ -607,6 +607,10 @@
   "en": "You did not pass. A score of 70% is required to pass."
  },
  {
+  "es": "No has aprobado. Se requiere un 90% para aprobar.",
+  "en": "You did not pass. A score of 90% is required to pass."
+ },
+ {
   "es": "Revisión Detallada de Preguntas",
   "en": "Detailed Question Review"
  },

@@ -7682,3 +7682,282 @@ body:has(#onboarding-screen:not(.hidden)) .global-language-divider {
   font-size: 0.76rem;
   color: var(--text-muted);
 }
+
+/* Claude (Opus 5.5) | 2026-10-09 | Recorrido de estudio AI-103: una calle por dominios y subhabilidades */
+.ai103-road .road-track {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+}
+.ai103-road .road-node {
+  position: relative;
+  padding: 0 0 22px 58px;
+  margin: 0;
+}
+.ai103-road .road-node::before {
+  content: "";
+  position: absolute;
+  left: 15px;
+  top: 0;
+  bottom: 0;
+  width: 16px;
+  background: var(--border-color);
+}
+.ai103-road .road-node::after {
+  content: "";
+  position: absolute;
+  left: 22px;
+  top: 0;
+  bottom: 0;
+  border-left: 2px dashed var(--card-bg);
+}
+.ai103-road .road-node:first-child::before,
+.ai103-road .road-node:first-child::after {
+  top: 18px;
+}
+.ai103-road .road-finish::before,
+.ai103-road .road-finish::after {
+  bottom: auto;
+  height: 18px;
+}
+.ai103-road .road-node.is-done::before {
+  background: var(--primary-color);
+}
+.ai103-road .road-marker {
+  position: absolute;
+  left: 5px;
+  top: 2px;
+  z-index: 1;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--card-bg);
+  border: 2px solid var(--border-color);
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+.unir-root .ai103-road svg,
+.ai103-road svg {
+  fill: none !important;
+  flex-shrink: 0;
+}
+.ai103-road .is-done > .road-marker {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  color: #ffffff;
+}
+.ai103-road .is-current > .road-marker {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  box-shadow: 0 0 0 4px var(--primary-light);
+}
+.ai103-road .road-gate.is-done > .road-marker,
+.ai103-road .road-finish.is-done > .road-marker {
+  background: var(--success-color);
+  border-color: var(--success-color);
+  color: #ffffff;
+}
+.ai103-road .road-body {
+  padding-top: 8px;
+}
+.ai103-road .road-stop > .road-body,
+.ai103-road .road-gate > .road-body,
+.ai103-road .road-finish > .road-body {
+  padding: 12px 14px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--card-bg);
+}
+.ai103-road .is-current > .road-body {
+  border-color: var(--primary-color);
+}
+.ai103-road .road-domain .road-body {
+  color: var(--text-color);
+  font-size: 1rem;
+}
+.ai103-road .road-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.ai103-road .road-badge {
+  flex-shrink: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+.ai103-road .is-current .road-badge {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  background: var(--primary-light);
+}
+.ai103-road .is-done .road-badge {
+  border-color: var(--success-color);
+  color: var(--success-color);
+  background: var(--success-light);
+}
+.ai103-road .road-step {
+  padding: 8px 0;
+  border-top: 1px solid var(--border-color);
+}
+.ai103-road .road-step-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: var(--text-color);
+  margin-bottom: 6px;
+}
+.ai103-road .road-step-note {
+  font-weight: 400;
+  color: var(--text-muted);
+}
+.ai103-road .road-topics {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+}
+.ai103-road .road-topic {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+  min-height: 36px;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--primary-color);
+  font: inherit;
+  font-size: 0.9rem;
+  text-align: left;
+  cursor: pointer;
+}
+.ai103-road .road-topic:hover,
+.ai103-road .road-topic:focus-visible {
+  background: var(--primary-light);
+}
+.ai103-road .road-topic-check {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border-color);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: transparent;
+}
+.ai103-road .road-topic.is-read .road-topic-check {
+  background: var(--success-color);
+  border-color: var(--success-color);
+  color: #ffffff;
+}
+.ai103-road .road-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 8px 14px;
+  border: 1px solid var(--primary-color);
+  border-radius: var(--radius-sm);
+  background: var(--card-bg);
+  color: var(--primary-color);
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.ai103-road .road-btn:hover,
+.ai103-road .road-btn:focus-visible,
+.ai103-road .road-btn-primary {
+  background: var(--primary-color);
+  color: #ffffff;
+}
+[data-theme="dark"] .ai103-road .road-topic,
+[data-theme="dark"] .ai103-road .road-btn:not(:hover):not(:focus-visible):not(.road-btn-primary) {
+  color: var(--text-color);
+}
+.ai103-road .road-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+.ai103-road .road-meter {
+  position: relative;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background: var(--border-color);
+  margin: 4px 0 6px;
+}
+.ai103-road .road-meter-fill {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: var(--radius-full);
+  background: var(--primary-color);
+}
+.ai103-road .is-done .road-meter-fill {
+  background: var(--success-color);
+}
+.ai103-road .road-meter-target {
+  position: absolute;
+  left: 90%;
+  top: -3px;
+  bottom: -3px;
+  border-left: 2px solid var(--text-color);
+}
+.ai103-road .road-detail {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+.ai103-road .road-note {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin: 4px 0 0;
+}
+@media (max-width: 640px) {
+  .ai103-road .road-node {
+    padding-left: 48px;
+  }
+  .ai103-road .road-node::before {
+    left: 11px;
+    width: 12px;
+  }
+  .ai103-road .road-node::after {
+    left: 16px;
+  }
+  .ai103-road .road-marker {
+    left: 1px;
+    width: 32px;
+    height: 32px;
+  }
+}
+/* Claude (Opus 5.5) | 2026-10-09 | En móvil, el contenido de Estudio pierde el relleno acumulado y gana ancho. */
+@media (max-width: 640px) {
+  .unir-root .unir-panel {
+    width: 100%;
+    padding: 12px 4px 48px;
+  }
+  .unir-root .unir-item-content {
+    padding: 18px 12px 24px;
+    font-size: 1rem;
+  }
+}

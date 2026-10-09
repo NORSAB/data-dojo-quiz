@@ -1587,6 +1587,8 @@ function exportHistoryCSV() {
 // F14: POST-EXAM SUMMARY PANEL
 // =============================================
 function renderPostExamSummary(container, questions, userAnswers, finalPct, passed) {
+    const passThreshold = typeof window.getPassThreshold === 'function' ? window.getPassThreshold() : 70;
+    const isEnSummary = !!window.AppI18n && window.AppI18n.getLanguage() === 'en';
     if (!questions || questions.length === 0) return;
 
     // Build domain stats
@@ -1706,8 +1708,10 @@ function renderPostExamSummary(container, questions, userAnswers, finalPct, pass
         <div class="post-exam-grade ${passed ? 'pass' : 'fail'}">
             <div class="grade-emoji">${passed ? passIcon : failIcon}</div>
             <div class="grade-text">
-                <h4>${passed ? 'Examen Aprobado' : 'Examen No Aprobado'}</h4>
-                <p>Obtuviste ${finalPct}% — ${passed ? 'cumples el umbral de 70% requerido.' : 'necesitas al menos 70% para aprobar.'}</p>
+                <h4>${isEnSummary ? (passed ? 'Exam Passed' : 'Exam Not Passed') : (passed ? 'Examen Aprobado' : 'Examen No Aprobado')}</h4>
+                <p>${isEnSummary
+                    ? `You scored ${finalPct}%. ${passed ? `You meet the required ${passThreshold}% threshold.` : `You need at least ${passThreshold}% to pass.`}`
+                    : `Obtuviste ${finalPct}% — ${passed ? `cumples el umbral de ${passThreshold}% requerido.` : `necesitas al menos ${passThreshold}% para aprobar.`}`}</p>
             </div>
         </div>
 

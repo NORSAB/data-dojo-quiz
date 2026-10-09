@@ -28,6 +28,7 @@ runFile('questions_azure_ai103_rationales.js');
 runFile('questions_azure_ai103_retired.js');
 runFile('study_azure_ai103.js');
 runFile('study_azure_ai103_exam_topics.js');
+runFile('study_azure_ai103_road.js');
 runFile('study_azure_ai103_resources.js');
 runFile('study_azure_ai103_glossary.js');
 
@@ -108,6 +109,25 @@ console.log(`Azure AI SDK/Code Examples categories: ${comandos.length}`);
 
 if (conceptos.length === 0 || patterns.length === 0 || comandos.length === 0) {
   console.error('FAIL: Missing dedicated Azure AI-103 terms, patterns or SDK code examples.');
+  process.exit(1);
+}
+
+// Claude (Opus 5.5) | 2026-10-09 | El recorrido de estudio debe tener las 14 subhabilidades oficiales,
+// cada una con al menos un tema para estudiar, y cubrir todas las preguntas vigentes.
+const road = sandbox.window.ai103Road || [];
+console.log(`Study road stops: ${road.length}`);
+if (road.length !== 14) {
+  console.error(`FAIL: Expected 14 subskill stops on the AI-103 study road, found ${road.length}`);
+  process.exit(1);
+}
+const roadEmpty = road.filter(stop => !stop.topics.length).map(stop => stop.id);
+if (roadEmpty.length) {
+  console.error(`FAIL: Road stops without study topics: ${roadEmpty.join(', ')}`);
+  process.exit(1);
+}
+const roadTotal = road.reduce((sum, stop) => sum + stop.count, 0);
+if (roadTotal !== enQuestions.length) {
+  console.error(`FAIL: Road covers ${roadTotal} questions, the active bank has ${enQuestions.length}`);
   process.exit(1);
 }
 
