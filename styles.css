@@ -7608,3 +7608,77 @@ body:has(#onboarding-screen:not(.hidden)) .global-language-divider {
   color: var(--text-muted);
   margin-left: 4px;
 }
+
+/* Claude (Opus 5.5) | 2026-10-08 | barras de progreso por subhabilidad */
+.subskill-progress {
+  margin-top: 20px;
+}
+.subskill-progress-hint {
+  margin: 0 0 12px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+.subskill-progress-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 8px;
+}
+.subskill-progress-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 6px 12px;
+  align-items: center;
+  width: 100%;
+  padding: 12px 14px;
+  text-align: left;
+  font: inherit;
+  color: var(--text-color);
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: border-color var(--transition-fast);
+}
+.subskill-progress-row:hover,
+.subskill-progress-row:focus-visible {
+  border-color: var(--primary-color);
+  outline: none;
+}
+.subskill-progress-name {
+  font-size: 0.86rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+.subskill-progress-pct {
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+.subskill-progress-bar {
+  position: relative;
+  grid-column: 1 / -1;
+  height: 6px;
+  background: var(--border-color);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.subskill-progress-seen,
+.subskill-progress-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  border-radius: 3px;
+}
+.subskill-progress-seen {
+  background: var(--primary-color);
+  opacity: 0.25;
+}
+.subskill-progress-fill {
+  background: var(--primary-color);
+}
+.subskill-progress-detail {
+  grid-column: 1 / -1;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+}
