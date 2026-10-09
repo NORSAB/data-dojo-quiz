@@ -1591,3 +1591,18 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
   - se ven 14 barras;
   - con el filtro Falladas quedan 10 preguntas y con No vistas quedan 485;
   - los botones y el bloque de opciones siguen visibles después de cambiar de idioma.
+
+### 2026-10-09 — Claude (Opus 5.5) — AI-103: primero las preguntas del PDF y fuera las obsoletas
+- **Pedido de Norman:** dar prioridad en AI-103 a las preguntas del PDF y que no aparezcan las que ya son obsoletas.
+- **Revisión:** se revisaron las 357 preguntas que no vienen del PDF, comparándolas con la guía oficial del 16 de abril de 2026 y con Microsoft Learn. Eran solo unas 30 preguntas distintas, copiadas con otro número ("Case N", "Workflow N"). Se retiraron 339:
+  - 279 repetidas;
+  - 41 obsoletas: proyectos basados en hub, prompt flow, el ciclo de agentes con thread/run/`requires_action`, el rol Azure AI Developer, `from_connection_string` y el parámetro `style` de DALL-E 3, que ya se retiró;
+  - 16 triviales;
+  - 3 con la respuesta incorrecta: el modo Pro de Content Understanding y la transcripción rápida usada como si fuera asíncrona.
+- Quedan 18 preguntas vigentes más las 158 del PDF: 176 en EN y 176 en ES. Las preguntas del PDF siguen literales, aunque mencionen productos viejos, porque son las del examen real.
+- **`questions_azure_ai103_retired.js` (nuevo):** se carga después de `questions_azure_ai103_rationales.js` y antes de los recursos de estudio. Quita del arreglo `window.questionsData`, sin reemplazarlo, las preguntas retiradas y sus gemelas `-es`. Los archivos del banco no se modificaron. Las flashcards de AI-103 pasan a 176.
+- **Prioridad del PDF:** `prioritizeExamQuestions` en `features.js`. En modo aleatorio, el examen se arma primero con preguntas del PDF y después se mezcla. En modo secuencial, las del PDF van primero. Las barras de subhabilidad también priorizan el PDF.
+- **Simulacro de AI-103:** 50 preguntas repartidas con los pesos oficiales (14, 17, 6, 6 y 7 por dominio), primero las del PDF, en 100 minutos. El texto del botón cambia según el curso y el idioma (`#start-real-exam-desc`).
+- **Informe:** `/mnt/project-files/ai103-pdf-2026-10-08/banco-vigente-ai103.md`.
+- **Caché PWA:** `BUILD_TIMESTAMP = '20261009a'`, caché `simulador-v81-20261009a`. `validate_ai103_integration.js` ahora espera 176 + 176.
+- **Verificación:** pasan las 9 suites. En Chromium, con Supabase bloqueado, en ES y en EN: el banco tiene 176 preguntas y el simulacro da 50 preguntas, 100 minutos y la distribución 14/17/6/6/7.

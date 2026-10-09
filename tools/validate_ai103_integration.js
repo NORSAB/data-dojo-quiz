@@ -25,6 +25,7 @@ function runFile(relPath) {
 runFile('questions_azure_ai103.js');
 runFile('questions_azure_ai103_es.js');
 runFile('questions_azure_ai103_rationales.js');
+runFile('questions_azure_ai103_retired.js');
 runFile('study_azure_ai103.js');
 runFile('study_azure_ai103_exam_topics.js');
 runFile('study_azure_ai103_resources.js');
@@ -56,8 +57,8 @@ if (pdfQuestions.length !== 316 || missingRationales.length) {
   process.exit(1);
 }
 
-if (enQuestions.length !== 515 || esQuestions.length !== 515) {
-  console.error(`FAIL: Expected 515 EN and 515 ES, got ${enQuestions.length} and ${esQuestions.length}`);
+if (enQuestions.length !== 176 || esQuestions.length !== 176) {
+  console.error(`FAIL: Expected 176 EN and 176 ES (158 del PDF + 18 vigentes), got ${enQuestions.length} and ${esQuestions.length}`);
   process.exit(1);
 }
 
@@ -91,8 +92,8 @@ if (studySections.length < 5) {
 // Verify Study Resources
 const flashcards = sandbox.window.studyFlashcards['azure-ai-103'] || [];
 console.log(`Study flashcards: ${flashcards.length}`);
-if (flashcards.length !== 515) {
-  console.error(`FAIL: Expected 515 flashcards for AI-103, found ${flashcards.length}`);
+if (flashcards.length !== 176) {
+  console.error(`FAIL: Expected 176 flashcards for AI-103, found ${flashcards.length}`);
   process.exit(1);
 }
 
@@ -110,4 +111,4 @@ if (conceptos.length === 0 || patterns.length === 0 || comandos.length === 0) {
   process.exit(1);
 }
 
-console.log('SUCCESS: All 515 EN + 515 ES questions and dedicated Azure AI study resources validated perfectly!');
+console.log('SUCCESS: All 176 EN + 176 ES questions and dedicated Azure AI study resources validated perfectly!');
