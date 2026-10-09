@@ -572,6 +572,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let currentProviderId = null;
   let currentCourseId = null;
+  // Claude (Opus 5.5) | 2026-10-09 | Pedido de Norman: AI-103 se aprueba con 90% en práctica, subhabilidad, dominio y simulacro.
+  const getPassThreshold = (courseId) => (courseId || currentCourseId) === 'azure-ai-103' ? 90 : 70;
+  window.getPassThreshold = getPassThreshold;
   let activeRoleFilter = "all";
   let currentLanguage = window.AppI18n ? window.AppI18n.getLanguage() : "es";
 
@@ -4282,7 +4285,8 @@ const badgesConfig = [
 
         // Calculate Percentage (Based on Total Score now, not just count)
         const finalPct = total === 0 ? 0 : Math.round((totalScore / total) * 100);
-        const passed = finalPct >= 70; // 70% to pass
+        const passThreshold = getPassThreshold();
+        const passed = finalPct >= passThreshold;
 
         // Identify Missed Questions (Strictly wrong or not perfect)
         const missedIds = [];
@@ -4382,7 +4386,7 @@ const badgesConfig = [
         lang === "es"
             ? {
                 pass: "¡Felicidades! Has aprobado el examen.",
-                fail: "No has aprobado. Se requiere un 70% para aprobar.",
+                fail: `No has aprobado. Se requiere un ${passThreshold}% para aprobar.`,
                 review_title: "Revisión Detallada de Preguntas",
                 domain_title: "Reporte de Fortalezas y Debilidades",
                 q_num: "Pregunta",
@@ -4400,7 +4404,7 @@ const badgesConfig = [
             }
             : {
                 pass: "Congratulations! You passed the exam.",
-                fail: "You did not pass. 70% is required to pass.",
+                fail: `You did not pass. ${passThreshold}% is required to pass.`,
                 review_title: "Detailed Question Review",
                 domain_title: "Strengths and Weaknesses Report",
                 q_num: "Question",
@@ -4457,7 +4461,7 @@ const badgesConfig = [
                     .map(([domain, stats]) => [domain, stats, Math.round((stats.correct / stats.total) * 100)])
                     .sort((a, b) => a[2] - b[2])
                     .forEach(([domain, stats, pct]) => {
-                    const isStrength = pct >= 70;
+                    const isStrength = pct >= passThreshold;
 
                     const item = document.createElement("div");
                     item.className = `domain-row ${isStrength ? "is-strength" : "is-weakness"}`;
@@ -6747,6 +6751,11 @@ function renderReview(questions, finalPct, passed) {
 
     // --- EASTER EGGS ---
     // --- EXPOSE QUIZ STATE SETTERS FOR EXTERNAL FEATURES (F1-F3) ---
+    // Claude (Opus 5.5) | 2026-10-09 | El recorrido de AI-103 lanza quizzes desde Estudio sin pasar por la tarjeta del curso.
+    window._setCurrentCourseId = function(courseId) {
+        if (courseId) currentCourseId = courseId;
+    };
+
     window._setQuizState = function(questions, isRealMode) {
         currentQuizQuestions = questions;
         currentQuestionIndex = 0;
