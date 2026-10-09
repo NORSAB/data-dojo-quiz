@@ -1606,3 +1606,10 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
 - **Informe:** `/mnt/project-files/ai103-pdf-2026-10-08/banco-vigente-ai103.md`.
 - **Caché PWA:** `BUILD_TIMESTAMP = '20261009a'`, caché `simulador-v81-20261009a`. `validate_ai103_integration.js` ahora espera 176 + 176.
 - **Verificación:** pasan las 9 suites. En Chromium, con Supabase bloqueado, en ES y en EN: el banco tiene 176 preguntas y el simulacro da 50 preguntas, 100 minutos y la distribución 14/17/6/6/7.
+
+### 2026-10-09 — Claude (Haiku 5.5) — roadmap progresivo de AI-103
+- **Pedido de Norman:** actualizar el roadmap a un plan progresivo (estudiar un tema, hacer su quiz, avanzar por dominios y cerrar con simulacro) con meta de 90% o más.
+- **Nuevo `ROADMAP_AI103.md`** (bilingüe). Ruta de 14 subhabilidades ordenada por dominio y peso, calendario de 7 días, criterio de cierre (90% en dos intentos seguidos por subhabilidad, examen mixto y simulacro de 50 preguntas dos veces seguidas).
+- **Conteos verificados** cargando `questions_azure_ai103.js`, `_es.js` y `_retired.js` en un vm: 176 EN y 176 ES; subhabilidades de 5 a 19 preguntas (3.1 tiene solo 5, así que un fallo baja la nota por debajo del 90%).
+- **Advertencias incluidas en el documento:** banco pequeño por subhabilidad; claves dudosas del PDF (14, 25, 35, 41, 72, 88, 89, 93, 95, 105, 110, 112, 115, dd-157, dd-159) pendientes de decisión de Norman, sin cambiar ninguna clave; las 339 preguntas retiradas siguen ocultas y no borradas.
+- **Sin cambios de código ni de caché PWA:** solo se agrega el documento de roadmap.
