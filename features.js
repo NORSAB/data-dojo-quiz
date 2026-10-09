@@ -1366,7 +1366,7 @@ function launchFlashcardMode(cards, courseId) {
                     ${idx >= shuffled.length - 1 ? 'disabled style="opacity:0.3;padding:10px 20px;border-radius:10px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.1);color:white;cursor:not-allowed;font-size:0.9rem;"' : ''}>
                     Siguiente
                 </button>
-                <button id="fc-close" style="padding:10px 20px;border-radius:10px;border:1px solid rgba(255,255,255,0.3);background:rgba(239,68,68,0.2);color:#fca5a5;cursor:pointer;font-size:0.9rem;">
+                <button id="fc-close" style="padding:10px 20px;border-radius:10px;border:1px solid rgba(255,255,255,0.3);background:rgba(239,68,68,0.2);color:#f4aaa4;cursor:pointer;font-size:0.9rem;">
                     Cerrar
                 </button>
             </div>
@@ -2860,7 +2860,7 @@ window.PodcastMode = {
                     </button>
                 </div>
 
-                <div id="podcast-countdown" style="font-weight:800;font-size:1.1rem;color:#eab308;min-width:32px;text-align:right;">
+                <div id="podcast-countdown" style="font-weight:800;font-size:1.1rem;color:var(--warning-color);min-width:32px;text-align:right;">
                     ${this.side === 'think' ? this.pauseSeconds + 's' : ''}
                 </div>
             </div>
@@ -4277,7 +4277,7 @@ window.DiagnosticMode = {
         } else if (avgScorePct < 85) {
             verdict = "Aprobación Probable con Refuerzo";
             verdictDesc = "Estás cerca del nivel óptimo. Refuerza los dominios en amarillo para garantizar un margen seguro.";
-            gaugeColor = "#d97706";
+            gaugeColor = "var(--warning-color)";
         }
 
         const rowsHtml = domains.map(d => {
@@ -4289,7 +4289,7 @@ window.DiagnosticMode = {
                 color = 'var(--success-color, #28a745)';
                 statusText = 'Dominado (Listo)';
             } else if (pct >= 70) {
-                color = '#d97706';
+                color = 'var(--warning-color)';
                 statusText = 'Reforzar (70-84%)';
             }
 

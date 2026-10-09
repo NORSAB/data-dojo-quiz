@@ -1570,12 +1570,23 @@ Aprendido en esta sesión (2026-08-23) tras 3 intentos fallidos con `deep_transl
 - **Caché PWA:** `BUILD_TIMESTAMP = '20261008g'`, caché `simulador-v78-20261008g`.
 - **Verificación:** pasan las 9 suites y `audit_code_structure.js` (107/107 en `validate_full_application.js`). En Chromium con Supabase bloqueado, en ES y en EN: opción única, lista desplegable y Sí/No muestran el bloque, el filtro de subhabilidad deja 48 preguntas en 2.1, el modo caso deja 11 y abre el caso, y la pestaña Términos muestra 71 términos con títulos en el idioma activo.
 
+### 2026-10-08 — Claude (Opus 5.5) — pendientes de la revisión
+- **Pedido de Norman:** terminar lo que quedó pendiente de la revisión. Rama `fix/pendientes-revision`.
+- **Manifest:** `theme_color` pasa de `#4f6ef7` a `#3157d5`, el acento del sistema de diseño.
+- **CI:** se crea `.github/workflows/validate.yml`, que no existía aunque la entrada del 2026-10-06 lo daba por agregado. En cada push a `main` y en cada pull request revisa la sintaxis de los módulos principales, corre las 9 suites de `tools/` y comprueba que todos los `?v=` de `index.html` coincidan con `BUILD_TIMESTAMP`.
+- **Paleta:** `tools/validate_ui_palette.js` ahora también revisa los colores hex escritos dentro de `script.js` y `features.js`. Ignora los respaldos `var(--token, #hex)`, los logos de marca (`providerIcons`) y la escala de cinturones. Se pasaron a tokens los colores que quedaban fuera de la paleta: `#d97706`, `#eab308`, `#ccc` y `#d1d5db` usan ahora `var(--warning-color)` o `var(--border-color)`, y `#fca5a5` pasa a `#f4aaa4`.
+- **Error corregido:** al abrir la revisión antes de entregar, la cuadrícula llamaba a `svgIcon` y `SVG`, que solo existen dentro del Centro de Estudio. Si había una pregunta marcada, se producía un `ReferenceError`. Ahora la estrella se dibuja con un SVG en línea.
+- **AI-103:** las opciones de Kubernetes que no correspondían y las afirmaciones de relleno de la 119 y la 122 ya estaban corregidas por el PR #4, que dejó las preguntas con el texto literal del PDF. Se verificó en los dos bancos; no hizo falta cambiar nada.
+- **Queda para decidir con Norman:** `auto_restore_data.js` carga el perfil y el progreso de Norman en cualquier navegador vacío.
+- **Caché PWA:** `BUILD_TIMESTAMP = '20261008h'`, caché `simulador-v79-20261008h` (el PR #7 ya había usado `20261008g`/`v78`).
+- **Verificación:** pasan las 9 suites, más `node --check` de los módulos principales.
+
 ### 2026-10-08 — Claude (Opus 5.5) — AI-103: progreso por subhabilidad y filtros avanzados que funcionan
 - **Pedido de Norman:** terminar todo lo pendiente y publicarlo.
 - **Barras de progreso por subhabilidad:** al elegir un curso con `subdomain` (AI-103 tiene 14), el inicio muestra una barra por subhabilidad debajo de "Practicar por Área". Una pregunta cuenta como dominada si la última respuesta que se le dio fue correcta. La barra clara muestra las preguntas vistas. Tocar una barra abre un examen con las preguntas de esa subhabilidad, en orden aleatorio. Los textos están en ES y EN y se actualizan al cambiar de idioma. El código está en `renderSubskillProgress` y `getLatestAnswerByQuestion`, en `features.js`. Lee `quizHistory` (respuestas por índice, `isCorrect`) y normaliza las gemelas `-es`/`-en`.
 - **Filtros avanzados del modal de configuración:** Falladas, No vistas, Con Código/SDK y Ordenación solo cambiaban un contador de `features.js` y no filtraban las preguntas del examen. Ahora filtran el grupo real en `updateSliderRange` (`script.js`) y se reinician cada vez que se abre el modal.
 - **Botones después de la explicación:** al cambiar de idioma, `translate_toggle.js` reescribía la explicación y desaparecían los botones "Escuchar explicación" y "Desglose AI Coach", el enlace a la documentación y el bloque de por qué cada opción. Ahora todo eso se dibuja en `appendFeedbackExtras(q, lang)`, que se vuelve a llamar después de traducir.
-- **Caché PWA:** `BUILD_TIMESTAMP = '20261008h'`, caché `simulador-v79-20261008h`.
+- **Caché PWA:** `BUILD_TIMESTAMP = '20261008i'`, caché `simulador-v80-20261008i`.
 - **Verificación:** pasan las 9 suites y `audit_code_structure.js`. En Chromium, con Supabase bloqueado y un historial de prueba, se probó lo siguiente en ES y en EN a 1280 px y a 390 px:
   - se ven 14 barras;
   - con el filtro Falladas quedan 10 preguntas y con No vistas quedan 485;
