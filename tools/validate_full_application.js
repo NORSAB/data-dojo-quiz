@@ -124,6 +124,7 @@ const questionBankFiles = [
   'questions_unir_viz.js',
   'questions_unir_herr.js',
   'questions_unah_tesis.js',
+  'questions_terralink_mooc2.js',
   'questions_azure_ai103.js',
   'questions_azure_ai103_es.js',
   'questions_azure_ai103_rationales.js',
@@ -151,7 +152,8 @@ const studyFiles = [
   'study_azure_ai103_resources.js',
   'study_azure_ai103_glossary.js',
   'study_unir_herr.js',
-  'study_unah_tesis.js'
+  'study_unah_tesis.js',
+  'study_terralink_mooc2.js'
 ];
 
 for (const sf of studyFiles) {
@@ -173,6 +175,7 @@ assert(coursesFound.has('azure-ai-103'), 'Course azure-ai-103 loaded');
 assert(coursesFound.has('databricks-genai-engineer'), 'Course databricks-genai-engineer loaded');
 assert(coursesFound.has('dp-600'), 'Course dp-600 loaded');
 assert(coursesFound.has('databricks-da'), 'Course databricks-da loaded');
+assert(coursesFound.has('terralink-mooc2'), 'Course terralink-mooc2 loaded');
 
 // Validate questions structure
 let validStructureCount = 0;

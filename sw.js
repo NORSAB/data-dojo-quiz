@@ -36,17 +36,17 @@
 // Antigravity (Gemini 3.8 Flash) | 2026-10-06 15:35 CST | Jerarquía por roles en cursos: organización por categorías, roles y cursos sin alterar bancos ni almacenamiento.
 // Claude (Opus 5.5) | 2026-10-08 | Revisión: 30 preguntas DEA visibles, indicador de sync real, reloj visible y layout móvil.
 // Claude (Opus 5.5) | 2026-10-08 | Mejoras visuales: inicio compacto, logos monocromos, anillo de puntaje y filas de dominio.
-const BUILD_TIMESTAMP = '20261009h';
-const CACHE_NAME = `simulador-v86-${BUILD_TIMESTAMP}`;
+const BUILD_TIMESTAMP = '20261109a';
+const CACHE_NAME = `simulador-v87-${BUILD_TIMESTAMP}`;
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './styles.css?v=20261009h',
-  './app_i18n.js?v=20261009h',
+  './styles.css?v=20261109a',
+  './app_i18n.js?v=20261109a',
   './app_i18n_ui.js',
-  './script.js?v=20261009h',
-  './features.js?v=20261009h',
-  './quiz_style.css?v=20261009h',
+  './script.js?v=20261109a',
+  './features.js?v=20261109a',
+  './quiz_style.css?v=20261109a',
   './hero_data.js',
   './manifest.json',
   './app_icon.png',
@@ -106,6 +106,9 @@ const ASSETS_TO_CACHE = [
   './flashcards_unir_viz.js',
   './flashcards_unir_herr.js',
   './flashcards_unah_tesis.js',
+  './questions_terralink_mooc2.js',
+  './study_terralink_mooc2.js',
+  './flashcards_terralink_mooc2.js',
   './i18n_study_content.js',
   './i18n_study_resources.js',
   './databricks_study_module.html',
@@ -113,8 +116,8 @@ const ASSETS_TO_CACHE = [
   './conceptos_databricks.js',
   './personajes_unir_viz.js',
   './translations_databricks_es.js',
-  './translate_toggle.js?v=20261009h',
-  './supabase-sync.js?v=20261009h',
+  './translate_toggle.js?v=20261109a',
+  './supabase-sync.js?v=20261109a',
   './comandos_sql_databricks.js',
   './comandos_sql_genai.js',
   './centro_quizzes_genai.html',

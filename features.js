@@ -1324,6 +1324,7 @@ const FLASHCARD_MAP = {
     'unir-viz':             () => window.unirVizFlashcards,
     'unir-herr':            () => window.unirHerrFlashcards,
     'unah-tesis':           () => window.unahTesisFlashcards,
+    'terralink-mooc2':      () => window.terralinkMooc2Flashcards,
 };
 
 function showFlashcardButton(courseId) {

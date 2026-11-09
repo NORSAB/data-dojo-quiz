@@ -438,6 +438,19 @@ document.addEventListener("DOMContentLoaded", () => {
         },
       ],
     },
+    {
+      id: "terralink",
+      name: "SICA / MOVE (Terralink)",
+      courses: [
+        {
+          id: "terralink-mooc2",
+          name: "MOOC 2: Adquisiciones y Finanzas de Vehículos Eléctricos",
+          status: "active",
+          role: "Movilidad Eléctrica & Finanzas",
+          roleDesc: "Modelos financieros, incentivos fiscales, negociación, baterías y ROI/TCO de flotas VE",
+        },
+      ],
+    },
   ];
 
   const roleIcons = {
@@ -453,6 +466,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "Data Visualizer": '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 10 10H12z"/></svg>',
     "Visualización Académica": '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>',
     "Investigación & Tesis Doctoral": '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>',
+    "Movilidad Eléctrica & Finanzas": '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
   };
 
   // Learning Paths catalog bound to providers/categories
@@ -562,6 +576,17 @@ document.addEventListener("DOMContentLoaded", () => {
         courseIds: ["unah-tesis"],
         estimatedHours: "80h",
         level: "Doctoral"
+      }
+    ],
+    terralink: [
+      {
+        id: "lp-terralink-movilidad-electrica",
+        name: "SICA / MOVE: Adquisiciones y Finanzas de Flotas Eléctricas",
+        badge: "Certificación Regional SICA",
+        description: "Ruta especializada en modelos financieros, incentivos fiscales, negociación contractual, gestión de baterías y evaluación ROI/VAN/TCO de flotas eléctricas.",
+        courseIds: ["terralink-mooc2"],
+        estimatedHours: "20h",
+        level: "Especialización"
       }
     ]
   };
@@ -1718,6 +1743,7 @@ const badgesConfig = [
     aws: '<svg viewBox="0 0 24 24" width="16" height="16"><path d="M7.16 14.46l-1.1-5.4h-.03l-1.13 5.4H3.14L1.5 6.7h1.7l.89 5.14h.03L5.3 6.7h1.47l1.17 5.19h.03l.9-5.19h1.63l-1.68 7.76H7.16z" fill="#232F3E"/><path d="M13.5 14.46l-1.1-5.4h-.03l-1.13 5.4H9.48L7.84 6.7h1.7l.89 5.14h.03l1.18-5.14h1.47l1.17 5.19h.03l.9-5.19h1.63l-1.68 7.76H13.5z" fill="#232F3E"/><path d="M18.1 14.63c-1.84 0-2.78-1.29-2.78-3.09 0-1.87 1.09-3 2.87-3 .7 0 1.21.16 1.67.46l-.51 1.3c-.31-.22-.65-.36-1.04-.36-.87 0-1.32.72-1.32 1.58 0 .92.39 1.72 1.35 1.72.42 0 .81-.17 1.1-.39l.38 1.33c-.47.31-1.08.45-1.72.45z" fill="#232F3E"/><path d="M6.39 18.9c3.56 1.8 7.98 1.84 12.21.02.37-.16.78.18.47.5-3.72 3.12-9.55 3.44-13.47.1-.32-.28.07-.79.79-.62z" fill="#FF9900"/><path d="M18.8 17.87c.45-.57 1.43-.42 2.22-.32.8.1 1.55.33 1.55.33s-.16.55-.82 1.15c-.61.56-1.31.49-1.56.24-.25-.25-.93-1.15-1.39-.4z" fill="#FF9900"/></svg>',
     unir: '<svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 3L3 7.5v2l9-4.5 9 4.5v-2L12 3z" fill="#ED1C24"/><path d="M12 9L5 12.5v4C5 19.5 8 22 12 22s7-2.5 7-5.5v-4L12 9z" fill="#ED1C24"/><circle cx="12" cy="15" r="2.5" fill="#fff"/><path d="M12 1.5l-1 1v3l1-0.5 1 .5v-3l-1-1z" fill="#ED1C24"/></svg>',
     unah: '<svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 2L4 6v4c0 5.1 3.4 9.8 8 11 4.6-1.2 8-5.9 8-11V6l-8-4z" fill="#006644"/><path d="M12 4l-5.5 2.75v3c0 3.92 2.28 7.37 5.5 8.72 3.22-1.35 5.5-4.8 5.5-8.72v-3L12 4z" fill="#FFD700"/><path d="M12 7l-3 1.5v2c0 2.1 1.2 4 3 4.7 1.8-.7 3-2.6 3-4.7v-2L12 7z" fill="#006644"/><text x="12" y="13" text-anchor="middle" fill="#FFD700" font-size="4" font-weight="bold">U</text></svg>',
+    terralink: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
   };
 
   function renderCategories() {
@@ -4704,7 +4730,7 @@ function renderReview(questions, finalPct, passed) {
     // Dojo Data Study Mode — Unified Inline Renderer
     // Supports: UNIR, UNAH, and Databricks courses
     // ===================================================================
-    if (courseId === "unir-viz-interactiva" || courseId === "unir-herramientas-viz" || courseId === "unah-tesis" || courseId === "databricks-da" || courseId === "databricks-fundamentals" || courseId === "dp-600" || courseId === "databricks-genai-engineer" || courseId === "azure-ai-103" || courseId === "databricks-lakeflow-connect" || courseId === "databricks-lakeflow-jobs" || courseId === "databricks-lakeflow-pipelines" || courseId === "databricks-devops-de" || courseId === "databricks-data-engineer-associate") {
+    if (courseId === "unir-viz-interactiva" || courseId === "unir-herramientas-viz" || courseId === "unah-tesis" || courseId === "terralink-mooc2" || courseId === "databricks-da" || courseId === "databricks-fundamentals" || courseId === "dp-600" || courseId === "databricks-genai-engineer" || courseId === "azure-ai-103" || courseId === "databricks-lakeflow-connect" || courseId === "databricks-lakeflow-jobs" || courseId === "databricks-lakeflow-pipelines" || courseId === "databricks-devops-de" || courseId === "databricks-data-engineer-associate") {
       const startScreen = document.getElementById("start-screen");
       const studyScreen = document.getElementById("study-screen");
       startScreen.classList.add("hidden");
@@ -4727,7 +4753,7 @@ function renderReview(questions, finalPct, passed) {
       };
 
       // XP / Mastery state from localStorage — each course has its own key
-      const storageKey = courseId === 'unir-herramientas-viz' ? 'unir_herr_mastery' : (courseId === 'unah-tesis' ? 'unah_tesis_mastery' : (courseId === 'databricks-da' ? 'databricks_da_mastery' : (courseId === 'databricks-fundamentals' ? 'databricks_fund_mastery' : (courseId === 'dp-600' ? 'dp600_mastery' : (courseId === 'databricks-genai-engineer' ? 'databricks_genai_mastery' : (courseId === 'azure-ai-103' ? 'azure_ai103_mastery' : (courseId === 'databricks-lakeflow-connect' ? 'databricks_lf_connect_mastery' : (courseId === 'databricks-lakeflow-jobs' ? 'databricks_lf_jobs_mastery' : (courseId === 'databricks-lakeflow-pipelines' ? 'databricks_lf_pipelines_mastery' : (courseId === 'databricks-devops-de' ? 'databricks_devops_mastery' : (courseId === 'databricks-data-engineer-associate' ? 'databricks_dea_mastery' : 'unir_viz_mastery')))))))))));
+      const storageKey = courseId === 'unir-herramientas-viz' ? 'unir_herr_mastery' : (courseId === 'unah-tesis' ? 'unah_tesis_mastery' : (courseId === 'terralink-mooc2' ? 'terralink_mooc2_mastery' : (courseId === 'databricks-da' ? 'databricks_da_mastery' : (courseId === 'databricks-fundamentals' ? 'databricks_fund_mastery' : (courseId === 'dp-600' ? 'dp600_mastery' : (courseId === 'databricks-genai-engineer' ? 'databricks_genai_mastery' : (courseId === 'azure-ai-103' ? 'azure_ai103_mastery' : (courseId === 'databricks-lakeflow-connect' ? 'databricks_lf_connect_mastery' : (courseId === 'databricks-lakeflow-jobs' ? 'databricks_lf_jobs_mastery' : (courseId === 'databricks-lakeflow-pipelines' ? 'databricks_lf_pipelines_mastery' : (courseId === 'databricks-devops-de' ? 'databricks_devops_mastery' : (courseId === 'databricks-data-engineer-associate' ? 'databricks_dea_mastery' : 'unir_viz_mastery'))))))))))));
       let mastery = JSON.parse(localStorage.getItem(storageKey) || '{}');
       if (!mastery.xp) mastery = { xp: 0, sectionsViewed: [], flashcardsViewed: 0, personajesViewed: [], conceptosViewed: [], comandosViewed: [], achievements: [] };
       if (!mastery.personajesViewed) mastery.personajesViewed = []; // Migrate existing data
@@ -4892,6 +4918,7 @@ function renderReview(questions, finalPct, passed) {
       const STUDY_FLASHCARD_SOURCES = {
         'unir-herramientas-viz': () => window.unirHerrFlashcards,
         'unah-tesis': () => window.unahTesisFlashcards,
+        'terralink-mooc2': () => window.terralinkMooc2Flashcards,
         'unir-viz-interactiva': () => window.unirVizFlashcards,
         'databricks-da': () => window.databricksDAFlashcards,
         'databricks-fundamentals': () => window.databricksDAFlashcards,
