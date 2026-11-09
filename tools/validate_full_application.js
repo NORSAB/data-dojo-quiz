@@ -30,7 +30,21 @@ function assert(condition, message) {
 
 // 1. JS SYNTAX CHECK FOR ALL JS FILES
 console.log('1. Checking JavaScript Syntax Across All Project Files...');
-const jsFiles = fs.readdirSync(ROOT).filter(f => f.endsWith('.js') && !f.startsWith('.'));
+function getProjectJsFiles() {
+  const dirsToScan = [ROOT, path.join(ROOT, 'data', 'questions'), path.join(ROOT, 'data', 'study'), path.join(ROOT, 'data', 'flashcards')];
+  const list = [];
+  for (const d of dirsToScan) {
+    if (fs.existsSync(d)) {
+      for (const f of fs.readdirSync(d)) {
+        if (f.endsWith('.js') && !f.startsWith('.')) {
+          list.push(path.relative(ROOT, path.join(d, f)));
+        }
+      }
+    }
+  }
+  return list;
+}
+const jsFiles = getProjectJsFiles();
 for (const file of jsFiles) {
   try {
     const code = fs.readFileSync(path.join(ROOT, file), 'utf8');
@@ -114,21 +128,21 @@ function runInSandbox(file) {
 
 // Load Question Banks
 const questionBankFiles = [
-  'questions.js',
-  'questions_databricks.js',
-  'questions_databricks_genai.js',
-  'questions_databricks_genai_es.js',
-  'questions_databricks_fundamentals.js',
-  'questions_databricks_aibi.js',
-  'questions_databricks_sql_analytics.js',
-  'questions_unir_viz.js',
-  'questions_unir_herr.js',
-  'questions_unah_tesis.js',
-  'questions_terralink_mooc2.js',
-  'questions_azure_ai103.js',
-  'questions_azure_ai103_es.js',
-  'questions_azure_ai103_rationales.js',
-  'questions_azure_ai103_retired.js'
+  'data/questions/questions.js',
+  'data/questions/questions_databricks.js',
+  'data/questions/questions_databricks_genai.js',
+  'data/questions/questions_databricks_genai_es.js',
+  'data/questions/questions_databricks_fundamentals.js',
+  'data/questions/questions_databricks_aibi.js',
+  'data/questions/questions_databricks_sql_analytics.js',
+  'data/questions/questions_unir_viz.js',
+  'data/questions/questions_unir_herr.js',
+  'data/questions/questions_unah_tesis.js',
+  'data/questions/questions_terralink_mooc2.js',
+  'data/questions/questions_azure_ai103.js',
+  'data/questions/questions_azure_ai103_es.js',
+  'data/questions/questions_azure_ai103_rationales.js',
+  'data/questions/questions_azure_ai103_retired.js'
 ];
 
 for (const qf of questionBankFiles) {
@@ -139,21 +153,21 @@ for (const qf of questionBankFiles) {
 
 // Load Study Modules
 const studyFiles = [
-  'study_data.js',
-  'study_databricks.js',
-  'study_databricks_urgent.js',
-  'study_databricks_expanded.js',
-  'study_databricks_domains.js',
-  'study_databricks_genai.js',
-  'study_databricks_genai_resources.js',
-  'study_azure_ai103.js',
-  'study_azure_ai103_exam_topics.js',
-  'study_azure_ai103_road.js',
-  'study_azure_ai103_resources.js',
-  'study_azure_ai103_glossary.js',
-  'study_unir_herr.js',
-  'study_unah_tesis.js',
-  'study_terralink_mooc2.js'
+  'data/study/study_data.js',
+  'data/study/study_databricks.js',
+  'data/study/study_databricks_urgent.js',
+  'data/study/study_databricks_expanded.js',
+  'data/study/study_databricks_domains.js',
+  'data/study/study_databricks_genai.js',
+  'data/study/study_databricks_genai_resources.js',
+  'data/study/study_azure_ai103.js',
+  'data/study/study_azure_ai103_exam_topics.js',
+  'data/study/study_azure_ai103_road.js',
+  'data/study/study_azure_ai103_resources.js',
+  'data/study/study_azure_ai103_glossary.js',
+  'data/study/study_unir_herr.js',
+  'data/study/study_unah_tesis.js',
+  'data/study/study_terralink_mooc2.js'
 ];
 
 for (const sf of studyFiles) {
