@@ -14,7 +14,11 @@ function assertJsonEqual(actual, expected, message) {
 }
 
 function loadQuestionBank(filename) {
-  const resolved = path.join(root, filename);
+  let resolved = path.join(root, filename);
+  if (!fs.existsSync(resolved)) {
+    const qCandidate = path.join(root, 'data', 'questions', filename);
+    if (fs.existsSync(qCandidate)) resolved = qCandidate;
+  }
   delete require.cache[require.resolve(resolved)];
   return require(resolved);
 }
@@ -50,14 +54,20 @@ function assertOneToOneTranslation(english, spanish, field) {
 
 function loadStudyModule() {
   const context = { window: {} };
-  const source = fs.readFileSync(path.join(root, 'study_databricks_genai.js'), 'utf8');
+  const filePath = fs.existsSync(path.join(root, 'study_databricks_genai.js'))
+    ? path.join(root, 'study_databricks_genai.js')
+    : path.join(root, 'data', 'study', 'study_databricks_genai.js');
+  const source = fs.readFileSync(filePath, 'utf8');
   vm.runInNewContext(source, context, { filename: 'study_databricks_genai.js' });
   return context.window.studyData['databricks-genai-engineer'];
 }
 
 function loadStudyResources(english, spanish) {
   const context = { window: { questionsData: [...english, ...spanish] } };
-  const source = fs.readFileSync(path.join(root, 'study_databricks_genai_resources.js'), 'utf8');
+  const filePath = fs.existsSync(path.join(root, 'study_databricks_genai_resources.js'))
+    ? path.join(root, 'study_databricks_genai_resources.js')
+    : path.join(root, 'data', 'study', 'study_databricks_genai_resources.js');
+  const source = fs.readFileSync(filePath, 'utf8');
   vm.runInNewContext(source, context, { filename: 'study_databricks_genai_resources.js' });
   return {
     flashcards: context.window.databricksGenAIFlashcards,
@@ -82,7 +92,8 @@ function loadDataSync(localStorage) {
   const context = {
     localStorage,
     document: { addEventListener() {} },
-    window: { addEventListener() {} },
+    window: { addEventListener() {}, dispatchEvent() {} },
+    CustomEvent: class CustomEvent { constructor(type, detail) { this.type = type; this.detail = detail; } },
     navigator: { sendBeacon() { return true; } },
     Blob: class Blob {},
     console,
@@ -186,7 +197,7 @@ async function main() {
   const workerSource = fs.readFileSync(path.join(root, 'sw.js'), 'utf8');
   const appSource = fs.readFileSync(path.join(root, 'script.js'), 'utf8');
   assert(indexSource.includes('study_databricks_genai_resources.js'), 'Falta cargar los recursos GenAI en index.html');
-  assert(workerSource.includes("'./study_databricks_genai_resources.js'"), 'Falta cachear los recursos GenAI en sw.js');
+  assert(workerSource.includes('study_databricks_genai_resources.js'), 'Falta cachear los recursos GenAI en sw.js');
   assert(appSource.includes("body.setAttribute('hidden', ''); // Start collapsed"), 'Las secciones deben crearse contraídas');
   assert(!appSource.includes('firstItemButton.click()'), 'El primer tema no debe abrirse automáticamente');
   assert((appSource.match(/class="unir-persona-cat-header unir-category-toggle" aria-expanded="false"/g) || []).length >= 4, 'Las categorías internas deben declararse contraídas');

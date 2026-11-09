@@ -19,7 +19,7 @@ console.log = () => {};
 
 const html = fs.readFileSync('index.html', 'utf8');
 const scripts = (html.match(/src="([^"?]+\.js)/g) || []).map(s => s.slice(5))
-  .filter(f => /^(questions|study_|flashcards_|translations_|i18n_study)/.test(f) && fs.existsSync(f));
+  .filter(f => /(?:^|data\/(?:questions|study|flashcards)\/)(questions|study_|flashcards_|translations_|i18n_study)/.test(f) && fs.existsSync(f));
 scripts.forEach(f => { try { eval(fs.readFileSync(f, 'utf8')); } catch (e) { /* algunos modulos esperan el DOM */ } });
 console.log = log;
 
@@ -41,7 +41,10 @@ Object.entries(byCourse).sort().forEach(([course, qs]) => {
   const en = qs.filter(q => q.lang === 'en').length;
   const es = qs.filter(q => q.lang === 'es').length;
   let missing;
-  if (course === 'databricks-da') {
+  if (course === 'terralink-mooc2') {
+    // SICA/MOVE es un programa regional centroamericano 100% nativo en español
+    missing = [];
+  } else if (course === 'databricks-da') {
     const dict = window.databricksTranslations || {};
     missing = qs.filter(q => !dict[q.id]).map(q => q.id);
   } else {
@@ -53,6 +56,7 @@ Object.entries(byCourse).sort().forEach(([course, qs]) => {
 
 const study = window.studyData || {};
 Object.entries(study).forEach(([course, sections]) => {
+  if (course === 'terralink-mooc2') return; // Contenido nativo en español
   (sections || []).forEach(sec => (sec.items || []).forEach(item => {
     const c = String(item.content || '');
     if (!/data-lang=["']en/.test(c) || !/data-lang=["']es/.test(c)) problems.push(`estudio ${course}: "${item.title}" no tiene bloques en y es`);

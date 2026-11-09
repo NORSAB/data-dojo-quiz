@@ -8,7 +8,7 @@ const path = require('path');
 const root = path.resolve(__dirname, '..');
 const coreFiles = [
   'features.js',
-  'hero_data.js',
+  'data/study/hero_data.js',
   'script.js',
   'supabase-sync.js',
   'sw.js',

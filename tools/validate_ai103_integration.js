@@ -17,8 +17,22 @@ const sandbox = {
 };
 vm.createContext(sandbox);
 
+function resolveRelPath(relPath) {
+  const root = path.join(__dirname, '..');
+  const candidates = [
+    path.join(root, relPath),
+    path.join(root, 'data', 'questions', relPath),
+    path.join(root, 'data', 'study', relPath),
+    path.join(root, 'data', 'flashcards', relPath)
+  ];
+  for (const c of candidates) {
+    if (fs.existsSync(c)) return c;
+  }
+  return path.join(root, relPath);
+}
+
 function runFile(relPath) {
-  const code = fs.readFileSync(path.join(__dirname, '..', relPath), 'utf8');
+  const code = fs.readFileSync(resolveRelPath(relPath), 'utf8');
   vm.runInContext(code, sandbox);
 }
 

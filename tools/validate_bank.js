@@ -11,6 +11,19 @@ const vm = require('vm');
 
 const baseDir = path.resolve(__dirname, '..');
 
+function resolveDataFile(file) {
+  const candidates = [
+    path.join(baseDir, file),
+    path.join(baseDir, 'data', 'questions', file),
+    path.join(baseDir, 'data', 'study', file),
+    path.join(baseDir, 'data', 'flashcards', file)
+  ];
+  for (const c of candidates) {
+    if (fs.existsSync(c)) return c;
+  }
+  return path.join(baseDir, file);
+}
+
 const questionFiles = [
   { file: 'questions.js', name: 'Core Questions (Demo + DP-600)' },
   { file: 'questions_databricks.js', name: 'Databricks Data Analyst' },
@@ -50,7 +63,7 @@ console.log(' QUESTION BANKS VALIDATION');
 console.log('---------------------------------------------------------------');
 
 questionFiles.forEach(entry => {
-  const filePath = path.join(baseDir, entry.file);
+  const filePath = resolveDataFile(entry.file);
   if (!fs.existsSync(filePath)) {
     console.warn(`  ! File not found: ${entry.file}`);
     return;
@@ -187,7 +200,7 @@ studySandbox.window = studySandbox;
 vm.createContext(studySandbox);
 
 studyFiles.forEach(file => {
-  const filePath = path.join(baseDir, file);
+  const filePath = resolveDataFile(file);
   if (fs.existsSync(filePath)) {
     try {
       const code = fs.readFileSync(filePath, 'utf8');

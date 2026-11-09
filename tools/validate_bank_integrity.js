@@ -29,7 +29,7 @@ global.document = { addEventListener() {} };
 
 // ── Cargar los bancos en el orden real de index.html ────────────────────────
 const html = fs.readFileSync('index.html', 'utf8');
-const archivos = (html.match(/src="(questions[^"?]*\.js)/g) || [])
+const archivos = (html.match(/src="([^"?]*questions[^"?]*\.js)/g) || [])
   .map(s => s.replace('src="', ''))
   .filter(f => fs.existsSync(f));
 
